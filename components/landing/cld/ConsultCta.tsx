@@ -43,7 +43,7 @@ export default function ConsultCta() {
                     alt={consultCta.image.alt}
                     width={consultCta.image.width}
                     height={consultCta.image.height}
-                    sizes="(max-width: 991px) 92vw, 560px"
+                    sizes="(max-width: 991px) 92vw, 704px"
                     className="reveal h-auto w-full rounded-md"
                 />
             </div>

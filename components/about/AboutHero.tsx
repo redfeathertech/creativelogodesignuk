@@ -67,7 +67,7 @@ export default function AboutHero({ trail }: { trail: readonly Crumb[] }) {
                             alt={aboutHero.image.alt}
                             width={2000}
                             height={2000}
-                            sizes="(min-width: 62rem) 480px, (min-width: 36rem) 520px, 92vw"
+                            sizes="(min-width: 62rem) 584px, (min-width: 36rem) 520px, 92vw"
                             preload
                             className="h-auto w-full"
                         />

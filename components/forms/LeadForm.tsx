@@ -59,7 +59,7 @@ export default function LeadForm() {
         />
 
         <div className="col-span-full flex flex-col gap-4">
-          <Recaptcha active={engaged} />
+          <Recaptcha active={engaged} action="lead" />
           <FormStatus state={state} />
           <button type="submit" disabled={pending} className={btn("primary", "lg", "w-full")}>
             {pending ? "Sending…" : "Submit"}

@@ -12,10 +12,13 @@ import { ArrowIcon } from "@/components/ui/icons";
 /**
  * Hero. The only H1 on the page.
  *
- * A full-bleed split: the copy column sits on the mesh, a lead-capture form
- * runs edge-to-edge and full-height beside it. It is deliberately NOT inside
- * the page container — the panel reaching the viewport edge is the whole
- * point of the composition.
+ * A split composition inside `container-site`, like every other section: the
+ * copy column's left edge lines up with the logo in the header above it, and
+ * the form card's right edge with the header CTA. Only the backgrounds bleed —
+ * the mesh behind everything, and the tint behind the form half, which runs to
+ * the viewport edge via an absolute layer. That layer can split at `left-1/2`
+ * because the container is centred, so its column boundary IS the section's
+ * midline.
  *
  * The section is exactly one screen tall: `--hero-h` is `100svh` less the
  * header that sits above it, so the whole composition — down to the stats — is
@@ -49,16 +52,22 @@ export default function Hero() {
                 aria-hidden="true"
             />
 
+            {/* Full-height tint behind the form half. Lives outside the container
+          so it still reaches the viewport edge; lg-only because below the
+          split it would render as a floating gutter-inset band. */}
+            <div
+                className="pointer-events-none absolute inset-y-0 right-0 left-1/2 z-0 hidden bg-ink-900/40 lg:block"
+                aria-hidden="true"
+            />
+
             {/* An even split rather than the old 5/7. At 5/7 the copy column is only
           ~490px on a 1440 screen, which wraps the H1 onto a third line and the
-          CTAs onto a second row — ~150px the fold does not have. The showreel
-          is still full-bleed and full-height, which is what the composition
-          was actually about. */}
-            <div className="relative z-[1] grid w-full grid-cols-1 lg:grid-cols-2">
+          CTAs onto a second row — ~150px the fold does not have. */}
+            <div className="relative z-[1] container-site grid grid-cols-1 lg:grid-cols-2">
                 {/* `--hero-foot` is the block padding plus room for the scroll cue —
             and collapses back to plain padding on the viewports too short to
             show the cue at all. */}
-                <div className="reveal mx-auto flex w-full max-w-[46rem] flex-col justify-center px-gutter py-hero-block lg:mx-0 lg:max-w-none lg:px-hero-pad lg:pb-[var(--hero-foot)]">
+                <div className="reveal mx-auto flex w-full max-w-[46rem] flex-col justify-center py-hero-block lg:mx-0 lg:max-w-none lg:pe-hero-pad lg:pb-[var(--hero-foot)]">
                     <Eyebrow>{hero.eyebrow}</Eyebrow>
 
                     <h1 className="mb-hero-gap text-hero">
@@ -128,10 +137,18 @@ export default function Hero() {
                         desktop window. `max()` holds the offset to the smallest
                         value that clears the FAB, and to zero if the gutter ever
                         grows past it on its own. Moving the FAB to bottom-right
-                        would retire both lines. */}
+                        would retire both lines.
+
+                        The subtrahend is the copy column's real left inset: the
+                        container gutter, now the hero shares `container-site`
+                        with the chrome. Once the container's max-width binds
+                        (>1560px) the true inset is larger and the offset
+                        overshoots by up to 2rem — visible only on viewports both
+                        wider than 1560px and shorter than 848px, and only as the
+                        badge sitting slightly right of the heading. */}
                     <TrustpilotBadge
                         {...hero.trustpilot}
-                        className="mt-hero-gap [@media(min-width:62rem)_and_(max-width:74.99rem)_and_(max-height:60rem)]:ms-[max(0px,calc(5rem-var(--spacing-hero-pad)))] [@media(min-width:75rem)_and_(max-height:53rem)]:ms-[max(0px,calc(5rem-var(--spacing-hero-pad)))]"
+                        className="mt-hero-gap [@media(min-width:62rem)_and_(max-width:74.99rem)_and_(max-height:60rem)]:ms-[max(0px,calc(5rem-var(--spacing-gutter)))] [@media(min-width:75rem)_and_(max-height:53rem)]:ms-[max(0px,calc(5rem-var(--spacing-gutter)))]"
                     />
                 </div>
 

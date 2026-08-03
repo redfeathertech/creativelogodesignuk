@@ -9,63 +9,63 @@
    ========================================================================== */
 
 @theme {
-  /* ---- typography ---------------------------------------------------- */
-  --font-display: var(--font-montserrat), "Segoe UI", system-ui, sans-serif;
-  --font-body: var(--font-raleway), "Segoe UI", system-ui, sans-serif;
+    /* ---- typography ---------------------------------------------------- */
+    --font-display: var(--font-montserrat), "Segoe UI", system-ui, sans-serif;
+    --font-body: var(--font-raleway), "Segoe UI", system-ui, sans-serif;
 
-  /* ---- brand ramp: magenta ------------------------------------------- */
-  --color-magenta-50: #ffe9f6;
-  --color-magenta-100: #ffc7e7;
-  --color-magenta-200: #ff8ecf;
-  --color-magenta-300: #f95bb6;
-  --color-magenta-400: #e62a9b;
-  --color-magenta-500: #cc067f; /* brand primary */
-  --color-magenta-600: #a80568;
-  --color-magenta-700: #7f0450;
-  --color-magenta-800: #560335;
-  --color-magenta-900: #30021e;
+    /* ---- brand ramp: magenta ------------------------------------------- */
+    --color-magenta-50: #ffe9f6;
+    --color-magenta-100: #ffc7e7;
+    --color-magenta-200: #ff8ecf;
+    --color-magenta-300: #f95bb6;
+    --color-magenta-400: #e62a9b;
+    --color-magenta-500: #cc067f; /* brand primary */
+    --color-magenta-600: #a80568;
+    --color-magenta-700: #7f0450;
+    --color-magenta-800: #560335;
+    --color-magenta-900: #30021e;
 
-  /* ---- brand ramp: violet -------------------------------------------- */
-  --color-violet-50: #f3ecfb;
-  --color-violet-100: #e0cdf5;
-  --color-violet-200: #c4a1ea;
-  --color-violet-300: #a473dd;
-  --color-violet-400: #8449c9;
-  --color-violet-500: #662e91; /* brand secondary */
-  --color-violet-600: #532678;
-  --color-violet-700: #3f1d5c;
-  --color-violet-800: #2b143f;
-  --color-violet-900: #180b24;
+    /* ---- brand ramp: violet -------------------------------------------- */
+    --color-violet-50: #f3ecfb;
+    --color-violet-100: #e0cdf5;
+    --color-violet-200: #c4a1ea;
+    --color-violet-300: #a473dd;
+    --color-violet-400: #8449c9;
+    --color-violet-500: #662e91; /* brand secondary */
+    --color-violet-600: #532678;
+    --color-violet-700: #3f1d5c;
+    --color-violet-800: #2b143f;
+    --color-violet-900: #180b24;
 
-  /* ---- accent: teal --------------------------------------------------- */
-  --color-teal-300: #63e5cb;
-  --color-teal-400: #35dbba;
-  --color-teal-500: #18cfab;
-  --color-teal-600: #0fa88a;
+    /* ---- accent: teal --------------------------------------------------- */
+    --color-teal-300: #63e5cb;
+    --color-teal-400: #35dbba;
+    --color-teal-500: #18cfab;
+    --color-teal-600: #0fa88a;
 
-  /* ---- neutrals: near-black canvas ------------------------------------ */
-  --color-ink-950: #07020f;
-  --color-ink-900: #0d031c; /* page background */
-  --color-ink-850: #140829;
-  --color-ink-800: #1b0f33;
-  --color-ink-700: #271848;
-  --color-ink-600: #3a2963;
+    /* ---- neutrals: near-black canvas ------------------------------------ */
+    --color-ink-950: #07020f;
+    --color-ink-900: #0d031c; /* page background */
+    --color-ink-850: #140829;
+    --color-ink-800: #1b0f33;
+    --color-ink-700: #271848;
+    --color-ink-600: #3a2963;
 
-  /* Named `mist` rather than `slate` so Tailwind's own slate ramp stays
+    /* Named `mist` rather than `slate` so Tailwind's own slate ramp stays
      intact — partially overriding a built-in ramp yields mismatched shades. */
-  --color-mist-100: #f7f6fa;
-  --color-mist-200: #ecebf1;
-  --color-mist-300: #d8d6e0;
-  --color-mist-400: #a9a5b8;
-  --color-mist-500: #7c7790;
-  --color-mist-600: #55506a;
+    --color-mist-100: #f7f6fa;
+    --color-mist-200: #ecebf1;
+    --color-mist-300: #d8d6e0;
+    --color-mist-400: #a9a5b8;
+    --color-mist-500: #7c7790;
+    --color-mist-600: #55506a;
 
-  --color-onlight: #14101c;
-  --color-onlight-muted: #55506a;
-  --color-star: #ffb400;
+    --color-onlight: #14101c;
+    --color-onlight-muted: #55506a;
+    --color-star: #ffb400;
 
-  /* ---- /seo-services: a light page on a dark site ---------------------- */
-  /* The only light-canvas page in the build. Its palette is the live page's
+    /* ---- /seo-services: a light page on a dark site ---------------------- */
+    /* The only light-canvas page in the build. Its palette is the live page's
      own `--rf-*` variables, carried over exactly because the design is signed
      off — it is a warmer, coral-leaning take on the brand magenta rather than
      the magenta→violet ramp every other page runs.
@@ -76,162 +76,167 @@
      NOT `magenta-500`: #d1008f vs #cc067f. Close enough to look wrong if they
      drift, far enough apart to be visible side by side, so it is its own
      token. */
-  --color-seo-pink: #d1008f;
-  --color-seo-coral: #ff4d73;
-  --color-seo-cream: #f3f1b2;
-  --color-seo-ink: #121212;
-  --color-seo-body: #6f7f95;
-  --color-seo-border: #dce4ec;
-  --color-seo-card: #f5f7f9;
-  /* The three ranking/insight mockups draw on near-black with these accents. */
-  --color-seo-good: #2cff9b;
-  --color-seo-warn: #ffba00;
+    --color-seo-pink: #d1008f;
+    --color-seo-coral: #ff4d73;
+    --color-seo-cream: #f3f1b2;
+    --color-seo-ink: #121212;
+    --color-seo-body: #6f7f95;
+    --color-seo-border: #dce4ec;
+    --color-seo-card: #f5f7f9;
+    /* The three ranking/insight mockups draw on near-black with these accents. */
+    --color-seo-good: #2cff9b;
+    --color-seo-warn: #ffba00;
 
-  /* ---- fluid type scale: 360px → 1440px viewport ---------------------- */
-  --text-display: clamp(2.75rem, 1.3rem + 6.4vw, 6rem);
-  --text-display--line-height: 0.98;
-  --text-display--letter-spacing: -0.03em;
+    /* ---- fluid type scale: 360px → 1440px viewport ---------------------- */
+    --text-display: clamp(2.75rem, 1.3rem + 6.4vw, 6rem);
+    --text-display--line-height: 0.98;
+    --text-display--letter-spacing: -0.03em;
 
-  /* The hero H1 is the one heading that has to fit a fixed box — the first
+    /* The hero H1 is the one heading that has to fit a fixed box — the first
      viewport. `min()` makes it track whichever runs out first, width or
      height, so a wide-but-short laptop screen gets smaller type rather than a
      third wrapped line pushing the stats below the fold. */
-  --text-hero: clamp(2.5rem, min(5.6vw, 8.6svh), 5.25rem);
-  --text-hero--line-height: 1.02;
-  --text-hero--letter-spacing: -0.03em;
+    --text-hero: clamp(2.5rem, min(5.6vw, 8.6svh), 5.25rem);
+    --text-hero--line-height: 1.02;
+    --text-hero--letter-spacing: -0.03em;
 
-  --text-h1: clamp(2.25rem, 1.25rem + 4.4vw, 4.5rem);
-  --text-h1--line-height: 1.05;
-  --text-h1--letter-spacing: -0.02em;
+    --text-h1: clamp(2.25rem, 1.25rem + 4.4vw, 4.5rem);
+    --text-h1--line-height: 1.05;
+    --text-h1--letter-spacing: -0.02em;
 
-  --text-h2: clamp(1.875rem, 1.1rem + 3.4vw, 3.5rem);
-  --text-h2--line-height: 1.1;
-  --text-h2--letter-spacing: -0.02em;
+    --text-h2: clamp(1.875rem, 1.1rem + 3.4vw, 3.5rem);
+    --text-h2--line-height: 1.1;
+    --text-h2--letter-spacing: -0.02em;
 
-  --text-h3: clamp(1.5rem, 1.05rem + 2vw, 2.375rem);
-  --text-h3--line-height: 1.2;
-  --text-h3--letter-spacing: -0.02em;
+    --text-h3: clamp(1.5rem, 1.05rem + 2vw, 2.375rem);
+    --text-h3--line-height: 1.2;
+    --text-h3--letter-spacing: -0.02em;
 
-  --text-h4: clamp(1.25rem, 1rem + 1.1vw, 1.75rem);
-  --text-h4--line-height: 1.2;
+    --text-h4: clamp(1.25rem, 1rem + 1.1vw, 1.75rem);
+    --text-h4--line-height: 1.2;
 
-  --text-h5: clamp(1.125rem, 0.98rem + 0.64vw, 1.375rem);
-  --text-h5--line-height: 1.3;
+    --text-h5: clamp(1.125rem, 0.98rem + 0.64vw, 1.375rem);
+    --text-h5--line-height: 1.3;
 
-  --text-lead: clamp(1.0625rem, 0.98rem + 0.4vw, 1.25rem);
-  --text-lead--line-height: 1.65;
+    --text-lead: clamp(1.0625rem, 0.98rem + 0.4vw, 1.25rem);
+    --text-lead--line-height: 1.65;
 
-  --text-body: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
-  --text-body--line-height: 1.65;
+    --text-body: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
+    --text-body--line-height: 1.65;
 
-  /* ---- layout --------------------------------------------------------- */
-  /* 62rem = 992px, not Tailwind's 64rem: it is the breakpoint every two-column
+    /* ---- layout --------------------------------------------------------- */
+    /* 62rem = 992px, not Tailwind's 64rem: it is the breakpoint every two-column
      section of the clduk design switches on, so `lg:` maps to it directly.
      It MUST stay in rem. Tailwind v4 cannot compare a px length to a rem one,
      so a px breakpoint is sorted ahead of every rem breakpoint instead of into
      its place among them — which emitted `lg:` BEFORE `sm:`/`md:` and let the
      smaller breakpoint win the cascade above 992px. */
-  --breakpoint-lg: 62rem;
+    --breakpoint-lg: 62rem;
 
-  --spacing-section: clamp(4rem, 2rem + 8vw, 8.5rem);
-  --spacing-gutter: clamp(1.25rem, 0.5rem + 3vw, 3rem);
-  --container-site: 1280px;
-  --container-wide: 1560px;
+    --spacing-section: clamp(4rem, 2rem + 8vw, 8.5rem);
+    --spacing-gutter: clamp(1.25rem, 0.5rem + 3vw, 3rem);
+    /* ONE container for everything — chrome and sections alike. The header,
+     every section body and every landing page centre on this same box, so
+     content edges line up from the top bar to the footer. Was two tokens
+     (1280px sections / 1560px chrome), which left every section visibly
+     narrower than the header above it. */
+    --container-site: 1560px;
 
-  /* ---- hero rhythm ----------------------------------------------------- */
-  /* The hero copy column is the only place spacing is driven by viewport
+    /* ---- hero rhythm ----------------------------------------------------- */
+    /* The hero copy column is the only place spacing is driven by viewport
      HEIGHT: it has to hold eyebrow → h1 → lead → CTAs → stats inside one
      screen, so the padding and the gaps give way before the content does.
-     `hero-pad` is also the left offset of the scroll cue, which is why it is a
-     token and not an inline clamp. */
-  --spacing-hero-pad: clamp(1.75rem, 0.75rem + 3vw, 4.5rem);
-  --spacing-hero-block: clamp(1rem, 3.2svh, 4.5rem);
-  --spacing-hero-gap: clamp(0.625rem, 2svh, 1.75rem);
+     `hero-pad` is the gap BETWEEN the two hero columns — the copy column's
+     trailing padding and the form column's leading one. It is not an outer
+     inset: now the hero sits in `container-site`, the gutter supplies that. */
+    --spacing-hero-pad: clamp(1.75rem, 0.75rem + 3vw, 4.5rem);
+    --spacing-hero-block: clamp(1rem, 3.2svh, 4.5rem);
+    --spacing-hero-gap: clamp(0.625rem, 2svh, 1.75rem);
 
-  /* ---- radii ---------------------------------------------------------- */
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 22px;
-  --radius-xl: 32px;
+    /* ---- radii ---------------------------------------------------------- */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+    --radius-xl: 32px;
 
-  /* ---- elevation ------------------------------------------------------ */
-  --shadow-sm: 0 1px 2px rgb(7 2 15 / 0.28);
-  --shadow-md: 0 8px 24px -8px rgb(7 2 15 / 0.45);
-  --shadow-lg: 0 24px 60px -18px rgb(7 2 15 / 0.6);
-  --shadow-glow: 0 12px 44px -12px rgb(204 6 127 / 0.55);
+    /* ---- elevation ------------------------------------------------------ */
+    --shadow-sm: 0 1px 2px rgb(7 2 15 / 0.28);
+    --shadow-md: 0 8px 24px -8px rgb(7 2 15 / 0.45);
+    --shadow-lg: 0 24px 60px -18px rgb(7 2 15 / 0.6);
+    --shadow-glow: 0 12px 44px -12px rgb(204 6 127 / 0.55);
 
-  /* ---- motion --------------------------------------------------------- */
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* ---- motion --------------------------------------------------------- */
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* 68s, not 44s: each marquee pass now repeats its logo list twice, so the
+    /* 68s, not 44s: each marquee pass now repeats its logo list twice, so the
      track travels ~3000px per cycle instead of ~1900px. Scaling the duration
      with it holds the drift at the same ~45px/s it read at before. */
-  --animate-marquee: marquee 68s linear infinite;
-  --animate-orbit: orbit 34s linear infinite;
-  --animate-orbit-reverse: orbit-reverse 34s linear infinite;
-  /* The inner methodology ring counter-rotates slightly faster than the track. */
-  --animate-orbit-inner: orbit-reverse 24s linear infinite;
-  --animate-meter: orbit 22s linear infinite;
-  --animate-ping-slow: ping-slow 2.4s var(--ease-out) infinite;
-  --animate-pulse-ring: pulse-ring 2.6s var(--ease-out) infinite;
-  --animate-scroll-hint: scroll-hint 2.4s var(--ease-in-out) infinite;
+    --animate-marquee: marquee 68s linear infinite;
+    --animate-orbit: orbit 34s linear infinite;
+    --animate-orbit-reverse: orbit-reverse 34s linear infinite;
+    /* The inner methodology ring counter-rotates slightly faster than the track. */
+    --animate-orbit-inner: orbit-reverse 24s linear infinite;
+    --animate-meter: orbit 22s linear infinite;
+    --animate-ping-slow: ping-slow 2.4s var(--ease-out) infinite;
+    --animate-pulse-ring: pulse-ring 2.6s var(--ease-out) infinite;
+    --animate-scroll-hint: scroll-hint 2.4s var(--ease-in-out) infinite;
 
-  @keyframes marquee {
-    to {
-      transform: translateX(calc(-100% - var(--marquee-gap, 4rem)));
+    @keyframes marquee {
+        to {
+            transform: translateX(calc(-100% - var(--marquee-gap, 4rem)));
+        }
     }
-  }
-  /* These animate the `rotate` property rather than `transform`, so an element
+    /* These animate the `rotate` property rather than `transform`, so an element
      can carry a static `transform` for placement AND spin at the same time —
      which is exactly what each orbiting icon needs. */
-  @keyframes orbit {
-    to {
-      rotate: 360deg;
+    @keyframes orbit {
+        to {
+            rotate: 360deg;
+        }
     }
-  }
-  @keyframes orbit-reverse {
-    to {
-      rotate: -360deg;
+    @keyframes orbit-reverse {
+        to {
+            rotate: -360deg;
+        }
     }
-  }
-  @keyframes ping-slow {
-    0% {
-      transform: scale(1);
-      opacity: 0.7;
+    @keyframes ping-slow {
+        0% {
+            transform: scale(1);
+            opacity: 0.7;
+        }
+        70%,
+        100% {
+            transform: scale(2.2);
+            opacity: 0;
+        }
     }
-    70%,
-    100% {
-      transform: scale(2.2);
-      opacity: 0;
-    }
-  }
-  /* Halo behind the play button — a ring that expands and fades, rather than a
+    /* Halo behind the play button — a ring that expands and fades, rather than a
      filled disc, so the gradient underneath stays readable. */
-  @keyframes pulse-ring {
-    0% {
-      transform: scale(0.9);
-      opacity: 0.7;
+    @keyframes pulse-ring {
+        0% {
+            transform: scale(0.9);
+            opacity: 0.7;
+        }
+        70%,
+        100% {
+            transform: scale(1.28);
+            opacity: 0;
+        }
     }
-    70%,
-    100% {
-      transform: scale(1.28);
-      opacity: 0;
+    /* Hero scroll cue: the hairline grows from its top edge and fades back. */
+    @keyframes scroll-hint {
+        0%,
+        100% {
+            transform: scaleY(0.35);
+            opacity: 0.4;
+        }
+        50% {
+            transform: scaleY(1);
+            opacity: 1;
+        }
     }
-  }
-  /* Hero scroll cue: the hairline grows from its top edge and fades back. */
-  @keyframes scroll-hint {
-    0%,
-    100% {
-      transform: scaleY(0.35);
-      opacity: 0.4;
-    }
-    50% {
-      transform: scaleY(1);
-      opacity: 1;
-    }
-  }
 }
 
 /* ==========================================================================
@@ -249,36 +254,36 @@
    ========================================================================== */
 
 :root {
-  --topbar-h: 0px;
-  --nav-h: 4.75rem;
-  --nav-h-condensed: 4rem; /* the scrolled, condensed bar */
-  --header-h: calc(var(--topbar-h) + var(--nav-h));
+    --topbar-h: 0px;
+    --nav-h: 4.75rem;
+    --nav-h-condensed: 4rem; /* the scrolled, condensed bar */
+    --header-h: calc(var(--topbar-h) + var(--nav-h));
 
-  /* Exactly what the header leaves of the first screen. `svh`, not `dvh`: on
+    /* Exactly what the header leaves of the first screen. `svh`, not `dvh`: on
      mobile it resolves against the browser UI being *visible*, so the hero
      never overflows the fold the visitor actually lands on. */
-  --hero-h: calc(100svh - var(--header-h));
+    --hero-h: calc(100svh - var(--header-h));
 
-  /* Bottom padding of the hero copy column. The scroll cue is absolutely
+    /* Bottom padding of the hero copy column. The scroll cue is absolutely
      positioned against the section floor, so the column has to keep clear of
      it — but only on the viewports tall enough to show the cue at all. Below
      that it would be 92px of padding bought with content pushed off screen. */
-  --hero-foot: var(--spacing-hero-block);
+    --hero-foot: var(--spacing-hero-block);
 }
 
 @media (min-height: 800px) {
-  :root {
-    --hero-foot: 5.75rem;
-  }
+    :root {
+        --hero-foot: 5.75rem;
+    }
 }
 
 /* 62rem, matching `--breakpoint-lg` exactly. TopBar is `hidden lg:block`, so if
    this query flipped at a different width the bar would be on screen while
    `--topbar-h` still read 0 — and `--hero-h` would overflow the fold by 40px. */
 @media (min-width: 62rem) {
-  :root {
-    --topbar-h: 2.5rem;
-  }
+    :root {
+        --topbar-h: 2.5rem;
+    }
 }
 
 /* ==========================================================================
@@ -286,59 +291,59 @@
    ========================================================================== */
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-    /* Clears the sticky header when jumping to an in-page anchor. Only the nav
+    html {
+        scroll-behavior: smooth;
+        /* Clears the sticky header when jumping to an in-page anchor. Only the nav
        is sticky — the utility bar scrolls away — and by the time an anchor
        fires the nav has condensed. */
-    scroll-padding-top: calc(var(--nav-h-condensed) + 1.25rem);
-  }
+        scroll-padding-top: calc(var(--nav-h-condensed) + 1.25rem);
+    }
 
-  body {
-    background-color: var(--color-ink-900);
-    color: #fff;
-    font-family: var(--font-body);
-    /* Matches the clduk body scale: 15px → 17px across the fluid range. */
-    font-size: var(--text-body);
-    line-height: 1.65;
-    -webkit-font-smoothing: antialiased;
-  }
+    body {
+        background-color: var(--color-ink-900);
+        color: #fff;
+        font-family: var(--font-body);
+        /* Matches the clduk body scale: 15px → 17px across the fluid range. */
+        font-size: var(--text-body);
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+    }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: var(--font-display);
-    text-wrap: balance;
-    overflow-wrap: break-word;
-  }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-display);
+        text-wrap: balance;
+        overflow-wrap: break-word;
+    }
 
-  /* Display weights taper below h2, exactly as the clduk scale does — every
+    /* Display weights taper below h2, exactly as the clduk scale does — every
      heading at 800 flattens the hierarchy on the light sections. */
-  h1,
-  h2 {
-    font-weight: 800;
-  }
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-weight: 700;
-  }
+    h1,
+    h2 {
+        font-weight: 800;
+    }
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-weight: 700;
+    }
 
-  /* Keyboard focus only — never suppress it entirely. */
-  :focus-visible {
-    outline: 2px solid var(--color-magenta-300);
-    outline-offset: 3px;
-    border-radius: 4px;
-  }
+    /* Keyboard focus only — never suppress it entirely. */
+    :focus-visible {
+        outline: 2px solid var(--color-magenta-300);
+        outline-offset: 3px;
+        border-radius: 4px;
+    }
 
-  ::selection {
-    background: var(--color-magenta-500);
-    color: #fff;
-  }
+    ::selection {
+        background: var(--color-magenta-500);
+        color: #fff;
+    }
 }
 
 /* ==========================================================================
@@ -350,24 +355,24 @@
    saturated brand ramp is used on white/mist sections, where the light one
    would wash out. */
 @utility gradient-text {
-  background-image: linear-gradient(97deg, #ff6cc0 0%, #b57bff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  /* Descenders get clipped without a little breathing room. */
-  padding-bottom: 0.08em;
+    background-image: linear-gradient(97deg, #ff6cc0 0%, #b57bff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* Descenders get clipped without a little breathing room. */
+    padding-bottom: 0.08em;
 }
 
 @utility gradient-text-brand {
-  background-image: linear-gradient(
-    97deg,
-    var(--color-violet-500) 0%,
-    var(--color-magenta-500) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  padding-bottom: 0.08em;
+    background-image: linear-gradient(
+        97deg,
+        var(--color-violet-500) 0%,
+        var(--color-magenta-500) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    padding-bottom: 0.08em;
 }
 
 /* `/seo-services` only: the live page's `--rf-gradient-color`, magenta →
@@ -375,124 +380,151 @@
    diagonal, so `gradient-text-brand` cannot stand in for it. Used on the H1
    accent, the CTA band and the primary buttons. */
 @utility gradient-seo {
-  background-image: linear-gradient(
-    90deg,
-    var(--color-seo-pink) 0%,
-    var(--color-seo-coral) 50%,
-    var(--color-seo-cream) 100%
-  );
+    background-image: linear-gradient(
+        90deg,
+        var(--color-seo-pink) 0%,
+        var(--color-seo-coral) 50%,
+        var(--color-seo-cream) 100%
+    );
 }
 
 @utility gradient-text-seo {
-  background-image: linear-gradient(
-    90deg,
-    var(--color-seo-pink) 0%,
-    var(--color-seo-coral) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  padding-bottom: 0.08em;
+    background-image: linear-gradient(
+        90deg,
+        var(--color-seo-pink) 0%,
+        var(--color-seo-coral) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    padding-bottom: 0.08em;
 }
 
 /* Concentric hairline rings behind the hero. Three hard-stopped radial
    gradients on one element — a border can only draw a single circle. */
 @utility bg-rings {
-  background-image:
-    radial-gradient(
-      circle,
-      transparent 0 61%,
-      rgb(204 6 127 / 0.5) 61.5% 62.2%,
-      transparent 62.7%
-    ),
-    radial-gradient(
-      circle,
-      transparent 0 74%,
-      rgb(102 46 145 / 0.55) 74.5% 75.2%,
-      transparent 75.7%
-    ),
-    radial-gradient(
-      circle,
-      transparent 0 88%,
-      rgb(204 6 127 / 0.32) 88.5% 89.2%,
-      transparent 89.7%
-    );
+    background-image:
+        radial-gradient(
+            circle,
+            transparent 0 61%,
+            rgb(204 6 127 / 0.5) 61.5% 62.2%,
+            transparent 62.7%
+        ),
+        radial-gradient(
+            circle,
+            transparent 0 74%,
+            rgb(102 46 145 / 0.55) 74.5% 75.2%,
+            transparent 75.7%
+        ),
+        radial-gradient(
+            circle,
+            transparent 0 88%,
+            rgb(204 6 127 / 0.32) 88.5% 89.2%,
+            transparent 89.7%
+        );
 }
 
 /* Full-bleed mesh used behind dark sections. */
 @utility bg-mesh {
-  background-image:
-    radial-gradient(58% 44% at 12% 8%, rgb(204 6 127 / 0.3) 0%, transparent 70%),
-    radial-gradient(52% 46% at 88% 14%, rgb(102 46 145 / 0.38) 0%, transparent 72%),
-    radial-gradient(46% 40% at 76% 92%, rgb(24 207 171 / 0.13) 0%, transparent 70%);
+    background-image:
+        radial-gradient(
+            58% 44% at 12% 8%,
+            rgb(204 6 127 / 0.3) 0%,
+            transparent 70%
+        ),
+        radial-gradient(
+            52% 46% at 88% 14%,
+            rgb(102 46 145 / 0.38) 0%,
+            transparent 72%
+        ),
+        radial-gradient(
+            46% 40% at 76% 92%,
+            rgb(24 207 171 / 0.13) 0%,
+            transparent 70%
+        );
 }
 
 /* Film grain. Inline SVG, so no network request. */
 @utility bg-noise {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
 }
 
 /* Page container. */
 @utility container-site {
-  width: 100%;
-  max-width: var(--container-site);
-  margin-inline: auto;
-  padding-inline: var(--spacing-gutter);
+    width: 100%;
+    max-width: var(--container-site);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
 }
 
 /* Horizontal rails: scroll-snap without a carousel library. */
 @utility rail {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  overscroll-behavior-x: contain;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  > * {
-    scroll-snap-align: start;
-    flex: 0 0 auto;
-  }
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overscroll-behavior-x: contain;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    > * {
+        scroll-snap-align: start;
+        flex: 0 0 auto;
+    }
 }
 
 /* Fades the marquee in and out at both edges. */
 @utility mask-edges {
-  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(
+        90deg,
+        transparent,
+        #000 8%,
+        #000 92%,
+        transparent
+    );
 }
 
 /* Scroll-reveal. Elements start hidden and are flipped by IntersectionObserver
    in components/ui/Reveal.tsx, which also has a safety net that reveals
    everything if the observer never fires. */
 @layer components {
-  .reveal {
-    opacity: 0;
-    transform: translateY(18px);
-    transition:
-      opacity 0.6s var(--ease-out),
-      transform 0.6s var(--ease-out);
-  }
-  .reveal.is-visible {
-    opacity: 1;
-    transform: none;
-  }
+    .reveal {
+        opacity: 0;
+        transform: translateY(18px);
+        transition:
+            opacity 0.6s var(--ease-out),
+            transform 0.6s var(--ease-out);
+    }
+    .reveal.is-visible {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* reCAPTCHA v3's floating badge. It is fixed to the bottom-right corner, which
+   on this site belongs to the WhatsApp button. Google permits hiding it only if
+   the page carries the "protected by reCAPTCHA" disclosure naming both
+   policies instead — `components/forms/Recaptcha.tsx` renders exactly that
+   under every form, and the two must stay together. */
+.grecaptcha-badge {
+    visibility: hidden;
 }
 
 /* Respect the OS setting: decorative motion is removed entirely. */
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  .reveal {
-    opacity: 1;
-    transform: none;
-  }
+    html {
+        scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    .reveal {
+        opacity: 1;
+        transform: none;
+    }
 }

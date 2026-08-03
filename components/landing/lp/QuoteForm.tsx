@@ -86,7 +86,7 @@ export default function QuoteForm({
                 errors={state.errors?.message}
             />
 
-            <Recaptcha active={engaged} />
+            <Recaptcha active={engaged} action="landing_quote" />
             <FormStatus state={state} />
 
             <button type="submit" disabled={pending} className={btn("primary", "lg", "w-full")}>

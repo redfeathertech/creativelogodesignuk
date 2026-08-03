@@ -32,35 +32,44 @@ export default function Hero() {
                 both cards were dragged 147px past a 320px viewport with it.
                 `min-w-0` breaks the chain, and `truncate` then does what it
                 says instead of pushing. */}
-            {/* Full-bleed with a 50px gutter, NOT `container-site`.
+            {/* `container-site`, like the offer bar above and every section
+                below, so the hero's edges line up with the rest of the page.
 
-                The live hero is a Bootstrap `container-fluid` carrying
-                `padding-inline: 50px` — it spans the viewport. Capping it at
-                the site's 1280px put three equal columns at 363px each, and a
-                70px `<h1>` in a 363px column wraps to **six lines**
-                ("Boost / Your / Business / With / SEO / Services"). At the
-                live width the same column is ~607px and the heading sits on
-                three, which is the approved design. Only the hero does this;
-                every section below it keeps `container-site`. */}
-            <div className="grid w-full items-center gap-[clamp(2.5rem,1.5rem+4vw,3rem)] px-[clamp(1.25rem,0.5rem+3vw,3.125rem)] lg:grid-cols-3 [&>*]:min-w-0">
+                This WAS full-bleed with a 50px gutter, because when
+                `container-site` capped at 1280px three equal columns came out
+                at 363px each, and a 70px `<h1>` in a 363px column wraps to
+                **six lines** ("Boost / Your / Business / With / SEO /
+                Services"). At the unified 1560px cap a column is 456px —
+                within 2px of what the full-bleed layout gave at a 1560px
+                viewport — and the heading ramp below freezes at the size
+                that fits it. */}
+            <div className="container-site grid items-center gap-[clamp(2.5rem,1.5rem+4vw,3rem)] lg:grid-cols-3 [&>*]:min-w-0">
                 {/* ---------------------------------------------------- copy -- */}
                 <div>
                     {/* The clamp tracks the column, not the viewport.
 
-                        This heading lives in a third of a full-bleed row, so
-                        the width it actually gets is `(100vw - 100px) / 3`.
-                        Sizing it off raw `vw` held 70px down to 1280px, where
-                        the column is 364px and the heading wrapped to six
-                        lines. The slope below keeps roughly "Business With" on
-                        one line at every desktop width, and tops out at the
-                        live page's own 70px.
+                        This heading lives in a third of the container, so its
+                        real width is `(min(100vw, 1560px) - 2*gutter - 96) / 3`
+                        — 273px at 992, 456px once the container caps. The
+                        binding constraint is "Business With" staying on one
+                        line: the approved wrap is three lines, and the phrase
+                        costs ~7.69px of width per 1px of font size. The ramp
+                        below is fitted to that column curve and holds 7-12px
+                        of slack at every width from 992 to 2560, freezing at
+                        3.65rem where the container stops growing.
+
+                        Do not raise the cap to the ramp's "natural" 3.72rem
+                        value at 1560px: it overflows the 456px column by 1.8px
+                        and drops "With" onto a fourth line as a widow.
+                        (The live page's 70px belonged to a full-bleed column
+                        that kept widening past the container.)
 
                         The live CSS answers this with three stepped media
                         queries that disagree with each other — 70px, then
                         32px at ≤1199, then *back up* to 46px at ≤991, then
                         28px at ≤767. A continuous ramp is the same intent
                         without the reversal. */}
-                    <h1 className="font-display text-[clamp(1.75rem,-0.25rem+4.07vw,4.375rem)] leading-[1.05] font-extrabold text-seo-ink">
+                    <h1 className="font-display text-[clamp(1.75rem,-0.52rem+4.27vw,3.65rem)] leading-[1.05] font-extrabold text-seo-ink">
                         {hero.titleLead}
                         <br />
                         <span className="text-seo-pink">{hero.titleAccent}</span>

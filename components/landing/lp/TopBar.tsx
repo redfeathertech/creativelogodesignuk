@@ -21,7 +21,7 @@ export default function TopBar() {
     return (
         <header className="relative isolate bg-ink-950">
             <div className="border-b border-white/[0.07] bg-[linear-gradient(97deg,var(--color-violet-600)_0%,var(--color-magenta-600)_100%)]">
-                <div className="mx-auto flex max-w-[var(--container-wide)] flex-col items-center justify-between gap-2 px-gutter py-2 text-center sm:flex-row sm:gap-6 sm:text-left">
+                <div className="mx-auto flex max-w-[var(--container-site)] flex-col items-center justify-between gap-2 px-gutter py-2 text-center sm:flex-row sm:gap-6 sm:text-left">
                     <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs font-semibold text-white sm:justify-start">
                         {topBar.offer}
                         <QuoteButton
@@ -60,7 +60,7 @@ export default function TopBar() {
                 </div>
             </div>
 
-            <div className="mx-auto flex max-w-[var(--container-wide)] items-center justify-center px-gutter py-5 lg:justify-start">
+            <div className="mx-auto flex max-w-[var(--container-site)] items-center justify-center px-gutter py-5 lg:justify-start">
                 <Image
                     src="/assets/img/logo.webp"
                     alt="Creative Logo Design"

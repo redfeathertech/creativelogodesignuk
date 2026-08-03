@@ -553,6 +553,54 @@ symptom (a page that scrolls a few px sideways on a phone) is easy to dismiss.
 
 **Final: 564 measurements across 47 routes, 0 failing.**
 
+### reCAPTCHA moved from v2 to v3
+
+The client acquired v3 keys, and the two are not interchangeable in either
+direction — a v3 site key will not render a v2 widget, and a v2 secret answering
+a v3 siteverify call returns success with no score.
+
+**The wire format did not change.** The token still posts as
+`g-recaptcha-response`, so every form's markup and every server action's read of
+that field are untouched. What changed is what fills it and what the server does
+with it.
+
+- **`components/forms/Recaptcha.tsx`** no longer renders a widget. It loads
+  `api.js?render=<site key>` on first interaction, calls `grecaptcha.execute`,
+  and writes the token into a hidden input. All the v2 sizing machinery is
+  gone — the compact-variant switch, the container query, the reserved height,
+  the `overflow-x-auto` guard. There is no iframe to fit into 320px any more,
+  which retires the whole 304px problem documented under 31 Jul.
+- **Tokens expire after 120s**, which a form being filled in will outlive. The
+  token is re-minted every 100s while the form is engaged, so whatever posts is
+  always fresh. This is the one genuinely new failure mode v3 introduces.
+- **`lib/recaptcha.ts` now scores.** v3 returns 0.0–1.0 rather than pass/fail,
+  so the threshold is ours to pick: `RECAPTCHA_MIN_SCORE`, defaulting to
+  Google's 0.5. Below-threshold, expired (`timeout-or-duplicate`) and
+  never-valid tokens are logged distinctly, because only the first two are worth
+  reacting to by moving the number.
+- **Actions are verified.** Each form mints its token under a name — `lead`,
+  `proposal`, `landing_quote`, `callback`, `seo_enquiry` — and `guard()` passes
+  the expected name to `verifyRecaptcha` as a literal argument. It is deliberately
+  not read from `formData`: a visitor-supplied action would verify against itself
+  and confirm nothing. The `action` prop and the `guard()` argument must stay in
+  step.
+- **The floating badge is hidden** in `globals.css`, because the bottom-right
+  corner is the WhatsApp FAB's. Google permits that only with the "protected by
+  reCAPTCHA" disclosure naming both policies, which `Recaptcha` now renders under
+  every form. **The two must ship together** — hiding the badge without the text
+  is a terms violation.
+- The rejection message changed. "Please complete the captcha" was v2 wording;
+  under v3 there is nothing to complete, and the three real causes (low score,
+  expired token, script blocked) are all cleared by reloading.
+
+`npx tsc --noEmit`, `npm run lint` and `npm run build` all clean; every route
+still prerenders `○` or `●`.
+
+**Not verified against live keys.** The score threshold in particular is a guess
+until real traffic runs through it — watch the `[recaptcha] score … below
+threshold` warnings for the first few days and move `RECAPTCHA_MIN_SCORE` if
+genuine enquiries are being turned away.
+
 ## Verified
 
 | Check | Result |
@@ -573,8 +621,8 @@ symptom (a page that scrolls a few px sideways on a phone) is easy to dismiss.
 | `/contact-us` outline | 1 × h1, 2 × h2, 3 × h3 in the body (9 × h2 counting the footer and lead panel) |
 | `/contact-us` JSON-LD | Organization + WebSite + WebPage + BreadcrumbList, breadcrumb matches the visible trail |
 | `/contact-us` responsive | No horizontal overflow and no overflowing element at 14 widths, 320 → 1920px, measured over CDP |
-| reCAPTCHA at 320px | Compact variant renders 164×144 and fits; reserved height matches, so no shift. Verified end-to-end against a build carrying Google's public test key |
-| Hero `sizes` | Now describes the wrapper (capped 520px, then 5/12 of the container) instead of a vw fraction. Measured: −42KB at 991px/2×, −11KB at 991px/1×, −7KB at 1440px/2×, no case worse |
+| reCAPTCHA at 320px | ~~Compact variant renders 164×144 and fits; reserved height matches, so no shift. Verified end-to-end against a build carrying Google's public test key~~ **Moot since the move to v3** — nothing is rendered, so there is no widget to fit. The check that replaces it is that the disclosure text wraps cleanly at 320px |
+| Hero `sizes` | Now describes the wrapper (capped 520px, then 5/12 of the container) instead of a vw fraction. Measured against the then-1280px container: −42KB at 991px/2×, −11KB at 991px/1×, −7KB at 1440px/2×, no case worse. **The px tails were re-measured when the container was unified to 1560px** — the 5/12 slot is 583px there, not 467px, so the tail is now 584px. Any future container change must re-measure every hard-coded `sizes` tail |
 | OG images | Every prerendered page now emits exactly one `og:image` + `twitter:image`. They were missing on all 42 inner pages — see [SEO-PLAYBOOK.md](SEO-PLAYBOOK.md#metadata) |
 | `/creative-logo-design` content parity | **0 deviations, both directions** — 258 module strings against the live page, 214 distinct live text runs against the build. `python scripts/verify-landing-parity.py` |
 | `/creative-logo-design` outline | 1 × h1, 13 × h2, 21 × h3. No skipped levels |
@@ -646,8 +694,10 @@ symptom (a page that scrolls a few px sideways on a phone) is easy to dismiss.
 ## Not done yet
 
 ### Blocking launch
-- [ ] **`.env` values** — SMTP credentials, reCAPTCHA keys, `NEXT_PUBLIC_GA_ID`.
-      See `.env.example`. Forms currently log to console instead of sending.
+- [ ] **`.env` values** — SMTP credentials, reCAPTCHA **v3** keys (the client has
+      them; v2 keys will not work), `NEXT_PUBLIC_GA_ID`. See `.env.example`.
+      Forms currently log to console instead of sending, and with no secret set
+      the captcha check is skipped entirely.
 - [ ] **The landing pages' own ad tracking is not reproduced.** The live
       `/creative-logo-design/` carries GA4 `G-7KR6HYTBXR`, Google Ads
       `AW-16485403310` (with a `phone_conversion_number` call-tracking snippet)

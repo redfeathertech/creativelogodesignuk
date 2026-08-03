@@ -1,135 +1,170 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
- * reCAPTCHA v2, loaded lazily.
+ * reCAPTCHA v3, loaded lazily.
+ *
+ * v3 has no widget and nothing to click — it scores the visitor in the
+ * background and hands back a token, which rides to the server in the hidden
+ * input below under the same `g-recaptcha-response` name v2 used. So every form
+ * keeps its existing markup and every server action keeps reading the same
+ * field; only what fills it changed.
  *
  * The live site pulls reCAPTCHA (~500KB across sub-requests) on every page
  * load, for two forms that are below the fold or behind an offcanvas. Here the
- * script is only fetched once the visitor actually interacts with a form,
- * which keeps it off the critical path entirely.
+ * script is only fetched once the visitor actually interacts with a form, which
+ * keeps it off the critical path entirely. That lazy load matters more under v3
+ * than it did under v2: v3 wants to be on *every* page, and this site would pay
+ * that cost on 43 routes for the sake of six forms.
  *
- * When no site key is configured the widget is skipped and the server-side
- * check is a no-op, so local development needs no credentials.
+ * Tokens expire two minutes after `execute` resolves, and a form sitting open
+ * while someone types will outlive that easily. The token is therefore minted
+ * on first interaction and re-minted on an interval below the expiry, so
+ * whatever is in the input when the form posts is always fresh.
  *
- * The widget is a fixed-size iframe — 304x78 normally, 164x144 compact — and
- * cannot be made fluid. At 320px the form card is 230px wide inside its
- * padding, so the normal widget pushes the whole page 29px wider than the
- * viewport (measured). Below 304px of room it therefore renders compact, which
- * is exactly what that variant exists for. The clduk redesign instead scales
- * the normal widget by 0.86 and clips the overflow, which still overflows at
- * 320px — this is the fix that reference needed.
+ * When no site key is configured nothing loads and the server-side check is a
+ * no-op, so local development needs no credentials.
  */
 
 declare global {
   interface Window {
     grecaptcha?: {
-      render: (
-        el: HTMLElement,
-        opts: { sitekey: string; theme?: string; size?: "normal" | "compact" },
-      ) => number;
-      reset: (id?: number) => void;
+      ready: (cb: () => void) => void;
+      execute: (siteKey: string, opts: { action: string }) => Promise<string>;
     };
-    __cldRecaptchaReady?: boolean;
   }
 }
-
-/** Width of the normal widget. Narrower than this and it will not fit. */
-const NORMAL_WIDTH = 304;
 
 const SCRIPT_ID = "recaptcha-api";
 const SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
-/** `active` flips true on first interaction with the parent form. */
-export default function Recaptcha({ active }: { active: boolean }) {
-  const holder = useRef<HTMLDivElement>(null);
-  const rendered = useRef(false);
+/** Google expires tokens at 120s. Refresh with room to spare. */
+const REFRESH_MS = 100_000;
+
+/**
+ * `active` flips true on first interaction with the parent form.
+ *
+ * `action` names this form to reCAPTCHA — it is echoed back by the siteverify
+ * call and checked there, which is what stops a token minted elsewhere being
+ * replayed here. Google only accepts `A-Za-z/_` in an action name.
+ */
+export default function Recaptcha({
+  active,
+  action,
+}: {
+  active: boolean;
+  action: string;
+}) {
+  const [token, setToken] = useState("");
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    if (!active || !SITE_KEY || rendered.current) return;
+    if (!active || !SITE_KEY) return;
 
     let cancelled = false;
 
-    const renderWidget = () => {
-      if (cancelled || rendered.current || !holder.current || !window.grecaptcha) return;
-      try {
-        window.grecaptcha.render(holder.current, {
-          sitekey: SITE_KEY,
-          theme: "dark",
-          // Measured at render time, which is after first interaction and so
-          // after layout has settled.
-          size: holder.current.clientWidth < NORMAL_WIDTH ? "compact" : "normal",
-        });
-        rendered.current = true;
-      } catch {
-        // Already rendered into this node — harmless.
-        rendered.current = true;
-      }
+    const mint = () => {
+      if (cancelled || !window.grecaptcha?.execute) return;
+      window.grecaptcha
+        .execute(SITE_KEY, { action })
+        .then((next) => {
+          if (cancelled) return;
+          setToken(next);
+          setFailed(false);
+        })
+        .catch(() => !cancelled && setFailed(true));
     };
 
-    if (window.grecaptcha?.render) {
-      renderWidget();
-      return;
-    }
+    const start = () => {
+      if (cancelled || !window.grecaptcha?.ready) return;
+      window.grecaptcha.ready(mint);
+    };
 
-    const existing = document.getElementById(SCRIPT_ID);
-    if (!existing) {
-      const script = document.createElement("script");
-      script.id = SCRIPT_ID;
-      script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
-      script.async = true;
-      script.defer = true;
-      script.onerror = () => !cancelled && setFailed(true);
-      document.head.appendChild(script);
-    }
+    let poll = 0;
+    let timeout = 0;
 
-    // The API sets window.grecaptcha asynchronously after the script loads.
-    const poll = window.setInterval(() => {
-      if (window.grecaptcha?.render) {
-        window.clearInterval(poll);
-        renderWidget();
+    if (window.grecaptcha?.ready) {
+      start();
+    } else {
+      const existing = document.getElementById(SCRIPT_ID);
+      if (!existing) {
+        const script = document.createElement("script");
+        script.id = SCRIPT_ID;
+        script.src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(SITE_KEY)}`;
+        script.async = true;
+        script.defer = true;
+        script.onerror = () => !cancelled && setFailed(true);
+        document.head.appendChild(script);
       }
-    }, 120);
-    const timeout = window.setTimeout(() => {
-      window.clearInterval(poll);
-      if (!rendered.current && !cancelled) setFailed(true);
-    }, 12_000);
+
+      // grecaptcha appears asynchronously after the script loads, and a second
+      // form mounting later shares whatever the first one injected.
+      poll = window.setInterval(() => {
+        if (window.grecaptcha?.ready) {
+          window.clearInterval(poll);
+          start();
+        }
+      }, 120);
+      timeout = window.setTimeout(() => {
+        window.clearInterval(poll);
+        if (!window.grecaptcha?.ready && !cancelled) setFailed(true);
+      }, 12_000);
+    }
+
+    // Armed straight away: `mint` no-ops until grecaptcha exists, and by the
+    // first tick 100s later it always will.
+    const refresh = window.setInterval(mint, REFRESH_MS);
 
     return () => {
       cancelled = true;
       window.clearInterval(poll);
       window.clearTimeout(timeout);
+      window.clearInterval(refresh);
     };
-  }, [active]);
+  }, [active, action]);
 
   if (!SITE_KEY) return null;
 
   return (
-    /* Two elements, not one: a container query matches descendants of the
-       container, never the container itself, so the reserved height has to sit
-       on a child of the element carrying `@container`.
+    /* No reserved height and no container query any more: v3 renders nothing,
+       so there is no fixed-size iframe to fit into 320px and nothing that can
+       shift the page when it appears. The v2 compact-variant machinery went
+       with it.
 
-       That reserve has to match whichever variant will render or the widget
-       shifts the page when it appears. Tailwind compiles `@max-[304px]` to
-       `@container not (min-width: 304px)` — true below 304px, the same test as
-       `clientWidth < NORMAL_WIDTH` above, so the two decisions cannot disagree
-       at the boundary. */
-    <div className="@container">
-      {/* `overflow-x-auto` is the belt to that braces: the variant is chosen
-          once, at first interaction, and re-rendering to change it would throw
-          away an already-solved captcha. So if the viewport narrows afterwards
-          — a phone rotating back to portrait — a now-too-wide widget scrolls
-          inside this box instead of pushing the page sideways. */}
-      <div className="min-h-[78px] max-w-full overflow-x-auto @max-[304px]:min-h-[144px]">
-        <div ref={holder} />
-        {failed && (
-          <p className="text-xs text-white/50">
-            The captcha could not load. Please check your connection and refresh the page.
-          </p>
-        )}
-      </div>
+       The disclosure is not decoration — Google's terms require either the
+       floating badge or this exact wording naming both policies. The badge is
+       hidden in globals.css because the bottom-right corner already belongs to
+       the WhatsApp button, so this text is what keeps us compliant. */
+    <div>
+      <input type="hidden" name="g-recaptcha-response" value={token} readOnly />
+      {failed ? (
+        <p className="text-xs text-white/50">
+          The captcha could not load. Please check your connection and refresh the page.
+        </p>
+      ) : (
+        <p className="text-xs text-white/40">
+          This site is protected by reCAPTCHA and the Google{" "}
+          <a
+            href="https://policies.google.com/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-white/70"
+          >
+            Privacy Policy
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://policies.google.com/terms"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-white/70"
+          >
+            Terms of Service
+          </a>{" "}
+          apply.
+        </p>
+      )}
     </div>
   );
 }

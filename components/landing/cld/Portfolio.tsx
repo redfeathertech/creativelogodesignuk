@@ -52,9 +52,10 @@ export default function Portfolio() {
                                 alt={item.alt}
                                 width={portfolio.tile.width}
                                 height={portfolio.tile.height}
-                                // Two up at 320px, five up at 1280 — the widest a
-                                // cell is ever drawn is ~236px inside the grid.
-                                sizes="(max-width: 575px) 45vw, (max-width: 991px) 30vw, 240px"
+                                // Two up at 320px, five up from 992 — the widest
+                                // a cell is ever drawn is 280px, at the 1560px
+                                // container cap: (1464 - 4x16 gap) / 5.
+                                sizes="(max-width: 575px) 45vw, (max-width: 991px) 30vw, 280px"
                                 className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
                             />
                         </li>

@@ -72,18 +72,19 @@ export default function ContactHero({ trail }: { trail: readonly Crumb[] }) {
                         />
                         {/* `sizes` describes the wrapper above it, not the
                             viewport: the image is capped at 520px until `lg`,
-                            and above `lg` it is 5/12 of a 1280px container, so
-                            it never exceeds ~470px. Measured widths: 280px at
-                            320, 520px from 576 to 991, 355px at 992, 467px at
-                            1440 and up. A vw-proportional `sizes` would claim
-                            813px at 991 and make the browser fetch a candidate
-                            two steps too large — on a preloaded image. */}
+                            and above `lg` it is 5/12 of the container, which
+                            tops out with the container itself at 1560px.
+                            Measured widths: 280px at 320, 520px from 576 to
+                            991, 355px at 992, 533px at 1440, 583px at 1560 and
+                            up. A vw-proportional `sizes` would claim 813px at
+                            991 and make the browser fetch a candidate two steps
+                            too large — on a preloaded image. */}
                         <Image
                             src={contactHero.image.src}
                             alt={contactHero.image.alt}
                             width={2000}
                             height={2000}
-                            sizes="(min-width: 62rem) 480px, (min-width: 36rem) 520px, 92vw"
+                            sizes="(min-width: 62rem) 584px, (min-width: 36rem) 520px, 92vw"
                             preload
                             className="h-auto w-full"
                         />

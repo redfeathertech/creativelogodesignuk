@@ -15,7 +15,7 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-white/10 bg-ink-950">
-      <div className="mx-auto max-w-[var(--container-wide)] px-gutter py-16">
+      <div className="mx-auto max-w-[var(--container-site)] px-gutter py-16">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)]">
           {/* ---- brand ---- */}
           <div>

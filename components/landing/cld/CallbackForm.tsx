@@ -46,7 +46,7 @@ export default function CallbackForm() {
                 errors={state.errors?.phone}
             />
 
-            <Recaptcha active={engaged} />
+            <Recaptcha active={engaged} action="callback" />
             <FormStatus state={state} />
 
             <button type="submit" disabled={pending} className={btn("primary", "lg", "w-full")}>

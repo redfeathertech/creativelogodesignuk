@@ -23,7 +23,7 @@ const socialIcons: Record<string, () => React.ReactElement> = {
 export default function TopBar() {
   return (
     <div className="hidden h-[var(--topbar-h)] border-b border-white/[0.07] bg-ink-950 lg:block">
-      <div className="mx-auto flex h-full max-w-[var(--container-wide)] items-center justify-between gap-6 px-gutter text-xs text-white/65">
+      <div className="mx-auto flex h-full max-w-[var(--container-site)] items-center justify-between gap-6 px-gutter text-xs text-white/65">
         <div className="flex items-center gap-5">
           <a
             href={`tel:${contact.phoneE164}`}

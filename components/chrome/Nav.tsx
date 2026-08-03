@@ -125,7 +125,7 @@ export default function Nav() {
             >
                 <nav
                     aria-label="Primary"
-                    className="mx-auto flex h-full max-w-[var(--container-wide)] items-center justify-between gap-6 px-gutter"
+                    className="mx-auto flex h-full max-w-[var(--container-site)] items-center justify-between gap-6 px-gutter"
                 >
                     <Link
                         href="/"

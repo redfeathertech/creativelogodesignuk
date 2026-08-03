@@ -2,25 +2,35 @@
 
 import { headers } from "next/headers";
 import {
-  callbackSchema,
-  landingQuoteSchema,
-  leadSchema,
-  proposalSchema,
-  seoEnquirySchema,
-  type FormState,
+    callbackSchema,
+    landingQuoteSchema,
+    leadSchema,
+    proposalSchema,
+    seoEnquirySchema,
+    type FormState,
 } from "@/lib/validation";
 import { checkAntiSpam } from "@/lib/antispam";
 import { verifyRecaptcha } from "@/lib/recaptcha";
-import { sendAdminNotification, sendUserConfirmation, type MailField } from "@/lib/mail";
-import { hero as cldHero, packageGroups } from "@/content/landing/creative-logo-design";
+import {
+    sendAdminNotification,
+    sendUserConfirmation,
+    type MailField,
+} from "@/lib/mail";
+import {
+    hero as cldHero,
+    packageGroups,
+} from "@/content/landing/creative-logo-design";
 import { packageGroups as ldoPackageGroups } from "@/content/landing/logo-design-offer";
 import {
-  combo as lpCombo,
-  hero as lpHero,
-  packageGroups as lpPackageGroups,
-  topBar as lpTopBar,
+    combo as lpCombo,
+    hero as lpHero,
+    packageGroups as lpPackageGroups,
+    topBar as lpTopBar,
 } from "@/content/landing/lp";
-import { pricing as seoPricing, quoteDialog as seoQuoteDialog } from "@/content/landing/seo-services";
+import {
+    pricing as seoPricing,
+    quoteDialog as seoQuoteDialog,
+} from "@/content/landing/seo-services";
 
 /**
  * Form submission handlers.
@@ -30,94 +40,121 @@ import { pricing as seoPricing, quoteDialog as seoQuoteDialog } from "@/content/
  * gives a bot no signal about which check tripped.
  */
 
-const GENERIC_ERROR = "Something went wrong. Please try again, or email us directly.";
-const SUCCESS = "Thanks — we've got your details and will be in touch within one working day.";
+const GENERIC_ERROR =
+    "Something went wrong. Please try again, or email us directly.";
+const SUCCESS =
+    "Thanks — we've got your details and will be in touch within one working day.";
 
 async function submissionMeta(formName: string): Promise<MailField[]> {
-  const h = await headers(); // async in Next 16
-  return [
-    { label: "Form", value: formName },
-    { label: "Submitted", value: new Date().toISOString() },
-    { label: "Referer", value: h.get("referer") ?? "" },
-    { label: "User agent", value: h.get("user-agent") ?? "" },
-  ];
+    const h = await headers(); // async in Next 16
+    return [
+        { label: "Form", value: formName },
+        { label: "Submitted", value: new Date().toISOString() },
+        { label: "Referer", value: h.get("referer") ?? "" },
+        { label: "User agent", value: h.get("user-agent") ?? "" },
+    ];
 }
 
-async function guard(formData: FormData): Promise<FormState | null> {
-  const spam = checkAntiSpam(formData, Date.now());
-  if (!spam.ok) {
-    console.warn("[forms] rejected by anti-spam:", spam.reason);
-    // Bots are told nothing useful; humans who trip "too-fast" get a retry hint.
-    return {
-      status: "error",
-      message:
-        spam.reason === "too-fast"
-          ? "That was quick! Please take a moment and submit again."
-          : GENERIC_ERROR,
-    };
-  }
+/**
+ * @param action the reCAPTCHA v3 action this form's token is minted under, and
+ *               which siteverify must echo back. It is passed in from each
+ *               server action rather than read out of `formData` on purpose:
+ *               a visitor-supplied action would verify against itself and the
+ *               check would confirm nothing. It must match the `action` prop on
+ *               the matching `<Recaptcha>`.
+ */
+async function guard(
+    formData: FormData,
+    action: string,
+): Promise<FormState | null> {
+    const spam = checkAntiSpam(formData, Date.now());
+    if (!spam.ok) {
+        console.warn("[forms] rejected by anti-spam:", spam.reason);
+        // Bots are told nothing useful; humans who trip "too-fast" get a retry hint.
+        return {
+            status: "error",
+            message:
+                spam.reason === "too-fast"
+                    ? "That was quick! Please take a moment and submit again."
+                    : GENERIC_ERROR,
+        };
+    }
 
-  const captchaOk = await verifyRecaptcha(
-    (formData.get("g-recaptcha-response") as string | null) ?? null,
-  );
-  if (!captchaOk) {
-    return { status: "error", message: "Please complete the captcha and try again." };
-  }
+    const captchaOk = await verifyRecaptcha(
+        (formData.get("g-recaptcha-response") as string | null) ?? null,
+        action,
+    );
+    if (!captchaOk) {
+        // v3 has nothing to "complete" — a rejection is a low score, an expired
+        // token, or a script that never loaded. Ask for the one thing that
+        // actually clears all three.
+        return {
+            status: "error",
+            message:
+                "We couldn't verify that submission. Please reload the page and try again.",
+        };
+    }
 
-  return null;
+    return null;
 }
 
 /** Offcanvas "Ready to grow revenue?" panel. */
-export async function submitLead(_prev: FormState, formData: FormData): Promise<FormState> {
-  const blocked = await guard(formData);
-  if (blocked) return blocked;
+export async function submitLead(
+    _prev: FormState,
+    formData: FormData,
+): Promise<FormState> {
+    const blocked = await guard(formData, "lead");
+    if (blocked) return blocked;
 
-  const parsed = leadSchema.safeParse({
-    first_name: formData.get("first_name"),
-    last_name: formData.get("last_name"),
-    email: formData.get("email"),
-    phone: formData.get("phone"),
-    company: formData.get("company"),
-    source: formData.get("source"),
-    help: formData.getAll("help").map(String),
-    project_details: formData.get("project_details"),
-  });
+    const parsed = leadSchema.safeParse({
+        first_name: formData.get("first_name"),
+        last_name: formData.get("last_name"),
+        email: formData.get("email"),
+        phone: formData.get("phone"),
+        company: formData.get("company"),
+        source: formData.get("source"),
+        help: formData.getAll("help").map(String),
+        project_details: formData.get("project_details"),
+    });
 
-  if (!parsed.success) {
-    return {
-      status: "error",
-      message: "Please check the highlighted fields.",
-      errors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
-    };
-  }
+    if (!parsed.success) {
+        return {
+            status: "error",
+            message: "Please check the highlighted fields.",
+            errors: parsed.error.flatten().fieldErrors as Record<
+                string,
+                string[]
+            >,
+        };
+    }
 
-  const d = parsed.data;
-  const fields: MailField[] = [
-    { label: "Name", value: `${d.first_name} ${d.last_name}` },
-    { label: "Email", value: d.email },
-    { label: "Phone", value: d.phone },
-    { label: "Company", value: d.company },
-    { label: "Heard about us via", value: d.source },
-    { label: "Wants help with", value: d.help.join(", ") },
-    { label: "Project details", value: d.project_details ?? "" },
-  ];
+    const d = parsed.data;
+    const fields: MailField[] = [
+        { label: "Name", value: `${d.first_name} ${d.last_name}` },
+        { label: "Email", value: d.email },
+        { label: "Phone", value: d.phone },
+        { label: "Company", value: d.company },
+        { label: "Heard about us via", value: d.source },
+        { label: "Wants help with", value: d.help.join(", ") },
+        { label: "Project details", value: d.project_details ?? "" },
+    ];
 
-  try {
-    await Promise.all([
-      sendAdminNotification({
-        formName: "New lead enquiry",
-        fields,
-        meta: await submissionMeta("Lead panel"),
-        replyTo: d.email,
-      }),
-      sendUserConfirmation({ to: d.email, firstName: d.first_name }),
-    ]);
-  } catch (error) {
-    console.error("[forms] lead delivery failed", error);
-    return { status: "error", message: GENERIC_ERROR };
-  }
+    try {
+        await Promise.all([
+            sendAdminNotification({
+                formName: "New lead enquiry",
+                fields,
+                meta: await submissionMeta("Lead panel"),
+                replyTo: d.email,
+            }),
+            sendUserConfirmation({ to: d.email, firstName: d.first_name }),
+        ]);
+    } catch (error) {
+        console.error("[forms] lead delivery failed", error);
+        return { status: "error", message: GENERIC_ERROR };
+    }
 
-  return { status: "success", message: SUCCESS };
+    return { status: "success", message: SUCCESS };
 }
 
 /**
@@ -134,63 +171,76 @@ export async function submitLead(_prev: FormState, formData: FormData): Promise<
  * has no inherited keys.
  */
 const PROPOSAL_SOURCES = new Map<string, { formName: string; meta: string }>([
-  ["Contact page", { formName: "New contact enquiry", meta: "Contact page form" }],
-  ["hero", { formName: "New proposal request", meta: "Homepage hero form" }],
+    [
+        "Contact page",
+        { formName: "New contact enquiry", meta: "Contact page form" },
+    ],
+    ["hero", { formName: "New proposal request", meta: "Homepage hero form" }],
 ]);
-const DEFAULT_PROPOSAL_SOURCE = { formName: "New proposal request", meta: "Proposal form" };
+const DEFAULT_PROPOSAL_SOURCE = {
+    formName: "New proposal request",
+    meta: "Proposal form",
+};
 
 /** The shared "Free expert proposal" form — homepage band and contact page. */
-export async function submitProposal(_prev: FormState, formData: FormData): Promise<FormState> {
-  const blocked = await guard(formData);
-  if (blocked) return blocked;
+export async function submitProposal(
+    _prev: FormState,
+    formData: FormData,
+): Promise<FormState> {
+    const blocked = await guard(formData, "proposal");
+    if (blocked) return blocked;
 
-  const origin =
-    PROPOSAL_SOURCES.get(String(formData.get("form_source") ?? "")) ?? DEFAULT_PROPOSAL_SOURCE;
+    const origin =
+        PROPOSAL_SOURCES.get(String(formData.get("form_source") ?? "")) ??
+        DEFAULT_PROPOSAL_SOURCE;
 
-  const parsed = proposalSchema.safeParse({
-    first_name: formData.get("first_name"),
-    last_name: formData.get("last_name"),
-    job_title: formData.get("job_title"),
-    company: formData.get("company"),
-    email: formData.get("email"),
-    phone: formData.get("phone"),
-    business_goals: formData.get("business_goals"),
-  });
+    const parsed = proposalSchema.safeParse({
+        first_name: formData.get("first_name"),
+        last_name: formData.get("last_name"),
+        job_title: formData.get("job_title"),
+        company: formData.get("company"),
+        email: formData.get("email"),
+        phone: formData.get("phone"),
+        business_goals: formData.get("business_goals"),
+    });
 
-  if (!parsed.success) {
-    return {
-      status: "error",
-      message: "Please check the highlighted fields.",
-      errors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
-    };
-  }
+    if (!parsed.success) {
+        return {
+            status: "error",
+            message: "Please check the highlighted fields.",
+            errors: parsed.error.flatten().fieldErrors as Record<
+                string,
+                string[]
+            >,
+        };
+    }
 
-  const d = parsed.data;
-  const fields: MailField[] = [
-    { label: "Name", value: `${d.first_name} ${d.last_name}` },
-    { label: "Job title", value: d.job_title ?? "" },
-    { label: "Company", value: d.company ?? "" },
-    { label: "Email", value: d.email },
-    { label: "Phone", value: d.phone },
-    { label: "Business goals", value: d.business_goals ?? "" },
-  ];
+    const d = parsed.data;
+    const fields: MailField[] = [
+        { label: "Name", value: `${d.first_name} ${d.last_name}` },
+        { label: "Job title", value: d.job_title ?? "" },
+        { label: "Company", value: d.company ?? "" },
+        { label: "Email", value: d.email },
+        { label: "Phone", value: d.phone },
+        { label: "Business goals", value: d.business_goals ?? "" },
+    ];
 
-  try {
-    await Promise.all([
-      sendAdminNotification({
-        formName: origin.formName,
-        fields,
-        meta: await submissionMeta(origin.meta),
-        replyTo: d.email,
-      }),
-      sendUserConfirmation({ to: d.email, firstName: d.first_name }),
-    ]);
-  } catch (error) {
-    console.error("[forms] proposal delivery failed", error);
-    return { status: "error", message: GENERIC_ERROR };
-  }
+    try {
+        await Promise.all([
+            sendAdminNotification({
+                formName: origin.formName,
+                fields,
+                meta: await submissionMeta(origin.meta),
+                replyTo: d.email,
+            }),
+            sendUserConfirmation({ to: d.email, firstName: d.first_name }),
+        ]);
+    } catch (error) {
+        console.error("[forms] proposal delivery failed", error);
+        return { status: "error", message: GENERIC_ERROR };
+    }
 
-  return { status: "success", message: SUCCESS };
+    return { status: "success", message: SUCCESS };
 }
 
 /* ------------------------------------------- /creative-logo-design landing -- */
@@ -209,17 +259,19 @@ export async function submitProposal(_prev: FormState, formData: FormData): Prom
  * never leave its name unrecognised here.
  */
 const LANDING_PACKAGES: ReadonlySet<string> = new Set<string>([
-  cldHero.offer.packageName,
-  ...packageGroups.flatMap((group) => group.items.map((item) => item.name)),
-  ...ldoPackageGroups.flatMap((group) => group.items.map((item) => item.name)),
-  ...lpPackageGroups.flatMap((group) => group.items.map((item) => item.name)),
-  /* /lp has three CTAs that label the enquiry with something that is not one of
+    cldHero.offer.packageName,
+    ...packageGroups.flatMap((group) => group.items.map((item) => item.name)),
+    ...ldoPackageGroups.flatMap((group) =>
+        group.items.map((item) => item.name),
+    ),
+    ...lpPackageGroups.flatMap((group) => group.items.map((item) => item.name)),
+    /* /lp has three CTAs that label the enquiry with something that is not one of
      its eighteen package names: the top bar's "Get Free Consultancy", the hero's
      "Get Started" (which the live page attributes to the starter package) and
      the combo band's "Order Now". All three are page constants, not free text. */
-  lpTopBar.offerCtaTitle,
-  lpHero.ctaStartPackage,
-  `${lpCombo.title} - ${lpCombo.price}`,
+    lpTopBar.offerCtaTitle,
+    lpHero.ctaStartPackage,
+    `${lpCombo.title} - ${lpCombo.price}`,
 ]);
 
 /**
@@ -235,42 +287,51 @@ const LANDING_PACKAGES: ReadonlySet<string> = new Set<string>([
  * call site, so a new landing page cannot forget to set it.
  */
 interface LandingSource {
-  meta: string;
-  subject: string;
+    meta: string;
+    subject: string;
 }
 
 const LANDING_SOURCES: ReadonlyMap<string, LandingSource> = new Map([
-  [
-    "creative-logo-design",
-    { meta: "Creative Logo Design landing page", subject: "New logo design enquiry" },
-  ],
-  [
-    "logo-design-offer",
-    { meta: "Logo Design Offer landing page", subject: "New logo design enquiry" },
-  ],
-  [
-    "logo-design-offer-callback",
-    {
-      meta: "Logo Design Offer landing page — callback",
-      subject: "New logo design enquiry",
-    },
-  ],
-  [
-    "lp",
-    { meta: "Web Design Offer landing page (/lp)", subject: "New web design enquiry" },
-  ],
-  [
-    "lp-contact",
-    {
-      meta: "Web Design Offer landing page (/lp) — contact band",
-      subject: "New web design enquiry",
-    },
-  ],
+    [
+        "creative-logo-design",
+        {
+            meta: "Creative Logo Design landing page",
+            subject: "New logo design enquiry",
+        },
+    ],
+    [
+        "logo-design-offer",
+        {
+            meta: "Logo Design Offer landing page",
+            subject: "New logo design enquiry",
+        },
+    ],
+    [
+        "logo-design-offer-callback",
+        {
+            meta: "Logo Design Offer landing page — callback",
+            subject: "New logo design enquiry",
+        },
+    ],
+    [
+        "lp",
+        {
+            meta: "Web Design Offer landing page (/lp)",
+            subject: "New web design enquiry",
+        },
+    ],
+    [
+        "lp-contact",
+        {
+            meta: "Web Design Offer landing page (/lp) — contact band",
+            subject: "New web design enquiry",
+        },
+    ],
 ]);
 
 const DEFAULT_LANDING_SOURCE: LandingSource = {
-  meta: "Creative Logo Design landing page",
-  subject: "New logo design enquiry",
+    meta: "Creative Logo Design landing page",
+    subject: "New logo design enquiry",
 };
 
 /** `sendUserConfirmation` greets by first name; this form asks for one field. */
@@ -278,58 +339,67 @@ const firstNameOf = (fullName: string) => fullName.trim().split(/\s+/)[0] ?? "";
 
 /** The landing page's hero card and its package dialog — both post here. */
 export async function submitLandingQuote(
-  _prev: FormState,
-  formData: FormData,
+    _prev: FormState,
+    formData: FormData,
 ): Promise<FormState> {
-  const blocked = await guard(formData);
-  if (blocked) return blocked;
+    const blocked = await guard(formData, "landing_quote");
+    if (blocked) return blocked;
 
-  const requested = String(formData.get("package") ?? "");
-  const packageName = LANDING_PACKAGES.has(requested) ? requested : "";
+    const requested = String(formData.get("package") ?? "");
+    const packageName = LANDING_PACKAGES.has(requested) ? requested : "";
 
-  const source =
-    LANDING_SOURCES.get(String(formData.get("form_source") ?? "")) ?? DEFAULT_LANDING_SOURCE;
+    const source =
+        LANDING_SOURCES.get(String(formData.get("form_source") ?? "")) ??
+        DEFAULT_LANDING_SOURCE;
 
-  const parsed = landingQuoteSchema.safeParse({
-    full_name: formData.get("full_name"),
-    email: formData.get("email"),
-    phone: formData.get("phone"),
-    message: formData.get("message"),
-  });
+    const parsed = landingQuoteSchema.safeParse({
+        full_name: formData.get("full_name"),
+        email: formData.get("email"),
+        phone: formData.get("phone"),
+        message: formData.get("message"),
+    });
 
-  if (!parsed.success) {
-    return {
-      status: "error",
-      message: "Please check the highlighted fields.",
-      errors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
-    };
-  }
+    if (!parsed.success) {
+        return {
+            status: "error",
+            message: "Please check the highlighted fields.",
+            errors: parsed.error.flatten().fieldErrors as Record<
+                string,
+                string[]
+            >,
+        };
+    }
 
-  const d = parsed.data;
-  const fields: MailField[] = [
-    { label: "Name", value: d.full_name },
-    { label: "Email", value: d.email },
-    { label: "Phone", value: d.phone },
-    { label: "Package", value: packageName },
-    { label: "Message", value: d.message ?? "" },
-  ];
+    const d = parsed.data;
+    const fields: MailField[] = [
+        { label: "Name", value: d.full_name },
+        { label: "Email", value: d.email },
+        { label: "Phone", value: d.phone },
+        { label: "Package", value: packageName },
+        { label: "Message", value: d.message ?? "" },
+    ];
 
-  try {
-    await Promise.all([
-      sendAdminNotification({
-        formName: packageName ? `${source.subject} — ${packageName}` : source.subject,
-        fields,
-        meta: await submissionMeta(source.meta),
-        replyTo: d.email,
-      }),
-      sendUserConfirmation({ to: d.email, firstName: firstNameOf(d.full_name) }),
-    ]);
-  } catch (error) {
-    console.error("[forms] landing quote delivery failed", error);
-    return { status: "error", message: GENERIC_ERROR };
-  }
+    try {
+        await Promise.all([
+            sendAdminNotification({
+                formName: packageName
+                    ? `${source.subject} — ${packageName}`
+                    : source.subject,
+                fields,
+                meta: await submissionMeta(source.meta),
+                replyTo: d.email,
+            }),
+            sendUserConfirmation({
+                to: d.email,
+                firstName: firstNameOf(d.full_name),
+            }),
+        ]);
+    } catch (error) {
+        console.error("[forms] landing quote delivery failed", error);
+        return { status: "error", message: GENERIC_ERROR };
+    }
 
-  return { status: "success", message: SUCCESS };
+    return { status: "success", message: SUCCESS };
 }
 
 /**
@@ -339,43 +409,52 @@ export async function submitLandingQuote(
  * one sends a single email — there is nowhere to send a confirmation, and
  * `sendAdminNotification` needs a `replyTo` it can dial rather than reply to.
  */
-export async function submitCallback(_prev: FormState, formData: FormData): Promise<FormState> {
-  const blocked = await guard(formData);
-  if (blocked) return blocked;
+export async function submitCallback(
+    _prev: FormState,
+    formData: FormData,
+): Promise<FormState> {
+    const blocked = await guard(formData, "callback");
+    if (blocked) return blocked;
 
-  const parsed = callbackSchema.safeParse({
-    full_name: formData.get("full_name"),
-    phone: formData.get("phone"),
-  });
-
-  if (!parsed.success) {
-    return {
-      status: "error",
-      message: "Please check the highlighted fields.",
-      errors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
-    };
-  }
-
-  const d = parsed.data;
-
-  try {
-    await sendAdminNotification({
-      formName: "New callback request",
-      fields: [
-        { label: "Name", value: d.full_name },
-        { label: "Phone", value: d.phone },
-      ],
-      meta: await submissionMeta("Creative Logo Design landing page — callback"),
+    const parsed = callbackSchema.safeParse({
+        full_name: formData.get("full_name"),
+        phone: formData.get("phone"),
     });
-  } catch (error) {
-    console.error("[forms] callback delivery failed", error);
-    return { status: "error", message: GENERIC_ERROR };
-  }
 
-  return {
-    status: "success",
-    message: "Thanks — we’ve got your number and will call you back shortly.",
-  };
+    if (!parsed.success) {
+        return {
+            status: "error",
+            message: "Please check the highlighted fields.",
+            errors: parsed.error.flatten().fieldErrors as Record<
+                string,
+                string[]
+            >,
+        };
+    }
+
+    const d = parsed.data;
+
+    try {
+        await sendAdminNotification({
+            formName: "New callback request",
+            fields: [
+                { label: "Name", value: d.full_name },
+                { label: "Phone", value: d.phone },
+            ],
+            meta: await submissionMeta(
+                "Creative Logo Design landing page — callback",
+            ),
+        });
+    } catch (error) {
+        console.error("[forms] callback delivery failed", error);
+        return { status: "error", message: GENERIC_ERROR };
+    }
+
+    return {
+        status: "success",
+        message:
+            "Thanks — we’ve got your number and will call you back shortly.",
+    };
 }
 
 /* ------------------------------------------------------- /seo-services -- */
@@ -389,9 +468,9 @@ export async function submitCallback(_prev: FormState, formData: FormData): Prom
  * echoed, so renaming a tier can never leave its name unrecognised here.
  */
 const SEO_PLANS: ReadonlySet<string> = new Set<string>([
-  seoQuoteDialog.defaultPackage,
-  seoQuoteDialog.reportPackage,
-  ...seoPricing.tiers.map((tier) => tier.name),
+    seoQuoteDialog.defaultPackage,
+    seoQuoteDialog.reportPackage,
+    ...seoPricing.tiers.map((tier) => tier.name),
 ]);
 
 /**
@@ -403,56 +482,61 @@ const SEO_PLANS: ReadonlySet<string> = new Set<string>([
  * `formName` is composed here from a constant and a `Set` lookup.
  */
 export async function submitSeoEnquiry(
-  _prev: FormState,
-  formData: FormData,
+    _prev: FormState,
+    formData: FormData,
 ): Promise<FormState> {
-  const blocked = await guard(formData);
-  if (blocked) return blocked;
+    const blocked = await guard(formData, "seo_enquiry");
+    if (blocked) return blocked;
 
-  const requested = String(formData.get("package") ?? "");
-  const plan = SEO_PLANS.has(requested) ? requested : "";
+    const requested = String(formData.get("package") ?? "");
+    const plan = SEO_PLANS.has(requested) ? requested : "";
 
-  const parsed = seoEnquirySchema.safeParse({
-    first_name: formData.get("first_name"),
-    last_name: formData.get("last_name"),
-    email: formData.get("email"),
-    subject: formData.get("subject"),
-    phone: formData.get("phone"),
-    message: formData.get("message"),
-  });
+    const parsed = seoEnquirySchema.safeParse({
+        first_name: formData.get("first_name"),
+        last_name: formData.get("last_name"),
+        email: formData.get("email"),
+        subject: formData.get("subject"),
+        phone: formData.get("phone"),
+        message: formData.get("message"),
+    });
 
-  if (!parsed.success) {
-    return {
-      status: "error",
-      message: "Please check the highlighted fields.",
-      errors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
-    };
-  }
+    if (!parsed.success) {
+        return {
+            status: "error",
+            message: "Please check the highlighted fields.",
+            errors: parsed.error.flatten().fieldErrors as Record<
+                string,
+                string[]
+            >,
+        };
+    }
 
-  const d = parsed.data;
-  const fields: MailField[] = [
-    { label: "Name", value: `${d.first_name} ${d.last_name}` },
-    { label: "Email", value: d.email },
-    { label: "Phone", value: d.phone },
-    { label: "Subject", value: d.subject },
-    { label: "Plan", value: plan },
-    { label: "Message", value: d.message },
-  ];
+    const d = parsed.data;
+    const fields: MailField[] = [
+        { label: "Name", value: `${d.first_name} ${d.last_name}` },
+        { label: "Email", value: d.email },
+        { label: "Phone", value: d.phone },
+        { label: "Subject", value: d.subject },
+        { label: "Plan", value: plan },
+        { label: "Message", value: d.message },
+    ];
 
-  try {
-    await Promise.all([
-      sendAdminNotification({
-        formName: plan ? `New SEO enquiry — ${plan}` : "New SEO enquiry",
-        fields,
-        meta: await submissionMeta("SEO Services landing page"),
-        replyTo: d.email,
-      }),
-      sendUserConfirmation({ to: d.email, firstName: d.first_name }),
-    ]);
-  } catch (error) {
-    console.error("[forms] SEO enquiry delivery failed", error);
-    return { status: "error", message: GENERIC_ERROR };
-  }
+    try {
+        await Promise.all([
+            sendAdminNotification({
+                formName: plan
+                    ? `New SEO enquiry — ${plan}`
+                    : "New SEO enquiry",
+                fields,
+                meta: await submissionMeta("SEO Services landing page"),
+                replyTo: d.email,
+            }),
+            sendUserConfirmation({ to: d.email, firstName: d.first_name }),
+        ]);
+    } catch (error) {
+        console.error("[forms] SEO enquiry delivery failed", error);
+        return { status: "error", message: GENERIC_ERROR };
+    }
 
-  return { status: "success", message: SUCCESS };
+    return { status: "success", message: SUCCESS };
 }

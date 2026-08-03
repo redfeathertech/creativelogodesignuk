@@ -69,8 +69,12 @@ live site's 23 `<h4>`s were fixed without changing a word.
 
 ## Layout
 
-- `container-site` — max 1280px + fluid gutter (`clamp(1.25rem, .5rem + 3vw, 3rem)`)
-- Wide chrome (header/footer) uses `max-w-[var(--container-wide)]` = 1560px
+- `container-site` — max 1560px + fluid gutter (`clamp(1.25rem, .5rem + 3vw, 3rem)`).
+  **The one container.** Chrome (header/footer/top bars) and every section body
+  centre on the same `--container-site` box, so content edges line up from the
+  top bar to the footer. There is no second, wider token — a section that needs
+  to bleed (hero backgrounds) does it with absolute layers behind the container,
+  not with a different container.
 - `py-section` — `clamp(4rem, 2rem + 8vw, 8.5rem)`
 - Radii: `sm 8` · `md 14` · `lg 22` · `xl 32` · `rounded-full`
 
