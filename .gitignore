@@ -1,0 +1,54 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+
+# Reference copies of LIVE pages, kept locally as the authoritative source for
+# content parity and read by scripts/verify-landing-parity.py. Not part of the
+# build. See docs/CONTENT-PARITY.md
+/page-source.html
+/page-source-creative-logo-design.html
+/page-source-logo-design-offer.html
+/page-source-lp.html
+/page-shell-lp.html
+/page-source-seo-services.html
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+scripts/*

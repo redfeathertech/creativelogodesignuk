@@ -1,0 +1,9 @@
+import LegalPage, { legalMetadata } from "@/components/legal/LegalPage";
+
+const PATH = "/cookies-policy";
+
+export const metadata = legalMetadata(PATH);
+
+export default function Page() {
+    return <LegalPage path={PATH} />;
+}

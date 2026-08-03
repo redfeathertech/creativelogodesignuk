@@ -1,0 +1,30 @@
+<svg width="55" height="55" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="27.5607" cy="27.6044" r="27.1735" fill="white"/>
+<mask id="mask0_11186_93" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="11" y="10" width="33" height="33">
+<path d="M43.0606 42.1042V11.1042H12.0605V42.1042H43.0606Z" fill="white" stroke="white"/>
+</mask>
+<g mask="url(#mask0_11186_93)">
+<path d="M13.2793 25.7358V13.6015" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13.2793 39.6213V27.4671" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M26.7003 40.8855H14.5474" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M35.5901 40.8855H28.4158" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M40.5766 40.8855H37.781" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M41.8418 27.4551V39.624" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M41.8418 13.5805V25.7561" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M28.4126 12.323H40.5842" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M19.8479 12.323H26.707" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.5486 12.323H17.5939" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.5293 11.073H12.0293V13.573H14.5293V11.073Z" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M43.0918 11.073H40.5918V13.573H43.0918V11.073Z" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M42.6855 25.7605H40.998V27.448H42.6855V25.7605Z" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.123 25.7605H12.4355V27.448H14.123V25.7605Z" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M28.4043 11.4792H26.7168V13.1667H28.4043V11.4792Z" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M28.4043 40.0417H26.7168V41.7292H28.4043V40.0417Z" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.5293 39.6355H12.0293V42.1355H14.5293V39.6355Z" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M43.0918 39.6355H40.5918V42.1355H43.0918V39.6355Z" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M29.9464 21.6566L28.1798 16.6204C28.0832 16.3466 27.8422 16.1543 27.5602 16.1156C27.5267 16.111 27.4925 16.1088 27.4575 16.1088H24.6225C24.2978 16.1088 24.0082 16.314 23.9002 16.6204L16.8593 36.6924C16.7893 36.8915 16.9376 37.0999 17.1482 37.0999H19.4732C19.6404 37.0999 19.7985 37.0451 19.927 36.9508C20.0448 36.8642 20.1376 36.744 20.1908 36.6011L20.5182 35.7202M21.2851 33.6566L21.6688 32.6242H30.4219L31.8845 36.5989C31.9949 36.8999 32.2822 37.0999 32.603 37.0999H34.9317C35.045 37.0999 35.1409 37.0398 35.1933 36.9524C35.2389 36.8778 35.2526 36.7843 35.2207 36.6924L30.6733 23.7288M22.6891 29.4987L26.0403 19.8828L27.5655 24.2315L29.413 29.4987H22.6891Z" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M24.7097 32.6242L23.2317 36.6011C23.1199 36.9007 22.8341 37.0999 22.514 37.0999H19.4729" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M27.5653 24.2314L25.73 29.4985" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M27.4578 16.1088H27.6638H30.4989C30.8235 16.1088 31.1131 16.314 31.2211 16.6205L38.262 36.6924C38.332 36.8915 38.1845 37.0999 37.9731 37.0999H34.932" stroke="#8B4FF4" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</svg>
