@@ -21,7 +21,16 @@ file: a string that appears without an entry there fails the check. The only
 entry is the logo brief's Email Address field, approved 4 Aug 2026 — the live
 page collects no email, which is why it could send no confirmation.
 
-Exits non-zero on any unexplained deviation.
+FORWARD, FIELDS and SCHEMA need only the live capture and the content module —
+not a build — so this script runs, and gates Task 2, before either page exists
+as a route. Only REVERSE needs the build.
+
+Exit codes:
+  0  clean — every page was checked and matched in both directions
+  1  every page could be checked, but at least one deviation was found
+  2  fatal — a live capture or a content module is missing for some page, so
+     that page could not be checked at all. A missing build alone is not
+     fatal: REVERSE is skipped for that page and counted as one deviation.
 """
 import html as H
 import pathlib
@@ -216,22 +225,28 @@ def schema_keys(name: str) -> set[str]:
     return set(re.findall(r"^\s*(\w+)\s*:", body, flags=re.M))
 
 
-def check(page) -> int:
+def check(page) -> tuple[bool, int]:
+    """Returns (fatal, deviations). fatal means a file that must exist for
+    this page to be checked at all — the live capture or the content module —
+    does not; no comparison runs for that page. A missing build is not fatal:
+    REVERSE alone is skipped and counted as one deviation."""
     slug = page["slug"]
     added = {fold(s) for s in ADDED[slug]}
     replaced = {fold(s) for s in REPLACED[slug]}
 
-    for path in (page["live"], page["built"], page["module"]):
+    fatal = False
+    for path in (page["live"], page["module"]):
         if not path.is_file():
             print(f"MISSING: {path}")
-            if path == page["built"]:
-                print("  run `npm run build` first")
             if path == page["live"]:
                 print("  see the docstring for the capture command")
-            return 2
+            fatal = True
+    if fatal:
+        return True, 0
+
+    has_build = page["built"].is_file()
 
     live_text = f" {page_text(page['live'])} "
-    built_text = f" {page_text(page['built'])} "
 
     # ---- FORWARD ---------------------------------------------------------
     checked = 0
@@ -247,15 +262,17 @@ def check(page) -> int:
     # ---- REVERSE ---------------------------------------------------------
     runs = 0
     reverse_misses = []
-    seen = set()
-    for run in live_runs(page["live"]):
-        folded = fold(run)
-        if folded in replaced or len(folded) < 3 or folded in seen:
-            continue
-        seen.add(folded)
-        runs += 1
-        if f" {folded} " not in built_text:
-            reverse_misses.append(run)
+    if has_build:
+        built_text = f" {page_text(page['built'])} "
+        seen = set()
+        for run in live_runs(page["live"]):
+            folded = fold(run)
+            if folded in replaced or len(folded) < 3 or folded in seen:
+                continue
+            seen.add(folded)
+            runs += 1
+            if f" {folded} " not in built_text:
+                reverse_misses.append(run)
 
     # ---- FIELD NAMES -----------------------------------------------------
     live_names = {n for n in live_field_names(page["live"])}
@@ -270,9 +287,12 @@ def check(page) -> int:
     print(f"FORWARD  {checked} module strings checked against the live page")
     for key, value in forward_misses:
         print(f"       ! {key or '(anon)'}: {value[:110]}")
-    print(f"REVERSE  {runs} distinct live runs checked against the build")
-    for run in reverse_misses:
-        print(f"       ! {run[:110]}")
+    if has_build:
+        print(f"REVERSE  {runs} distinct live runs checked against the build")
+        for run in reverse_misses:
+            print(f"       ! {run[:110]}")
+    else:
+        print("REVERSE  skipped — no build (run `npm run build`)")
     print(f"FIELDS   {len(live_names)} live name= attributes")
     for name in dropped:
         print(f"       ! dropped: {name}")
@@ -281,15 +301,25 @@ def check(page) -> int:
         print(f"       ! not validated: {name}")
     print(f"ADDED    {len(ADDED[slug])} declared additions")
 
-    return len(forward_misses) + len(reverse_misses) + len(dropped) + len(unvalidated)
+    deviations = len(forward_misses) + len(reverse_misses) + len(dropped) + len(unvalidated)
+    if not has_build:
+        deviations += 1
+    return False, deviations
 
 
 def main() -> int:
     if not VALIDATION.is_file():
         print(f"MISSING: {VALIDATION}")
         return 2
-    total = sum(check(p) for p in PAGES)
+    any_fatal = False
+    total = 0
+    for p in PAGES:
+        fatal, deviations = check(p)
+        any_fatal = any_fatal or fatal
+        total += deviations
     print(f"\n{total} deviation(s)")
+    if any_fatal:
+        return 2
     return 1 if total else 0
 
 
