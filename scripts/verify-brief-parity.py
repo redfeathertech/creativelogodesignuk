@@ -239,7 +239,10 @@ def schema_keys(name: str) -> set[str]:
         return set()
     body = re.sub(r"/\*.*?\*/", "", m.group(1), flags=re.S)
     body = re.sub(r"^\s*//.*$", "", body, flags=re.M)
-    return set(re.findall(r"^\s*(\w+)\s*:", body, flags=re.M))
+    # Both `key: value` and shorthand `key,` — lib/validation.ts uses shorthand
+    # for the shared `email`/`phone` primitives, and a colon-only pattern reads
+    # those schemas as missing a field they validate.
+    return set(re.findall(r"^\s*(\w+)\s*[,:]", body, flags=re.M))
 
 
 def check(page) -> tuple[bool, int]:

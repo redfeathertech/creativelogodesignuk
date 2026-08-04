@@ -122,7 +122,7 @@ const briefBlock = z.string().trim().max(2000).optional().or(z.literal(""));
 export const websiteBriefSchema = z.object({
     client_name: z.string().trim().min(3, "Please enter your full name").max(80),
     company: z.string().trim().min(1, "Company name is required").max(120),
-    email: email,
+    email,
     phone: z
         .string()
         .trim()
@@ -168,7 +168,7 @@ export const websiteBriefSchema = z.object({
  */
 export const logoBriefSchema = z.object({
     full_name: z.string().trim().min(3, "Please enter your full name").max(80),
-    email: email,
+    email,
     business_name: z.string().trim().min(1, "Business name is required").max(120),
     business_description: z
         .string()
