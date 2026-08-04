@@ -33,7 +33,7 @@ components/home2/           NEW
   Hero.tsx  FeaturedWork.tsx  Industries.tsx  Locations.tsx
   Awards.tsx  CtaBand.tsx  DeviceFrame.tsx  …one file per section
 content/home.ts             UNTOUCHED — imported, never copied
-content/home2.ts            NEW — copy for the 4 added sections only
+content/home2.ts            NEW — Featured Work entries only (see below)
 app/(site)/home-v2/page.tsx NEW — noindex preview route
 app/(site)/page.tsx         one import line changes at launch
 ```
@@ -41,6 +41,23 @@ app/(site)/page.tsx         one import line changes at launch
 `content/home.ts` is **imported, not duplicated**. This makes it structurally
 impossible for the redesign to drift from the ranking copy — there is no second
 file to keep in sync.
+
+### Only one added section needs new copy
+
+Three of the four added sections already have signed-off copy and real assets in
+the repo, written for the About page:
+
+| Added section | Copy source | Assets |
+|---|---|---|
+| Industries | `content/about.ts` → `industries` (31 sectors) | — |
+| Locations | `content/about.ts` → `locations` + `content/site.ts` → `offices` | `office-uk/usa/dubai.webp` |
+| Awards & recognition | `content/about.ts` → `credentials` (12 badges, grouped) | `/assets/img/credentials/` |
+| **Featured Work** | `content/home2.ts` — **the only net-new copy** | 10 client logo projects |
+
+These are reused verbatim, not rewritten. The homepage gets its own *components*
+(the About page's compositions don't fit the editorial treatment), but the words
+and images are the same ones already approved and shipped. That removes three
+copy-approval cycles and three chances to introduce an unreviewed claim.
 
 Two shared files take additive-only edits, both in fenced, deletable blocks:
 
@@ -64,7 +81,7 @@ Existing copy in **bold**; added sections marked NEW.
 | 5 | — | Gradient interstitial CTA band |
 | 6 | **How it works** | Oversized `01 02 03` gradient numerals, editorial three-up |
 | 7 | **What you get** | Full ARIA tablist retained; monitor frame large-format, screens bleed |
-| 8 | NEW **Industries we serve** | Two-column expandable list + imagery. Internal links to existing service pages only |
+| 8 | NEW **Industries we serve** | Editorial two-column list from the existing 31-sector `industries` copy |
 | 9 | **Results** | Full-bleed gradient stat band, counters at display scale |
 | 10 | **Methodology** | Orbit replaced by alternating editorial rows at image size |
 | 11 | **Toolbox** | Refined glass grid. Tool names stay `<p>`, not `<h4>` — the heading-spam fix is preserved |
@@ -73,12 +90,15 @@ Existing copy in **bold**; added sections marked NEW.
 | 14 | NEW **Locations** | UK / USA / Dubai cards, sourced from real office data in `content/about.ts` |
 | 15 | **Challenges** + **Proposal** | Native `<details>` preserved; proposal gets the full-bleed gradient treatment |
 
-Two changes are layout-only under the parity rule but were called out and
-approved explicitly, because they alter more than pixels:
+One change is layout-only under the parity rule but was called out and approved
+explicitly, because it alters more than pixels: moving the client logo wall from
+6th to 2nd changes the page's reading order.
 
-- Moving the client logo wall from 6th to 2nd changes the page's reading order.
-- The industries list adds internal links into the service pages — an SEO
-  change, not merely a visual one.
+An earlier draft proposed linking each industry to a service page. Dropped: the
+31 sectors have no natural mapping onto the 36 services, so the links would be
+arbitrary, and arbitrary internal links are an SEO liability rather than a gain.
+The list renders as text, exactly as it does on the About page. **The redesign
+therefore adds no internal links and changes no part of the link graph.**
 
 ## Visual language
 
@@ -112,8 +132,8 @@ every new effect.
 
 **SEO.** Metadata, `homeGraph` JSON-LD and the title/description are
 byte-identical on promote. `/home-v2` ships `robots: noindex` and is absent from
-`content/routes.ts`, so it never reaches the sitemap. Industries links target
-existing service URLs only — no new URLs, no new redirects. No `Review` or
+`content/routes.ts`, so it never reaches the sitemap. No new URLs, no new
+redirects, no change to the internal link graph. No `Review` or
 `AggregateRating`, per the manual-action rule in `docs/SEO-PLAYBOOK.md`.
 
 **Style.** 4-space indent per `.editorconfig`.
