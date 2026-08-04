@@ -175,7 +175,7 @@ email" — so it is validated as length-bounded text, not as either type.
 ### Server Actions — `app/actions/forms.ts`
 
 `submitWebsiteBrief` and `submitLogoBrief`. Both open with the existing
-`guard(formData, action)` — honeypot, fill-time stamp, reCAPTCHA v3 — under
+`guard(formData, action)` — honeypot then reCAPTCHA v3 — under
 new action names `website_brief` and `logo_brief`, which must match the
 `action` prop on each page's `<Recaptcha>`.
 
