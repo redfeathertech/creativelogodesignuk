@@ -4,6 +4,7 @@ import { site } from "@/content/site";
 
 import Hero from "./Hero";
 import Logos from "./Logos";
+import About from "./About";
 
 /**
  * Homepage v2 — the editorial redesign.
@@ -29,6 +30,7 @@ export default function HomeV2() {
 
             <Hero />
             <Logos />
+            <About />
         </>
     );
 }
