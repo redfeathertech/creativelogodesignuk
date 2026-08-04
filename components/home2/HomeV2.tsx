@@ -2,6 +2,8 @@ import JsonLd from "@/components/JsonLd";
 import { homeGraph } from "@/lib/seo";
 import { site } from "@/content/site";
 
+import Hero from "./Hero";
+
 /**
  * Homepage v2 — the editorial redesign.
  *
@@ -23,6 +25,8 @@ export default function HomeV2() {
     return (
         <>
             <JsonLd data={homeGraph(HOME_TITLE, site.description)} />
+
+            <Hero />
         </>
     );
 }
