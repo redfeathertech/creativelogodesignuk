@@ -55,7 +55,7 @@ export default function WebsiteBriefForm() {
             ))}
 
             <div className="mt-8 grid gap-4">
-                <Recaptcha active={engaged} action="website_brief" />
+                <Recaptcha active={engaged} action="website_brief" tone="light" />
                 <FormStatus state={state} tone="light" />
                 <button
                     type="submit"

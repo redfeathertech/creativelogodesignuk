@@ -17,6 +17,9 @@ import { sections, submitLabel, successTitle } from "@/content/landing/logo-brie
 /**
  * The logo brief's eighteen fields, one section.
  *
+ * Everything visible is driven by `sections`, so the copy has exactly one home
+ * and scripts/verify-brief-parity.py has one file to diff.
+ *
  * The `action` passed to `<Recaptcha>` MUST stay `logo_brief` — it is what
  * `submitLogoBrief` asks siteverify to echo back, and a mismatch rejects
  * every submission with a message that blames the visitor's browser.
@@ -52,7 +55,7 @@ export default function LogoBriefForm() {
             ))}
 
             <div className="mt-8 grid gap-4">
-                <Recaptcha active={engaged} action="logo_brief" />
+                <Recaptcha active={engaged} action="logo_brief" tone="light" />
                 <FormStatus state={state} tone="light" />
                 <button
                     type="submit"

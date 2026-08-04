@@ -28,7 +28,7 @@ export default function BriefShell({
             <div className="mx-auto w-full max-w-3xl rounded-2xl bg-white p-6 shadow-[0_30px_80px_-30px_rgb(7_2_15/0.6)] sm:p-10">
                 <div className="flex justify-center">
                     <Image
-                        src="/assets/img/logo.webp"
+                        src="/assets/img/logo-dark.png"
                         alt="Creative Logo Design"
                         width={220}
                         height={56}

@@ -29,7 +29,7 @@ title/meta, internal links, and URLs — not on CSS or visual arrangement.
 |---|---|
 | Visual layout, CSS, DOM structure | Any body or heading copy |
 | Component boundaries | Page titles and meta descriptions |
-| Heading **levels** (`h4` → `h2` with identical text) | Any of the 43 URLs |
+| Heading **levels** (`h4` → `h2` with identical text) | Any of the 49 URLs |
 | Image markup, JS libraries, interactions | The internal link graph |
 
 Before editing anything under `content/`, read **[docs/CONTENT-PARITY.md](docs/CONTENT-PARITY.md)**.
