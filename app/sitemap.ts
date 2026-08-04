@@ -3,7 +3,7 @@ import { routes } from "@/content/routes";
 import { SITE_URL } from "@/content/site";
 
 /**
- * Only indexable routes are listed. All 46 now are — the rebuild is
+ * Only indexable routes are listed. All 49 now are — the rebuild is
  * content-complete — so this currently emits every route in content/routes.ts.
  *
  * The filter stays because it is the mechanism, not a leftover: a new route is

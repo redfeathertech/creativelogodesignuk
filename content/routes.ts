@@ -11,7 +11,7 @@
  * misspelling is load-bearing — it is the live production URL.
  *
  * `indexable` gates two things at once: whether the page emits
- * `robots: index` and whether it appears in the sitemap. All 46 are `true` —
+ * `robots: index` and whether it appears in the sitemap. All 49 are `true` —
  * the rebuild is content-complete.
  */
 
