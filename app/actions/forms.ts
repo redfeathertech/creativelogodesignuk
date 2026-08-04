@@ -5,8 +5,10 @@ import {
     callbackSchema,
     landingQuoteSchema,
     leadSchema,
+    logoBriefSchema,
     proposalSchema,
     seoEnquirySchema,
+    websiteBriefSchema,
     type FormState,
 } from "@/lib/validation";
 import { checkAntiSpam } from "@/lib/antispam";
@@ -31,6 +33,11 @@ import {
     pricing as seoPricing,
     quoteDialog as seoQuoteDialog,
 } from "@/content/landing/seo-services";
+import {
+    CHECKBOX_OPTIONS,
+    sections as websiteBriefSections,
+} from "@/content/landing/website-brief";
+import { sections as logoBriefSections } from "@/content/landing/logo-brief";
 
 /**
  * Form submission handlers.
@@ -67,17 +74,18 @@ async function guard(
     formData: FormData,
     action: string,
 ): Promise<FormState | null> {
-    const spam = checkAntiSpam(formData, Date.now());
+    const spam = checkAntiSpam(formData);
     if (!spam.ok) {
-        console.warn("[forms] rejected by anti-spam:", spam.reason);
-        // Bots are told nothing useful; humans who trip "too-fast" get a retry hint.
-        return {
-            status: "error",
-            message:
-                spam.reason === "too-fast"
-                    ? "That was quick! Please take a moment and submit again."
-                    : GENERIC_ERROR,
-        };
+        // The value, not just the fact. This check has already been tripped
+        // once by browser autofill rather than by a bot, and the value is the
+        // only thing that tells the two apart: a trap echoing what the visitor
+        // typed into a real field means the honeypot is misclassified again,
+        // not that a bot got through.
+        console.warn(
+            `[forms] rejected by honeypot — field contained ${JSON.stringify(spam.value)}`,
+        );
+        // Bots are told nothing useful.
+        return { status: "error", message: GENERIC_ERROR };
     }
 
     const captchaOk = await verifyRecaptcha(
@@ -535,6 +543,182 @@ export async function submitSeoEnquiry(
         ]);
     } catch (error) {
         console.error("[forms] SEO enquiry delivery failed", error);
+        return { status: "error", message: GENERIC_ERROR };
+    }
+
+    return { status: "success", message: SUCCESS };
+}
+
+/* --------------------------------------- /website-brief and /logo-brief -- */
+
+/**
+ * Keep only the checkbox values the page actually offers.
+ *
+ * Same guard and the same reasoning as `LANDING_PACKAGES` above: these arrive
+ * from visitor-editable checkboxes and land in an email, so they are matched
+ * against a `Set` built from the content module rather than echoed. A `Set`,
+ * not an object literal — `"constructor"` would otherwise survive the test.
+ * Unrecognised values are dropped silently; there is nothing useful to tell a
+ * caller who is hand-crafting a POST.
+ */
+function allowedChoices(formData: FormData, field: string): string[] {
+    const allowed = CHECKBOX_OPTIONS.get(field);
+    if (!allowed) return [];
+    return formData
+        .getAll(field)
+        .map(String)
+        .filter((value) => allowed.has(value));
+}
+
+/**
+ * Build the notification body in the page's own section order.
+ *
+ * Driven by the content module rather than a second hand-written list, so a
+ * field cannot be added to a page and quietly go missing from the email. The
+ * mail layer already drops empty values, so optional fields cost nothing.
+ */
+function briefFields(
+    sections: readonly { fields: readonly { name: string; label: string }[] }[],
+    values: Record<string, unknown>,
+): MailField[] {
+    return sections
+        .flatMap((section) => section.fields)
+        .map((field) => {
+            const key = field.name.replace("[]", "");
+            const value = values[key];
+            return {
+                label: field.label.replace(/\s*\*$/, ""),
+                value: Array.isArray(value) ? value.join(", ") : String(value ?? ""),
+            };
+        });
+}
+
+/** `/website-brief` — the long website discovery form. */
+export async function submitWebsiteBrief(
+    _prev: FormState,
+    formData: FormData,
+): Promise<FormState> {
+    const blocked = await guard(formData, "website_brief");
+    if (blocked) return blocked;
+
+    const parsed = websiteBriefSchema.safeParse({
+        client_name: formData.get("client_name"),
+        company: formData.get("company"),
+        email: formData.get("email"),
+        phone: formData.get("phone"),
+        business_overview: formData.get("business_overview"),
+        products_services: formData.get("products_services"),
+        business_difference: formData.get("business_difference"),
+        business_age: formData.get("business_age"),
+        ideal_customers: formData.get("ideal_customers"),
+        locations_served: formData.get("locations_served"),
+        target_industries: formData.get("target_industries"),
+        website_goals: allowedChoices(formData, "website_goals[]"),
+        main_services_products: formData.get("main_services_products"),
+        competitor_1: formData.get("competitor_1"),
+        competitor_2: formData.get("competitor_2"),
+        competitor_3: formData.get("competitor_3"),
+        competitor_4: formData.get("competitor_4"),
+        website_features: allowedChoices(formData, "website_features[]"),
+        pages_required: allowedChoices(formData, "pages_required[]"),
+        additional_notes: formData.get("additional_notes"),
+    });
+
+    if (!parsed.success) {
+        return {
+            status: "error",
+            message: "Please check the highlighted fields.",
+            errors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
+        };
+    }
+
+    const d = parsed.data;
+    /* `sendAdminNotification` builds its subject from the "Name" field, so the
+       brief's own "Full Name" label is restated here rather than relied on. */
+    const fields: MailField[] = [
+        { label: "Name", value: d.client_name },
+        ...briefFields(websiteBriefSections, d),
+    ];
+
+    try {
+        await Promise.all([
+            sendAdminNotification({
+                formName: "New website brief",
+                fields,
+                meta: await submissionMeta("Website brief form"),
+                replyTo: d.email,
+            }),
+            sendUserConfirmation({
+                to: d.email,
+                firstName: firstNameOf(d.client_name),
+            }),
+        ]);
+    } catch (error) {
+        console.error("[forms] website brief delivery failed", error);
+        return { status: "error", message: GENERIC_ERROR };
+    }
+
+    return { status: "success", message: SUCCESS };
+}
+
+/** `/logo-brief` — the logo discovery form. */
+export async function submitLogoBrief(
+    _prev: FormState,
+    formData: FormData,
+): Promise<FormState> {
+    const blocked = await guard(formData, "logo_brief");
+    if (blocked) return blocked;
+
+    const parsed = logoBriefSchema.safeParse({
+        full_name: formData.get("full_name"),
+        email: formData.get("email"),
+        business_name: formData.get("business_name"),
+        business_description: formData.get("business_description"),
+        business_stage: formData.get("business_stage"),
+        existing_presence: formData.get("existing_presence"),
+        brand_message: formData.get("brand_message"),
+        logo_inspiration: formData.get("logo_inspiration"),
+        logo_style: formData.get("logo_style"),
+        color_preferences: formData.get("color_preferences"),
+        font_preferences: formData.get("font_preferences"),
+        avoid: formData.get("avoid"),
+        tagline: formData.get("tagline"),
+        logo_usage: formData.get("logo_usage"),
+        branding_materials: formData.get("branding_materials"),
+        contact_method: formData.get("contact_method"),
+        contact_info: formData.get("contact_info"),
+        schedule_call: formData.get("schedule_call"),
+    });
+
+    if (!parsed.success) {
+        return {
+            status: "error",
+            message: "Please check the highlighted fields.",
+            errors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
+        };
+    }
+
+    const d = parsed.data;
+    const fields: MailField[] = [
+        { label: "Name", value: d.full_name },
+        ...briefFields(logoBriefSections, d),
+    ];
+
+    try {
+        await Promise.all([
+            sendAdminNotification({
+                formName: "New logo design brief",
+                fields,
+                meta: await submissionMeta("Logo brief form"),
+                replyTo: d.email,
+            }),
+            sendUserConfirmation({
+                to: d.email,
+                firstName: firstNameOf(d.full_name),
+            }),
+        ]);
+    } catch (error) {
+        console.error("[forms] logo brief delivery failed", error);
         return { status: "error", message: GENERIC_ERROR };
     }
 
