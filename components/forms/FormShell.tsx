@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
-import { HONEYPOT_FIELD, TIMESTAMP_FIELD } from "@/lib/antispam";
+import { useId, useState } from "react";
+import { HONEYPOT_FIELD } from "@/lib/antispam";
 import type { FormState } from "@/lib/validation";
 
 /**
- * Shared plumbing for both forms: honeypot, fill-time stamp, and the
- * "has the user engaged yet" flag that gates the reCAPTCHA download.
+ * Shared plumbing for both forms: the honeypot, and the "has the user engaged
+ * yet" flag that gates the reCAPTCHA download.
  */
 
 export function useFormEngagement() {
@@ -22,7 +22,7 @@ export function useFormEngagement() {
 }
 
 /**
- * Hidden anti-spam inputs. Rendered inside every form.
+ * The hidden honeypot input. Rendered inside every form.
  *
  * The `id` is generated, not the field name: any page with more than one form
  * renders this more than once, and a hardcoded id would be duplicated across
@@ -35,26 +35,28 @@ export function useFormEngagement() {
 export function HoneypotFields() {
   const id = useId();
   const honeypotId = `${HONEYPOT_FIELD}-${id}`;
-  const stamp = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    // Written straight to the DOM node rather than through state: the value
-    // must come from the client (the page is prerendered, so a server-rendered
-    // timestamp would be baked in at build time), and stamping it here avoids
-    // both a hydration mismatch and a second render.
-    if (stamp.current) stamp.current.value = String(Date.now());
-  }, []);
 
   return (
-    <>
-      {/* Positioned off-screen rather than display:none — some bots skip
-          hidden inputs but happily fill visually-offset ones. */}
-      <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
-        <label htmlFor={honeypotId}>Leave this field empty</label>
-        <input id={honeypotId} name={HONEYPOT_FIELD} type="text" tabIndex={-1} autoComplete="off" />
-      </div>
-      <input ref={stamp} type="hidden" name={TIMESTAMP_FIELD} defaultValue="" />
-    </>
+    /* Positioned off-screen rather than display:none — some bots skip hidden
+       inputs but happily fill visually-offset ones. That choice is also why
+       the field has to be invisible to *autofill*, which does not skip an
+       off-screen field the way it skips a display:none one: hence the name
+       (see lib/antispam.ts) and the three opt-outs below, for 1Password,
+       LastPass and Dashlane. They fill harder than the browser does and do not
+       all honour autocomplete="off". */
+    <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+      <label htmlFor={honeypotId}>Leave this field empty</label>
+      <input
+        id={honeypotId}
+        name={HONEYPOT_FIELD}
+        type="text"
+        tabIndex={-1}
+        autoComplete="off"
+        data-1p-ignore
+        data-lpignore="true"
+        data-form-type="other"
+      />
+    </div>
   );
 }
 
