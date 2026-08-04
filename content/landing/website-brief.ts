@@ -1,4 +1,4 @@
-import type { BriefField, BriefSection } from "./brief-types";
+import type { BriefSection } from "./brief-types";
 
 /**
  * `/website-brief` — copy transcribed from the live
@@ -220,17 +220,10 @@ export const sections: readonly BriefSection[] = [
  * than retyped, so adding an option can never leave it unrecognised. A `Map` of
  * `Set`s, not object literals — neither inherits `constructor`, which would
  * otherwise survive the membership test.
- *
- * Narrowed by the `[]` suffix on `name` (see `BriefField`'s own doc comment)
- * rather than by comparing `field.kind` to a literal, which would read to
- * scripts/verify-brief-parity.py as an untranscribed copy string and fail
- * FORWARD.
  */
 export const CHECKBOX_OPTIONS: ReadonlyMap<string, ReadonlySet<string>> = new Map(
     sections
         .flatMap((section) => section.fields)
-        .filter((field): field is Extract<BriefField, { kind: "checkboxes" }> =>
-            field.name.endsWith("[]"),
-        )
+        .filter((field) => field.kind === "checkboxes")
         .map((field) => [field.name, new Set(field.options)] as const),
 );

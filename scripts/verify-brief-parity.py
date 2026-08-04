@@ -119,6 +119,11 @@ VALIDATION = REPO / "lib" / "validation.ts"
 # Keys in the content modules that are plumbing, not copy.
 NOT_COPY = re.compile(r"^(kind|name|autoComplete|inputMode|type|rows|path)$")
 
+# A string on the right of `===`/`!==` is a discriminant being compared, not
+# copy — `field.kind === "checkboxes"`. Same class of false positive as the
+# import specifiers skipped below.
+COMPARISON = re.compile(r"[=!]==\s*$")
+
 WORD = re.compile(r"[a-z0-9]+")
 
 
@@ -192,6 +197,8 @@ def module_strings(path: pathlib.Path):
     for m in re.finditer(r'(?:(\w+)\s*:\s*)?"((?:[^"\\]|\\.)*)"', src):
         key, value = m.group(1), m.group(2)
         if key and NOT_COPY.search(key):
+            continue
+        if COMPARISON.search(src[: m.start()]):
             continue
         value = value.replace('\\"', '"').replace("\\\\", "\\").replace("\\n", "\n")
         # "./" matters: both modules open with `from "./brief-types"`, and that
