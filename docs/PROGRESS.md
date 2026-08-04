@@ -601,6 +601,114 @@ until real traffic runs through it — watch the `[recaptcha] score … below
 threshold` warnings for the first few days and move `RECAPTCHA_MIN_SCORE` if
 genuine enquiries are being turned away.
 
+## Done — 4 Aug 2026
+
+### The honeypot was rejecting real people
+
+Reported as "nodemailer is not working". It was not the mail layer: `guard()`
+never reached it. A devtools capture of a hand-filled proposal form showed
+`hp_company_url` and `company` carrying the *same* value — Chrome autofill, not
+a bot.
+
+Chrome classifies fields by regex over `name`/`id`/`label`, and `company` is one
+of its strongest organization tokens, so it saw two company fields and filled
+both. `autocomplete="off"` does not help: Chrome has ignored it for contact
+profiles for a decade. And the off-screen positioning chosen over `display:none`
+(to catch bots that skip hidden inputs) is exactly what left the field visible to
+autofill, which *does* skip `display:none` but not a field with a real bounding
+box. So this fired for every visitor with a saved profile — the ones most likely
+to be real leads — and handed them `GENERIC_ERROR`.
+
+- `HONEYPOT_FIELD` is now `hp_field`. No autofill-recognised token in the name;
+  that alone is the fix.
+- Added `data-1p-ignore`, `data-lpignore`, `data-form-type="other"` for
+  1Password, LastPass and Dashlane, which fill harder than the browser does.
+- The rejection now logs the *value*. Only the value distinguishes a caught bot
+  from this bug recurring under a different heuristic.
+
+### The fill-time check is gone
+
+The same capture showed `hp_ts` empty, which `checkAntiSpam` treated as "skip
+the timing check" — so it had been a no-op, silently. Two reasons, both
+structural: it was client-stamped (the pages are prerendered, so a server-issued
+token goes stale within hours), making it forgeable by design; and React 19
+resets an uncontrolled form once its action resolves, restoring the input to its
+empty `defaultValue`, while the mount-effect that wrote the stamp never re-ran.
+Blank on every attempt after the first. Deleted rather than repaired — it was
+protecting nothing it could not be talked out of.
+
+### Still standing on one leg
+
+`verifyRecaptcha` returns `true` when `RECAPTCHA_SECRET_KEY` is unset
+(`lib/recaptcha.ts`), so reCAPTCHA is only a gate when that var is present. The
+honeypot is what covers a missing key, which is the reason it was fixed rather
+than removed. Neither check stops a human hand-submitting junk repeatedly —
+that needs per-IP rate limiting in `guard()`, which does not exist yet.
+
+### `/website-brief` and `/logo-brief` — the fifth and sixth landing pages
+
+Both `index.php` forms only — no marketing copy to speak of, so unlike the
+other four landing pages the point of the rebuild is almost entirely the form:
+19 fields and three checkbox groups on the website brief, 18 fields in one
+section on the logo brief. Both canonical to themselves (the live pages
+canonical to the homepage, the same pre-existing bug the other four shipped
+and the client ruled out on 1 Aug 2026), and both are the first version of
+their page to carry a meta description that renders anywhere but a live
+`<head>` a crawler never sees rendered.
+
+The logo brief gained one field the live page has never had: **Email
+Address**, approved 4 Aug 2026 — the live page collects no email, so it could
+never send a confirmation. It is the one declared addition in
+`scripts/verify-brief-parity.py`'s `ADDED` set for that page beyond the
+boilerplate (title, description, success state) every rebuilt page adds.
+
+Controls are a new shared pair, `components/landing/brief/fields.tsx`
+(`BriefFieldControl`, `BriefSectionBlock`), deliberately not
+`components/forms/Field.tsx` — that component is a floating-label control
+sized for four-field dark-glass forms, and reusing it for two ~60-control
+white-card forms would have meant threading a label-position variant through
+a component three other forms depend on. Checkbox options already carry
+`min-w-0` on both the grid item and the flex label span, so the "longest word
+won't shrink" failure mode documented under 3 Aug 2026 never had a chance to
+appear here — confirmed, not assumed, by the audit below.
+
+`WebsiteBriefForm.tsx` and `LogoBriefForm.tsx` are deliberate near-twins; both
+carry the same JSDoc middle paragraph ("Everything visible is driven by
+`sections`, so the copy has exactly one home and
+scripts/verify-brief-parity.py has one file to diff") and both pass
+`tone="light"` to `<Recaptcha>` so the disclosure text renders `text-onlight`
+against the white card instead of the dark-panel default, which would have
+been unreadable here.
+
+**Responsive audit, both pages, 12 widths (320 → 1920px) over CDP:**
+
+| Width | `/website-brief` overflow | `/logo-brief` overflow |
+|---|---|---|
+| 320px | 0 | 0 |
+| 360px | 0 | 0 |
+| 390px | 0 | 0 |
+| 414px | 0 | 0 |
+| 480px | 0 | 0 |
+| 600px | 0 | 0 |
+| 768px | 0 | 0 |
+| 834px | 0 | 0 |
+| 1024px | 0 | 0 |
+| 1280px | 0 | 0 |
+| 1440px | 0 | 0 |
+| 1920px | 0 | 0 |
+
+24 measurements, 0 failing, 1 h1 at every width on both pages, 0 images
+missing `width`/`height`, 0 elements held by a contained rail (neither page
+has a carousel). Confirmed by eye at 320px and 1440px against a served
+production build: the logo is not stretched, labels read `text-onlight` (not
+a `/40` white) against the white card, every text control shows a visible
+`focus:ring-2 focus:ring-magenta-500/30` and every checkbox a
+`focus-visible:ring-2`, and the submit button is `w-full` and reachable on
+both pages.
+
+No overflow fix was needed — Tasks 5–7 already applied the `min-w-0` lesson
+from 3 Aug 2026 before this audit ran.
+
 ## Verified
 
 | Check | Result |
@@ -690,6 +798,12 @@ genuine enquiries are being turned away.
 | Duplicate element IDs | **47/47 pages clean** |
 | Sitemap | 47 URLs — every route, including all four landing pages |
 | Live page has no tracking | `/seo-services/index.php` carries **one** `<script>`: a 17-line Bootstrap validation IIFE. No GA4, no Google Ads, no Meta Pixel, no ClickCease, no Chatra — unlike the other three landing pages. Nothing to reproduce, and nothing measuring it today |
+| `/website-brief` + `/logo-brief` content parity | **0 deviations, both directions**, both pages. Website brief: 63 module strings forward, 58 distinct live runs reverse, 20/20 field names carried, 21 schema keys. Logo brief: 48 module strings forward, 49 distinct live runs reverse, 17/17 field names carried, 18 schema keys. `python scripts/verify-brief-parity.py` |
+| `/website-brief` + `/logo-brief` responsive | 12 widths 320 → 1920px, both pages: **24 measurements, 0 failing.** Zero document overflow at every width including 320px, 1 h1 at every width, 0 images missing `width`/`height`, 0 elements held by a contained rail |
+| `/website-brief` + `/logo-brief` by eye | Checked at 320px and 1440px against a served production build: logo not stretched, labels `text-onlight` against the white card, visible focus ring on every text control and every checkbox, submit button `w-full` and reachable |
+| Build | Both routes prerender `○ (Static)` |
+| `npx tsc --noEmit` / `npm run lint` / `node scripts/gen-routes-table.mjs --check` | All clean after the brief pages; 49 routes (3 core, 6 landing, 36 service, 4 legal) |
+| Regression | The other five `verify-*.py` parity scripts still exit 0 after `lib/validation.ts` and `app/actions/forms.ts` gained the two brief schemas and actions |
 
 ## Not done yet
 
@@ -731,8 +845,10 @@ how you capture the source.
       `scripts/capture-rendered.mjs`
 - [x] `/seo-services/index.php` — **done, 3 Aug 2026.** Server-rendered, so
       `curl` was enough. Served at `/seo-services`; see the rebrand note above
-- [ ] `/logo-brief/index.php` — form only
-- [ ] `/website-brief/index.php` — form only
+- [x] `/logo-brief/index.php` — **done, 4 Aug 2026.** Form only, served at
+      `/logo-brief`
+- [x] `/website-brief/index.php` — **done, 4 Aug 2026.** Form only, served at
+      `/website-brief`
 
 **The `.php` question is settled.** `/seo-services` set the pattern: serve at
 the extension-less path, 308 the `index.php` form to it in `next.config.ts`, and
@@ -779,6 +895,8 @@ they are real and should not be rediscovered from scratch.
 | `page-source-creative-logo-design.html` (repo root) | The **live** landing page HTML. The only source there is for it — it is not in the Laravel repo. Read by `scripts/verify-landing-parity.py`. Gitignored; re-capture with `curl -sSL https://creativelogodesign.co.uk/creative-logo-design/ -o page-source-creative-logo-design.html` |
 | `page-source-lp.html` (repo root) | The **live** `/lp/` DOM *after hydration* — the served HTML has no content. Read by `scripts/verify-lp-parity.py`. Gitignored; re-capture with `node scripts/capture-rendered.mjs https://creativelogodesign.co.uk/lp/ page-source-lp.html` |
 | `page-source-seo-services.html` (repo root) | The **live** `/seo-services/index.php` HTML. Server-rendered, so a plain fetch is enough. Read by `scripts/verify-seo-services-parity.py`. Gitignored; re-capture with `curl -sSL https://creativelogodesign.co.uk/seo-services/index.php -o page-source-seo-services.html` |
+| `page-source-website-brief.html` (repo root) | The **live** `/website-brief/index.php`. Server-rendered, so a plain fetch is enough. Read by `scripts/verify-brief-parity.py`. Gitignored; re-capture with `curl -sSL https://creativelogodesign.co.uk/website-brief/index.php -o page-source-website-brief.html` |
+| `page-source-logo-brief.html` (repo root) | The **live** `/logo-brief/index.php`. Same. Re-capture with `curl -sSL https://creativelogodesign.co.uk/logo-brief/index.php -o page-source-logo-brief.html` |
 | `c:/Herd/clduk` | The Laravel app being replaced |
 | `clduk/resources/views/user/home/*.blade.php` | The approved redesign markup |
 | `clduk/public/assets/css/cld/*.css` | The redesign CSS (tokens only were ported) |

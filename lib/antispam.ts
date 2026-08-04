@@ -1,42 +1,32 @@
 /**
- * Honeypot + fill-time anti-spam, carried over from the Laravel forms.
+ * Honeypot anti-spam, carried over from the Laravel forms.
  *
- * Two cheap checks that catch naive bots without adding friction:
- *   1. A hidden field a human never sees and never fills in.
- *   2. A render timestamp — a form submitted implausibly fast was not typed
- *      by a person.
+ * One cheap check: a hidden field a human never sees and never fills in. It
+ * runs ahead of reCAPTCHA purely to reject obvious junk without spending a
+ * siteverify round-trip — reCAPTCHA is the real gate.
  *
- * The timestamp is stamped by the browser on mount rather than signed by the
- * server, because the homepage is statically prerendered: a build-time token
- * would be stale for every visitor after the first couple of hours. That makes
- * the timing check forgeable in principle, which is fine — reCAPTCHA is the
- * real gate, and these two run first purely to reject obvious junk cheaply.
+ * The field *name* matters more than it looks, and is the reason this file no
+ * longer says `hp_company_url`. Chrome classifies form fields by regex over
+ * `name`/`id`/`label`, and has ignored `autocomplete="off"` for contact
+ * profiles for a decade — so a trap whose name contains `company` is filled
+ * alongside the real Company field for every visitor with a saved profile.
+ * That is a rejected lead, not a caught bot. Keep this name free of anything
+ * an autofill heuristic recognises: company, name, email, phone, address,
+ * url, title, organization.
+ *
+ * The fill-time check that used to live here is gone. It was stamped by the
+ * browser (the pages are prerendered, so a server-issued token would be stale
+ * for everyone after the first couple of hours), which made it forgeable by
+ * design; and because React 19 resets an uncontrolled form once its action
+ * resolves, the mount-effect that wrote the stamp never re-ran and the field
+ * was empty — and therefore skipped — on every attempt after the first.
  */
 
-const MIN_FILL_MS = 2_000;
-const MAX_AGE_MS = 12 * 60 * 60 * 1000; // 12 hours — a long-lived open tab is legitimate.
+export const HONEYPOT_FIELD = "hp_field";
 
-export const HONEYPOT_FIELD = "hp_company_url";
-export const TIMESTAMP_FIELD = "hp_ts";
+export type AntiSpamResult = { ok: true } | { ok: false; value: string };
 
-export type AntiSpamResult = { ok: true } | { ok: false; reason: string };
-
-export function checkAntiSpam(formData: FormData, now: number): AntiSpamResult {
-  const honeypot = String(formData.get(HONEYPOT_FIELD) ?? "");
-  if (honeypot.trim() !== "") return { ok: false, reason: "honeypot" };
-
-  const raw = String(formData.get(TIMESTAMP_FIELD) ?? "");
-  const issued = Number(raw);
-
-  // Absent or unparseable: skip the timing check rather than block a real
-  // person whose JS failed. reCAPTCHA still has to pass.
-  if (!raw || !Number.isFinite(issued)) return { ok: true };
-
-  const elapsed = now - issued;
-  // Clock skew can make `elapsed` negative; only reject when it is clearly
-  // inside the window and too fast.
-  if (elapsed >= 0 && elapsed < MIN_FILL_MS) return { ok: false, reason: "too-fast" };
-  if (elapsed > MAX_AGE_MS) return { ok: false, reason: "expired" };
-
-  return { ok: true };
+export function checkAntiSpam(formData: FormData): AntiSpamResult {
+  const value = String(formData.get(HONEYPOT_FIELD) ?? "").trim();
+  return value === "" ? { ok: true } : { ok: false, value };
 }

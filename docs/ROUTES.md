@@ -1,6 +1,6 @@
 # Routes
 
-**47 routes, all indexable and all in the sitemap.** 3 core + 4 landing +
+**49 routes, all indexable and all in the sitemap.** 3 core + 6 landing +
 36 service + 4 legal.
 
 Mirrors `content/routes.ts`, which is the single source of truth — it drives the
@@ -77,6 +77,8 @@ only ways off the page are its own CTAs. See
 | `/logo-design-offer` | Professional Bespoke Logo Design Services | **yes** |
 | `/lp` | Web Design Service Starts from £199 | **yes** |
 | `/seo-services` | SEO Services | **yes** |
+| `/website-brief` | Website Brief Form | **yes** |
+| `/logo-brief` | Logo Design Brief Form | **yes** |
 
 
 ## Service

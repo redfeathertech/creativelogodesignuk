@@ -96,6 +96,112 @@ export const seoEnquirySchema = z.object({
     message: z.string().trim().min(1, "Required").max(2000),
 });
 
+/* ---------------------------------------------- the two brief forms -- */
+
+/** Optional single-line field. Longer cap than `optionalText`: these ask for
+    lists of industries, locations and brand names, not job titles. */
+const briefLine = z.string().trim().max(200).optional().or(z.literal(""));
+/** Optional multi-line field. */
+const briefBlock = z.string().trim().max(2000).optional().or(z.literal(""));
+
+/**
+ * `/website-brief`.
+ *
+ * Required-versus-optional is the live `js/script.js`, not the asterisks in the
+ * labels — a visitor who can submit the live form can still submit this one.
+ *
+ * `client_name` is `z.string`, not the shared `name` primitive: the live check
+ * is "at least 3 characters" and the field is asked as "Full Name", so a name
+ * carrying a digit or an accent must not be rejected where it is accepted
+ * today. Same for `phone`, which the live script accepts empty.
+ *
+ * The three checkbox arrays are NOT validated for membership here — the action
+ * matches them against `CHECKBOX_OPTIONS` before they reach an email. This
+ * schema only bounds their size.
+ */
+export const websiteBriefSchema = z.object({
+    client_name: z.string().trim().min(3, "Please enter your full name").max(80),
+    company: z.string().trim().min(1, "Company name is required").max(120),
+    email,
+    phone: z
+        .string()
+        .trim()
+        .max(32)
+        .refine((v) => v === "" || /^[+()\d\s-]{7,}$/.test(v), {
+            message: "Enter a valid phone number",
+        })
+        .optional()
+        .or(z.literal("")),
+    business_overview: z
+        .string()
+        .trim()
+        .min(5, "Please tell us about your business")
+        .max(2000),
+    products_services: briefBlock,
+    business_difference: briefBlock,
+    business_age: briefLine,
+    ideal_customers: briefBlock,
+    locations_served: briefLine,
+    target_industries: briefLine,
+    website_goals: z
+        .array(z.string().max(60))
+        .min(1, "Please select at least one website goal")
+        .max(6),
+    main_services_products: briefBlock,
+    competitor_1: briefLine,
+    competitor_2: briefLine,
+    competitor_3: briefLine,
+    competitor_4: briefLine,
+    website_features: z.array(z.string().max(60)).max(10).optional().default([]),
+    pages_required: z.array(z.string().max(60)).max(8).optional().default([]),
+    additional_notes: briefBlock,
+});
+
+/**
+ * `/logo-brief`.
+ *
+ * `email` is the one field the live form does not have — see
+ * `content/landing/logo-brief.ts` for why it was added.
+ *
+ * `contact_info` is free text by design: the live field is labelled "Contact
+ * Information" and placeheld "Phone or email", so it is bounded, not typed.
+ */
+export const logoBriefSchema = z.object({
+    full_name: z.string().trim().min(3, "Please enter your full name").max(80),
+    email,
+    business_name: z.string().trim().min(1, "Business name is required").max(120),
+    business_description: z
+        .string()
+        .trim()
+        .min(5, "Please describe your business")
+        .max(2000),
+    business_stage: z.string().trim().min(1, "Please select business stage").max(60),
+    existing_presence: briefLine,
+    brand_message: briefLine,
+    logo_inspiration: briefLine,
+    logo_style: z.string().trim().min(1, "Please select logo style").max(60),
+    color_preferences: briefLine,
+    font_preferences: briefLine,
+    avoid: briefLine,
+    tagline: briefLine,
+    logo_usage: briefLine,
+    branding_materials: briefLine,
+    contact_method: z
+        .string()
+        .trim()
+        .min(1, "Please select contact method")
+        .max(60),
+    contact_info: z
+        .string()
+        .trim()
+        .min(5, "Please enter contact information")
+        .max(200),
+    schedule_call: briefLine,
+});
+
+export type WebsiteBriefInput = z.infer<typeof websiteBriefSchema>;
+export type LogoBriefInput = z.infer<typeof logoBriefSchema>;
+
 export type LeadInput = z.infer<typeof leadSchema>;
 export type ProposalInput = z.infer<typeof proposalSchema>;
 export type LandingQuoteInput = z.infer<typeof landingQuoteSchema>;

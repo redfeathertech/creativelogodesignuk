@@ -106,7 +106,7 @@ export default function Rail({
         "transition-all duration-300 ease-out",
         "enabled:hover:scale-[1.06] enabled:hover:border-transparent enabled:hover:text-white",
         "enabled:hover:bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)]",
-        "disabled:cursor-default disabled:opacity-30",
+        "disabled:cursor-default disabled:opacity-30 bg-origin-border",
         tone === "dark" ? "border-white/20" : "border-ink-900/[0.18]",
     );
 

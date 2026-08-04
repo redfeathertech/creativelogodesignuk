@@ -26,7 +26,7 @@ export default function Industries() {
                                `-translate-y-*` off the standalone `translate`
                                property, and 31 chips snapping on hover is very
                                visible. See components/ui/TrustpilotBadge.tsx. */
-                            className="rounded-full border border-white/[0.11] bg-white/[0.04] px-4 py-2 font-display text-xs font-bold tracking-[0.08em] text-white/65 uppercase transition-[background-color,border-color,color,translate] duration-200 ease-out hover:-translate-y-0.5 hover:border-transparent hover:bg-[linear-gradient(97deg,var(--color-violet-500)_0%,var(--color-magenta-500)_100%)] hover:text-white"
+                            className="rounded-full border border-white/[0.11] bg-white/[0.04] bg-origin-border px-4 py-2 font-display text-xs font-bold tracking-[0.08em] text-white/65 uppercase transition-[background-color,border-color,color,translate] duration-200 ease-out hover:-translate-y-0.5 hover:border-transparent hover:bg-[linear-gradient(97deg,var(--color-violet-500)_0%,var(--color-magenta-500)_100%)] hover:text-white"
                         >
                             {industry}
                         </li>

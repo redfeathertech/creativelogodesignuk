@@ -112,7 +112,12 @@ export default function Methodology() {
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-6 font-display text-h5 leading-snug font-bold text-white transition-colors marker:content-[''] hover:text-magenta-300">
                   {step.title}
                   <span
-                    className="relative grid size-10 shrink-0 place-items-center rounded-full border border-white/20 transition-[background-color,border-color,rotate] duration-300 ease-out group-open/item:rotate-180 group-open/item:border-transparent group-open/item:bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)] group-open/item:text-white"
+                    /* bg-origin-border is load-bearing: background-origin defaults to
+                       padding-box while background-clip defaults to border-box, so with
+                       a 1px transparent border the gradient tiles into that ring and
+                       wraps its far-end colour round to the near edge — a crimson line
+                       down one side of the circle and a violet one down the other. */
+                    className="relative grid size-10 shrink-0 place-items-center rounded-full border border-white/20 bg-origin-border transition-[background-color,border-color,rotate] duration-300 ease-out group-open/item:rotate-180 group-open/item:border-transparent group-open/item:bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)] group-open/item:text-white"
                     aria-hidden="true"
                   >
                     <span className="absolute h-[2px] w-[14px] rounded-sm bg-current" />
