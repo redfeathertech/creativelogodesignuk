@@ -106,7 +106,7 @@ export default function EnquiryForm({
                 errors={state.errors?.message}
             />
 
-            <Recaptcha active={engaged} action="seo_enquiry" />
+            <Recaptcha active={engaged} action="seo_enquiry" tone="light" />
             <FormStatus state={state} tone="light" />
 
             <button type="submit" disabled={pending} className={btn("seo", "lg", "w-full")}>
