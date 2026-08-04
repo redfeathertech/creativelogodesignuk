@@ -43,6 +43,8 @@ yarn-error.log*
 /page-source-lp.html
 /page-shell-lp.html
 /page-source-seo-services.html
+/page-source-website-brief.html
+/page-source-logo-brief.html
 
 # vercel
 .vercel
