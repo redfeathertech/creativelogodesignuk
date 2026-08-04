@@ -46,6 +46,9 @@ yarn-error.log*
 /page-source-website-brief.html
 /page-source-logo-brief.html
 
+# brainstorming mockups (superpowers visual companion) — working files, not build input
+/.superpowers/
+
 # vercel
 .vercel
 
