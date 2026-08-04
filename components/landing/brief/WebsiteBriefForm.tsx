@@ -15,7 +15,7 @@ import { BriefSectionBlock } from "@/components/landing/brief/fields";
 import { sections, submitLabel, successTitle } from "@/content/landing/website-brief";
 
 /**
- * The website brief's nineteen fields and three checkbox groups.
+ * The website brief's twenty fields, three of which are checkbox groups.
  *
  * Everything visible is driven by `sections`, so the copy has exactly one home
  * and scripts/verify-brief-parity.py has one file to diff.
