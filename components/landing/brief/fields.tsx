@@ -1,4 +1,5 @@
 import { cn } from "@/lib/cn";
+import { ChevronDown } from "@/components/ui/icons";
 import type { BriefField, BriefSection } from "@/content/landing/brief-types";
 
 /**
@@ -53,14 +54,11 @@ export function BriefFieldControl({
 
     if (field.kind === "checkboxes") {
         return (
-            <fieldset>
+            <fieldset aria-describedby={described} aria-invalid={bad || undefined}>
                 <legend className="text-sm font-semibold text-onlight">
                     {field.label}
                 </legend>
-                <div
-                    className="mt-3 grid gap-x-6 gap-y-2.5 sm:grid-cols-2 lg:grid-cols-3"
-                    aria-describedby={described}
-                >
+                <div className="mt-3 grid gap-x-6 gap-y-2.5 sm:grid-cols-2 lg:grid-cols-3">
                     {field.options.map((option) => (
                         <label
                             key={option}
@@ -98,26 +96,29 @@ export function BriefFieldControl({
                         className={cn(control, "resize-y", bad && invalid)}
                     />
                 ) : field.kind === "select" ? (
-                    <select
-                        id={id}
-                        name={field.name}
-                        required={field.required}
-                        aria-required={field.required}
-                        aria-invalid={bad || undefined}
-                        aria-describedby={described}
-                        defaultValue=""
-                        className={cn(control, "appearance-none pr-9", bad && invalid)}
-                    >
-                        {field.options.map((option, index) => (
-                            <option
-                                key={option}
-                                value={index === 0 ? "" : option}
-                                disabled={index === 0 && field.required}
-                            >
-                                {option}
-                            </option>
-                        ))}
-                    </select>
+                    <div className="relative">
+                        <select
+                            id={id}
+                            name={field.name}
+                            required={field.required}
+                            aria-required={field.required}
+                            aria-invalid={bad || undefined}
+                            aria-describedby={described}
+                            defaultValue=""
+                            className={cn(control, "appearance-none pr-9", bad && invalid)}
+                        >
+                            {field.options.map((option, index) => (
+                                <option
+                                    key={option}
+                                    value={index === 0 ? "" : option}
+                                    disabled={index === 0 && field.required}
+                                >
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                        <ChevronDown className="pointer-events-none absolute top-1/2 right-3.5 size-2.5 -translate-y-1/2 text-mist-500" />
+                    </div>
                 ) : (
                     <input
                         id={id}
