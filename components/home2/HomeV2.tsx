@@ -8,6 +8,11 @@ import Logos from "./Logos";
 import About from "./About";
 import FeaturedWork from "./FeaturedWork";
 import CtaBand from "./CtaBand";
+import HowItWork from "./HowItWork";
+import WhatYouGet from "./WhatYouGet";
+import Results from "./Results";
+import Methodology from "./Methodology";
+import Toolbox from "./Toolbox";
 
 /**
  * Homepage v2 — the editorial redesign.
@@ -38,6 +43,12 @@ export default function HomeV2() {
             {/* Existing copy, recombined — "Your Competitors Aren't Waiting".
                 Nothing new is introduced by the band itself. */}
             <CtaBand heading={`${about.titleMid} ${about.titleAccent}`} />
+            <HowItWork />
+            <WhatYouGet />
+            {/* Industries slots in here — Task 8 */}
+            <Results />
+            <Methodology />
+            <Toolbox />
         </>
     );
 }
