@@ -67,6 +67,9 @@ python scripts/verify-landing-parity.py            # /creative-logo-design, both
 python scripts/verify-ldo-parity.py                # /logo-design-offer, both directions
 python scripts/verify-lp-parity.py                 # /lp, both directions
 python scripts/verify-seo-services-parity.py       # /seo-services, both directions
+# the homepage — works against either version, so run it on `/` to check the
+# script itself before trusting it on the redesign
+python scripts/verify-home-v2-parity.py <rendered.html>
 # /logo-design-offer and /lp render client-side, so their source must be run,
 # not fetched
 node scripts/capture-rendered.mjs <url> <outFile>
