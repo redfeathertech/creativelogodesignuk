@@ -208,10 +208,20 @@ def module_strings(path: pathlib.Path):
         yield key or "", value
 
 
+FIELD_TAG = re.compile(
+    r'<(?:input|select|textarea)\b[^>]*\bname="([^"]+)"', flags=re.I
+)
+
+
 def live_field_names(path: pathlib.Path):
-    """Every name= the live form posts, [] stripped."""
+    """Every name= the live FORM posts, [] stripped.
+
+    Anchored on the control tags rather than a bare `name=` scan: `<meta
+    name="viewport">` and friends are not form fields, and counting them made
+    the check permanently unsatisfiable.
+    """
     raw = path.read_text(encoding="utf-8", errors="replace")
-    for name in re.findall(r'\bname="([^"]+)"', raw):
+    for name in FIELD_TAG.findall(raw):
         yield name.replace("[]", "")
 
 
