@@ -3,6 +3,7 @@ import { homeGraph } from "@/lib/seo";
 import { site } from "@/content/site";
 
 import Hero from "./Hero";
+import Logos from "./Logos";
 
 /**
  * Homepage v2 — the editorial redesign.
@@ -27,6 +28,7 @@ export default function HomeV2() {
             <JsonLd data={homeGraph(HOME_TITLE, site.description)} />
 
             <Hero />
+            <Logos />
         </>
     );
 }
