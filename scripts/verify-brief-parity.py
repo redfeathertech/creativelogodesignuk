@@ -45,30 +45,27 @@ REPO = pathlib.Path(__file__).resolve().parent.parent
 # ---------------------------------------------------------------------------
 # Strings the live pages have no version of at all — not changed, added.
 # ---------------------------------------------------------------------------
+# module_strings() only reads content/landing/<page>.ts, so ADDED can only ever
+# hold strings that function can produce — never a live <title> (checked
+# separately below, against routes.ts) and never text that lives in component
+# or action code ("Sending…" lives in the submit button; the success message
+# and "Creative Logo Design" live in app/actions/forms.ts and the shared brief
+# shell). Listing those here would be inert: they can never be the source of a
+# FORWARD miss, so their presence would silently stop meaning anything.
 ADDED = {
     "website-brief": {
-        # The live <head> has a title and a description and nothing else.
-        "Website Brief Form",
         # Form outcome. The live form posts to email.php and navigates away,
         # so the live document has no success state.
-        "Thanks — we've got your details and will be in touch within one working day.",
         "Brief received",
-        "Sending…",
-        "Creative Logo Design",
     },
     "logo-brief": {
         # THE declared content addition. Approved 4 Aug 2026.
         "Email Address",
         "Enter your email address",
-        # The live <head> has a title and no description.
-        "Logo Design Brief Form",
         "UK logo design brief form. Tell us about your business, your style "
         "preferences and how to reach you, and our designers will come back to "
         "you within one working day.",
-        "Thanks — we've got your details and will be in touch within one working day.",
         "Brief received",
-        "Sending…",
-        "Creative Logo Design",
     },
 }
 
@@ -115,6 +112,37 @@ PAGES = [
 ]
 
 VALIDATION = REPO / "lib" / "validation.ts"
+ROUTES = REPO / "content" / "routes.ts"
+
+# Parsed the same way scripts/gen-routes-table.mjs reads content/routes.ts:
+# a regex over the literal entry shape, since it's TypeScript and this runs
+# without a build step.
+ROUTE_ENTRY = re.compile(
+    r'\{\s*path:\s*"([^"]+)",\s*title:\s*"((?:[^"\\]|\\.)*)",\s*group:\s*"(\w+)",\s*indexable:\s*(true|false),',
+)
+
+
+def route_titles() -> dict[str, str]:
+    """path -> title, from content/routes.ts."""
+    src = ROUTES.read_text(encoding="utf-8")
+    return {
+        path: title.replace('\\"', '"')
+        for path, title, _group, _indexable in ROUTE_ENTRY.findall(src)
+    }
+
+
+def module_title(path: pathlib.Path) -> str | None:
+    """`meta.title` out of a content module."""
+    src = path.read_text(encoding="utf-8")
+    m = re.search(r'export const meta = \{.*?title:\s*"((?:[^"\\]|\\.)*)"', src, flags=re.S)
+    return m.group(1).replace('\\"', '"') if m else None
+
+
+def live_title(path: pathlib.Path) -> str | None:
+    """`<title>` out of a live capture."""
+    raw = path.read_text(encoding="utf-8", errors="replace")
+    m = re.search(r"<title[^>]*>(.*?)</title>", raw, flags=re.S | re.I)
+    return H.unescape(m.group(1)).strip() if m else None
 
 # Keys in the content modules that are plumbing, not copy.
 NOT_COPY = re.compile(r"^(kind|name|autoComplete|inputMode|type|rows|path)$")
@@ -241,8 +269,13 @@ def schema_keys(name: str) -> set[str]:
     body = re.sub(r"^\s*//.*$", "", body, flags=re.M)
     # Both `key: value` and shorthand `key,` — lib/validation.ts uses shorthand
     # for the shared `email`/`phone` primitives, and a colon-only pattern reads
-    # those schemas as missing a field they validate.
-    return set(re.findall(r"^\s*(\w+)\s*[,:]", body, flags=re.M))
+    # those schemas as missing a field they validate. Anchored on 4 spaces —
+    # the schema object's own indent level — not `\s*`: an unanchored pattern
+    # also matches a nested key inside a chained `.refine(fn, { message: … })`,
+    # which sits deeper. That over-read fails OPEN: a real content-module field
+    # coincidentally named `message` would be reported as validated when it
+    # is not.
+    return set(re.findall(r"^ {4}(\w+)\s*[,:]", body, flags=re.M))
 
 
 def check(page) -> tuple[bool, int]:
@@ -303,6 +336,17 @@ def check(page) -> tuple[bool, int]:
     keys = schema_keys(page["schema"])
     unvalidated = sorted(module_names - keys)
 
+    # ---- TITLE -------------------------------------------------------
+    # The docstring and the plan both promise this: the live <title>, the
+    # routes.ts entry for this path, and the content module's meta.title all
+    # have to agree. Nothing enforced that until now — a change to any one of
+    # the three would have gone undetected.
+    live_t = live_title(page["live"])
+    route_t = route_titles().get(f"/{slug}")
+    module_t = module_title(page["module"])
+    title_ok = live_t is not None and live_t == route_t == module_t
+    title_mismatch = 0 if title_ok else 1
+
     print(f"\n== /{slug}")
     print(f"FORWARD  {checked} module strings checked against the live page")
     for key, value in forward_misses:
@@ -320,8 +364,21 @@ def check(page) -> tuple[bool, int]:
     for name in unvalidated:
         print(f"       ! not validated: {name}")
     print(f"ADDED    {len(ADDED[slug])} declared additions")
+    if title_ok:
+        print(f"TITLE    match — {live_t!r}")
+    else:
+        print(
+            f"TITLE  ! mismatch — live={live_t!r} routes.ts={route_t!r} "
+            f"meta.title={module_t!r}"
+        )
 
-    deviations = len(forward_misses) + len(reverse_misses) + len(dropped) + len(unvalidated)
+    deviations = (
+        len(forward_misses)
+        + len(reverse_misses)
+        + len(dropped)
+        + len(unvalidated)
+        + title_mismatch
+    )
     if not has_build:
         deviations += 1
     return False, deviations
@@ -330,6 +387,9 @@ def check(page) -> tuple[bool, int]:
 def main() -> int:
     if not VALIDATION.is_file():
         print(f"MISSING: {VALIDATION}")
+        return 2
+    if not ROUTES.is_file():
+        print(f"MISSING: {ROUTES}")
         return 2
     any_fatal = False
     total = 0
