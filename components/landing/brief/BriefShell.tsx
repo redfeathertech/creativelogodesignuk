@@ -28,10 +28,10 @@ export default function BriefShell({
             <div className="mx-auto w-full max-w-3xl rounded-2xl bg-white p-6 shadow-[0_30px_80px_-30px_rgb(7_2_15/0.6)] sm:p-10">
                 <div className="flex justify-center">
                     <Image
-                        src="/assets/img/logo-dark.png"
+                        src="/assets/img/logo-dark.webp"
                         alt="Creative Logo Design"
-                        width={220}
-                        height={56}
+                        width={600}
+                        height={260}
                         preload
                         className="h-11 w-auto"
                     />
