@@ -77,6 +77,8 @@ only ways off the page are its own CTAs. See
 | `/logo-design-offer` | Professional Bespoke Logo Design Services | **yes** |
 | `/lp` | Web Design Service Starts from £199 | **yes** |
 | `/seo-services` | SEO Services | **yes** |
+| `/website-brief` | Website Brief Form | **yes** |
+| `/logo-brief` | Logo Design Brief Form | **yes** |
 
 
 ## Service

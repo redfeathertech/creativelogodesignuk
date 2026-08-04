@@ -11,7 +11,7 @@
  * misspelling is load-bearing — it is the live production URL.
  *
  * `indexable` gates two things at once: whether the page emits
- * `robots: index` and whether it appears in the sitemap. All 44 are `true` —
+ * `robots: index` and whether it appears in the sitemap. All 46 are `true` —
  * the rebuild is content-complete.
  */
 
@@ -122,6 +122,30 @@ export const routes: RouteEntry[] = [
         group: "landing",
         indexable: true,
         priority: 0.9,
+    },
+    /* The two brief forms the sales team sends to clients. Live URLs are
+       `/website-brief/index.php` and `/logo-brief/index.php`; like
+       `/seo-services`, Next cannot serve a `.php` path from a static route
+       folder, so the clean path is canonical and both `index.php` forms 308 to
+       it (declared in next.config.ts). The slash forms need no entry —
+       `trailingSlash: false` handles them.
+
+       Indexed despite being intake forms: Search Console shows both ranking.
+       Priority 0.7 rather than the other landing pages' 0.9 — they rank, but
+       they are not where the ad spend points. */
+    {
+        path: "/website-brief",
+        title: "Website Brief Form",
+        group: "landing",
+        indexable: true,
+        priority: 0.7,
+    },
+    {
+        path: "/logo-brief",
+        title: "Logo Design Brief Form",
+        group: "landing",
+        indexable: true,
+        priority: 0.7,
     },
 
     /* ---- service hubs & children ----------------------------------------- */

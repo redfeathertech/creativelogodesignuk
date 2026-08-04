@@ -38,6 +38,19 @@ const nextConfig: NextConfig = {
                 destination: "/seo-services",
                 permanent: true,
             },
+            // The two brief forms' live URLs. Same reasoning as
+            // `/seo-services/index.php` above: standalone PHP folders, so their
+            // addresses carry a file name, and there is no PHP left on the site.
+            {
+                source: "/website-brief/index.php",
+                destination: "/website-brief",
+                permanent: true,
+            },
+            {
+                source: "/logo-brief/index.php",
+                destination: "/logo-brief",
+                permanent: true,
+            },
         ];
     },
 
