@@ -68,7 +68,7 @@ export default function Combo() {
 
                     {/* ------------------------------------------- price tag -- */}
                     <div className="reveal order-1 justify-self-center lg:order-2 lg:self-center">
-                        <p className="grid w-[clamp(13rem,26vw,16rem)] rotate-[-4deg] gap-1 rounded-lg border border-star/40 bg-[linear-gradient(160deg,var(--color-magenta-500)_0%,var(--color-violet-600)_100%)] px-6 py-7 text-center shadow-lg">
+                        <p className="grid w-[clamp(13rem,26vw,16rem)] rotate-[-4deg] gap-1 rounded-lg border border-star/40 bg-[linear-gradient(160deg,var(--color-magenta-500)_0%,var(--color-violet-600)_100%)] bg-origin-border px-6 py-7 text-center shadow-lg">
                             <span className="font-display text-sm font-extrabold tracking-[0.14em] text-star uppercase">
                                 {combo.tag.kicker}
                             </span>

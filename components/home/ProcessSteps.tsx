@@ -59,7 +59,9 @@ export default function ProcessSteps() {
             <span
               aria-hidden="true"
               className={cn(
-                "grid size-[60px] shrink-0 place-items-center rounded-full border font-display text-[1.3rem] font-extrabold",
+                // bg-origin-border: without it the gradient tiles into the 1px
+                // transparent border ring and wraps a crimson line down one edge.
+                "grid size-[60px] shrink-0 place-items-center rounded-full border bg-origin-border font-display text-[1.3rem] font-extrabold",
                 "transition-[background-color,color,border-color,transform] duration-300 ease-out",
                 "group-hover:scale-[1.06] group-hover:border-transparent group-hover:text-white",
                 "group-hover:bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)]",

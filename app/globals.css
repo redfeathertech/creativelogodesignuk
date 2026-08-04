@@ -133,7 +133,7 @@
      smaller breakpoint win the cascade above 992px. */
     --breakpoint-lg: 62rem;
 
-    --spacing-section: clamp(4rem, 2rem + 8vw, 8.5rem);
+    --spacing-section: clamp(4rem, 2rem + 8vw, 6.25rem);
     --spacing-gutter: clamp(1.25rem, 0.5rem + 3vw, 3rem);
     /* ONE container for everything — chrome and sections alike. The header,
      every section body and every landing page centre on this same box, so
@@ -182,6 +182,9 @@
     --animate-ping-slow: ping-slow 2.4s var(--ease-out) infinite;
     --animate-pulse-ring: pulse-ring 2.6s var(--ease-out) infinite;
     --animate-scroll-hint: scroll-hint 2.4s var(--ease-in-out) infinite;
+    /* The service-hero quick-link tiles: a gradient border that drifts while
+       the tile is hovered or focused. */
+    --animate-tile-ring: tile-ring 6s linear infinite;
 
     @keyframes marquee {
         to {
@@ -223,6 +226,17 @@
         100% {
             transform: scale(1.28);
             opacity: 0;
+        }
+    }
+    /* Slides an oversized gradient across the tile's border box and back, so
+       the 3px ring reads as a moving light rather than a static outline. */
+    @keyframes tile-ring {
+        0%,
+        100% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
         }
     }
     /* Hero scroll cue: the hairline grows from its top edge and fades back. */

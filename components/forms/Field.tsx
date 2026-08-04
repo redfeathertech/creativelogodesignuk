@@ -26,22 +26,22 @@ import { cn } from "@/lib/cn";
 export type FieldTone = "dark" | "light";
 
 const CONTROL: Record<FieldTone, string> = {
-  dark:
-    "border-white/[0.11] bg-white/[0.04] text-white " +
-    "hover:border-white/20 focus:border-magenta-400 focus:bg-white/[0.07] " +
-    "focus:shadow-[0_0_0_3px_rgb(204_6_127/0.22)] aria-[invalid=true]:border-red-400/60",
-  light:
-    "border-seo-border bg-white text-seo-ink " +
-    "hover:border-seo-body/50 focus:border-seo-pink focus:bg-white " +
-    "focus:shadow-[0_0_0_3px_rgb(209_0_143/0.16)] aria-[invalid=true]:border-red-500",
+    dark:
+        "border-white/[0.11] bg-white/[0.04] text-white " +
+        "hover:border-white/20 focus:border-magenta-400 focus:bg-white/[0.07] " +
+        "focus:shadow-[0_0_0_3px_rgb(204_6_127/0.22)] aria-[invalid=true]:border-red-400/60",
+    light:
+        "border-seo-border bg-white text-seo-ink " +
+        "hover:border-seo-body/50 focus:border-seo-pink focus:bg-white " +
+        "focus:shadow-[0_0_0_3px_rgb(209_0_143/0.16)] aria-[invalid=true]:border-red-500",
 };
 
 const controlClass = (tone: FieldTone) =>
-  "peer w-full rounded-md border px-[1.1rem] pt-[1.4rem] pb-[0.6rem] " +
-  "leading-[1.4] placeholder:text-transparent " +
-  "transition-[border-color,background-color,box-shadow] duration-300 ease-out " +
-  "focus:outline-none " +
-  CONTROL[tone];
+    "peer w-full rounded-md border px-[1.1rem] pt-[1.4rem] pb-[0.6rem] " +
+    "leading-[1.4] placeholder:text-transparent " +
+    "transition-[border-color,background-color,box-shadow] duration-300 ease-out " +
+    "focus:outline-none " +
+    CONTROL[tone];
 
 /**
  * Every variant below is written out in full, never composed from a fragment.
@@ -53,195 +53,142 @@ const controlClass = (tone: FieldTone) =>
  * to find. Keep these as literals.
  */
 const LABEL_BASE =
-  "pointer-events-none absolute top-[1.05rem] left-[1.1rem] origin-top-left " +
-  "transition-[transform,color] duration-200 ease-out ";
+    "pointer-events-none absolute top-[1.05rem] left-[1.1rem] origin-top-left " +
+    "transition-[transform,color] duration-200 ease-out ";
 
 /* Both rest colours clear 4.5:1 against their own canvas. */
 const labelBase = (tone: FieldTone) =>
-  LABEL_BASE + (tone === "light" ? "text-seo-body" : "text-white/40");
-
-const labelFloat = (tone: FieldTone) =>
-  tone === "light"
-    ? "-translate-y-[0.62rem] scale-[0.74] text-seo-pink"
-    : "-translate-y-[0.62rem] scale-[0.74] text-magenta-300";
+    LABEL_BASE + (tone === "light" ? "text-seo-body" : "text-white/40");
 
 /** The float is driven by focus or by the field no longer showing its (blank) placeholder. */
 const LABEL_REACTIVE: Record<FieldTone, string> = {
-  dark:
-    "peer-focus:-translate-y-[0.62rem] peer-focus:scale-[0.74] peer-focus:text-magenta-300 " +
-    "peer-[:not(:placeholder-shown)]:-translate-y-[0.62rem] peer-[:not(:placeholder-shown)]:scale-[0.74] " +
-    "peer-[:not(:placeholder-shown)]:text-magenta-300",
-  light:
-    "peer-focus:-translate-y-[0.62rem] peer-focus:scale-[0.74] peer-focus:text-seo-pink " +
-    "peer-[:not(:placeholder-shown)]:-translate-y-[0.62rem] peer-[:not(:placeholder-shown)]:scale-[0.74] " +
-    "peer-[:not(:placeholder-shown)]:text-seo-pink",
+    dark:
+        "peer-focus:-translate-y-[0.62rem] peer-focus:scale-[0.74] peer-focus:text-magenta-300 " +
+        "peer-[:not(:placeholder-shown)]:-translate-y-[0.62rem] peer-[:not(:placeholder-shown)]:scale-[0.74] " +
+        "peer-[:not(:placeholder-shown)]:text-magenta-300",
+    light:
+        "peer-focus:-translate-y-[0.62rem] peer-focus:scale-[0.74] peer-focus:text-seo-pink " +
+        "peer-[:not(:placeholder-shown)]:-translate-y-[0.62rem] peer-[:not(:placeholder-shown)]:scale-[0.74] " +
+        "peer-[:not(:placeholder-shown)]:text-seo-pink",
 };
 
 const labelReactive = (tone: FieldTone) => LABEL_REACTIVE[tone];
 
 const hintClass = (tone: FieldTone) =>
-  tone === "light"
-    ? "mt-[0.35rem] block text-xs text-red-600"
-    : "mt-[0.35rem] block text-xs text-[#ff9a9a]";
+    tone === "light"
+        ? "mt-[0.35rem] block text-xs text-red-600"
+        : "mt-[0.35rem] block text-xs text-[#ff9a9a]";
 
 function Asterisk({ required }: { required?: boolean }) {
-  return required ? <span aria-hidden="true"> *</span> : null;
+    return required ? <span aria-hidden="true"> *</span> : null;
 }
 
 export function Field({
-  label,
-  name,
-  type = "text",
-  required,
-  autoComplete,
-  errors,
-  className,
-  tone = "dark",
+    label,
+    name,
+    type = "text",
+    required,
+    autoComplete,
+    errors,
+    className,
+    tone = "dark",
 }: {
-  label: string;
-  name: string;
-  type?: string;
-  required?: boolean;
-  autoComplete?: string;
-  errors?: string[];
-  className?: string;
-  tone?: FieldTone;
+    label: string;
+    name: string;
+    type?: string;
+    required?: boolean;
+    autoComplete?: string;
+    errors?: string[];
+    className?: string;
+    tone?: FieldTone;
 }) {
-  const id = useId();
-  const errorId = `${id}-error`;
-  const hasError = Boolean(errors?.length);
+    const id = useId();
+    const errorId = `${id}-error`;
+    const hasError = Boolean(errors?.length);
 
-  return (
-    <div className={cn("relative", className)}>
-      {/* A single space as the placeholder: it never renders (the placeholder is
+    return (
+        <div className={cn("relative", className)}>
+            {/* A single space as the placeholder: it never renders (the placeholder is
           transparent) but it makes :placeholder-shown track emptiness. */}
-      <input
-        id={id}
-        name={name}
-        type={type}
-        required={required}
-        autoComplete={autoComplete}
-        placeholder=" "
-        aria-invalid={hasError}
-        aria-describedby={hasError ? errorId : undefined}
-        className={controlClass(tone)}
-      />
-      <label htmlFor={id} className={cn(labelBase(tone), labelReactive(tone))}>
-        {label}
-        <Asterisk required={required} />
-      </label>
-      {hasError && (
-        <span id={errorId} className={hintClass(tone)}>
-          {errors![0]}
-        </span>
-      )}
-    </div>
-  );
+            <input
+                id={id}
+                name={name}
+                type={type}
+                required={required}
+                autoComplete={autoComplete}
+                placeholder=" "
+                aria-invalid={hasError}
+                aria-describedby={hasError ? errorId : undefined}
+                className={controlClass(tone)}
+            />
+            <label
+                htmlFor={id}
+                className={cn(labelBase(tone), labelReactive(tone))}
+            >
+                {label}
+                <Asterisk required={required} />
+            </label>
+            {hasError && (
+                <span id={errorId} className={hintClass(tone)}>
+                    {errors![0]}
+                </span>
+            )}
+        </div>
+    );
 }
 
 export function TextareaField({
-  label,
-  name,
-  rows = 4,
-  required,
-  errors,
-  className,
-  tone = "dark",
+    label,
+    name,
+    rows = 4,
+    required,
+    errors,
+    className,
+    tone = "dark",
 }: {
-  label: string;
-  name: string;
-  rows?: number;
-  required?: boolean;
-  errors?: string[];
-  className?: string;
-  tone?: FieldTone;
+    label: string;
+    name: string;
+    rows?: number;
+    required?: boolean;
+    errors?: string[];
+    className?: string;
+    tone?: FieldTone;
 }) {
-  const id = useId();
-  const errorId = `${id}-error`;
-  const hasError = Boolean(errors?.length);
+    const id = useId();
+    const errorId = `${id}-error`;
+    const hasError = Boolean(errors?.length);
 
-  return (
-    <div className={cn("relative", className)}>
-      <textarea
-        id={id}
-        name={name}
-        rows={rows}
-        required={required}
-        placeholder=" "
-        aria-invalid={hasError}
-        aria-describedby={hasError ? errorId : undefined}
-        className={cn(controlClass(tone), "min-h-32 resize-y pt-[1.7rem]")}
-      />
-      <label htmlFor={id} className={cn(labelBase(tone), labelReactive(tone))}>
-        {label}
-        <Asterisk required={required} />
-      </label>
-      {hasError && (
-        <span id={errorId} className={hintClass(tone)}>
-          {errors![0]}
-        </span>
-      )}
-    </div>
-  );
+    return (
+        <div className={cn("relative", className)}>
+            <textarea
+                id={id}
+                name={name}
+                rows={rows}
+                required={required}
+                placeholder=" "
+                aria-invalid={hasError}
+                aria-describedby={hasError ? errorId : undefined}
+                className={cn(
+                    controlClass(tone),
+                    "min-h-32 resize-y pt-[1.7rem]",
+                )}
+            />
+            <label
+                htmlFor={id}
+                className={cn(labelBase(tone), labelReactive(tone))}
+            >
+                {label}
+                <Asterisk required={required} />
+            </label>
+            {hasError && (
+                <span id={errorId} className={hintClass(tone)}>
+                    {errors![0]}
+                </span>
+            )}
+        </div>
+    );
 }
 
-export function SelectField({
-  label,
-  name,
-  options,
-  required,
-  errors,
-  className,
-  tone = "dark",
-}: {
-  label: string;
-  name: string;
-  options: readonly string[];
-  required?: boolean;
-  errors?: string[];
-  className?: string;
-  tone?: FieldTone;
-}) {
-  const id = useId();
-  const errorId = `${id}-error`;
-  const hasError = Boolean(errors?.length);
-
-  return (
-    <div className={cn("relative", className)}>
-      <select
-        id={id}
-        name={name}
-        required={required}
-        defaultValue=""
-        aria-invalid={hasError}
-        aria-describedby={hasError ? errorId : undefined}
-        className={cn(
-          controlClass(tone),
-          "appearance-none",
-          /* The option list is drawn by the OS, so it needs a solid background
-             matching its own canvas rather than the field's translucent one. */
-          tone === "light" ? "[&>option]:bg-white" : "[&>option]:bg-ink-850",
-        )}
-      >
-        <option value="" disabled>
-          Please choose…
-        </option>
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
-      </select>
-      {/* A <select> always has a value, so its label stays raised. */}
-      <label htmlFor={id} className={cn(labelBase(tone), labelFloat(tone))}>
-        {label}
-        <Asterisk required={required} />
-      </label>
-      {hasError && (
-        <span id={errorId} className={hintClass(tone)}>
-          {errors![0]}
-        </span>
-      )}
-    </div>
-  );
-}
+/* The dropdown lives in ./Select — the native option list is drawn by the OS
+   and ignores every token in @theme. Re-exported so callers import one module. */
+export { SelectField } from "./Select";

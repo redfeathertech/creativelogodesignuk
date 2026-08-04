@@ -1,5 +1,5 @@
 import { cn } from "@/lib/cn";
-import { ChevronDown } from "@/components/ui/icons";
+import { SelectField } from "@/components/forms/Field";
 import type { BriefField, BriefSection } from "@/content/landing/brief-types";
 
 /**
@@ -10,6 +10,12 @@ import type { BriefField, BriefSection } from "@/content/landing/brief-types";
  * about sixty controls on a white card with static labels above each input.
  * Reusing it would mean threading a tone and a label-position variant through a
  * component three other forms depend on.
+ *
+ * The one thing it does borrow is the dropdown: the native option list is drawn
+ * by the OS, so `components/forms/Select.tsx` is used in its `plain` variant
+ * with a `brief` skin — the label and the error line still come from here.
+ * That control posts through a hidden input, which is exempt from constraint
+ * validation, so `required` on a select is enforced by zod in the action.
  *
  * Labels are rendered exactly as the content module gives them, asterisks
  * included. Where the live page marks nothing — the whole logo brief — the
@@ -23,9 +29,26 @@ const control =
 
 const invalid = "border-red-500 focus:border-red-500 focus:ring-red-500/30";
 
-function Label({ htmlFor, children }: { htmlFor: string; children: React.ReactNode }) {
+/**
+ * `htmlFor` is dropped for the dropdown: its trigger is a <button>, which is not
+ * a labelable element, so the association is made the other way round — the
+ * label carries an id and the combobox points at it with aria-labelledby.
+ */
+function Label({
+    htmlFor,
+    id,
+    children,
+}: {
+    htmlFor?: string;
+    id?: string;
+    children: React.ReactNode;
+}) {
     return (
-        <label htmlFor={htmlFor} className="block text-sm font-semibold text-onlight">
+        <label
+            htmlFor={htmlFor}
+            id={id}
+            className="block text-sm font-semibold text-onlight"
+        >
             {children}
         </label>
     );
@@ -79,6 +102,32 @@ export function BriefFieldControl({
         );
     }
 
+    if (field.kind === "select") {
+        /* The first option is the live form's own placeholder, not a value. */
+        const [placeholder, ...options] = field.options;
+        return (
+            <div>
+                <Label id={`${id}-label`}>{field.label}</Label>
+                <div className="mt-1.5">
+                    <SelectField
+                        tone="brief"
+                        variant="plain"
+                        triggerId={id}
+                        labelledBy={`${id}-label`}
+                        describedBy={described}
+                        label={field.label}
+                        name={field.name}
+                        options={options}
+                        placeholder={placeholder}
+                        required={field.required}
+                        errors={errors}
+                    />
+                </div>
+                <Errors id={errorId} errors={errors} />
+            </div>
+        );
+    }
+
     return (
         <div>
             <Label htmlFor={id}>{field.label}</Label>
@@ -95,30 +144,6 @@ export function BriefFieldControl({
                         aria-describedby={described}
                         className={cn(control, "resize-y", bad && invalid)}
                     />
-                ) : field.kind === "select" ? (
-                    <div className="relative">
-                        <select
-                            id={id}
-                            name={field.name}
-                            required={field.required}
-                            aria-required={field.required}
-                            aria-invalid={bad || undefined}
-                            aria-describedby={described}
-                            defaultValue=""
-                            className={cn(control, "appearance-none pr-9", bad && invalid)}
-                        >
-                            {field.options.map((option, index) => (
-                                <option
-                                    key={option}
-                                    value={index === 0 ? "" : option}
-                                    disabled={index === 0 && field.required}
-                                >
-                                    {option}
-                                </option>
-                            ))}
-                        </select>
-                        <ChevronDown className="pointer-events-none absolute top-1/2 right-3.5 size-2.5 -translate-y-1/2 text-mist-500" />
-                    </div>
                 ) : (
                     <input
                         id={id}
