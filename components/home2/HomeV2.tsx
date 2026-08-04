@@ -1,11 +1,13 @@
 import JsonLd from "@/components/JsonLd";
 import { homeGraph } from "@/lib/seo";
 import { site } from "@/content/site";
+import { about } from "@/content/home";
 
 import Hero from "./Hero";
 import Logos from "./Logos";
 import About from "./About";
 import FeaturedWork from "./FeaturedWork";
+import CtaBand from "./CtaBand";
 
 /**
  * Homepage v2 — the editorial redesign.
@@ -33,6 +35,9 @@ export default function HomeV2() {
             <Logos />
             <About />
             <FeaturedWork />
+            {/* Existing copy, recombined — "Your Competitors Aren't Waiting".
+                Nothing new is introduced by the band itself. */}
+            <CtaBand heading={`${about.titleMid} ${about.titleAccent}`} />
         </>
     );
 }
