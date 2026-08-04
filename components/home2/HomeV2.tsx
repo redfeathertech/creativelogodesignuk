@@ -13,6 +13,9 @@ import WhatYouGet from "./WhatYouGet";
 import Results from "./Results";
 import Methodology from "./Methodology";
 import Toolbox from "./Toolbox";
+import Industries from "./Industries";
+import Awards from "./Awards";
+import Locations from "./Locations";
 
 /**
  * Homepage v2 — the editorial redesign.
@@ -45,10 +48,13 @@ export default function HomeV2() {
             <CtaBand heading={`${about.titleMid} ${about.titleAccent}`} />
             <HowItWork />
             <WhatYouGet />
-            {/* Industries slots in here — Task 8 */}
+            <Industries />
             <Results />
             <Methodology />
             <Toolbox />
+            <Awards />
+            {/* Testimonials slots in above Locations — Task 9 */}
+            <Locations />
         </>
     );
 }
