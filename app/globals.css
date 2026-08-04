@@ -542,3 +542,68 @@
         transform: none;
     }
 }
+
+/* ==========================================================================
+   ==== home-v2 ====
+
+   Additive block for the homepage redesign (components/home2/). Everything
+   here is a NEW name — nothing above is redefined — so the whole block can be
+   deleted to revert the redesign without touching the rest of the file.
+
+   Deliberately introduces no @keyframes: every animated thing in the redesign
+   reuses machinery that the prefers-reduced-motion block above already covers.
+
+   See docs/superpowers/specs/2026-08-04-homepage-v2-design.md
+   ========================================================================== */
+
+@theme {
+    /* Oversized step numerals (01 02 03). Deliberately above --text-display:
+       these are graphic elements, not headings, and they set the editorial
+       scale the whole redesign hangs off. */
+    --text-numeral: clamp(3.5rem, 1.5rem + 9vw, 9rem);
+    --text-numeral--line-height: 0.85;
+    --text-numeral--letter-spacing: -0.05em;
+
+    /* A wider glow than --shadow-glow, for large focal surfaces (the featured
+       work frames, the hero form card) where the tighter one disappears. */
+    --shadow-glow-lg: 0 40px 120px -30px rgb(204 6 127 / 0.55);
+
+    /* Vertical rhythm for full-bleed interstitial bands — tighter than
+       --spacing-section, because a band is a punctuation mark, not a section. */
+    --spacing-band: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
+}
+
+/* Frosted surface: blur + hairline + an inner top highlight. The highlight is
+   what stops the card reading as flat translucent grey — it simulates a light
+   source above the surface, which is the whole trick behind this style. */
+@utility glass {
+    background-color: rgb(255 255 255 / 0.04);
+    backdrop-filter: blur(16px);
+    box-shadow:
+        inset 0 1px 0 0 rgb(255 255 255 / 0.14),
+        inset 0 0 0 1px rgb(255 255 255 / 0.09),
+        var(--shadow-lg);
+}
+
+/* Radial brand bloom, for placing behind a focal element. Always on a
+   pointer-events-none, aria-hidden layer. */
+@utility glow-bloom {
+    background-image: radial-gradient(
+        closest-side,
+        rgb(204 6 127 / 0.45) 0%,
+        rgb(102 46 145 / 0.25) 45%,
+        transparent 100%
+    );
+}
+
+/* Hairline grid that fades out downward — sits under editorial dark bands to
+   give them structure without competing with the mesh. */
+@utility bg-grid-fade {
+    background-image:
+        linear-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: linear-gradient(180deg, #000 0%, transparent 75%);
+}
+
+/* ==== end home-v2 ==== */
