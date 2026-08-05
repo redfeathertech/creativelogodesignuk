@@ -87,7 +87,7 @@ export default function ProcessSteps() {
                             </p>
                         </div>
 
-                        <Image
+                        {/* <Image
                             src={step.icon}
                             alt=""
                             aria-hidden="true"
@@ -98,7 +98,7 @@ export default function ProcessSteps() {
                                 "group-hover:opacity-100",
                                 active ? "opacity-100" : "opacity-50",
                             )}
-                        />
+                        /> */}
                     </li>
                 );
             })}
