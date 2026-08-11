@@ -4,6 +4,12 @@ import type { ServiceContentOverrides } from "./types";
  * Section overrides for /seo, transcribed verbatim from
  * clduk/config/services_content/seo.php. Merged one level deep, per
  * section, over serviceDefaults in index.ts.
+ *
+ * `/seo` itself was retired — the SEO plan's URL table has no slot for it, and
+ * it now 301s to the `/seo-services` pillar (content/legacy-redirects.json).
+ * This module stays because it is still verified against the live baseline by
+ * scripts/verify-content-parity.py AND because it is the base every placeholder
+ * in ./seo-placeholders clones. Do not edit it to suit those pages.
  */
 export const seoOverrides: ServiceContentOverrides = {
   "meta": {

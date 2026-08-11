@@ -29,8 +29,8 @@ title/meta, internal links, and URLs — not on CSS or visual arrangement.
 |---|---|
 | Visual layout, CSS, DOM structure | Any body or heading copy |
 | Component boundaries | Page titles and meta descriptions |
-| Heading **levels** (`h4` → `h2` with identical text) | Any of the 49 URLs |
-| Image markup, JS libraries, interactions | The internal link graph |
+| Heading **levels** (`h4` → `h2` with identical text) | A URL, **in place** — moves go through `content/legacy-redirects.json`, which 301s every old URL forever (see docs/ROUTES.md) |
+| Image markup, JS libraries, interactions | The internal link graph — every indexable page stays linked from the chrome or a page body |
 
 Before editing anything under `content/`, read **[docs/CONTENT-PARITY.md](docs/CONTENT-PARITY.md)**.
 
@@ -83,7 +83,8 @@ app/
   (site)/               everything with site navigation — wraps in <SiteChrome>
     layout.tsx
     page.tsx            homepage — composes the 11 sections
-    [slug]/page.tsx     the 36 service pages, from content/services/
+    [slug]/page.tsx     pillar + flat service pages, from content/services/
+    [slug]/[child]/page.tsx  nested sub-service pages (2026-08 pillar restructure)
     about-us/ contact-us/ + the 4 legal folders
   (landing)/            paid-traffic pages — NO site nav, own header + footer
     layout.tsx
@@ -108,6 +109,7 @@ components/
   forms/    Field FormShell LeadForm ProposalForm Recaptcha
   ui/       Section Rail Counter Reveal Breadcrumbs button icons
 content/    site nav footer routes home about contact clients
+            legacy-redirects.json  <- old URL -> new URL, drives the 301s
             services/ legal/ landing/                       <- ALL copy here
 lib/        seo mail validation antispam recaptcha cn
 scripts/    verify-content-parity.py verify-landing-parity.py verify-ldo-parity.py
@@ -127,9 +129,16 @@ holds only `<html>`/`<body>`, `(site)` wraps its routes in `SiteChrome`, and
    interactivity. Everything a crawler needs must be in the server-rendered HTML.
 2. **All copy lives in `content/`**, never inline in a component. This makes it
    diffable against the live site.
-3. **`content/routes.ts` is the single source of truth for URLs.** It drives the
-   the dynamic service route, `sitemap.ts`, and `docs/ROUTES.md`. Never edit an existing
-   `path` — add the new one and a 308 in `next.config.ts`.
+3. **`content/routes.ts` is the single source of truth for URLs.** It drives
+   the dynamic service routes, `sitemap.ts`, and `docs/ROUTES.md`. Never edit an
+   existing `path` in place — give the route its new path AND map old → new in
+   `content/legacy-redirects.json` (append-only; `next.config.ts` 301s every
+   entry, and the build fails on a source that is still live or a destination
+   that is not).
+   **Every redirect is a 301** — use `statusCode: 301`, never `permanent: true`,
+   which emits 308. Client requirement; applies to every redirect added from
+   now on. (Next's own `trailingSlash` normalisation still emits 308 and is not
+   configurable — that one is fine and is not ours to set.)
 4. **Tailwind first.** Only add hand-written CSS for things utilities genuinely
    cannot express (keyframes, conic/mesh gradients, the noise data-URI,
    `background-clip: text`). Do not port CSS from the Laravel repo.

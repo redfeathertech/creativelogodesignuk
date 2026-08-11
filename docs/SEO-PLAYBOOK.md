@@ -112,8 +112,8 @@ so the two cannot drift.
 `content/routes.ts` has an `indexable` flag per route. It gates **two** things at
 once: the page's `robots` meta and its presence in `sitemap.ts`.
 
-All 44 routes are now `indexable: true` — the rebuild is content-complete, and
-the sitemap carries 44 URLs.
+All 49 routes are now `indexable: true` — the rebuild is content-complete, and
+the sitemap carries 49 URLs.
 
 Thin pages that get indexed cause real damage; `noindex` stubs are inert. When a
 new route is added, keep it `false` and flip it in the same commit that lands the
@@ -160,7 +160,9 @@ sets `alternates.canonical` from the page's own `path`, and every route in the
 app goes through it. There is no code path that can emit a canonical pointing
 somewhere else without someone deliberately overriding `alternates`.
 
-Verify it across the whole site after any build:
+Verify it across the whole site after any build. The walk is recursive: since
+the 2026-08 pillar restructure, the sub-service pages prerender into nested
+directories (`.next/server/app/web-design-services/shopify.html`):
 
 ```bash
 npm run build
@@ -168,20 +170,54 @@ node -e '
 const fs=require("fs"), path=require("path");
 const SITE="https://creativelogodesign.co.uk", dir=".next/server/app";
 let bad=0, n=0;
-for (const f of fs.readdirSync(dir).filter(f=>f.endsWith(".html") && !f.startsWith("_"))) {
-  const h=fs.readFileSync(path.join(dir,f),"utf8");
+const walk=(d)=>fs.readdirSync(d,{withFileTypes:true}).flatMap((e)=>
+  e.isDirectory() ? walk(path.join(d,e.name))
+  : e.name.endsWith(".html") && !e.name.startsWith("_") ? [path.join(d,e.name)] : []);
+for (const f of walk(dir)) {
+  const h=fs.readFileSync(f,"utf8");
   const got=(h.match(/<link rel="canonical" href="([^"]*)"/)||[])[1];
-  const slug=f.replace(/\.html$/,"");
+  const slug=path.relative(dir,f).replace(/\\/g,"/").replace(/\.html$/,"");
   const want=slug==="index" ? SITE : `${SITE}/${slug}`;
   n++;
-  if (got!==want) { bad++; console.log(`  ${f}: got ${got} want ${want}`); }
+  if (got!==want) { bad++; console.log(`  ${slug}: got ${got} want ${want}`); }
 }
 console.log(`${n-bad}/${n} pages canonical to themselves`);
 '
 ```
 
-Currently **44/44**. (Next drops the root's trailing slash, so the homepage
+Currently **49/49**. (Next drops the root's trailing slash, so the homepage
 emits `https://creativelogodesign.co.uk` — the same resource either way.)
+
+## The 2026-08 pillar restructure
+
+The 36 flat service URLs moved to the SEO plan's pillar tree — 8 pillars,
+sub-services nested one level under each. What keeps the move rank-safe:
+
+- **Copy, `<title>`s and meta descriptions did not change.** The parity gates
+  all still pass; the title-drift check still runs against the same live
+  strings. Only the URL and the chrome around the content moved.
+- **Every old URL 301s to its new home**, driven by
+  `content/legacy-redirects.json`. Sources are append-only and live forever.
+  The slashless form — the one the live site links and the one in Search
+  Console — is a single hop straight to the final URL. The trailing-slash form
+  costs two: Next's own `trailingSlash: false` normalisation is registered
+  ahead of the custom table, so `/ppc/` resolves `/ppc/` → `/ppc` → the final
+  URL. That is accepted, not overlooked: killing it needs
+  `skipTrailingSlashRedirect`, which would strand every *other* slash form as a
+  duplicate. Two permanent hops consolidate fine.
+- **Internal links point at the new URLs directly** (nav, footer, homepage,
+  hero tiles via `currentPath()`), so no crawl path bounces off a redirect.
+- **Canonicals, the sitemap and the JSON-LD follow `content/routes.ts`**, so
+  they switched to the new URLs in the same commit — no window where the
+  sitemap says one thing and the canonical another.
+- **`/seo` and `/ui-and-ux-analysis` deliberately did not move**, and every
+  ranking page kept an internal link — nothing was orphaned. See
+  docs/ROUTES.md for the reasoning.
+
+After deploy: submit the sitemap in Search Console and expect the usual
+re-crawl dip while Google consolidates the 34 moved URLs; the 301 + unchanged
+content is exactly the signal pattern the "site move with URL changes"
+guidance describes.
 
 #### The consequence to watch
 
@@ -261,7 +297,8 @@ as such — so this is left alone rather than fought.
 4. Lighthouse mobile incognito → SEO ≥ 95, Accessibility ≥ 95, CLS < 0.1
 5. Fetch `/robots.txt`, `/sitemap.xml`, `/manifest.webmanifest`,
    `/opengraph-image`
-6. Confirm all 44 URLs resolve and none 404
+6. Confirm all 49 URLs resolve and none 404, and every entry in
+   `content/legacy-redirects.json` returns `301` with the mapped `Location`
 6b. The trailing-slash form 308s to the canonical one, on every route group —
    a stray `trailingSlash: true` would silently invert this and split every
    page's signals:
@@ -272,17 +309,17 @@ as such — so this is left alone rather than fought.
    done   # each must print 308 -> the same path without the slash
    ```
 7. Every prerendered page carries exactly one `og:image` and one
-   `twitter:image`:
+   `twitter:image` (recursive — sub-service pages sit in nested directories):
    ```bash
-   for f in .next/server/app/*.html; do
-     printf '%-46s og:%s tw:%s\n' "$f" \
+   find .next/server/app -name '*.html' ! -name '_*' | while read f; do
+     printf '%-64s og:%s tw:%s\n' "$f" \
        "$(grep -c 'property="og:image"' "$f")" "$(grep -c 'name="twitter:image"' "$f")"
    done
    ```
 
 ## Still to do
 
-- [ ] Resolve the trailing-slash question above. It now covers 43 URLs, and
+- [ ] Resolve the trailing-slash question above. It now covers 49 URLs, and
       `/creative-logo-design/` is the one that matters most: it is the only page
       whose live canonical is *wrong* in a second way as well, so both signals
       change at once at cutover
@@ -296,6 +333,6 @@ as such — so this is left alone rather than fought.
       page is self-canonical
 - [ ] Check the five remaining landing pages for the homepage canonical and drop
       it when each is rebuilt — see the rule above
-- [x] Port real content to every route — all 44 are `indexable`
-- [x] Submit the sitemap once more than the homepage is indexable — 44 URLs are
+- [x] Port real content to every route — all 49 are `indexable`
+- [x] Submit the sitemap once more than the homepage is indexable — 49 URLs are
       now in it

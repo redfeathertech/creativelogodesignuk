@@ -12,18 +12,27 @@ import { cn } from "@/lib/cn";
 /**
  * Primary navigation: sticky bar, services mega-menu, mobile drawer.
  *
- * The mega-menu and drawer links are always present in the DOM and merely
- * hidden with CSS, so every one of the 36 service URLs is crawlable from the
- * homepage. The live site hides the trigger behind `javascript:void(0)`, which
- * leaves the Services hub unlinked entirely.
+ * The mega-menu is a two-pane rail: the 8 service pillars down the left
+ * (mirroring the 2026-08 SEO plan's pillar/sub-service tree), the hovered
+ * pillar's sub-services on the right. ALL eight panels are in the DOM on
+ * every render — the inactive ones are `hidden` — so every service URL stays
+ * crawlable from every page, exactly the property the old 4-column grid had.
+ * The live Laravel site hides the trigger behind `javascript:void(0)`, which
+ * leaves the Services hub unlinked entirely; this is the opposite.
  */
 export default function Nav() {
     const [condensed, setCondensed] = useState(false);
     const [megaOpen, setMegaOpen] = useState(false);
+    const [activeGroup, setActiveGroup] = useState(0);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const megaRef = useRef<HTMLLIElement>(null);
+    const triggerRef = useRef<HTMLButtonElement>(null);
+    const railRefs = useRef<(HTMLElement | null)[]>([]);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const switchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const pathname = usePathname();
+
+    const panelId = (i: number) => `services-panel-${i}`;
 
     // Hover intent: open immediately, but delay closing so moving the pointer
     // across the gap onto the panel (a positioned child) doesn't dismiss it.
@@ -34,6 +43,39 @@ export default function Nav() {
     const closeMegaSoon = () => {
         if (closeTimer.current) clearTimeout(closeTimer.current);
         closeTimer.current = setTimeout(() => setMegaOpen(false), 160);
+    };
+
+    const cancelSwitch = () => {
+        if (switchTimer.current) clearTimeout(switchTimer.current);
+    };
+    /** Immediate — for focus, click and arrow keys, where any delay reads as lag. */
+    const selectGroup = (i: number) => {
+        cancelSwitch();
+        setActiveGroup(i);
+    };
+    /**
+     * Delayed — for the pointer only. Travelling diagonally from a rail row to a
+     * link in its own panel crosses the rows below it; switching instantly would
+     * swap the panel out from under the pointer mid-journey.
+     */
+    const switchGroupSoon = (i: number) => {
+        cancelSwitch();
+        switchTimer.current = setTimeout(() => setActiveGroup(i), 110);
+    };
+
+    const onRailKeyDown = (e: React.KeyboardEvent) => {
+        const last = serviceNav.length - 1;
+        let next: number | null = null;
+        if (e.key === "ArrowDown")
+            next = activeGroup === last ? 0 : activeGroup + 1;
+        else if (e.key === "ArrowUp")
+            next = activeGroup === 0 ? last : activeGroup - 1;
+        else if (e.key === "Home") next = 0;
+        else if (e.key === "End") next = last;
+        if (next === null) return;
+        e.preventDefault();
+        selectGroup(next);
+        railRefs.current[next]?.focus();
     };
 
     // A link is active on its own page; sub-paths of a section also count so a
@@ -52,6 +94,7 @@ export default function Nav() {
     useEffect(
         () => () => {
             if (closeTimer.current) clearTimeout(closeTimer.current);
+            if (switchTimer.current) clearTimeout(switchTimer.current);
         },
         [],
     );
@@ -70,8 +113,14 @@ export default function Nav() {
             if (megaRef.current && !megaRef.current.contains(e.target as Node))
                 setMegaOpen(false);
         };
-        const onKey = (e: KeyboardEvent) =>
-            e.key === "Escape" && setMegaOpen(false);
+        // Escape hands focus back to the trigger. Without it the panel goes
+        // `invisible` under whatever was focused inside it and the browser drops
+        // focus to <body>, losing the keyboard user's place in the page.
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key !== "Escape") return;
+            setMegaOpen(false);
+            triggerRef.current?.focus();
+        };
         document.addEventListener("mousedown", onDown);
         document.addEventListener("keydown", onKey);
         return () => {
@@ -109,8 +158,8 @@ export default function Nav() {
        `translate-x-full` copy counted as real page overflow and let every route
        below `xl:` be swiped sideways by the full width of the drawer. Keeping
        them out here puts them under <body>, exactly where LeadPanel already
-       sits. Both still render on the server, so the 36 service links inside the
-       drawer stay in the crawled HTML. */
+       sits. Both still render on the server, so every service link inside the
+       drawer stays in the crawled HTML. */
         <>
             <header
                 className={cn(
@@ -170,6 +219,7 @@ export default function Nav() {
                             onMouseLeave={closeMegaSoon}
                         >
                             <button
+                                ref={triggerRef}
                                 type="button"
                                 aria-expanded={megaOpen}
                                 aria-controls="services-mega"
@@ -192,56 +242,202 @@ export default function Nav() {
                             <div
                                 id="services-mega"
                                 className={cn(
-                                    "absolute top-full left-1/2 z-10 mt-3 w-[min(1100px,92vw)] -translate-x-1/2 rounded-xl border border-white/10 bg-ink-850/98 p-8 shadow-lg backdrop-blur-xl transition-all duration-200",
+                                    "absolute top-full left-1/2 z-10 mt-3 w-[min(960px,92vw)] -translate-x-1/2 overflow-hidden rounded-xl border border-white/10 bg-ink-850/98 shadow-lg backdrop-blur-xl transition-all duration-200",
                                     megaOpen
                                         ? "visible translate-y-0 opacity-100"
                                         : "invisible -translate-y-2 opacity-0",
                                 )}
                             >
-                                <div className="grid grid-cols-4 gap-8">
-                                    {serviceNav.map((group) => (
-                                        <div key={group.label}>
-                                            {group.href ? (
-                                                <Link
-                                                    href={group.href}
-                                                    onClick={() =>
-                                                        setMegaOpen(false)
-                                                    }
-                                                    className="mb-3 block font-display text-sm font-bold tracking-wide text-magenta-300 uppercase hover:text-magenta-200"
-                                                >
-                                                    {group.label}
-                                                </Link>
-                                            ) : (
-                                                <span className="mb-3 block font-display text-sm font-bold tracking-wide text-magenta-300 uppercase">
-                                                    {group.label}
-                                                </span>
-                                            )}
-                                            <ul className="space-y-1.5">
-                                                {group.items.map((item) => (
-                                                    <li key={item.href}>
+                                <div className="grid grid-cols-[290px_1fr]">
+                                    {/* ---- pillar rail ----
+                                        Roving tabindex: only the active row is in
+                                        the tab sequence, and Up/Down/Home/End move
+                                        between pillars. Without it, every rail row
+                                        was a tab stop that re-pointed `activeGroup`
+                                        on focus, so tabbing forward always ended on
+                                        the last pillar and the other seven panels —
+                                        30 of the 31 sub-service links — were
+                                        unreachable by keyboard entirely. */}
+                                    <ul
+                                        className="border-r border-white/10 bg-ink-950/40 py-3"
+                                        onKeyDown={onRailKeyDown}
+                                    >
+                                        <li
+                                            className="sr-only"
+                                            id="services-rail-hint"
+                                        >
+                                            Use the up and down arrow keys to
+                                            browse service categories.
+                                        </li>
+                                        {serviceNav.map((group, i) => {
+                                            const rowClass = cn(
+                                                "relative flex w-full items-center justify-between gap-3 px-6 py-2.5 text-left text-sm font-semibold transition-colors",
+                                                i === activeGroup
+                                                    ? "bg-white/5 text-white before:absolute before:inset-y-2 before:left-0 before:w-0.5 before:rounded-full before:bg-[linear-gradient(180deg,var(--color-magenta-500),var(--color-violet-500))]"
+                                                    : "text-white/65 hover:text-white",
+                                                group.href &&
+                                                    isActive(group.href) &&
+                                                    "text-magenta-300",
+                                            );
+                                            const chevron = (
+                                                <ChevronDown
+                                                    className={cn(
+                                                        "-rotate-90",
+                                                        i === activeGroup
+                                                            ? "text-magenta-300"
+                                                            : "text-white/30",
+                                                    )}
+                                                />
+                                            );
+                                            /* Shared by both row kinds. `aria-controls`
+                                               names the panel each row reveals; the
+                                               active row carries the arrow-key hint so
+                                               it is announced once on entry rather than
+                                               eight times. */
+                                            const rowProps = {
+                                                ref: (
+                                                    el: HTMLElement | null,
+                                                ) => {
+                                                    railRefs.current[i] = el;
+                                                },
+                                                tabIndex:
+                                                    i === activeGroup ? 0 : -1,
+                                                "aria-controls": panelId(i),
+                                                "aria-describedby":
+                                                    i === activeGroup
+                                                        ? "services-rail-hint"
+                                                        : undefined,
+                                                onMouseEnter: () =>
+                                                    switchGroupSoon(i),
+                                                onFocus: () => selectGroup(i),
+                                                className: rowClass,
+                                            };
+                                            return (
+                                                <li key={group.label}>
+                                                    {group.href ? (
                                                         <Link
-                                                            href={item.href}
+                                                            {...rowProps}
+                                                            href={group.href}
                                                             onClick={() =>
                                                                 setMegaOpen(
                                                                     false,
                                                                 )
                                                             }
-                                                            className={cn(
-                                                                "block text-[0.8125rem] leading-snug transition-colors hover:text-white",
-                                                                isActive(
-                                                                    item.href,
-                                                                )
-                                                                    ? "font-bold text-magenta-300"
-                                                                    : "text-white/70",
-                                                            )}
                                                         >
-                                                            {item.label}
+                                                            {group.label}
+                                                            {chevron}
                                                         </Link>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    ))}
+                                                    ) : (
+                                                        /* No pillar page yet — the row only steers
+                                                           the panel, it does not navigate, so it is
+                                                           a disclosure control and says so. */
+                                                        <button
+                                                            {...rowProps}
+                                                            type="button"
+                                                            aria-expanded={
+                                                                i ===
+                                                                activeGroup
+                                                            }
+                                                            onClick={() =>
+                                                                selectGroup(i)
+                                                            }
+                                                        >
+                                                            {group.label}
+                                                            {chevron}
+                                                        </button>
+                                                    )}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+
+                                    {/* ---- sub-service panels ----
+                                        All 8 render on the server; `hidden` keeps
+                                        the inactive ones out of view and out of
+                                        the tab order while their links stay in
+                                        the crawled HTML. */}
+                                    <div
+                                        className="p-7"
+                                        onMouseEnter={cancelSwitch}
+                                    >
+                                        {serviceNav.map((group, i) => (
+                                            <div
+                                                key={group.label}
+                                                id={panelId(i)}
+                                                role="group"
+                                                aria-label={group.label}
+                                                hidden={i !== activeGroup}
+                                            >
+                                                {group.href ? (
+                                                    <Link
+                                                        href={group.href}
+                                                        onClick={() =>
+                                                            setMegaOpen(false)
+                                                        }
+                                                        className="mb-4 inline-block font-display text-sm font-bold tracking-wide text-magenta-300 uppercase hover:text-magenta-200"
+                                                    >
+                                                        {group.label}
+                                                    </Link>
+                                                ) : (
+                                                    <span className="mb-4 inline-block font-display text-sm font-bold tracking-wide text-magenta-300 uppercase">
+                                                        {group.label}
+                                                    </span>
+                                                )}
+
+                                                {group.items.length > 0 ? (
+                                                    <ul className="grid grid-cols-2 gap-x-8 gap-y-1.5">
+                                                        {group.items.map(
+                                                            (item) => (
+                                                                <li
+                                                                    key={
+                                                                        item.href
+                                                                    }
+                                                                >
+                                                                    <Link
+                                                                        href={
+                                                                            item.href
+                                                                        }
+                                                                        onClick={() =>
+                                                                            setMegaOpen(
+                                                                                false,
+                                                                            )
+                                                                        }
+                                                                        className={cn(
+                                                                            "block rounded-md px-3 py-2 text-[0.8125rem] leading-snug transition-colors hover:bg-white/5 hover:text-white",
+                                                                            isActive(
+                                                                                item.href,
+                                                                            )
+                                                                                ? "font-bold text-magenta-300"
+                                                                                : "text-white/70",
+                                                                        )}
+                                                                    >
+                                                                        {
+                                                                            item.label
+                                                                        }
+                                                                    </Link>
+                                                                </li>
+                                                            ),
+                                                        )}
+                                                    </ul>
+                                                ) : (
+                                                    group.href && (
+                                                        <Link
+                                                            href={group.href}
+                                                            onClick={() =>
+                                                                setMegaOpen(
+                                                                    false,
+                                                                )
+                                                            }
+                                                            className="block rounded-md px-3 py-2 text-[0.8125rem] leading-snug text-white/70 transition-colors hover:bg-white/5 hover:text-white"
+                                                        >
+                                                            Explore{" "}
+                                                            {group.label} →
+                                                        </Link>
+                                                    )
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </li>
@@ -308,9 +504,15 @@ export default function Nav() {
             <div
                 id="mobile-drawer"
                 aria-label="Menu"
-                aria-hidden={!drawerOpen}
-                {...(!drawerOpen && { inert: false })}
-                // {...(!drawerOpen && { inert: "" as unknown as boolean })}
+                /* `inert` when closed, and it must be the real thing: the drawer
+                   is parked off-canvas with `translate-x-full`, which removes it
+                   from view but NOT from the tab order. The previous
+                   `{...(!drawerOpen && { inert: false })}` was a no-op in both
+                   states — React omits a false boolean attribute — so on every
+                   sub-xl viewport Tab walked ~55 off-screen links that were also
+                   `aria-hidden`: focusable but invisible to assistive tech.
+                   `inert` covers both, so `aria-hidden` is no longer needed. */
+                inert={!drawerOpen}
                 className={cn(
                     /* `overflow-y-auto` sits on the inner column rather than here, matching
              LeadPanel: the scroll then starts below the fixed edge instead of on

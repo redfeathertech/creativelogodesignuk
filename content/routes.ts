@@ -1,14 +1,30 @@
 /**
  * The URL map — single source of truth.
  *
- * Drives `app/(site)/[slug]`, `app/sitemap.ts`, and `docs/ROUTES.md`. The 36
- * service paths are carried over verbatim from
- * `clduk/config/services_content/_registry.php`; the rest are read off the live
- * Laravel routes. All of them are indexed and externally linked.
+ * Drives `app/(site)/[slug]`, `app/(site)/[slug]/[child]`, `app/sitemap.ts`,
+ * the redirect table in `next.config.ts`, and `docs/ROUTES.md`.
  *
- * NEVER edit an existing `path`. To change one, add the new path and register a
- * 308 from the old one in `next.config.ts`. The `custom-wordpress-developement`
- * misspelling is load-bearing — it is the live production URL.
+ * ## The 2026-08 pillar restructure
+ *
+ * The 36 service URLs were flat (`/ppc`, `/shopify-developers`, …), carried
+ * verbatim from `clduk/config/services_content/_registry.php`. In August 2026
+ * they were restructured into the pillar/sub-service tree specified by the SEO
+ * plan (8 pillars, sub-services nested one level under each). 34 of the 36
+ * moved; every old URL 301s to its new home via `legacyServicePaths` below.
+ * One did not move:
+ *
+ * - `/ui-and-ux-analysis` — not in the SEO plan at all. It ranks, so it keeps
+ *   its URL and its internal links until the plan gives it a slot.
+ *
+ * `/seo` was retired in the same spirit: the plan's SEO URL table has no slot
+ * for it (its subject is the `/seo-services` pillar), so it 301s there and its
+ * content became the base for the eight new SEO sub-service placeholders.
+ *
+ * NEVER edit an existing `path`. To change one, add the new path here, map the
+ * old one in `legacyServicePaths`, and the 301 is emitted by `next.config.ts`
+ * automatically. Old URLs must keep redirecting forever — they are indexed and
+ * externally linked. (The `/custom-wordpress-developement` misspelling lives on
+ * as a redirect source for exactly that reason.)
  *
  * `indexable` gates two things at once: whether the page emits
  * `robots: index` and whether it appears in the sitemap. All 49 are `true` —
@@ -21,6 +37,8 @@
  * because this file drives `sitemap.ts` and `docs/ROUTES.md`, and a URL missing
  * from the sitemap is a URL nobody notices has gone.
  */
+import legacyRedirects from "./legacy-redirects.json";
+
 export type RouteGroup = "core" | "service" | "legal" | "landing";
 
 export interface RouteEntry {
@@ -32,9 +50,10 @@ export interface RouteEntry {
      * For a `service` route this MUST equal the live page's `<title>`, which is
      * also transcribed into `meta.title` in the matching `content/services/*.ts`
      * — the title-drift check in `content/services/index.ts` fails the build if
-     * the two disagree. Four live titles name the wrong page and are corrected
-     * here on purpose; see `TITLE_CORRECTIONS` there and the "Titles corrected"
-     * table in docs/CONTENT-PARITY.md.
+     * the two disagree. The 2026-08 URL moves deliberately did NOT touch these:
+     * a moved page keeps its ranking `<title>` exactly. Four live titles name
+     * the wrong page and are corrected here on purpose; see `TITLE_CORRECTIONS`
+     * there and the "Titles corrected" table in docs/CONTENT-PARITY.md.
      *
      * This is NOT the visible breadcrumb label. Several live titles are
      * mechanically title-cased slugs ("Ui Ux Design"), so the crumb reads from
@@ -110,8 +129,14 @@ export const routes: RouteEntry[] = [
     /* Live URL is `/seo-services/index.php`; `/seo-services/` serves the same
        page and `/seo-services` 301s to it. Next cannot serve a `.php` path from
        a static route folder, so the clean path is canonical here and BOTH live
-       forms 308 to it — the `index.php` redirect is declared in
+       forms redirect to it — the `index.php` 301 is declared in
        `next.config.ts`, the slash form is handled by `trailingSlash: false`.
+
+       Since the 2026-08 restructure this URL is also the SEO pillar in the
+       services mega-menu, and the SEO sub-services nest under it
+       (`/seo-services/seo-audit`, …). The nested routes render in `app/(site)/`
+       with full chrome; this page itself still renders in `app/(landing)/`
+       until it is rebuilt as a real pillar page.
 
        The live page is an un-rebranded third-party template: it names another
        agency ten times, prices in US dollars, and canonicals to the homepage.
@@ -126,7 +151,7 @@ export const routes: RouteEntry[] = [
     /* The two brief forms the sales team sends to clients. Live URLs are
        `/website-brief/index.php` and `/logo-brief/index.php`; like
        `/seo-services`, Next cannot serve a `.php` path from a static route
-       folder, so the clean path is canonical and both `index.php` forms 308 to
+       folder, so the clean path is canonical and both `index.php` forms 301 to
        it (declared in next.config.ts). The slash forms need no entry —
        `trailingSlash: false` handles them.
 
@@ -148,232 +173,287 @@ export const routes: RouteEntry[] = [
         priority: 0.7,
     },
 
-    /* ---- service hubs & children ----------------------------------------- */
+    /* ---- service pillars -------------------------------------------------- */
+    /* One entry per pillar page that exists. The SEO pillar is `/seo-services`
+       (a `landing` route, above). `/automation-services` and
+       `/logo-design-services` have no page yet — both are in the SEO plan, and
+       each gets its route here (indexable: false first) the day it has real
+       content. Automation already has one sub-service nested under its prefix;
+       logo design has none, so nothing sits under `/logo-design-services` yet
+       and its menu group points at the `/creative-logo-design` landing page. */
     {
-        path: "/web-designing",
-        title: "Web Designing",
+        path: "/web-design-services",
+        title: "Web Design Services",
         group: "service",
         indexable: true,
         priority: 0.8,
     },
     {
-        path: "/web-development",
+        path: "/web-development-services",
         title: "Web Development",
         group: "service",
         indexable: true,
         priority: 0.8,
     },
     {
-        path: "/website-maintenance",
-        title: "Website Maintenance",
-        group: "service",
-        indexable: true,
-        priority: 0.8,
-    },
-    {
-        path: "/digital-marketing",
+        path: "/digital-marketing-services",
         title: "Digital Marketing",
         group: "service",
         indexable: true,
         priority: 0.8,
     },
     {
-        path: "/branding",
+        path: "/branding-services",
         title: "Branding",
         group: "service",
         indexable: true,
         priority: 0.8,
     },
     {
-        path: "/app-development",
+        path: "/app-development-services",
         title: "App Development",
         group: "service",
         indexable: true,
         priority: 0.8,
     },
 
-    // Web design children
+    /* SEO sub-services (nest under the /seo-services landing route).
+       The full set from the SEO plan's URL table. Eight of the eleven have no
+       live counterpart and ship on placeholder copy cloned from the old `/seo`
+       page — see content/services/seo-placeholders.ts. */
     {
-        path: "/custom-wordpress-developement",
-        title: "Custom Wordpress Developement",
-        group: "service",
-        indexable: true,
-    },
-    {
-        path: "/website-redesign-services",
-        title: "Website Redesign",
-        group: "service",
-        indexable: true,
-    },
-    {
-        path: "/responsive-website-design-and-development",
-        title: "Responsive Website Design And Development",
-        group: "service",
-        indexable: true,
-    },
-    {
-        path: "/ui-ux-design",
-        title: "Ui Ux Design",
-        group: "service",
-        indexable: true,
-    },
-    {
-        path: "/shopify-web-design",
-        title: "Shopify Web Design",
-        group: "service",
-        indexable: true,
-    },
-    {
-        path: "/magento-design-and-development-service",
-        title: "Magento Design And Development Service",
-        group: "service",
-        indexable: true,
-    },
-    {
-        path: "/corporate-blog-design-services",
-        title: "Corporate Blog Design Services",
-        group: "service",
-        indexable: true,
-    },
-    {
-        path: "/content-management-systems",
-        title: "Content Management Systems",
-        group: "service",
-        indexable: true,
-    },
-    {
-        path: "/ui-and-ux-analysis",
-        title: "Ui Ux Analysis",
-        group: "service",
-        indexable: true,
-    },
-
-    // Digital marketing children
-    {
-        path: "/marketing-and-sales-automation",
-        title: "Marketing & Sales Automation",
-        group: "service",
-        indexable: true,
-    },
-    {
-        path: "/seo",
-        title: "SEO",
-        group: "service",
-        indexable: true,
-    },
-    {
-        path: "/aeo",
-        title: "AEO",
-        group: "service",
-        indexable: true,
-    },
-    {
-        path: "/seo-audit-service",
+        path: "/seo-services/seo-audit",
         title: "SEO Audit Services",
         group: "service",
         indexable: true,
     },
     {
-        path: "/social-media-management",
-        title: "Social Media Management",
+        path: "/seo-services/technical-seo",
+        title: "Technical SEO",
         group: "service",
         indexable: true,
     },
     {
-        path: "/ppc",
-        title: "PPC",
+        path: "/seo-services/on-page-seo",
+        title: "On-Page SEO",
         group: "service",
         indexable: true,
     },
     {
-        path: "/email-marketing-management-services",
-        title: "Email Marketing Management Services",
+        path: "/seo-services/link-building",
+        title: "Off-Page SEO & Link Building",
         group: "service",
         indexable: true,
     },
     {
-        path: "/amazon-seo-and-product-optimisation-service",
+        path: "/seo-services/local-seo",
+        title: "Local SEO",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/seo-services/ecommerce-seo",
+        title: "E-commerce SEO",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/seo-services/shopify-seo",
+        title: "Shopify SEO",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/seo-services/wordpress-seo",
+        title: "WordPress SEO",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/seo-services/amazon-seo",
         title: "Amazon SEO & Product Optimisation Service",
         group: "service",
         indexable: true,
     },
     {
-        path: "/content-marketing-services",
-        title: "Content Marketing Services",
+        path: "/seo-services/aeo",
+        title: "AEO",
         group: "service",
         indexable: true,
     },
     {
-        path: "/influencer-marketing",
-        title: "Influencer Marketing",
-        group: "service",
-        indexable: true,
-    },
-    {
-        path: "/conversion-rate-optimisation",
-        title: "Conversion Rate Optimisation",
-        group: "service",
-        indexable: true,
-    },
-    {
-        path: "/google-analytics",
-        title: "Google Analytics",
+        path: "/seo-services/keyword-research",
+        title: "Keyword Research",
         group: "service",
         indexable: true,
     },
 
-    // Web development children
+    // Web design sub-services
     {
-        path: "/ecommerce-website-development",
+        path: "/web-design-services/custom-wordpress",
+        title: "Custom WordPress Website Design",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/web-design-services/website-redesign",
+        title: "Website Redesign",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/web-design-services/responsive-design",
+        title: "Responsive Website Design",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/web-design-services/ui-ux-design",
+        title: "UI & UX Design",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/web-design-services/shopify",
+        title: "Shopify Web Design",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/web-design-services/magento",
+        title: "Magento Web Design",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/web-design-services/corporate-blog-design",
+        title: "Corporate Blog Design",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/web-design-services/cms",
+        title: "CMS Website Design",
+        group: "service",
+        indexable: true,
+    },
+    // {
+    //     path: "/ui-and-ux-analysis",
+    //     title: "Ui Ux Analysis",
+    //     group: "service",
+    //     indexable: true,
+    // },
+
+    // Web development sub-services
+    {
+        path: "/web-development-services/ecommerce",
         title: "Ecommerce Website Development",
         group: "service",
         indexable: true,
     },
     {
-        path: "/wordpress-development",
+        path: "/web-development-services/wordpress",
         title: "WordPress Development",
         group: "service",
         indexable: true,
     },
     {
-        path: "/amp-web-design",
-        title: "AMP Web Design",
-        group: "service",
-        indexable: true,
-    },
-    {
-        path: "/page-speed-optimisation",
-        title: "Page Speed Optimisation",
-        group: "service",
-        indexable: true,
-    },
-    {
-        path: "/shopify-developers",
+        path: "/web-development-services/shopify",
         title: "Shopify Developers",
         group: "service",
         indexable: true,
     },
     {
-        path: "/magento-development",
+        path: "/web-development-services/magento",
         title: "Magento Development",
         group: "service",
         indexable: true,
     },
     {
-        path: "/laravel-developers",
+        path: "/web-development-services/laravel",
         title: "Laravel Developers",
         group: "service",
         indexable: true,
     },
     {
-        path: "/contentful-developers",
+        path: "/web-development-services/contentful",
         title: "Contentful Developers",
         group: "service",
         indexable: true,
     },
     {
-        path: "/custom-3d-product-configurators",
+        path: "/web-development-services/amp",
+        title: "AMP Web Design",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/web-development-services/page-speed-optimisation",
+        title: "Page Speed Optimisation",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/web-development-services/3d-configurators",
         title: "Custom 3D Product Configurators",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/web-development-services/website-maintenance",
+        title: "Website Maintenance",
+        group: "service",
+        indexable: true,
+    },
+
+    // Digital marketing sub-services
+    {
+        path: "/digital-marketing-services/ppc",
+        title: "PPC",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/digital-marketing-services/social-media-marketing",
+        title: "Social Media Management",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/digital-marketing-services/email-marketing",
+        title: "Email Marketing Management Services",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/digital-marketing-services/content-marketing",
+        title: "Content Marketing Services",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/digital-marketing-services/cro",
+        title: "Conversion Rate Optimisation",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/digital-marketing-services/influencer-marketing",
+        title: "Influencer Marketing",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/digital-marketing-services/google-analytics-4",
+        title: "Google Analytics",
+        group: "service",
+        indexable: true,
+    },
+
+    // Automation sub-services (pillar page not built yet — see the pillar note)
+    {
+        path: "/automation-services/marketing-sales-automation",
+        title: "Marketing & Sales Automation",
         group: "service",
         indexable: true,
     },
@@ -409,10 +489,62 @@ export const routes: RouteEntry[] = [
     },
 ];
 
-
 export const routeByPath = new Map(routes.map((r) => [r.path, r]));
 
-/** Slugs for `generateStaticParams` on `app/(site)/[slug]`. */
-export const serviceSlugs = routes
+/**
+ * Old URL -> current URL, one entry per move. The single source of truth for
+ * the 308 table in `next.config.ts`, and for resolving legacy slugs that
+ * survive in content (`hero.tiles[].slug` in every service module).
+ *
+ * The table itself lives in `content/legacy-redirects.json` — JSON because
+ * `next.config.ts` cannot import a project TS module (the config is transpiled
+ * and evaluated outside the project tree, so relative TS imports do not
+ * resolve), and the one thing worse than a JSON side-file is two divergent
+ * copies of a redirect table.
+ *
+ * Entries are append-only: a URL that has ever been live keeps redirecting
+ * forever — including `/content-management-system` (singular), which never had
+ * a page and 500'd on Laravel. If a destination moves again, update the VALUE,
+ * for every key that points at it: each hop must point at the final URL
+ * (Google follows chains, but each hop taxes crawl and dilutes the signal).
+ */
+export const legacyServicePaths: Record<string, string> = legacyRedirects;
+
+/* A legacy source that is also a live path would make next.config.ts redirect
+   a page out from under itself. Fail at module load, which fails the build. */
+for (const [from, to] of Object.entries(legacyServicePaths)) {
+    if (routeByPath.has(from)) {
+        throw new Error(
+            `legacyServicePaths: "${from}" is still a live route in routes.ts.`,
+        );
+    }
+    if (!routeByPath.has(to)) {
+        throw new Error(
+            `legacyServicePaths: "${from}" points at "${to}", which is not a route.`,
+        );
+    }
+}
+
+/**
+ * Resolve a possibly-legacy path to its current URL. Content that predates the
+ * 2026-08 restructure still names old slugs (`hero.tiles[].slug`); linking
+ * through this keeps every internal link pointing at the final URL instead of
+ * bouncing off a 308.
+ */
+export function currentPath(path: string): string {
+    return legacyServicePaths[path] ?? path;
+}
+
+const serviceSegments = routes
     .filter((r) => r.group === "service")
-    .map((r) => r.path.replace(/^\//, ""));
+    .map((r) => r.path.replace(/^\//, "").split("/"));
+
+/** Params for `app/(site)/[slug]` — the one-segment service pages. */
+export const serviceParams = serviceSegments
+    .filter((segments) => segments.length === 1)
+    .map(([slug]) => ({ slug }));
+
+/** Params for `app/(site)/[slug]/[child]` — the nested sub-service pages. */
+export const subServiceParams = serviceSegments
+    .filter((segments) => segments.length === 2)
+    .map(([slug, child]) => ({ slug, child }));

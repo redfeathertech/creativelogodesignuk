@@ -2,6 +2,92 @@
 
 Where the rebuild stands. Update this at the end of each working session.
 
+## Done — 11 Aug 2026 · Pillar URL restructure + mega-menu redesign
+
+The SEO plan's new information architecture: 8 pillars, sub-services nested
+one level under each.
+
+- **34 of the 36 service URLs moved** to the pillar tree
+  (`/ppc` → `/digital-marketing-services/ppc`, …). Copy, titles and metas
+  untouched — all five parity gates still pass (3,184 strings, 0 new
+  deviations). `/seo` and `/ui-and-ux-analysis` deliberately did not move; see
+  [ROUTES.md](ROUTES.md#the-2026-08-pillar-restructure).
+- **`content/legacy-redirects.json`** — append-only old → new table; drives
+  the 301s in `next.config.ts` (read via `fs`: the transpiled config cannot
+  import project TS) and `currentPath()` in `content/routes.ts`, and is
+  validated against the route table at build time. The
+  `/content-management-system` redirect was retargeted to skip the chain.
+- **All 38 redirects are 301, never 308.** Client requirement, and it binds
+  every future redirect too. `permanent: true` emits **308**, so the config
+  sets `statusCode: 301` explicitly (the two keys are mutually exclusive).
+  Next's own `trailingSlash` normalisation still emits 308 and takes no
+  configuration — the slash form of a legacy URL therefore costs two permanent
+  hops, which is accepted and written up in
+  [SEO-PLAYBOOK.md](SEO-PLAYBOOK.md#the-2026-08-pillar-restructure).
+- **Routing**: `app/(site)/[slug]` (pillars + flat) and new
+  `app/(site)/[slug]/[child]` (sub-services), both `dynamicParams = false`,
+  everything still ○/●. The SEO sub-services nest under `/seo-services`, whose
+  own page remains the `(landing)` route.
+- **Mega-menu redesigned** as a two-pane rail: 8 pillar rows left, active
+  pillar's sub-services right; all 8 panels server-rendered (`hidden`, not
+  unmounted) so every service URL stays crawlable from every page. Groups
+  whose pillar page is unbuilt (`Automation`, `Logo Design`) render as
+  non-navigating rows until their page exists. Mobile drawer carries the same
+  8 groups.
+- **Sub-service pages breadcrumb through their pillar** — `BreadcrumbList`
+  JSON-LD now emits three levels (`Home → Web Design → Shopify Web Design`),
+  and the crumb is skipped when the pillar page does not exist yet, so it never
+  links a 404. Hero quick-link tiles resolve their legacy content slugs through
+  `currentPath()` so no internal link bounces off a 301.
+
+  ⚠️ **Open:** the *visible* breadcrumb is still commented out in
+  `components/services/Hero.tsx:42` — a pre-existing decision, unexplained and
+  older than this session. Google asks that `BreadcrumbList` describe a
+  breadcrumb the reader can see, so the site now emits a three-level trail with
+  nothing on screen. That mismatch predates the restructure (it was
+  `Home → Page` before) but it matters more now that the hierarchy is real, and
+  a visible trail is exactly what a newly-nested URL structure wants. Enabling
+  it is a one-line uncomment; it needs a yes/no rather than a silent flip.
+- Footer / homepage links repointed at final URLs; labels unchanged.
+- Docs: ROUTES.md restructure section + regenerated tables, SEO-PLAYBOOK
+  restructure notes + recursive canonical sweep, AGENTS.md URL rule.
+
+### Accessibility fixes the review caught
+
+A five-dimension adversarial review of the diff confirmed five defects; all are
+fixed and re-verified by a CDP keyboard harness that presses real keys:
+
+- **Critical — the mega-menu was a keyboard trap.** Rail rows switched panels
+  on focus while sitting *before* the panels in DOM order, so tabbing forward
+  re-pointed `activeGroup` at every stop and always ended on the last pillar:
+  exactly one of the sub-service links was reachable by keyboard. Fixed with a
+  roving tabindex (one rail tab stop) plus Up/Down/Home/End. **38/38 mega-menu
+  links now reachable**, measured, not asserted.
+- **Major — the pillar-less rail rows** (Automation, Logo Design) were bare
+  buttons with no state. Panels got ids; those rows got `aria-expanded` +
+  `aria-controls`, and every row now names the panel it reveals.
+- **Major — the closed mobile drawer was `aria-hidden` yet fully tabbable.**
+  The guard was `{...(!drawerOpen && { inert: false })}`, which React omits
+  entirely — a no-op in both states, leaving ~55 off-screen links in the tab
+  order on every sub-xl viewport. Now `inert={!drawerOpen}`.
+- Escape returns focus to the Services trigger instead of dropping it to
+  `<body>`; pointer panel-switching got a 110ms delay so a diagonal reach into
+  a panel no longer swaps it away mid-travel.
+- Two menu orderings and one homepage link were corrected against the sheet
+  (Amazon SEO before AEO; CRO before Influencer Marketing; the "Explore E-Com
+  Development" card restored to the `/web-development-services` pillar it
+  pointed at before, rather than the ecommerce sub-service).
+
+**Not fixed, not mine, worth a decision:** `scripts.zip` (93KB, untracked, not
+gitignored — a `git add .` would commit a stale copy of the verification
+harness) and `@vercel/analytics`, added to `package.json` in this working tree
+but imported nowhere, so it collects nothing until `<Analytics />` renders.
+
+**Still open from the restructure:** the planned pillar pages
+`/automation-services` and `/logo-design-services`, 36 planned sub-service
+pages (get real content, then a route + a `content/nav.ts` line each), and the
+`/seo` vs `/seo-services` fold — a content decision needing client sign-off.
+
 ## Done — 28 Jul 2026
 
 ### Foundation

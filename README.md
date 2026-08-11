@@ -29,7 +29,7 @@ npm run dev                  # http://localhost:3000
 
 ## Status
 
-**Content-complete.** All 44 routes have real copy and all 44 are indexable and
+**Content-complete.** All 49 routes have real copy and all 49 are indexable and
 in the sitemap: the homepage, About Us, Contact Us, 36 service pages, 4 legal
 pages, and the `/creative-logo-design` landing page.
 

@@ -27,8 +27,17 @@ import { marketingAndSalesAutomationOverrides } from "./marketing-and-sales-auto
 import { pageSpeedOptimisationOverrides } from "./page-speed-optimisation";
 import { ppcOverrides } from "./ppc";
 import { responsiveWebsiteDesignOverrides } from "./responsive-website-design-and-development";
-import { seoOverrides } from "./seo";
 import { seoAuditServiceOverrides } from "./seo-audit-service";
+import {
+    ecommerceSeoOverrides,
+    keywordResearchOverrides,
+    linkBuildingOverrides,
+    localSeoOverrides,
+    onPageSeoOverrides,
+    shopifySeoOverrides,
+    technicalSeoOverrides,
+    wordpressSeoOverrides,
+} from "./seo-placeholders";
 import { shopifyDevelopersOverrides } from "./shopify-developers";
 import { shopifyWebDesignOverrides } from "./shopify-web-design";
 import { socialMediaManagementOverrides } from "./social-media-management";
@@ -51,99 +60,168 @@ export type { ServiceContent } from "./types";
  * complete, or not at all — never merged element-by-element with the
  * defaults' list.
  */
-function mergeSection<T extends object>(base: T, override: Partial<T> | undefined): T {
-  return override ? { ...base, ...override } : base;
+function mergeSection<T extends object>(
+    base: T,
+    override: Partial<T> | undefined,
+): T {
+    return override ? { ...base, ...override } : base;
 }
 
 function mergeContent(overrides: ServiceContentOverrides): ServiceContent {
-  return {
-    meta: mergeSection(serviceDefaults.meta, overrides.meta),
-    hero: mergeSection(serviceDefaults.hero, overrides.hero),
-    howItWorks: mergeSection(serviceDefaults.howItWorks, overrides.howItWorks),
-    solutions: mergeSection(serviceDefaults.solutions, overrides.solutions),
-    marquee: mergeSection(serviceDefaults.marquee, overrides.marquee),
-    benefits: mergeSection(serviceDefaults.benefits, overrides.benefits),
-    advantages: mergeSection(serviceDefaults.advantages, overrides.advantages),
-    whyChoose: mergeSection(serviceDefaults.whyChoose, overrides.whyChoose),
-    about: mergeSection(serviceDefaults.about, overrides.about),
-    clients: mergeSection(serviceDefaults.clients, overrides.clients),
-    process: mergeSection(serviceDefaults.process, overrides.process),
-    capabilities: mergeSection(serviceDefaults.capabilities, overrides.capabilities),
-    cta: mergeSection(serviceDefaults.cta, overrides.cta),
-  };
+    return {
+        meta: mergeSection(serviceDefaults.meta, overrides.meta),
+        hero: mergeSection(serviceDefaults.hero, overrides.hero),
+        howItWorks: mergeSection(
+            serviceDefaults.howItWorks,
+            overrides.howItWorks,
+        ),
+        solutions: mergeSection(serviceDefaults.solutions, overrides.solutions),
+        marquee: mergeSection(serviceDefaults.marquee, overrides.marquee),
+        benefits: mergeSection(serviceDefaults.benefits, overrides.benefits),
+        advantages: mergeSection(
+            serviceDefaults.advantages,
+            overrides.advantages,
+        ),
+        whyChoose: mergeSection(serviceDefaults.whyChoose, overrides.whyChoose),
+        about: mergeSection(serviceDefaults.about, overrides.about),
+        clients: mergeSection(serviceDefaults.clients, overrides.clients),
+        process: mergeSection(serviceDefaults.process, overrides.process),
+        capabilities: mergeSection(
+            serviceDefaults.capabilities,
+            overrides.capabilities,
+        ),
+        cta: mergeSection(serviceDefaults.cta, overrides.cta),
+    };
 }
 
 /**
- * Route path -> section overrides, for all 36 "service" group routes in
+ * Route path -> section overrides, for every "service" group route in
  * content/routes.ts.
  *
  * Seventeen came from `clduk/config/services_content/*.php`; the other
  * nineteen were transcribed from the per-service Blade views the live site
  * still renders (`clduk/resources/views/user/<service>/`), checked against the
  * captured HTML in `clduk/_migration_backup/baseline/`. File names follow the
- * Laravel registry keys, which is why a few differ from the URL slug
- * (`content-marketing` -> `/content-marketing-services`).
+ * Laravel registry keys — the 2026-08 pillar restructure moved the URLs
+ * (`legacyServicePaths` in content/routes.ts) but deliberately did NOT rename
+ * these modules: `scripts/verify-content-parity.py` keys its baseline check on
+ * the module filename, and the content inside is byte-identical either way.
  *
  * Every service route must have an entry. Without one `ServicePage` has nothing
  * to render, so `npm run build` fails on the completeness assertion below
  * rather than shipping a thin page — see components/services/ServicePage.tsx.
  */
 const overridesByPath = new Map<string, ServiceContentOverrides>([
-  ["/aeo", aeoOverrides],
-  ["/amazon-seo-and-product-optimisation-service", amazonSeoOverrides],
-  ["/amp-web-design", ampWebDesignOverrides],
-  ["/app-development", appDevelopmentOverrides],
-  ["/branding", brandingOverrides],
-  ["/content-management-systems", contentManagementSystemsOverrides],
-  ["/content-marketing-services", contentMarketingOverrides],
-  ["/contentful-developers", contentfulDevelopersOverrides],
-  ["/conversion-rate-optimisation", conversionRateOverrides],
-  ["/corporate-blog-design-services", corporateBlogDesignOverrides],
-  ["/custom-3d-product-configurators", custom3dProductConfiguratorsOverrides],
-  ["/custom-wordpress-developement", customWordpressDevelopementOverrides],
-  ["/digital-marketing", digitalMarketingOverrides],
-  ["/ecommerce-website-development", ecommerceDevelopmentOverrides],
-  ["/email-marketing-management-services", emailMarketingOverrides],
-  ["/google-analytics", googleAnalyticsOverrides],
-  ["/influencer-marketing", influencerMarketingOverrides],
-  ["/laravel-developers", laravelDevelopersOverrides],
-  ["/magento-design-and-development-service", magentoDesignAndDevelopmentOverrides],
-  ["/magento-development", magentoDevelopmentOverrides],
-  ["/marketing-and-sales-automation", marketingAndSalesAutomationOverrides],
-  ["/page-speed-optimisation", pageSpeedOptimisationOverrides],
-  ["/ppc", ppcOverrides],
-  ["/responsive-website-design-and-development", responsiveWebsiteDesignOverrides],
-  ["/seo", seoOverrides],
-  ["/seo-audit-service", seoAuditServiceOverrides],
-  ["/shopify-developers", shopifyDevelopersOverrides],
-  ["/shopify-web-design", shopifyWebDesignOverrides],
-  ["/social-media-management", socialMediaManagementOverrides],
-  ["/ui-and-ux-analysis", uiAndUxAnalysisOverrides],
-  ["/ui-ux-design", uiUxDesignOverrides],
-  ["/web-designing", webDesigningOverrides],
-  ["/web-development", webDevelopmentOverrides],
-  ["/website-maintenance", websiteMaintenanceOverrides],
-  ["/website-redesign-services", websiteRedesignServicesOverrides],
-  ["/wordpress-development", wordpressDevelopmentOverrides],
+    // pillars + the one flat URL the restructure left in place
+    ["/web-design-services", webDesigningOverrides],
+    ["/web-development-services", webDevelopmentOverrides],
+    ["/digital-marketing-services", digitalMarketingOverrides],
+    ["/branding-services", brandingOverrides],
+    ["/app-development-services", appDevelopmentOverrides],
+    ["/ui-and-ux-analysis", uiAndUxAnalysisOverrides],
+
+    // SEO sub-services. The eight on placeholder copy are marked; see
+    // content/services/seo-placeholders.ts.
+    ["/seo-services/seo-audit", seoAuditServiceOverrides],
+    ["/seo-services/technical-seo", technicalSeoOverrides], // placeholder
+    ["/seo-services/on-page-seo", onPageSeoOverrides], // placeholder
+    ["/seo-services/link-building", linkBuildingOverrides], // placeholder
+    ["/seo-services/local-seo", localSeoOverrides], // placeholder
+    ["/seo-services/ecommerce-seo", ecommerceSeoOverrides], // placeholder
+    ["/seo-services/shopify-seo", shopifySeoOverrides], // placeholder
+    ["/seo-services/wordpress-seo", wordpressSeoOverrides], // placeholder
+    ["/seo-services/aeo", aeoOverrides],
+    ["/seo-services/amazon-seo", amazonSeoOverrides],
+    ["/seo-services/keyword-research", keywordResearchOverrides], // placeholder
+
+    // web design sub-services
+    [
+        "/web-design-services/custom-wordpress",
+        customWordpressDevelopementOverrides,
+    ],
+    ["/web-design-services/website-redesign", websiteRedesignServicesOverrides],
+    [
+        "/web-design-services/responsive-design",
+        responsiveWebsiteDesignOverrides,
+    ],
+    ["/web-design-services/ui-ux-design", uiUxDesignOverrides],
+    ["/web-design-services/shopify", shopifyWebDesignOverrides],
+    ["/web-design-services/magento", magentoDesignAndDevelopmentOverrides],
+    [
+        "/web-design-services/corporate-blog-design",
+        corporateBlogDesignOverrides,
+    ],
+    ["/web-design-services/cms", contentManagementSystemsOverrides],
+
+    // web development sub-services
+    ["/web-development-services/ecommerce", ecommerceDevelopmentOverrides],
+    ["/web-development-services/wordpress", wordpressDevelopmentOverrides],
+    ["/web-development-services/shopify", shopifyDevelopersOverrides],
+    ["/web-development-services/magento", magentoDevelopmentOverrides],
+    ["/web-development-services/laravel", laravelDevelopersOverrides],
+    ["/web-development-services/contentful", contentfulDevelopersOverrides],
+    ["/web-development-services/amp", ampWebDesignOverrides],
+    [
+        "/web-development-services/page-speed-optimisation",
+        pageSpeedOptimisationOverrides,
+    ],
+    [
+        "/web-development-services/3d-configurators",
+        custom3dProductConfiguratorsOverrides,
+    ],
+    [
+        "/web-development-services/website-maintenance",
+        websiteMaintenanceOverrides,
+    ],
+
+    // digital marketing sub-services
+    ["/digital-marketing-services/ppc", ppcOverrides],
+    [
+        "/digital-marketing-services/social-media-marketing",
+        socialMediaManagementOverrides,
+    ],
+    ["/digital-marketing-services/email-marketing", emailMarketingOverrides],
+    [
+        "/digital-marketing-services/content-marketing",
+        contentMarketingOverrides,
+    ],
+    ["/digital-marketing-services/cro", conversionRateOverrides],
+    [
+        "/digital-marketing-services/influencer-marketing",
+        influencerMarketingOverrides,
+    ],
+    [
+        "/digital-marketing-services/google-analytics-4",
+        googleAnalyticsOverrides,
+    ],
+
+    // automation sub-services
+    [
+        "/automation-services/marketing-sales-automation",
+        marketingAndSalesAutomationOverrides,
+    ],
 ]);
 
 /* Fails the build if a service route has no content, rather than quietly
    prerendering the placeholder. routes.ts imports nothing from here, so this
    direction of the dependency is safe. */
 const missing = routes
-  .filter((r) => r.group === "service" && !overridesByPath.has(r.path))
-  .map((r) => r.path);
+    .filter((r) => r.group === "service" && !overridesByPath.has(r.path))
+    .map((r) => r.path);
 
 if (missing.length) {
-  throw new Error(
-    `No service content for ${missing.join(", ")} — add a module in content/services/ ` +
-      `and map it in overridesByPath, or drop the route from content/routes.ts.`,
-  );
+    throw new Error(
+        `No service content for ${missing.join(", ")} — add a module in content/services/ ` +
+            `and map it in overridesByPath, or drop the route from content/routes.ts.`,
+    );
 }
 
-/** Path ("/seo") -> fully-merged ServiceContent, for every service route. */
+/** Path ("/seo-services/local-seo") -> fully-merged ServiceContent, for every service route. */
 export const serviceContentByPath: Map<string, ServiceContent> = new Map(
-  [...overridesByPath.entries()].map(([servicePath, overrides]) => [servicePath, mergeContent(overrides)]),
+    [...overridesByPath.entries()].map(([servicePath, overrides]) => [
+        servicePath,
+        mergeContent(overrides),
+    ]),
 );
 
 /**
@@ -156,10 +234,10 @@ export const serviceContentByPath: Map<string, ServiceContent> = new Map(
  * See the "Titles corrected" table in docs/CONTENT-PARITY.md.
  */
 const TITLE_CORRECTIONS: Record<string, string> = {
-  "/marketing-and-sales-automation": "SEO",
-  "/social-media-management": "seo audit service",
-  "/seo-audit-service": "seo audit service",
-  "/website-redesign-services": "Website ReDesign Services",
+    "/automation-services/marketing-sales-automation": "SEO",
+    "/digital-marketing-services/social-media-marketing": "seo audit service",
+    "/seo-services/seo-audit": "seo audit service",
+    "/web-design-services/website-redesign": "Website ReDesign Services",
 };
 
 /**
@@ -171,23 +249,35 @@ const TITLE_CORRECTIONS: Record<string, string> = {
  * `-ise`/`-ize` is folded out: British spelling was settled site-wide in titles
  * (docs/CONTENT-PARITY.md), so `Optimization` vs `Optimisation` is not drift.
  */
-const spellingFolded = (s: string) => s.replace(/iz(e|ation|ing|ed)\b/gi, (m) => "is" + m.slice(2));
+const spellingFolded = (s: string) =>
+    s.replace(/iz(e|ation|ing|ed)\b/gi, (m) => "is" + m.slice(2));
 
 const drifted = routes
-  .filter((r) => r.group === "service")
-  .map((r) => ({ route: r, live: serviceContentByPath.get(r.path)!.meta.title }))
-  .filter(({ route, live }) => TITLE_CORRECTIONS[route.path] !== live)
-  .filter(({ route, live }) => spellingFolded(route.title) !== spellingFolded(live));
+    .filter((r) => r.group === "service")
+    .map((r) => ({
+        route: r,
+        live: serviceContentByPath.get(r.path)!.meta.title,
+    }))
+    .filter(({ route, live }) => TITLE_CORRECTIONS[route.path] !== live)
+    .filter(
+        ({ route, live }) =>
+            spellingFolded(route.title) !== spellingFolded(live),
+    );
 
 if (drifted.length) {
-  throw new Error(
-    `content/routes.ts title does not match the live <title> transcribed in content/services/:\n` +
-      drifted.map(({ route, live }) => `  ${route.path}\n    routes.ts: ${route.title}\n    live:      ${live}`).join("\n") +
-      `\nRestore the live title, or add the route to TITLE_CORRECTIONS in this file ` +
-      `and to the "Titles corrected" table in docs/CONTENT-PARITY.md.`,
-  );
+    throw new Error(
+        `content/routes.ts title does not match the live <title> transcribed in content/services/:\n` +
+            drifted
+                .map(
+                    ({ route, live }) =>
+                        `  ${route.path}\n    routes.ts: ${route.title}\n    live:      ${live}`,
+                )
+                .join("\n") +
+            `\nRestore the live title, or add the route to TITLE_CORRECTIONS in this file ` +
+            `and to the "Titles corrected" table in docs/CONTENT-PARITY.md.`,
+    );
 }
 
 export function getServiceContent(path: string): ServiceContent | undefined {
-  return serviceContentByPath.get(path);
+    return serviceContentByPath.get(path);
 }

@@ -1,20 +1,21 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
-import { routeByPath, serviceSlugs } from "@/content/routes";
+import { routeByPath, serviceParams } from "@/content/routes";
 import { getServiceContent } from "@/content/services";
 import { buildMetadata } from "@/lib/seo";
 import { site } from "@/content/site";
 import ServicePage from "@/components/services/ServicePage";
 
 /**
- * Single dynamic route covering all 36 "service" group entries in
- * content/routes.ts (web-designing, seo, branding, ppc, ...).
+ * Dynamic route for every ONE-segment "service" entry in content/routes.ts —
+ * the pillar pages (`/web-design-services`, …) and the two flat pages the
+ * 2026-08 restructure left in place (`/seo`, `/ui-and-ux-analysis`). The
+ * nested sub-services render through `[slug]/[child]/page.tsx` beside this.
  *
- * Replaces one `app/(site)/<slug>/page.tsx` folder per service with one file
- * driven by content/services/index.ts. `about-us`, `contact-us` and the four
- * legal pages keep their own folders — different route groups, different
- * components; a static segment wins over this dynamic one either way.
+ * `about-us`, `contact-us` and the four legal pages keep their own folders —
+ * different route groups, different components; a static segment wins over
+ * this dynamic one either way.
  *
  * `dynamicParams = false` makes an unknown slug 404 immediately rather than
  * fall through to a server render attempt — the site is fully static.
@@ -22,7 +23,7 @@ import ServicePage from "@/components/services/ServicePage";
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return serviceSlugs.map((slug) => ({ slug }));
+  return serviceParams;
 }
 
 function resolveServiceRoute(slug: string) {

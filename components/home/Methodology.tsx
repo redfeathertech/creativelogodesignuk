@@ -24,7 +24,12 @@ export default function Methodology() {
   const count = methodology.orbitIcons.length;
 
   return (
-    <section className="relative isolate bg-ink-900 py-section text-white">
+    /* overflow-x-clip: the orbit tracks are square `inset-0` elements that
+       spin; at 45° a square's bounding box is √2 wider than its layout box,
+       and transform overflow extends the page's scrollable area — a real
+       horizontal scroll on phones that comes and goes with the rotation
+       angle. Clip (not hidden) so no scroll container is created. */
+    <section className="relative isolate overflow-x-clip bg-ink-900 py-section text-white">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-mesh" aria-hidden="true" />
       <div
         className="pointer-events-none absolute inset-0 -z-10 bg-noise opacity-[0.42] mix-blend-overlay"

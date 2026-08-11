@@ -1,4 +1,4 @@
-import type { RouteEntry } from "@/content/routes";
+import { routeByPath, type RouteEntry } from "@/content/routes";
 import { getServiceContent } from "@/content/services";
 import JsonLd from "@/components/JsonLd";
 import { pageGraph } from "@/lib/seo";
@@ -35,9 +35,22 @@ export default function ServicePage({ route }: { route: RouteEntry }) {
    * live `<title>`, and several of those are mechanically title-cased slugs
    * ("Ui Ux Design", "Custom Wordpress Developement") — faithful in the head,
    * unreadable on the page. See the note on `title` in content/routes.ts.
+   *
+   * A nested sub-service gets its pillar as a middle crumb — visible trail and
+   * BreadcrumbList JSON-LD both, since both render from this one array. The
+   * crumb only appears when the pillar page actually exists: `/automation-
+   * services/*` pages skip it until their pillar is built, because a crumb is
+   * a link and a link to an unbuilt page is a 404.
    */
+  const pillarPath = route.path.slice(0, route.path.lastIndexOf("/"));
+  const pillar = pillarPath ? routeByPath.get(pillarPath) : undefined;
+  const pillarCrumb = pillar
+    ? [{ name: getServiceContent(pillar.path)?.hero.breadcrumb ?? pillar.title, path: pillar.path }]
+    : [];
+
   const trail = [
     { name: "Home", path: "/" },
+    ...pillarCrumb,
     { name: content.hero.breadcrumb, path: route.path },
   ];
 

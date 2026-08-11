@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Route } from "next";
 
 import type { ServiceHero } from "@/content/services/types";
+import { currentPath } from "@/content/routes";
 import Breadcrumbs, { type Crumb } from "@/components/ui/Breadcrumbs";
 import { LeadButton } from "@/components/chrome/LeadPanel";
 
@@ -95,8 +96,12 @@ export default function Hero({
                     <ul className="grid grid-cols-2 gap-3 min-[576px]:gap-4 lg:grid-cols-4">
                         {hero.tiles.map((tile) => (
                             <li key={tile.label}>
+                                {/* Tile slugs in content predate the 2026-08 URL
+                                    restructure; `currentPath` resolves them to
+                                    the final URL so no internal link bounces
+                                    off a 301. */}
                                 <Link
-                                    href={`/${tile.slug}` as Route}
+                                    href={currentPath(`/${tile.slug}`) as Route}
                                     className="group relative block overflow-hidden rounded-lg border-[3px] border-transparent bg-size-[300%_300%] hover:animate-tile-ring hover:bg-[linear-gradient(135deg,#ffffff,#ff6a00,var(--color-magenta-500),#ff6a00,#ffffff)] focus-visible:animate-tile-ring focus-visible:bg-[linear-gradient(135deg,#ffffff,#ff6a00,var(--color-magenta-500),#ff6a00,#ffffff)] focus-visible:outline-none"
                                 >
                                     <Image

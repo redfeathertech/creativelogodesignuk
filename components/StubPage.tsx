@@ -11,7 +11,7 @@ import { LeadButton } from "@/components/chrome/LeadPanel";
 /**
  * Placeholder body for a route that exists but has no content yet.
  *
- * **Currently unused** — all 43 routes are content-complete. It is kept for the
+ * **Currently unused** — all 49 routes are content-complete. It is kept for the
  * sections still deferred (blog, portfolio, case studies: see
  * `docs/PROGRESS.md`), because the pattern it encodes is the one to reuse:
  * declare the route so `typedRoutes` makes a bad link a compile error, render

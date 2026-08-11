@@ -93,12 +93,12 @@ export const process = {
 export const recentWork = {
   title: "Our Recent Work",
   items: [
-    { lead: "App", trail: "Development", img: "/assets/img/work/app-development.webp", href: "/app-development" },
-    { lead: "Blog", trail: "Design", img: "/assets/img/work/blog-design.webp", href: "/corporate-blog-design-services" },
-    { lead: "Branding", trail: "Design", img: "/assets/img/work/branding-design.webp", href: "/branding" },
-    { lead: "Web", trail: "Design", img: "/assets/img/work/seo-aeo.webp", href: "/web-designing" },
-    { lead: "Social", trail: "Media", img: "/assets/img/work/social-media.webp", href: "/social-media-management" },
-    { lead: "UI UX", trail: "Design", img: "/assets/img/work/ui-ux-design.webp", href: "/ui-ux-design" },
+    { lead: "App", trail: "Development", img: "/assets/img/work/app-development.webp", href: "/app-development-services" },
+    { lead: "Blog", trail: "Design", img: "/assets/img/work/blog-design.webp", href: "/web-design-services/corporate-blog-design" },
+    { lead: "Branding", trail: "Design", img: "/assets/img/work/branding-design.webp", href: "/branding-services" },
+    { lead: "Web", trail: "Design", img: "/assets/img/work/seo-aeo.webp", href: "/web-design-services" },
+    { lead: "Social", trail: "Media", img: "/assets/img/work/social-media.webp", href: "/digital-marketing-services/social-media-marketing" },
+    { lead: "UI UX", trail: "Design", img: "/assets/img/work/ui-ux-design.webp", href: "/web-design-services/ui-ux-design" },
   ],
 } as const;
 
@@ -116,32 +116,32 @@ export const whatYouGet = {
       label: "UI/UX Design",
       body: "Let us craft experiences your users will love from the very first click.",
       shot: "/assets/img/screens/ui-ux-design.webp",
-      href: "/ui-ux-design",
+      href: "/web-design-services/ui-ux-design",
     },
     {
       label: "Web Design",
       body: "Launch a site that doesn't just look good. It sells for you 24/7.",
       shot: "/assets/img/screens/web-design.webp",
-      href: "/web-designing",
+      href: "/web-design-services",
     },
     {
       label: "App Development",
       body: "Turn your idea into a high-performing app that customers keep coming back to.",
       shot: "/assets/img/screens/app-development.webp",
-      href: "/app-development",
+      href: "/app-development-services",
     },
     {
       label: "Branding",
       body: "Stand out instantly with branding that leaves a lasting impression everywhere you show up.",
       shot: "/assets/img/screens/branding.webp",
-      href: "/branding",
+      href: "/branding-services",
     },
     {
       // [live] retains "about the new trends, start growing with campaigns that will maximise"
       label: "Marketing",
       body: "Stop guessing about the new trends, start growing with campaigns that will maximise every marketing pound.",
       shot: "/assets/img/screens/marketing.webp",
-      href: "/digital-marketing",
+      href: "/digital-marketing-services",
     },
   ],
 } as const;
@@ -299,7 +299,7 @@ export const challenges = {
         "Consistent storytelling across every channel",
       ],
       ctaLabel: "Explore Branding",
-      href: "/branding",
+      href: "/branding-services",
     },
     {
       q: "Is your website just there, doing nothing and only wasting money?",
@@ -310,7 +310,7 @@ export const challenges = {
         "Responsive layouts for every device",
       ],
       ctaLabel: "Explore Web Designing",
-      href: "/web-designing",
+      href: "/web-design-services",
     },
     {
       q: "Tired of watching sales slip through your ecommerce cracks?",
@@ -321,7 +321,7 @@ export const challenges = {
         "Data-driven improvements to boost sales",
       ],
       ctaLabel: "Explore E-Com Development",
-      href: "/web-development",
+      href: "/web-development-services",
     },
     {
       // [live] "actually covers expenses for itself" — not the redesign's "actually pays for itself"
@@ -333,7 +333,7 @@ export const challenges = {
         "Paid ads that bring high-value leads",
       ],
       ctaLabel: "Explore Digital Marketing",
-      href: "/digital-marketing",
+      href: "/digital-marketing-services",
     },
     {
       q: "Is managing a campaign like herding cats?",
@@ -344,7 +344,7 @@ export const challenges = {
         "Flexible support tailored to your goals",
       ],
       ctaLabel: "Explore Web Development",
-      href: "/web-development",
+      href: "/web-development-services",
     },
     {
       // [live] "When was the last time you gave your website a thorough makeover?"
@@ -356,7 +356,7 @@ export const challenges = {
         "Future-proof functionality",
       ],
       ctaLabel: "Explore Website Redesign",
-      href: "/website-redesign-services",
+      href: "/web-design-services/website-redesign",
     },
     {
       q: "Think SEO and responsive design are a bit of a mystery?",
@@ -367,7 +367,7 @@ export const challenges = {
         "Fully responsive web design",
       ],
       ctaLabel: "Explore SEO Services",
-      href: "/seo",
+      href: "/seo-services",
     },
     {
       q: "Not sure which channels will give your business the biggest bang for buck?",
@@ -378,7 +378,7 @@ export const challenges = {
         "Data-backed recommendations to scale smart",
       ],
       ctaLabel: "Explore Sales Automation",
-      href: "/marketing-and-sales-automation",
+      href: "/automation-services/marketing-sales-automation",
     },
   ],
 } as const;

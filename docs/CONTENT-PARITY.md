@@ -125,12 +125,16 @@ that already ranks, and unlike body copy there is no second chance to make the
 same impression. **Four** live titles are exempt, because each is a copy-paste
 defect naming a different page — worse for the URL than fixing it:
 
+URLs below are the current ones; each page's pre-2026-08 URL is in brackets,
+since the live `<title>` was served at that address (see
+[ROUTES.md](ROUTES.md#the-2026-08-pillar-restructure)).
+
 | URL | Live `<title>` | Now |
 |---|---|---|
-| `/marketing-and-sales-automation` | `SEO` | `Marketing & Sales Automation` |
-| `/social-media-management` | `seo audit service` | `Social Media Management` |
-| `/seo-audit-service` | `seo audit service` | `SEO Audit Services` |
-| `/website-redesign-services` | `Website ReDesign Services` | `Website Redesign` |
+| `/automation-services/marketing-sales-automation` (was `/marketing-and-sales-automation`) | `SEO` | `Marketing & Sales Automation` |
+| `/digital-marketing-services/social-media-marketing` (was `/social-media-management`) | `seo audit service` | `Social Media Management` |
+| `/seo-services/seo-audit` (was `/seo-audit-service`) | `seo audit service` | `SEO Audit Services` |
+| `/web-design-services/website-redesign` (was `/website-redesign-services`) | `Website ReDesign Services` | `Website Redesign` |
 
 Those four, and only those four, are listed in `TITLE_CORRECTIONS` in
 `content/services/index.ts`. The `-ise`/`-ize` split is separately settled toward
@@ -145,9 +149,9 @@ wrong and are meant to:
 
 | URL | Restored `<title>` | Why it looks broken |
 |---|---|---|
-| `/ui-ux-design` | `Ui Ux Design` | The CMS title-cased the slug |
+| `/web-design-services/ui-ux-design` | `Ui Ux Design` | The CMS title-cased the slug |
 | `/ui-and-ux-analysis` | `Ui Ux Analysis` | Same |
-| `/custom-wordpress-developement` | `Custom Wordpress Developement` | Live typo, matching the live URL |
+| `/web-design-services/custom-wordpress` | `Custom Wordpress Developement` | Live typo, matching the URL it was served at (`/custom-wordpress-developement`, still a 301 source) |
 
 Expanding `SEO` to `Search Engine Optimisation` throws away an exact-match
 keyword on a URL Google already ranks. `Ui Ux Design` is uglier but it is what is

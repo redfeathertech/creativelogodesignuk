@@ -1,0 +1,43 @@
+{
+    "/web-designing": "/web-design-services",
+    "/web-development": "/web-development-services",
+    "/digital-marketing": "/digital-marketing-services",
+    "/branding": "/branding-services",
+    "/app-development": "/app-development-services",
+
+    "/seo": "/seo-services",
+    "/seo-audit-service": "/seo-services/seo-audit",
+    "/aeo": "/seo-services/aeo",
+    "/amazon-seo-and-product-optimisation-service": "/seo-services/amazon-seo",
+
+    "/custom-wordpress-developement": "/web-design-services/custom-wordpress",
+    "/website-redesign-services": "/web-design-services/website-redesign",
+    "/responsive-website-design-and-development": "/web-design-services/responsive-design",
+    "/ui-ux-design": "/web-design-services/ui-ux-design",
+    "/shopify-web-design": "/web-design-services/shopify",
+    "/magento-design-and-development-service": "/web-design-services/magento",
+    "/corporate-blog-design-services": "/web-design-services/corporate-blog-design",
+    "/content-management-systems": "/web-design-services/cms",
+    "/content-management-system": "/web-design-services/cms",
+
+    "/ecommerce-website-development": "/web-development-services/ecommerce",
+    "/wordpress-development": "/web-development-services/wordpress",
+    "/shopify-developers": "/web-development-services/shopify",
+    "/magento-development": "/web-development-services/magento",
+    "/laravel-developers": "/web-development-services/laravel",
+    "/contentful-developers": "/web-development-services/contentful",
+    "/amp-web-design": "/web-development-services/amp",
+    "/page-speed-optimisation": "/web-development-services/page-speed-optimisation",
+    "/custom-3d-product-configurators": "/web-development-services/3d-configurators",
+    "/website-maintenance": "/web-development-services/website-maintenance",
+
+    "/ppc": "/digital-marketing-services/ppc",
+    "/social-media-management": "/digital-marketing-services/social-media-marketing",
+    "/email-marketing-management-services": "/digital-marketing-services/email-marketing",
+    "/content-marketing-services": "/digital-marketing-services/content-marketing",
+    "/conversion-rate-optimisation": "/digital-marketing-services/cro",
+    "/influencer-marketing": "/digital-marketing-services/influencer-marketing",
+    "/google-analytics": "/digital-marketing-services/google-analytics-4",
+
+    "/marketing-and-sales-automation": "/automation-services/marketing-sales-automation"
+}

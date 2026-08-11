@@ -4,7 +4,32 @@
 36 service + 4 legal.
 
 Mirrors `content/routes.ts`, which is the single source of truth — it drives the
-dynamic service route, `app/sitemap.ts`, and this file.
+dynamic service routes, `app/sitemap.ts`, the 301 table in `next.config.ts`
+(via `content/legacy-redirects.json`), and this file.
+
+## The 2026-08 pillar restructure
+
+The 36 service URLs were flat (`/ppc`, `/shopify-developers`, …). In August
+2026 they were restructured to the SEO plan's pillar tree: 8 pillars, each
+sub-service nested one level under its pillar
+(`/digital-marketing-services/ppc`). 34 URLs moved; every old URL 301s to its
+new home via `content/legacy-redirects.json`. Two service URLs did **not**
+move:
+
+- **`/seo`** — the plan's SEO pillar URL is `/seo-services`, which is occupied
+  by the paid-traffic landing page. Folding the general SEO page into it is a
+  content decision that needs sign-off, so `/seo` stays put for now.
+- **`/ui-and-ux-analysis`** — not in the SEO plan. It ranks, so it keeps its
+  URL and its menu link until the plan gives it a slot.
+
+The pillar pages `/automation-services` and `/logo-design-services` are in the
+plan but do not exist yet. Automation already has one sub-service nested under
+its prefix; logo design has none — nothing sits under `/logo-design-services`,
+and its menu group points at the `/creative-logo-design` landing page instead.
+Each pillar route gets added (`indexable: false` first, as ever) the day it has
+real content. The same goes for every planned sub-service that has
+no page yet: **no link and no route until the content is real** — a menu link
+to an unbuilt page is a 404, and an indexed placeholder is thin content.
 
 ## Route groups
 
@@ -24,25 +49,40 @@ layout — it can be served for any URL — so it pulls `SiteChrome` in itself.
 
 ## The rule
 
-> **Never edit an existing `path`.**
+> **Never edit an existing `path` in place.**
 
-These URLs are indexed and externally linked. To change one: add the new path,
-then register a 308 from the old one in `next.config.ts`. Never swap in place.
+These URLs are indexed and externally linked. To change one: give the route its
+new path in `content/routes.ts` **and** map old → new in
+`content/legacy-redirects.json` in the same commit. `next.config.ts` emits a
+301 for every entry in that file, and `content/routes.ts` fails the build if an
+entry's source is still a live route or its destination is not one.
 
-Two live quirks are load-bearing and must be preserved:
+**Every redirect is a 301.** `next.config.ts` sets `statusCode: 301` explicitly;
+do not use `permanent: true`, which emits 308. This is a client requirement and
+it applies to every redirect added in future. The one exception is not ours to
+make: Next's built-in `trailingSlash: false` normalisation emits 308 and takes
+no configuration.
 
-- **`/custom-wordpress-developement`** — the misspelling is the live production
-  URL. Do not "fix" it.
-- **`/content-management-system`** (singular) never had a page and 500'd since
-  launch. It is a 308 to the plural URL, declared in `next.config.ts`.
+Redirect sources are **append-only**: a URL that has ever been live keeps
+redirecting forever. If a destination moves again, update the value on every
+key that points at it — each hop must point at the final URL, never at another
+redirect. Among the permanent sources:
+
+- **`/custom-wordpress-developement`** — the live production URL for years,
+  misspelling and all. It now 301s to `/web-design-services/custom-wordpress`.
+- **`/content-management-system`** (singular) — never had a page and 500'd on
+  Laravel since launch. 301s straight to `/web-design-services/cms`.
 
 ## Adding a route
 
 1. Add an entry to `content/routes.ts` (`indexable: false` until it has real content)
 2. Give it a body:
    - **a service page** — add a module in `content/services/` and map it in that
-     directory's `index.ts`. Nothing else; `app/(site)/[slug]/page.tsx` picks it
-     up. Leaving it unmapped **fails the build** on purpose.
+     directory's `index.ts`. Nothing else; `app/(site)/[slug]/page.tsx` (pillar
+     or flat URL) or `app/(site)/[slug]/[child]/page.tsx` (nested sub-service)
+     picks it up from the path's segment count. Leaving it unmapped **fails the
+     build** on purpose. If it belongs in the mega-menu, add its line to
+     `content/nav.ts` in the same commit.
    - **a landing page** — create `app/(landing)/<slug>/page.tsx`, and give it a
      module under `content/landing/`. It gets no site chrome; render its own.
    - **anything else** — create `app/(site)/<slug>/page.tsx`
@@ -85,42 +125,49 @@ only ways off the page are its own CTAs. See
 
 | URL | Title | Indexable |
 |---|---|---|
-| `/web-designing` | Web Designing | **yes** |
-| `/web-development` | Web Development | **yes** |
-| `/website-maintenance` | Website Maintenance | **yes** |
-| `/digital-marketing` | Digital Marketing | **yes** |
-| `/branding` | Branding | **yes** |
-| `/app-development` | App Development | **yes** |
-| `/custom-wordpress-developement` | Custom Wordpress Developement | **yes** |
-| `/website-redesign-services` | Website Redesign | **yes** |
-| `/responsive-website-design-and-development` | Responsive Website Design And Development | **yes** |
-| `/ui-ux-design` | Ui Ux Design | **yes** |
-| `/shopify-web-design` | Shopify Web Design | **yes** |
-| `/magento-design-and-development-service` | Magento Design And Development Service | **yes** |
-| `/corporate-blog-design-services` | Corporate Blog Design Services | **yes** |
-| `/content-management-systems` | Content Management Systems | **yes** |
+| `/web-design-services` | Web Designing | **yes** |
+| `/web-development-services` | Web Development | **yes** |
+| `/digital-marketing-services` | Digital Marketing | **yes** |
+| `/branding-services` | Branding | **yes** |
+| `/app-development-services` | App Development | **yes** |
+| `/seo-services/seo-audit` | SEO Audit Services | **yes** |
+| `/seo-services/technical-seo` | Technical SEO | **yes** |
+| `/seo-services/on-page-seo` | On-Page SEO | **yes** |
+| `/seo-services/link-building` | Off-Page SEO & Link Building | **yes** |
+| `/seo-services/local-seo` | Local SEO | **yes** |
+| `/seo-services/ecommerce-seo` | E-commerce SEO | **yes** |
+| `/seo-services/shopify-seo` | Shopify SEO | **yes** |
+| `/seo-services/wordpress-seo` | WordPress SEO | **yes** |
+| `/seo-services/amazon-seo` | Amazon SEO & Product Optimisation Service | **yes** |
+| `/seo-services/aeo` | AEO | **yes** |
+| `/seo-services/keyword-research` | Keyword Research | **yes** |
+| `/web-design-services/custom-wordpress` | Custom Wordpress Developement | **yes** |
+| `/web-design-services/website-redesign` | Website Redesign | **yes** |
+| `/web-design-services/responsive-design` | Responsive Website Design And Development | **yes** |
+| `/web-design-services/ui-ux-design` | Ui Ux Design | **yes** |
+| `/web-design-services/shopify` | Shopify Web Design | **yes** |
+| `/web-design-services/magento` | Magento Design And Development Service | **yes** |
+| `/web-design-services/corporate-blog-design` | Corporate Blog Design Services | **yes** |
+| `/web-design-services/cms` | Content Management Systems | **yes** |
 | `/ui-and-ux-analysis` | Ui Ux Analysis | **yes** |
-| `/marketing-and-sales-automation` | Marketing & Sales Automation | **yes** |
-| `/seo` | SEO | **yes** |
-| `/aeo` | AEO | **yes** |
-| `/seo-audit-service` | SEO Audit Services | **yes** |
-| `/social-media-management` | Social Media Management | **yes** |
-| `/ppc` | PPC | **yes** |
-| `/email-marketing-management-services` | Email Marketing Management Services | **yes** |
-| `/amazon-seo-and-product-optimisation-service` | Amazon SEO & Product Optimisation Service | **yes** |
-| `/content-marketing-services` | Content Marketing Services | **yes** |
-| `/influencer-marketing` | Influencer Marketing | **yes** |
-| `/conversion-rate-optimisation` | Conversion Rate Optimisation | **yes** |
-| `/google-analytics` | Google Analytics | **yes** |
-| `/ecommerce-website-development` | Ecommerce Website Development | **yes** |
-| `/wordpress-development` | WordPress Development | **yes** |
-| `/amp-web-design` | AMP Web Design | **yes** |
-| `/page-speed-optimisation` | Page Speed Optimisation | **yes** |
-| `/shopify-developers` | Shopify Developers | **yes** |
-| `/magento-development` | Magento Development | **yes** |
-| `/laravel-developers` | Laravel Developers | **yes** |
-| `/contentful-developers` | Contentful Developers | **yes** |
-| `/custom-3d-product-configurators` | Custom 3D Product Configurators | **yes** |
+| `/web-development-services/ecommerce` | Ecommerce Website Development | **yes** |
+| `/web-development-services/wordpress` | WordPress Development | **yes** |
+| `/web-development-services/shopify` | Shopify Developers | **yes** |
+| `/web-development-services/magento` | Magento Development | **yes** |
+| `/web-development-services/laravel` | Laravel Developers | **yes** |
+| `/web-development-services/contentful` | Contentful Developers | **yes** |
+| `/web-development-services/amp` | AMP Web Design | **yes** |
+| `/web-development-services/page-speed-optimisation` | Page Speed Optimisation | **yes** |
+| `/web-development-services/3d-configurators` | Custom 3D Product Configurators | **yes** |
+| `/web-development-services/website-maintenance` | Website Maintenance | **yes** |
+| `/digital-marketing-services/ppc` | PPC | **yes** |
+| `/digital-marketing-services/social-media-marketing` | Social Media Management | **yes** |
+| `/digital-marketing-services/email-marketing` | Email Marketing Management Services | **yes** |
+| `/digital-marketing-services/content-marketing` | Content Marketing Services | **yes** |
+| `/digital-marketing-services/cro` | Conversion Rate Optimisation | **yes** |
+| `/digital-marketing-services/influencer-marketing` | Influencer Marketing | **yes** |
+| `/digital-marketing-services/google-analytics-4` | Google Analytics | **yes** |
+| `/automation-services/marketing-sales-automation` | Marketing & Sales Automation | **yes** |
 
 
 ## Legal
@@ -144,11 +191,11 @@ the Laravel repo, so the live page is the only source for all six.
 | `/logo-design-offer/` | £19 logo-design offer page | **yes** |
 | `/lp/` | £199 web-design offer page | **yes** |
 | `/seo-services/index.php` | SEO retainer page | **yes** — at `/seo-services` |
-| `/logo-brief/index.php` | Form only | not yet |
-| `/website-brief/index.php` | Form only | not yet |
+| `/logo-brief/index.php` | Form only | **yes** — at `/logo-brief` |
+| `/website-brief/index.php` | Form only | **yes** — at `/website-brief` |
 
-The four rebuilt so far are built three different ways, and the difference
-decides how you capture the source:
+All six are rebuilt. The four content pages were built three different ways, and
+the difference decides how you capture the source:
 
 - **`/creative-logo-design/`** and **`/seo-services/index.php`** are
   server-rendered HTML — their own Bootstrap builds and a PHPMailer endpoint.
@@ -170,8 +217,8 @@ Next cannot serve a `.php` path from a static route folder, and there is no PHP
 left on the site. `/seo-services/index.php` settled it for the two that remain:
 
 - the page is served at the clean **`/seo-services`**
-- `/seo-services/index.php` **308s** to it, declared in `next.config.ts`
-- `/seo-services/` needs no entry — `trailingSlash: false` already 308s it
+- `/seo-services/index.php` **301s** to it, declared in `next.config.ts`
+- `/seo-services/` needs no entry — `trailingSlash: false` already redirects it
 
 Note the live server does the opposite: `/seo-services` **301s to
 `/seo-services/`**, and `/seo-services/index.php` returns 200. Both live forms

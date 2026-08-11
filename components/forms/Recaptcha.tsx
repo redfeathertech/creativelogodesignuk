@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
  * script is only fetched once the visitor actually interacts with a form, which
  * keeps it off the critical path entirely. That lazy load matters more under v3
  * than it did under v2: v3 wants to be on *every* page, and this site would pay
- * that cost on 43 routes for the sake of six forms.
+ * that cost on all 49 routes for the sake of six forms.
  *
  * Tokens expire two minutes after `execute` resolves, and a form sitting open
  * while someone types will outlive that easily. The token is therefore minted
