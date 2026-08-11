@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics as NextAnalytics } from "@vercel/analytics/next";
 import { Montserrat, Raleway } from "next/font/google";
 import "./globals.css";
 
@@ -95,6 +97,8 @@ export default function RootLayout({
                 <Reveal />
                 <Analytics />
                 <Chatra />
+                <NextAnalytics />
+                <SpeedInsights />
             </body>
         </html>
     );
