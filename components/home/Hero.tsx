@@ -67,7 +67,7 @@ export default function Hero() {
                 {/* `--hero-foot` is the block padding plus room for the scroll cue —
             and collapses back to plain padding on the viewports too short to
             show the cue at all. */}
-                <div className="reveal mx-auto flex w-full max-w-[46rem] flex-col justify-center py-hero-block lg:mx-0 lg:max-w-none lg:pe-hero-pad lg:pb-[var(--hero-foot)]">
+                <div className="hero-copy reveal mx-auto flex w-full max-w-[46rem] flex-col justify-center py-hero-block lg:mx-0 lg:max-w-none lg:pe-hero-pad lg:pb-[var(--hero-foot)]">
                     <Eyebrow>{hero.eyebrow}</Eyebrow>
 
                     <h1 className="mb-hero-gap text-hero">
@@ -84,7 +84,7 @@ export default function Hero() {
                         {hero.sub}
                     </p>
 
-                    <div className="flex flex-wrap gap-4">
+                    <div className="hero-ctas flex flex-wrap gap-4">
                         <LeadButton variant="primary" size="lg">
                             {hero.primaryCta}
                             <ArrowIcon />

@@ -91,6 +91,23 @@ export default function Nav() {
         allServiceLinks.some((l) => isActive(l.href)) ||
         serviceNav.some((g) => g.href && isActive(g.href));
 
+    // A pillar counts as active when its own page is open OR any of its
+    // sub-services is — a child page always lights its parent.
+    const groupActive = (g: (typeof serviceNav)[number]) =>
+        (!!g.href && isActive(g.href)) || g.items.some((i) => isActive(i.href));
+
+    // Open the mega-menu on the pillar that owns the current page.
+    useEffect(() => {
+        const i = serviceNav.findIndex(groupActive);
+        if (i >= 0) setActiveGroup(i);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pathname]);
+
+    // Bullet marker for sub-service links, drawn as a pseudo-element so the
+    // link stays a single block and wrapped text aligns past the dot.
+    const bulletClass =
+        "relative before:absolute before:left-3 before:size-1.5 before:-translate-y-1/2 before:rounded-full before:bg-current";
+
     useEffect(
         () => () => {
             if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -275,8 +292,7 @@ export default function Nav() {
                                                 i === activeGroup
                                                     ? "bg-white/5 text-white before:absolute before:inset-y-2 before:left-0 before:w-0.5 before:rounded-full before:bg-[linear-gradient(180deg,var(--color-magenta-500),var(--color-violet-500))]"
                                                     : "text-white/65 hover:text-white",
-                                                group.href &&
-                                                    isActive(group.href) &&
+                                                groupActive(group) &&
                                                     "text-magenta-300",
                                             );
                                             const chevron = (
@@ -403,12 +419,14 @@ export default function Nav() {
                                                                             )
                                                                         }
                                                                         className={cn(
-                                                                            "block rounded-md px-3 py-2 text-[0.8125rem] leading-snug transition-colors hover:bg-white/5 hover:text-white",
+                                                                            "block rounded-md py-2 pr-3 pl-7 text-[0.8125rem] leading-snug transition-colors hover:bg-white/5 hover:text-white",
+                                                                            bulletClass,
+                                                                            "before:top-[1.05rem]",
                                                                             isActive(
                                                                                 item.href,
                                                                             )
                                                                                 ? "font-bold text-magenta-300"
-                                                                                : "text-white/70",
+                                                                                : "text-white/70 before:opacity-45",
                                                                         )}
                                                                     >
                                                                         {
@@ -575,9 +593,17 @@ export default function Nav() {
                     {serviceNav.map((group) => (
                         <details
                             key={group.label}
+                            open={groupActive(group)}
                             className="border-t border-white/10 py-1"
                         >
-                            <summary className="cursor-pointer list-none px-3 py-2.5 font-display font-bold text-white marker:content-['']">
+                            <summary
+                                className={cn(
+                                    "cursor-pointer list-none px-3 py-2.5 font-display font-bold marker:content-['']",
+                                    groupActive(group)
+                                        ? "text-magenta-300"
+                                        : "text-white",
+                                )}
+                            >
                                 {group.label}
                             </summary>
                             <ul className="pb-2 pl-3">
@@ -586,7 +612,11 @@ export default function Nav() {
                                         <Link
                                             href={group.href}
                                             onClick={() => setDrawerOpen(false)}
-                                            className="block px-3 py-1.5 text-sm text-magenta-300"
+                                            className={cn(
+                                                "block py-1.5 pr-3 pl-7 text-sm text-magenta-300",
+                                                isActive(group.href) &&
+                                                    "font-bold",
+                                            )}
                                         >
                                             All {group.label}
                                         </Link>
@@ -598,10 +628,12 @@ export default function Nav() {
                                             href={item.href}
                                             onClick={() => setDrawerOpen(false)}
                                             className={cn(
-                                                "block px-3 py-1.5 text-sm hover:text-white",
+                                                "block py-1.5 pr-3 pl-7 text-sm hover:text-white",
+                                                bulletClass,
+                                                "before:top-4",
                                                 isActive(item.href)
-                                                    ? "text-magenta-300"
-                                                    : "text-white/70",
+                                                    ? "font-bold text-magenta-300"
+                                                    : "text-white/70 before:opacity-45",
                                             )}
                                         >
                                             {item.label}

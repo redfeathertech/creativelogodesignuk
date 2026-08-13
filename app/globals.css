@@ -278,17 +278,13 @@
      never overflows the fold the visitor actually lands on. */
     --hero-h: calc(100svh - var(--header-h));
 
-    /* Bottom padding of the hero copy column. The scroll cue is absolutely
-     positioned against the section floor, so the column has to keep clear of
-     it — but only on the viewports tall enough to show the cue at all. Below
-     that it would be 92px of padding bought with content pushed off screen. */
+    /* Bottom padding of the hero copy column. This used to widen to 5.75rem
+     above 800px of viewport to keep the column clear of the scroll cue, which
+     was absolutely positioned against the section floor. The cue is now
+     commented out in Hero.tsx, so that branch reserved 70px of empty floor and
+     was on its own enough to push the hero past the fold at 1280x832. Restore
+     it alongside the cue, not before. */
     --hero-foot: var(--spacing-hero-block);
-}
-
-@media (min-height: 800px) {
-    :root {
-        --hero-foot: 5.75rem;
-    }
 }
 
 /* 62rem, matching `--breakpoint-lg` exactly. TopBar is `hidden lg:block`, so if
@@ -297,6 +293,94 @@
 @media (min-width: 62rem) {
     :root {
         --topbar-h: 2.5rem;
+    }
+}
+
+/* ==========================================================================
+   Short-viewport hero compression
+
+   `--hero-h` sizes the hero to the fold, but the section is `min-height`, so
+   the grid row still grows to whatever its tallest column needs. The copy
+   column already gives way — every gap in it is `svh`-driven. The proposal
+   card beside it did not: six fields, a textarea, the reCAPTCHA note and the
+   submit button measure a rigid 623px at EVERY viewport height, so below
+   ~790px of viewport the card alone is taller than the fold it is supposed to
+   sit inside and pushes the section past it.
+
+   The `overflow-y-auto` on the form column cannot catch this. The grid row is
+   sized BY the card, so the column never receives a bounded height to scroll
+   within — the safety valve has no pressure to release.
+
+   Measured on the homepage at 1280x700 (Safari on a 13" MacBook keeps ~120px
+   of tab bar + favourites bar, which lands squarely in this band): hero 668px
+   against a 584px fold, so the stats row and the Trustpilot badge were cut off
+   on load. These rules put the card on the same viewport-height rhythm as the
+   copy column so both fit.
+
+   Height-banded, and `lg` only. Above 800px nothing here applies and the card
+   keeps its full metrics; below `lg` the columns stack and the hero is
+   deliberately taller than one screen.
+   ========================================================================== */
+
+@media (min-width: 62rem) and (max-height: 800px) {
+    /* The card's own inset, normally clamp(1.25rem, 0.75rem + 2vw, 2rem). */
+    .hero-form {
+        padding: 1.125rem;
+    }
+
+    .hero-form h2 + p {
+        margin-bottom: 0.875rem;
+    }
+
+    /* Field rows, the textarea and the submit stack all sit on `gap-4`. */
+    .hero-form .grid,
+    .hero-form .grid > .flex {
+        gap: 0.75rem;
+    }
+
+    /* The floating label needs headroom above the value, so the top padding
+       can only come down as far as the label's own travel — 0.62rem of
+       translate at 0.74 scale. 1.15rem keeps ~2px of clearance. */
+    .hero-form input,
+    .hero-form textarea {
+        padding-top: 1.15rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .hero-form label {
+        top: 0.85rem;
+    }
+
+    /* Only the label headroom. The textarea's height comes from `rows={4}`,
+       which already exceeds `min-h-32`, so lowering the min-height here would
+       be a no-op — the four rows are what the visitor writes their brief in
+       and they stay. */
+    .hero-form textarea {
+        padding-top: 1.45rem;
+    }
+
+    .hero-form button[type="submit"] {
+        padding-block: 0.85rem;
+    }
+
+    /* Left column. The eyebrow's `mb-4` is the one gap in it that is not
+       already `svh`-driven. */
+    .hero-copy > :first-child {
+        margin-bottom: 0.5rem;
+    }
+
+    /* At 1280 the copy column is 544px wide and the two CTAs come to 583px, so
+       they wrap to a second row and cost 64px the fold does not have. Trimmed
+       to 1.5rem of inline padding and a 0.75rem gap they measure 531px and
+       stay on one line, with 13px in hand for font-rendering differences
+       between engines. Below `lg` the wrap is fine — the hero is not pinned to
+       one screen there. */
+    .hero-ctas {
+        gap: 0.75rem;
+    }
+
+    .hero-ctas > * {
+        padding-inline: 1.5rem;
     }
 }
 

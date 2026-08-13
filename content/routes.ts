@@ -190,7 +190,7 @@ export const routes: RouteEntry[] = [
     },
     {
         path: "/web-development-services",
-        title: "Web Development",
+        title: "Web Development Services",
         group: "service",
         indexable: true,
         priority: 0.8,
@@ -347,7 +347,7 @@ export const routes: RouteEntry[] = [
     // Web development sub-services
     {
         path: "/web-development-services/ecommerce",
-        title: "Ecommerce Website Development",
+        title: "E-commerce Development",
         group: "service",
         indexable: true,
     },
@@ -359,7 +359,7 @@ export const routes: RouteEntry[] = [
     },
     {
         path: "/web-development-services/shopify",
-        title: "Shopify Developers",
+        title: "Shopify Development",
         group: "service",
         indexable: true,
     },
@@ -371,19 +371,19 @@ export const routes: RouteEntry[] = [
     },
     {
         path: "/web-development-services/laravel",
-        title: "Laravel Developers",
+        title: "Laravel Development",
         group: "service",
         indexable: true,
     },
     {
         path: "/web-development-services/contentful",
-        title: "Contentful Developers",
+        title: "Contentful Development",
         group: "service",
         indexable: true,
     },
     {
         path: "/web-development-services/amp",
-        title: "AMP Web Design",
+        title: "AMP Development",
         group: "service",
         indexable: true,
     },
@@ -395,7 +395,7 @@ export const routes: RouteEntry[] = [
     },
     {
         path: "/web-development-services/3d-configurators",
-        title: "Custom 3D Product Configurators",
+        title: "Custom 3D Configurators",
         group: "service",
         indexable: true,
     },

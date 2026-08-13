@@ -22,7 +22,7 @@ import ProposalForm from "@/components/forms/ProposalForm";
 export default function HeroLeadForm() {
   return (
     <div className="reveal relative flex min-h-[46svh] items-center justify-center overflow-y-auto py-hero-block lg:min-h-full lg:ps-hero-pad lg:justify-end lg:py-hero-block">
-      <div className="w-full max-w-[32rem] rounded-xl border border-white/[0.11] bg-white/[0.04] p-[clamp(1.25rem,0.75rem+2vw,2rem)] shadow-lg backdrop-blur-[16px]">
+      <div className="hero-form w-full max-w-[32rem] rounded-xl border border-white/[0.11] bg-white/[0.04] p-[clamp(1.25rem,0.75rem+2vw,2rem)] shadow-lg backdrop-blur-[16px]">
         <h2 className="text-h5 text-white">Request your free proposal</h2>
         <p className="mt-2 mb-6 text-sm text-white/65">
           Tell us about your project and a strategist will be in touch.
