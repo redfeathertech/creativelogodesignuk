@@ -238,47 +238,89 @@ export const testimonials = {
   titleLead: "Clients’ valuable",
   titleAccent: "feedback",
   mark: "/assets/img/home/quote-mark.webp",
-  // Deliberately NOT marked up as Review/AggregateRating — see docs/SEO-PLAYBOOK.md.
+  /* CLIENT-SUPPLIED REPLACEMENT (13 Aug 2026). The five anonymous quotes that
+     were here — job title + industry, no names — were replaced wholesale with
+     the ten real reviews the client sent over, verbatim including their own
+     punctuation, spelling and line breaks. This is the one content change on
+     this page that did not come from the live Laravel site; it is a deliberate
+     instruction, not a parity drift (docs/CONTENT-PARITY.md).
+
+     Still deliberately NOT marked up as Review/AggregateRating even though the
+     reviewers are now named — see docs/SEO-PLAYBOOK.md. Self-hosted reviews of
+     your own business stay ineligible for rich results, and marking them up
+     risks a manual action.
+
+     `date` is the display string; `dateISO` backs the <time datetime>. */
   items: [
     {
       stars: 5,
-      quote:
-        "I'm well chuffed with the results! The team nailed our brand identity and made the whole process feel effortless.",
-      body: "They handled everything from start to finish. Proper professionals who saved us loads of faff, always on the ball, and bang on with deadlines. Couldn't have asked for better.",
-      role: "Director of Ecommerce",
-      org: "The Fragrance Group",
+      name: "Conor",
+      date: "Oct 23, 2025",
+      dateISO: "2025-10-23",
+      body: "Nick has been amazing throughout the process, very accommodating to required changes requested to logos and designs created for my company. He is also very quick to respond to any queries I’ve had. I’ve been very impressed with his ability to bring my vision to life. We plan to work further on my projects and couldn’t recommend the company enough and Nick in particular has been great.\n\nThanks Nick!",
     },
     {
       stars: 5,
-      quote:
-        "These folks really know their onions when it comes to design and marketing. Felt like they understood our business straight off the bat.",
-      body: "From strategy chats to final delivery, they kept it simple, stress-free, and delivered top-notch work. Cracking bunch who actually listen and graft to get it right every time.",
-      role: "VP Marketing",
-      org: "DTC Apparel Brand",
-    },
-    {
-      stars: 4,
-      quote:
-        "Our new website is brilliant — slick, easy to use, and exactly what we needed. Customers have already noticed the difference.",
-      body: "Conversions have gone up, engagement's through the roof, and the site runs like a dream. They sorted the tricky bits without us getting worried. Absolute game-changers.",
-      role: "Product Manager",
-      org: "Fintech SaaS",
+      name: "master k",
+      date: "Jan 13, 2026",
+      dateISO: "2026-01-13",
+      body: "I recently redesigned my website through Red Feather Solutions, and the experience was excellent. The website now performs significantly faster than before, and the color scheme and overall design are very well executed. Any issues or updates are handled promptly and professionally by their team. I would highly recommend Red Feather Solutions to businesses of all sizes for website or logo design services. Their pricing is also very reasonable for the quality of work delivered.",
     },
     {
       stars: 5,
-      quote:
-        "Can't fault the service — friendly, sharp, and creative as anything. They made the whole branding job feel like a doddle.",
-      body: "The team's attention to detail was spot on. Every tweak was handled with care, and they worked hard to get us the look we wanted.",
-      role: "Growth Lead",
-      org: "Healthcare Marketplace",
+      name: "Lee",
+      date: "Dec 9, 2025",
+      dateISO: "2025-12-09",
+      body: "Dan and his team were amazing from start to finish, doing various edits and adjustments promptly and always making sure I was happy along the process.\nAlso, very polite and professional. Will definitely use again when needed.",
     },
     {
       stars: 5,
-      quote:
-        "They're a proper solid team, no messing about. Everything from the first call to the finished product was smooth sailing.",
-      body: "They went above and beyond, making sure the designs hit the mark perfectly. Straight-talking, reliable, and genuinely passionate about what they do. We'll be sticking with them.",
-      role: "Creative Director",
-      org: "Hospitality Group",
+      name: "Tracy",
+      date: "Jan 13, 2026",
+      dateISO: "2026-01-13",
+      body: "Adam was extremely helpful and guided me through the full process from designing my logo to creating a website . Always responded promptly to my messages . I was really clueless , he was very patient I’m delighted with the outcome",
+    },
+    {
+      stars: 5,
+      name: "Tafadzwa Zulu",
+      date: "Sep 25, 2025",
+      dateISO: "2025-09-25",
+      body: "It was a great experience working with Daniel in designing the branding for my newly formed company, As I was new to the world of business, Daniel was very kind to take me through the process of Logo design and all the branding associated, patiently explaining and helped me come up with great Logo designs for my Company. Delivered in the agreed timeline, many different formats as requested. Overally, I'm greatly satisfied with the service and looking forward to working with him on my future project. Will definitely recommend.",
+    },
+    {
+      stars: 5,
+      name: "Mohammed Azam",
+      date: "Sep 26, 2025",
+      dateISO: "2025-09-26",
+      body: "What an amazing service .I can’t praise these guys enough. Polite, patient and friendly.\nThey helped with my companies logos in a very professional manner and in a few days we have amazing logos.\nThank you so much .",
+    },
+    {
+      stars: 5,
+      name: "Hgdddt yuiiii",
+      date: "Sep 23, 2025",
+      dateISO: "2025-09-23",
+      body: "Daniel was extremely attentive, creative -& patient and did a great job offering solutions on my new logo- I highly recommend I’m so pleased with my new logo. Thankyou Daniel !",
+    },
+    {
+      stars: 5,
+      name: "Adam",
+      date: "Oct 1, 2025",
+      dateISO: "2025-10-01",
+      body: "Very impressed! The service was 10/10. A helpful man called Daniel surpassed my expectations with my logo I needed help with. Would definitely recommend 👍",
+    },
+    {
+      stars: 5,
+      name: "Andrew Marshall-Read",
+      date: "Nov 5, 2025",
+      dateISO: "2025-11-05",
+      body: "Adam was extremely helpful in aiding my logo needs. I needed a redesign for my scuba travel agency, Mares Diem, and he delivered above and beyond.",
+    },
+    {
+      stars: 5,
+      name: "Will",
+      date: "Sep 3, 2025",
+      dateISO: "2025-09-03",
+      body: "I called regarding a logo design for my company!!! Nick was very helpful and sent me examples promptly!!! Would definitely use them again!!!",
     },
   ],
 } as const;

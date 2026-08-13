@@ -64,6 +64,13 @@
     --color-onlight-muted: #55506a;
     --color-star: #ffb400;
 
+    /* Homepage testimonial cards reproduce the review-platform rating bar the
+     client signed off on: filled green tiles with a knocked-out white star.
+     `rating-muted` is the *unfilled* tile — a pale green, not grey, so a 4/5
+     still reads as a green bar. Every current review is 5/5. */
+    --color-rating: #00b67a;
+    --color-rating-muted: #cfe8de;
+
     /* ---- /seo-services: a light page on a dark site ---------------------- */
     /* The only light-canvas page in the build. Its palette is the live page's
      own `--rf-*` variables, carried over exactly because the design is signed

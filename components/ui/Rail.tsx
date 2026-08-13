@@ -172,8 +172,15 @@ export default function Rail({
                     /* gap-4, not gap-2: each dot carries a 24px invisible hit area
                        (below), and 16px of gap is the least that keeps two
                        neighbouring hit areas from overlapping — an overlap would
-                       hand the tap to whichever dot paints last. */
-                    <div className="inline-flex items-center gap-4">
+                       hand the tap to whichever dot paints last.
+
+                       `flex-wrap` because that 24px pitch adds up: ten dots plus
+                       the arrow cluster want 384px, and a 320px phone has 280px
+                       of gutter-to-gutter room. Without it the row pushed the
+                       document sideways — 84px at 320px, 45px at 360px. Wrapping
+                       also lets `min-width: auto` resolve to one dot instead of
+                       the whole strip, so the row can shrink at all. */
+                    <div className="inline-flex flex-wrap items-center gap-4">
                         {Array.from({ length: count }, (_, i) => (
                             <button
                                 key={i}
