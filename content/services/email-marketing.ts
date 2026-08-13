@@ -7,7 +7,7 @@ import type { ServiceContentOverrides } from "./types";
  */
 export const emailMarketingOverrides: ServiceContentOverrides = {
   "meta": {
-    "title": "Email Marketing Management Services",
+    "title": "Email Marketing",
     "description": "Email marketing management from Creative Logo Design — campaigns, automation and segmentation that boost open rates and turn subscribers into loyal customers."
   },
   "hero": {

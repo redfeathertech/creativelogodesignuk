@@ -141,23 +141,65 @@ Those four, and only those four, are listed in `TITLE_CORRECTIONS` in
 British spelling (`Page Speed Optimisation`), matching the URLs the business
 already chose, and the drift check folds it out.
 
-**Everything else keeps the live string, warts included.** The service pages
-briefly shipped with 14 further titles quietly improved — `SEO` expanded to
-`Search Engine Optimisation`, `PPC` to `PPC Management`, `Google Analytics` to
-`Google Analytics 4`. Reverted on 31 Jul 2026. Three of the restored titles look
-wrong and are meant to:
+**Everything a rename does not cover keeps the live string, warts included.** The
+service pages briefly shipped with 14 titles quietly *improved* — `SEO` expanded
+to `Search Engine Optimisation`, `PPC` to `PPC Management`, `Google Analytics` to
+`Google Analytics 4`. Reverted on 31 Jul 2026, and that revert still stands: an
+unbriefed rewrite is not the same thing as the client's SEO plan renaming a page
+(next section). One restored title looks wrong and is meant to:
 
 | URL | Restored `<title>` | Why it looks broken |
 |---|---|---|
-| `/web-design-services/ui-ux-design` | `Ui Ux Design` | The CMS title-cased the slug |
-| `/ui-and-ux-analysis` | `Ui Ux Analysis` | Same |
-| `/web-design-services/custom-wordpress` | `Custom Wordpress Developement` | Live typo, matching the URL it was served at (`/custom-wordpress-developement`, still a 301 source) |
+| `/ui-and-ux-analysis` | `Ui Ux Analysis` | The CMS title-cased the slug |
 
 Expanding `SEO` to `Search Engine Optimisation` throws away an exact-match
-keyword on a URL Google already ranks. `Ui Ux Design` is uglier but it is what is
-indexed; a title is not a design surface. If any of these should change, that is
-a ranking decision to take deliberately in Search Console — add the URL to
+keyword on a URL Google already ranks. `Ui Ux Analysis` is uglier but it is what
+is indexed; a title is not a design surface. If it should change, that is a
+ranking decision to take deliberately in Search Console — add the URL to
 `TITLE_CORRECTIONS` and to the table above, and the build will accept it.
+
+### Titles renamed by the SEO plan
+
+Distinct from both of the above, and the **only** sanctioned reason a `<title>`
+changes. The client's SEO plan supplies a page name per URL, and where that name
+differs from the live title the page takes the plan's name.
+
+The reason this is safe where the 31 Jul rewrite was not: every rename ships
+with that page's **URL move**, so the new title lands on a new URL that 301s
+from the old one. No title is being swapped underneath a URL Google already
+ranks — the redirect carries the history, and the plan's name is the keyword the
+new URL is meant to win.
+
+Fourteen pages are renamed so far, all from the first four service groups:
+
+| Group | Live `<title>` | Plan's page name |
+|---|---|---|
+| Pillar | `Web Designing` | `Web Design Services` |
+| Pillar | `Web Development` | `Web Development Services` |
+| Pillar | `App Development` | `App Development Services` |
+| Web design | `Custom Wordpress Developement` | `Custom WordPress Website Design` |
+| Web design | `Responsive Website Design And Development` | `Responsive Website Design` |
+| Web design | `Magento Design And Development Service` | `Magento Web Design` |
+| Web design | `Corporate Blog Design Services` | `Corporate Blog Design` |
+| Web design | `Content Management Systems` | `CMS Website Design` |
+| Web dev | `Ecommerce Website Development` | `E-commerce Development` |
+| Web dev | `Shopify Developers` | `Shopify Development` |
+| Web dev | `Laravel Developers` | `Laravel Development` |
+| Web dev | `Contentful Developers` | `Contentful Development` |
+| Web dev | `AMP Web Design` | `AMP Development` |
+| Web dev | `Custom 3D Product Configurators` | `Custom 3D Configurators` |
+
+Each is declared in `RETITLED` in `scripts/verify-content-parity.py`, which pins
+**both** ends: the live title it replaced (so a re-captured baseline re-opens the
+question) and the plan's name it became (so the title cannot then drift to a
+third value unnoticed). Renaming a page without adding its row fails the gate.
+
+> ⚠️ Twelve of these fourteen went in unrecorded and passed the parity gate by
+> accident — `meta.title` was checked by searching the live page's body text,
+> and phrases like "Web Design Services" happen to occur in the page's own copy.
+> Only `AMP Development` and `CMS Website Design` ever failed. A gate that fires
+> on 2 of 14 identical decisions is not a gate; the `RETITLED` table is what
+> replaced it. Do not add a rename by editing `meta.title` alone.
 
 The visible breadcrumb is **not** the title, precisely so these three do not leak
 onto the page: it reads `hero.breadcrumb` from the content module, which still
@@ -179,6 +221,38 @@ rewording, and each fixes a section that currently ships with no heading at all.
 The two work grids are worth calling out separately: a carousel with no
 accessible name is a real defect, so giving it the heading the other 34 pages
 already have is a fix, not just consistency.
+
+### The new sub-service pages, which have no live counterpart
+
+The SEO plan's URL tables contain pages the Laravel site never had. There is
+nothing to port and nothing to diff, so the parity rule above simply does not
+reach them. Two sets exist so far:
+
+| Set | Pages | Cloned from | Module |
+|---|---|---|---|
+| SEO | 8 (`/seo-services/technical-seo`, `on-page-seo`, `link-building`, `local-seo`, `ecommerce-seo`, `shopify-seo`, `wordpress-seo`, `keyword-research`) | `content/services/seo.ts` | `seo-placeholders.ts` |
+| App development | 6 (`/app-development-services/android`, `ios`, `cross-platform`, `flutter`, `react-native`, `app-maintenance`) | `content/services/app-development.ts` | `app-placeholders.ts` |
+| Branding | 7 (`/branding-services/brand-identity`, `brand-strategy`, `rebranding`, `brand-guidelines`, `packaging-design`, `stationery-design`, `business-card-design`) | `content/services/branding.ts` | `branding-placeholders.ts` |
+| Digital marketing | 3 (`/digital-marketing-services/meta-ads`, `linkedin-ads`, `tiktok-ads`) | `content/services/digital-marketing.ts` | `digital-marketing-placeholders.ts` |
+| Automation | 6 — the `/automation-services` **pillar** + `crm-automation`, `workflow-automation`, `email-automation`, `chatbot-development`, `ai-automation` | `content/services/marketing-and-sales-automation.ts` | `automation-placeholders.ts` |
+| Logo design | 8 — the `/logo-design-services` **pillar** + all 7 sub-services | `content/services/branding.ts` | `logo-design-placeholders.ts` |
+
+Each page spreads its source module whole and swaps only the strings that make
+the page name itself: `meta.title`, `meta.description`, the hero
+eyebrow/breadcrumb/heading/lead, the marquee, and the `whyChoose` heading. Both
+modules are exempt from `scripts/verify-content-parity.py` (the `skip` set in
+`assert_covers_every_module`) because the pages they describe do not exist
+upstream — their source modules *are* checked, so the cloned strings are covered
+at the root.
+
+> ⚠️ **These 14 pages ship `indexable: true` on near-duplicate copy.** Below the
+> swapped strings, all 8 SEO pages carry identical body content, as do all 6 app
+> pages. That is the thin/duplicate-content shape
+> [ROUTES.md](ROUTES.md#adding-a-route) warns about in step 5, accepted here so
+> the URL tree and its internal linking go live in one move rather than
+> trickling out per page. It is a deliberate, *temporary* trade and it is the
+> main reason real copy is the next priority for both sets — not a pattern to
+> extend to a third group without saying so out loud.
 
 ## The four legal pages
 

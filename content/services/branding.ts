@@ -7,7 +7,7 @@ import type { ServiceContentOverrides } from "./types";
  */
 export const brandingOverrides: ServiceContentOverrides = {
   "meta": {
-    "title": "Branding",
+    "title": "Branding Services",
     "description": "Full-service branding from Creative Logo Design — strategy, positioning, messaging and style guides that give your business an identity customers trust and remember."
   },
   "hero": {

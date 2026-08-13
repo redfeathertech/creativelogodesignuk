@@ -7,7 +7,7 @@ import type { ServiceContentOverrides } from "./types";
  */
 export const ppcOverrides: ServiceContentOverrides = {
   "meta": {
-    "title": "PPC",
+    "title": "PPC / Google Ads",
     "description": "PPC management from Creative Logo Design — targeted campaigns that turn clicks into loyal customers, cut wasted spend and grow your return on ad spend."
   },
   "hero": {

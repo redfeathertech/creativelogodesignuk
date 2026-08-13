@@ -125,11 +125,13 @@ only ways off the page are its own CTAs. See
 
 | URL | Title | Indexable |
 |---|---|---|
-| `/web-design-services` | Web Designing | **yes** |
-| `/web-development-services` | Web Development | **yes** |
-| `/digital-marketing-services` | Digital Marketing | **yes** |
-| `/branding-services` | Branding | **yes** |
-| `/app-development-services` | App Development | **yes** |
+| `/web-design-services` | Web Design Services | **yes** |
+| `/web-development-services` | Web Development Services | **yes** |
+| `/digital-marketing-services` | Digital Marketing Services | **yes** |
+| `/branding-services` | Branding Services | **yes** |
+| `/app-development-services` | App Development Services | **yes** |
+| `/automation-services` | Automation Services | **yes** |
+| `/logo-design-services` | Logo Design Services | **yes** |
 | `/seo-services/seo-audit` | SEO Audit Services | **yes** |
 | `/seo-services/technical-seo` | Technical SEO | **yes** |
 | `/seo-services/on-page-seo` | On-Page SEO | **yes** |
@@ -141,33 +143,60 @@ only ways off the page are its own CTAs. See
 | `/seo-services/amazon-seo` | Amazon SEO & Product Optimisation Service | **yes** |
 | `/seo-services/aeo` | AEO | **yes** |
 | `/seo-services/keyword-research` | Keyword Research | **yes** |
-| `/web-design-services/custom-wordpress` | Custom Wordpress Developement | **yes** |
+| `/web-design-services/custom-wordpress` | Custom WordPress Website Design | **yes** |
 | `/web-design-services/website-redesign` | Website Redesign | **yes** |
-| `/web-design-services/responsive-design` | Responsive Website Design And Development | **yes** |
-| `/web-design-services/ui-ux-design` | Ui Ux Design | **yes** |
+| `/web-design-services/responsive-design` | Responsive Website Design | **yes** |
+| `/web-design-services/ui-ux-design` | UI & UX Design | **yes** |
 | `/web-design-services/shopify` | Shopify Web Design | **yes** |
-| `/web-design-services/magento` | Magento Design And Development Service | **yes** |
-| `/web-design-services/corporate-blog-design` | Corporate Blog Design Services | **yes** |
-| `/web-design-services/cms` | Content Management Systems | **yes** |
-| `/ui-and-ux-analysis` | Ui Ux Analysis | **yes** |
-| `/web-development-services/ecommerce` | Ecommerce Website Development | **yes** |
+| `/web-design-services/magento` | Magento Web Design | **yes** |
+| `/web-design-services/corporate-blog-design` | Corporate Blog Design | **yes** |
+| `/web-design-services/cms` | CMS Website Design | **yes** |
+| `/web-development-services/ecommerce` | E-commerce Development | **yes** |
 | `/web-development-services/wordpress` | WordPress Development | **yes** |
-| `/web-development-services/shopify` | Shopify Developers | **yes** |
+| `/web-development-services/shopify` | Shopify Development | **yes** |
 | `/web-development-services/magento` | Magento Development | **yes** |
-| `/web-development-services/laravel` | Laravel Developers | **yes** |
-| `/web-development-services/contentful` | Contentful Developers | **yes** |
-| `/web-development-services/amp` | AMP Web Design | **yes** |
+| `/web-development-services/laravel` | Laravel Development | **yes** |
+| `/web-development-services/contentful` | Contentful Development | **yes** |
+| `/web-development-services/amp` | AMP Development | **yes** |
 | `/web-development-services/page-speed-optimisation` | Page Speed Optimisation | **yes** |
-| `/web-development-services/3d-configurators` | Custom 3D Product Configurators | **yes** |
+| `/web-development-services/3d-configurators` | Custom 3D Configurators | **yes** |
 | `/web-development-services/website-maintenance` | Website Maintenance | **yes** |
-| `/digital-marketing-services/ppc` | PPC | **yes** |
-| `/digital-marketing-services/social-media-marketing` | Social Media Management | **yes** |
-| `/digital-marketing-services/email-marketing` | Email Marketing Management Services | **yes** |
-| `/digital-marketing-services/content-marketing` | Content Marketing Services | **yes** |
+| `/app-development-services/android` | Android App Development | **yes** |
+| `/app-development-services/ios` | iOS App Development | **yes** |
+| `/app-development-services/cross-platform` | Cross-Platform App Development | **yes** |
+| `/app-development-services/flutter` | Flutter App Development | **yes** |
+| `/app-development-services/react-native` | React Native App Development | **yes** |
+| `/app-development-services/app-maintenance` | App Maintenance & Support | **yes** |
+| `/branding-services/brand-identity` | Brand Identity Design | **yes** |
+| `/branding-services/brand-strategy` | Brand Strategy | **yes** |
+| `/branding-services/rebranding` | Rebranding Services | **yes** |
+| `/branding-services/brand-guidelines` | Brand Guidelines | **yes** |
+| `/branding-services/packaging-design` | Packaging Design | **yes** |
+| `/branding-services/stationery-design` | Stationery Design | **yes** |
+| `/branding-services/business-card-design` | Business Card Design | **yes** |
+| `/digital-marketing-services/ppc` | PPC / Google Ads | **yes** |
+| `/digital-marketing-services/meta-ads` | Meta Ads | **yes** |
+| `/digital-marketing-services/social-media-marketing` | Social Media Marketing | **yes** |
+| `/digital-marketing-services/email-marketing` | Email Marketing | **yes** |
+| `/digital-marketing-services/content-marketing` | Content Marketing | **yes** |
 | `/digital-marketing-services/cro` | Conversion Rate Optimisation | **yes** |
 | `/digital-marketing-services/influencer-marketing` | Influencer Marketing | **yes** |
-| `/digital-marketing-services/google-analytics-4` | Google Analytics | **yes** |
+| `/digital-marketing-services/google-analytics-4` | Google Analytics 4 & Tracking | **yes** |
+| `/digital-marketing-services/linkedin-ads` | LinkedIn Ads | **yes** |
+| `/digital-marketing-services/tiktok-ads` | TikTok Ads | **yes** |
 | `/automation-services/marketing-sales-automation` | Marketing & Sales Automation | **yes** |
+| `/automation-services/crm-automation` | CRM Automation | **yes** |
+| `/automation-services/workflow-automation` | Workflow Automation | **yes** |
+| `/automation-services/email-automation` | Email Automation | **yes** |
+| `/automation-services/chatbot-development` | Chatbot Development | **yes** |
+| `/automation-services/ai-automation` | AI Automation | **yes** |
+| `/logo-design-services/custom-logo-design` | Custom Logo Design | **yes** |
+| `/logo-design-services/business-logo-design` | Business Logo Design | **yes** |
+| `/logo-design-services/logo-redesign` | Logo Redesign | **yes** |
+| `/logo-design-services/3d-logo-design` | 3D Logo Design | **yes** |
+| `/logo-design-services/mascot-logo-design` | Mascot Logo Design | **yes** |
+| `/logo-design-services/minimalist-logo-design` | Minimalist Logo Design | **yes** |
+| `/logo-design-services/illustrative-logo-design` | Illustrative Logo Design | **yes** |
 
 
 ## Legal

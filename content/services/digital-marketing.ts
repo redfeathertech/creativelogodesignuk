@@ -7,7 +7,7 @@ import type { ServiceContentOverrides } from "./types";
  */
 export const digitalMarketingOverrides: ServiceContentOverrides = {
   "meta": {
-    "title": "Digital Marketing",
+    "title": "Digital Marketing Services",
     "description": "Digital marketing from Creative Logo Design — SEO, social media and ads that connect your business with the right audience and turn visitors into loyal customers."
   },
   "hero": {

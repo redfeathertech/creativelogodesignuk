@@ -11,9 +11,10 @@
  * both cost rankings. As each planned sub-service page is built (see
  * docs/ROUTES.md "Adding a route"), it gets one `items` line here.
  *
- * Two groups are ahead of their pillar page: "Automation Services" and
- * "Logo Design Services" have `href: null` until `/automation-services` and
- * `/logo-design-services` are built with real content.
+ * As of 13 Aug 2026 all eight groups have a pillar page, so no group carries
+ * `href: null` any more. The type still allows it — a future group may be added
+ * to the menu before its pillar exists — and `NavGroup.href` being null renders
+ * the rail row as a non-navigating heading rather than a link to a 404.
  */
 
 import type { Route } from "next";
@@ -92,41 +93,72 @@ export const serviceNav: NavGroup[] = [
     {
         label: "App Development Services",
         href: "/app-development-services" as Route,
-        items: [],
+        items: [
+            { label: "Android App Development", href: "/app-development-services/android" as Route },
+            { label: "iOS App Development", href: "/app-development-services/ios" as Route },
+            { label: "Cross-Platform App Development", href: "/app-development-services/cross-platform" as Route },
+            { label: "Flutter App Development", href: "/app-development-services/flutter" as Route },
+            { label: "React Native App Development", href: "/app-development-services/react-native" as Route },
+            { label: "App Maintenance & Support", href: "/app-development-services/app-maintenance" as Route },
+        ],
     },
     {
         label: "Branding Services",
         href: "/branding-services" as Route,
-        items: [],
+        items: [
+            { label: "Brand Identity Design", href: "/branding-services/brand-identity" as Route },
+            { label: "Brand Strategy", href: "/branding-services/brand-strategy" as Route },
+            { label: "Rebranding Services", href: "/branding-services/rebranding" as Route },
+            { label: "Brand Guidelines", href: "/branding-services/brand-guidelines" as Route },
+            { label: "Packaging Design", href: "/branding-services/packaging-design" as Route },
+            { label: "Stationery Design", href: "/branding-services/stationery-design" as Route },
+            { label: "Business Card Design", href: "/branding-services/business-card-design" as Route },
+        ],
     },
     {
         label: "Digital Marketing Services",
         href: "/digital-marketing-services" as Route,
         items: [
-            { label: "PPC", href: "/digital-marketing-services/ppc" as Route },
-            { label: "Social Media", href: "/digital-marketing-services/social-media-marketing" as Route },
+            { label: "PPC / Google Ads", href: "/digital-marketing-services/ppc" as Route },
+            { label: "Meta Ads", href: "/digital-marketing-services/meta-ads" as Route },
+            { label: "Social Media Marketing", href: "/digital-marketing-services/social-media-marketing" as Route },
             { label: "Email Marketing", href: "/digital-marketing-services/email-marketing" as Route },
             { label: "Content Marketing", href: "/digital-marketing-services/content-marketing" as Route },
-            { label: "Conversion Rate", href: "/digital-marketing-services/cro" as Route },
+            { label: "Conversion Rate Optimisation", href: "/digital-marketing-services/cro" as Route },
             { label: "Influencer Marketing", href: "/digital-marketing-services/influencer-marketing" as Route },
-            { label: "Google Analytics 4", href: "/digital-marketing-services/google-analytics-4" as Route },
+            { label: "Google Analytics 4 & Tracking", href: "/digital-marketing-services/google-analytics-4" as Route },
+            { label: "LinkedIn Ads", href: "/digital-marketing-services/linkedin-ads" as Route },
+            { label: "TikTok Ads", href: "/digital-marketing-services/tiktok-ads" as Route },
         ],
     },
     {
         label: "Automation Services",
-        href: null,
+        href: "/automation-services" as Route,
         items: [
             { label: "Marketing & Sales Automation", href: "/automation-services/marketing-sales-automation" as Route },
+            { label: "CRM Automation", href: "/automation-services/crm-automation" as Route },
+            { label: "Workflow Automation", href: "/automation-services/workflow-automation" as Route },
+            { label: "Email Automation", href: "/automation-services/email-automation" as Route },
+            { label: "Chatbot Development", href: "/automation-services/chatbot-development" as Route },
+            { label: "AI Automation", href: "/automation-services/ai-automation" as Route },
         ],
     },
     {
-        /* No site page under this pillar yet. The one real logo-design page is
-           the /creative-logo-design landing page — indexable and self-canonical,
-           so linking it here is safe, but it renders without site chrome. */
+        /* This group used to point at the /creative-logo-design landing page,
+           because it had no pillar of its own. It does now, and the SEO plan
+           gives that menu slot to /logo-design-services/custom-logo-design.
+           The landing page is NOT orphaned by that: the pillar page links it
+           from its hero tiles — see content/services/logo-design-placeholders.ts. */
         label: "Logo Design Services",
-        href: null,
+        href: "/logo-design-services" as Route,
         items: [
-            { label: "Custom Logo Design", href: "/creative-logo-design" as Route },
+            { label: "Custom Logo Design", href: "/logo-design-services/custom-logo-design" as Route },
+            { label: "Business Logo Design", href: "/logo-design-services/business-logo-design" as Route },
+            { label: "Logo Redesign", href: "/logo-design-services/logo-redesign" as Route },
+            { label: "3D Logo Design", href: "/logo-design-services/3d-logo-design" as Route },
+            { label: "Mascot Logo Design", href: "/logo-design-services/mascot-logo-design" as Route },
+            { label: "Minimalist Logo Design", href: "/logo-design-services/minimalist-logo-design" as Route },
+            { label: "Illustrative Logo Design", href: "/logo-design-services/illustrative-logo-design" as Route },
         ],
     },
 ];

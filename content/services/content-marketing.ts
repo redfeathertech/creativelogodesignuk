@@ -8,7 +8,7 @@ import type { ServiceContentOverrides } from "./types";
  */
 export const contentMarketingOverrides: ServiceContentOverrides = {
   "meta": {
-    "title": "Content Marketing Services",
+    "title": "Content Marketing",
     "description": "Content marketing from Creative Logo Design — blogs, social, email and SEO content planned, written and shared to reach the right people and win customers."
   },
   "hero": {

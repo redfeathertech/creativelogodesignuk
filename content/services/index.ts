@@ -7,7 +7,24 @@ import { aeoOverrides } from "./aeo";
 import { amazonSeoOverrides } from "./amazon-seo";
 import { ampWebDesignOverrides } from "./amp-web-design";
 import { appDevelopmentOverrides } from "./app-development";
+import {
+    androidAppDevelopmentOverrides,
+    appMaintenanceOverrides,
+    crossPlatformAppDevelopmentOverrides,
+    flutterAppDevelopmentOverrides,
+    iosAppDevelopmentOverrides,
+    reactNativeAppDevelopmentOverrides,
+} from "./app-placeholders";
 import { brandingOverrides } from "./branding";
+import {
+    brandGuidelinesOverrides,
+    brandIdentityDesignOverrides,
+    brandStrategyOverrides,
+    businessCardDesignOverrides,
+    packagingDesignOverrides,
+    rebrandingOverrides,
+    stationeryDesignOverrides,
+} from "./branding-placeholders";
 import { contentManagementSystemsOverrides } from "./content-management-systems";
 import { contentMarketingOverrides } from "./content-marketing";
 import { contentfulDevelopersOverrides } from "./contentful-developers";
@@ -16,6 +33,11 @@ import { corporateBlogDesignOverrides } from "./corporate-blog-design-services";
 import { custom3dProductConfiguratorsOverrides } from "./custom-3d-configurators";
 import { customWordpressDevelopementOverrides } from "./custom-wordpress-developement";
 import { digitalMarketingOverrides } from "./digital-marketing";
+import {
+    linkedinAdsOverrides,
+    metaAdsOverrides,
+    tiktokAdsOverrides,
+} from "./digital-marketing-placeholders";
 import { ecommerceDevelopmentOverrides } from "./ecommerce-development";
 import { emailMarketingOverrides } from "./email-marketing";
 import { googleAnalyticsOverrides } from "./google-analytics";
@@ -23,6 +45,24 @@ import { influencerMarketingOverrides } from "./influencer-marketing";
 import { laravelDevelopersOverrides } from "./laravel-developers";
 import { magentoDesignAndDevelopmentOverrides } from "./magento-design-and-development-service";
 import { magentoDevelopmentOverrides } from "./magento-development";
+import {
+    aiAutomationOverrides,
+    automationServicesOverrides,
+    chatbotDevelopmentOverrides,
+    crmAutomationOverrides,
+    emailAutomationOverrides,
+    workflowAutomationOverrides,
+} from "./automation-placeholders";
+import {
+    businessLogoDesignOverrides,
+    customLogoDesignOverrides,
+    illustrativeLogoDesignOverrides,
+    logoDesignServicesOverrides,
+    logoRedesignOverrides,
+    mascotLogoDesignOverrides,
+    minimalistLogoDesignOverrides,
+    threeDLogoDesignOverrides,
+} from "./logo-design-placeholders";
 import { marketingAndSalesAutomationOverrides } from "./marketing-and-sales-automation";
 import { pageSpeedOptimisationOverrides } from "./page-speed-optimisation";
 import { ppcOverrides } from "./ppc";
@@ -118,6 +158,8 @@ const overridesByPath = new Map<string, ServiceContentOverrides>([
     ["/digital-marketing-services", digitalMarketingOverrides],
     ["/branding-services", brandingOverrides],
     ["/app-development-services", appDevelopmentOverrides],
+    ["/automation-services", automationServicesOverrides], // placeholder
+    ["/logo-design-services", logoDesignServicesOverrides], // placeholder
     ["/ui-and-ux-analysis", uiAndUxAnalysisOverrides],
 
     // SEO sub-services. The eight on placeholder copy are marked; see
@@ -174,8 +216,41 @@ const overridesByPath = new Map<string, ServiceContentOverrides>([
         websiteMaintenanceOverrides,
     ],
 
-    // digital marketing sub-services
+    // app development sub-services. All six ship on placeholder copy cloned
+    // from the pillar; see content/services/app-placeholders.ts.
+    ["/app-development-services/android", androidAppDevelopmentOverrides], // placeholder
+    ["/app-development-services/ios", iosAppDevelopmentOverrides], // placeholder
+    [
+        "/app-development-services/cross-platform",
+        crossPlatformAppDevelopmentOverrides, // placeholder
+    ],
+    ["/app-development-services/flutter", flutterAppDevelopmentOverrides], // placeholder
+    [
+        "/app-development-services/react-native",
+        reactNativeAppDevelopmentOverrides, // placeholder
+    ],
+    ["/app-development-services/app-maintenance", appMaintenanceOverrides], // placeholder
+
+    // branding sub-services. All seven ship on placeholder copy cloned from
+    // the pillar; see content/services/branding-placeholders.ts.
+    ["/branding-services/brand-identity", brandIdentityDesignOverrides], // placeholder
+    ["/branding-services/brand-strategy", brandStrategyOverrides], // placeholder
+    ["/branding-services/rebranding", rebrandingOverrides], // placeholder
+    ["/branding-services/brand-guidelines", brandGuidelinesOverrides], // placeholder
+    ["/branding-services/packaging-design", packagingDesignOverrides], // placeholder
+    ["/branding-services/stationery-design", stationeryDesignOverrides], // placeholder
+    [
+        "/branding-services/business-card-design",
+        businessCardDesignOverrides, // placeholder
+    ],
+
+    // digital marketing sub-services. Seven were already on the plan's URLs and
+    // only took its page name as their title; the three ad platforms are new
+    // and ship on placeholder copy cloned from the pillar.
     ["/digital-marketing-services/ppc", ppcOverrides],
+    ["/digital-marketing-services/meta-ads", metaAdsOverrides], // placeholder
+    ["/digital-marketing-services/linkedin-ads", linkedinAdsOverrides], // placeholder
+    ["/digital-marketing-services/tiktok-ads", tiktokAdsOverrides], // placeholder
     [
         "/digital-marketing-services/social-media-marketing",
         socialMediaManagementOverrides,
@@ -195,10 +270,44 @@ const overridesByPath = new Map<string, ServiceContentOverrides>([
         googleAnalyticsOverrides,
     ],
 
-    // automation sub-services
+    // automation sub-services. Only marketing-sales-automation is a ported
+    // page; the other five are new and clone it.
     [
         "/automation-services/marketing-sales-automation",
         marketingAndSalesAutomationOverrides,
+    ],
+    ["/automation-services/crm-automation", crmAutomationOverrides], // placeholder
+    ["/automation-services/workflow-automation", workflowAutomationOverrides], // placeholder
+    ["/automation-services/email-automation", emailAutomationOverrides], // placeholder
+    [
+        "/automation-services/chatbot-development",
+        chatbotDevelopmentOverrides, // placeholder
+    ],
+    ["/automation-services/ai-automation", aiAutomationOverrides], // placeholder
+
+    // logo design sub-services. All seven are new; see
+    // content/services/logo-design-placeholders.ts.
+    [
+        "/logo-design-services/custom-logo-design",
+        customLogoDesignOverrides, // placeholder
+    ],
+    [
+        "/logo-design-services/business-logo-design",
+        businessLogoDesignOverrides, // placeholder
+    ],
+    ["/logo-design-services/logo-redesign", logoRedesignOverrides], // placeholder
+    ["/logo-design-services/3d-logo-design", threeDLogoDesignOverrides], // placeholder
+    [
+        "/logo-design-services/mascot-logo-design",
+        mascotLogoDesignOverrides, // placeholder
+    ],
+    [
+        "/logo-design-services/minimalist-logo-design",
+        minimalistLogoDesignOverrides, // placeholder
+    ],
+    [
+        "/logo-design-services/illustrative-logo-design",
+        illustrativeLogoDesignOverrides, // placeholder
     ],
 ]);
 

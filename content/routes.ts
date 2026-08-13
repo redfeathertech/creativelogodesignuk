@@ -27,7 +27,7 @@
  * as a redirect source for exactly that reason.)
  *
  * `indexable` gates two things at once: whether the page emits
- * `robots: index` and whether it appears in the sitemap. All 49 are `true` —
+ * `robots: index` and whether it appears in the sitemap. All 85 are `true` —
  * the rebuild is content-complete.
  */
 
@@ -174,13 +174,21 @@ export const routes: RouteEntry[] = [
     },
 
     /* ---- service pillars -------------------------------------------------- */
-    /* One entry per pillar page that exists. The SEO pillar is `/seo-services`
-       (a `landing` route, above). `/automation-services` and
-       `/logo-design-services` have no page yet — both are in the SEO plan, and
-       each gets its route here (indexable: false first) the day it has real
-       content. Automation already has one sub-service nested under its prefix;
-       logo design has none, so nothing sits under `/logo-design-services` yet
-       and its menu group points at the `/creative-logo-design` landing page. */
+    /* One entry per pillar page. The SEO pillar is `/seo-services` (a `landing`
+       route, above); the other seven render here.
+
+       `/automation-services` and `/logo-design-services` were the last two to be
+       built (13 Aug 2026) and complete the SEO plan's eight. Both are new URLs
+       with no live counterpart, so both ship on placeholder copy cloned from
+       the nearest real page — automation from the marketing-and-sales-automation
+       module, logo design from branding. See content/services/*-placeholders.ts.
+
+       `/logo-design-services` carries one extra job: the `/creative-logo-design`
+       landing page used to be the Logo Design menu group's only link, and the
+       SEO plan gives that menu slot to `/logo-design-services/custom-logo-design`.
+       Rather than orphan an indexable page, the pillar's hero tiles link it from
+       the page body — see the `creative-logo-design` tile slug in
+       content/services/logo-design-placeholders.ts. */
     {
         path: "/web-design-services",
         title: "Web Design Services",
@@ -197,21 +205,35 @@ export const routes: RouteEntry[] = [
     },
     {
         path: "/digital-marketing-services",
-        title: "Digital Marketing",
+        title: "Digital Marketing Services",
         group: "service",
         indexable: true,
         priority: 0.8,
     },
     {
         path: "/branding-services",
-        title: "Branding",
+        title: "Branding Services",
         group: "service",
         indexable: true,
         priority: 0.8,
     },
     {
         path: "/app-development-services",
-        title: "App Development",
+        title: "App Development Services",
+        group: "service",
+        indexable: true,
+        priority: 0.8,
+    },
+    {
+        path: "/automation-services",
+        title: "Automation Services",
+        group: "service",
+        indexable: true,
+        priority: 0.8,
+    },
+    {
+        path: "/logo-design-services",
+        title: "Logo Design Services",
         group: "service",
         indexable: true,
         priority: 0.8,
@@ -406,28 +428,128 @@ export const routes: RouteEntry[] = [
         indexable: true,
     },
 
-    // Digital marketing sub-services
+    /* App development sub-services. None of the six exists on the live Laravel
+       site — they are new URLs from the SEO plan's App Development table, and
+       ship on placeholder copy cloned from the pillar. See
+       content/services/app-placeholders.ts. */
+    {
+        path: "/app-development-services/android",
+        title: "Android App Development",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/app-development-services/ios",
+        title: "iOS App Development",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/app-development-services/cross-platform",
+        title: "Cross-Platform App Development",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/app-development-services/flutter",
+        title: "Flutter App Development",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/app-development-services/react-native",
+        title: "React Native App Development",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/app-development-services/app-maintenance",
+        title: "App Maintenance & Support",
+        group: "service",
+        indexable: true,
+    },
+
+    /* Branding sub-services. Like the app-development set, none exists on the
+       live Laravel site — new URLs from the SEO plan's Branding table, on
+       placeholder copy cloned from the pillar. See
+       content/services/branding-placeholders.ts. */
+    {
+        path: "/branding-services/brand-identity",
+        title: "Brand Identity Design",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/branding-services/brand-strategy",
+        title: "Brand Strategy",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/branding-services/rebranding",
+        title: "Rebranding Services",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/branding-services/brand-guidelines",
+        title: "Brand Guidelines",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/branding-services/packaging-design",
+        title: "Packaging Design",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/branding-services/stationery-design",
+        title: "Stationery Design",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/branding-services/business-card-design",
+        title: "Business Card Design",
+        group: "service",
+        indexable: true,
+    },
+
+    /* Digital marketing sub-services, in the SEO plan's table order.
+       Unlike the app-development and branding groups, the seven that already
+       existed needed NO URL change — the 2026-08 restructure had already put
+       them on the plan's paths. Five took the plan's page name as their title;
+       `cro` and `influencer-marketing` already matched. Only `meta-ads`,
+       `linkedin-ads` and `tiktok-ads` are new URLs, and those three ship on
+       placeholder copy — see content/services/digital-marketing-placeholders.ts. */
     {
         path: "/digital-marketing-services/ppc",
-        title: "PPC",
+        title: "PPC / Google Ads",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/digital-marketing-services/meta-ads",
+        title: "Meta Ads",
         group: "service",
         indexable: true,
     },
     {
         path: "/digital-marketing-services/social-media-marketing",
-        title: "Social Media Management",
+        title: "Social Media Marketing",
         group: "service",
         indexable: true,
     },
     {
         path: "/digital-marketing-services/email-marketing",
-        title: "Email Marketing Management Services",
+        title: "Email Marketing",
         group: "service",
         indexable: true,
     },
     {
         path: "/digital-marketing-services/content-marketing",
-        title: "Content Marketing Services",
+        title: "Content Marketing",
         group: "service",
         indexable: true,
     },
@@ -445,15 +567,105 @@ export const routes: RouteEntry[] = [
     },
     {
         path: "/digital-marketing-services/google-analytics-4",
-        title: "Google Analytics",
+        title: "Google Analytics 4 & Tracking",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/digital-marketing-services/linkedin-ads",
+        title: "LinkedIn Ads",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/digital-marketing-services/tiktok-ads",
+        title: "TikTok Ads",
         group: "service",
         indexable: true,
     },
 
-    // Automation sub-services (pillar page not built yet — see the pillar note)
+    /* Automation sub-services, in the SEO plan's table order.
+       `marketing-sales-automation` is the one real page (ported from Laravel and
+       moved here by the 2026-08 restructure); the other five are new URLs on
+       placeholder copy. */
     {
         path: "/automation-services/marketing-sales-automation",
         title: "Marketing & Sales Automation",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/automation-services/crm-automation",
+        title: "CRM Automation",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/automation-services/workflow-automation",
+        title: "Workflow Automation",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/automation-services/email-automation",
+        title: "Email Automation",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/automation-services/chatbot-development",
+        title: "Chatbot Development",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/automation-services/ai-automation",
+        title: "AI Automation",
+        group: "service",
+        indexable: true,
+    },
+
+    /* Logo design sub-services, in the SEO plan's table order. All seven are new
+       URLs with no live counterpart. */
+    {
+        path: "/logo-design-services/custom-logo-design",
+        title: "Custom Logo Design",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/logo-design-services/business-logo-design",
+        title: "Business Logo Design",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/logo-design-services/logo-redesign",
+        title: "Logo Redesign",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/logo-design-services/3d-logo-design",
+        title: "3D Logo Design",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/logo-design-services/mascot-logo-design",
+        title: "Mascot Logo Design",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/logo-design-services/minimalist-logo-design",
+        title: "Minimalist Logo Design",
+        group: "service",
+        indexable: true,
+    },
+    {
+        path: "/logo-design-services/illustrative-logo-design",
+        title: "Illustrative Logo Design",
         group: "service",
         indexable: true,
     },

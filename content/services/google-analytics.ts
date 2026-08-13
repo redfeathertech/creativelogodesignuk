@@ -7,7 +7,7 @@ import type { ServiceContentOverrides } from "./types";
  */
 export const googleAnalyticsOverrides: ServiceContentOverrides = {
   "meta": {
-    "title": "Google Analytics",
+    "title": "Google Analytics 4 & Tracking",
     "description": "Google Analytics 4 setup from Creative Logo Design — custom event tracking, accurate data and clear reports that show what leads to sales and growth."
   },
   "hero": {

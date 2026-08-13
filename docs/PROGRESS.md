@@ -2,6 +2,104 @@
 
 Where the rebuild stands. Update this at the end of each working session.
 
+## Done — 13 Aug 2026 · The SEO plan's URL restructure is COMPLETE (all 8 groups)
+
+**Groups 4–8 of 8.** SEO, Web Design and Web Development shipped previously;
+App Development, Branding, Digital Marketing, Automation and Logo Design all
+landed today. **85 routes, 72 of them service pages, all indexable.** Every
+group in the plan now has a pillar page and its full sub-service tree, so no
+`NavGroup` carries `href: null` any more.
+
+- **Automation: pillar + 5 new sub-services.** `/automation-services` did not
+  exist as a page before today — the group's one real page
+  (`marketing-sales-automation`) was nested under a prefix with nothing at its
+  root. Added `crm-automation`, `workflow-automation`, `email-automation`,
+  `chatbot-development`, `ai-automation`.
+- **Logo design: pillar + all 7 sub-services**, none of which existed.
+
+### ⚠️ `/creative-logo-design` lost its site-wide link — read before changing the menu
+
+That landing page ranks, is indexable and self-canonical, and `content/nav.ts`
+was its **only** internal link: it filled the Logo Design menu group while that
+group had no pillar. The SEO plan gives that menu slot to
+`/logo-design-services/custom-logo-design`, which would have orphaned it —
+no link from the chrome or any page body, which AGENTS.md forbids.
+
+It is now linked from the `/logo-design-services` pillar's hero tiles (the
+`creative-logo-design` tile slug; `Hero` builds tile hrefs through
+`currentPath()`). Verified rendered, and the page is still in the sitemap and
+still `index, follow`.
+
+**But be clear about what changed:** it went from a link on *every* page of the
+site to a link on *one*. The rule is satisfied and the page is not orphaned,
+but that is a real reduction in internal link equity to a paid-traffic page that
+ranks. If it should keep a stronger signal, the options are a footer entry or a
+second menu item — both are content decisions, not cleanups, so neither was
+taken unilaterally.
+
+- **Digital marketing: 3 new sub-service URLs** — `meta-ads`, `linkedin-ads`,
+  `tiktok-ads`. This group was unlike the other two: the 2026-08 restructure had
+  already landed the plan's URLs, so the other **seven sub-services needed no URL
+  change at all**, only the plan's page name as their title (`PPC` →
+  `PPC / Google Ads`, `Social Media Management` → `Social Media Marketing`,
+  `Email Marketing Management Services` → `Email Marketing`,
+  `Content Marketing Services` → `Content Marketing`, `Google Analytics` →
+  `Google Analytics 4 & Tracking`). `cro` and `influencer-marketing` already
+  matched. Pillar retitled `Digital Marketing` → `Digital Marketing Services`.
+  Menu order now follows the sheet exactly.
+
+- **Branding: 7 new sub-service URLs** under `/branding-services` —
+  `brand-identity`, `brand-strategy`, `rebranding`, `brand-guidelines`,
+  `packaging-design`, `stationery-design`, `business-card-design`. Pillar
+  retitled `Branding` → `Branding Services`. Content in
+  `content/services/branding-placeholders.ts`, same clone-the-pillar shape as
+  the app set.
+- **Scope note for the remaining groups:** these are **URL-structure** jobs —
+  routes, exact page names as `<title>`, matching nav labels, sitemap,
+  redirects. The placeholder body copy is temporary and will be replaced, so
+  content-parity analysis is explicitly out of scope from 13 Aug 2026 onward.
+  Keep the gate green (one `RETITLED` row + one `skip` entry per group); do not
+  investigate it further.
+
+- **6 new sub-service URLs** under `/app-development-services`: `android`,
+  `ios`, `cross-platform`, `flutter`, `react-native`, `app-maintenance`. Routes,
+  content modules, mega-menu links and sitemap entries all in the same commit,
+  so no URL is live without a link to it.
+- **The pillar was retitled** `App Development` → `App Development Services`,
+  matching the plan's page name — the same move the Web Design and Web
+  Development pillars already made.
+- **`content/services/app-placeholders.ts`** — the six pages clone the pillar
+  and swap only the strings that make each page name itself, exactly as
+  `seo-placeholders.ts` does for the eight SEO sub-services. ⚠️ That is now
+  **14 indexable pages on near-duplicate copy**; real copy is the priority for
+  both sets. See [CONTENT-PARITY.md](CONTENT-PARITY.md).
+
+### The parity gate had stopped checking half the site
+
+Found while adding the group, and worth more than the group itself.
+
+- **16 of the 36 service modules were silently unverified.** A `prettier` pass
+  in the previous session rewrote them from JSON-shaped (`"meta": {`) to
+  idiomatic JS (bare keys, trailing commas). `load_module` parsed with
+  `json.loads`, so each one threw, got logged as a one-line `UNPARSEABLE` note —
+  and `continue`d **without touching the exit code**. The gate kept printing
+  "0 NEW deviations" while checking 1,770 of 3,184 strings.
+- Fixed by parsing both shapes (`js_object_to_json`), and by making an
+  unreadable module a **failure** rather than a note. Back to 3,184 strings
+  across 36/36 pages, and all 4 documented deviations fire again.
+- **`meta.title` renames are now declared, not accidental.** 14 pages carry the
+  SEO plan's page name instead of the live `<title>`. Only 2 ever failed the
+  gate; the other 12 passed because the new title happened to appear in the
+  page's own body copy. The new `RETITLED` table pins **both** ends — the live
+  title replaced and the plan's name adopted — so neither can drift unnoticed.
+- All three failure modes were negative-tested: reworded body copy, an
+  undeclared title change, and an unparseable module each exit 1.
+
+**Not mine, still open:** `npm run lint` reports 1 pre-existing error
+(`components/chrome/Nav.tsx:102`, `react-hooks/set-state-in-effect`) and 2
+unused-import warnings in `components/services/Hero.tsx` — the latter left over
+from the still-commented-out visible breadcrumb below.
+
 ## Done — 11 Aug 2026 · Pillar URL restructure + mega-menu redesign
 
 The SEO plan's new information architecture: 8 pillars, sub-services nested

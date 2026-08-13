@@ -8,7 +8,7 @@ import type { ServiceContentOverrides } from "./types";
  */
 export const appDevelopmentOverrides: ServiceContentOverrides = {
   "meta": {
-    "title": "App Development",
+    "title": "App Development Services",
     "description": "App development from Creative Logo Design — iOS, Android and cross-platform apps built to be easy to use, quick to load and ready to grow with you."
   },
   "hero": {
