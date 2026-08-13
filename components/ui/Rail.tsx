@@ -50,6 +50,14 @@ export default function Rail({
 }) {
     const railRef = useRef<HTMLDivElement>(null);
     const [active, setActive] = useState(0);
+    /* One dot per REACHABLE scroll position, not per slide. The rail scrolls a
+       card at a time but stops at `scrollWidth - clientWidth`, so with N slides
+       and V of them in view only N - V + 1 positions exist — the trailing V - 1
+       dots could never light up. Measured rather than assumed, because V is a
+       function of viewport width: 1 on a phone, 3 on a desktop. Starts at
+       `count` so the server-rendered markup and the first client render agree;
+       the mount-time `sync()` corrects it before paint. */
+    const [pages, setPages] = useState(count);
     const [atStart, setAtStart] = useState(true);
     const [atEnd, setAtEnd] = useState(false);
 
@@ -62,10 +70,30 @@ export default function Rail({
         const step =
             first.getBoundingClientRect().width +
             parseFloat(getComputedStyle(rail).columnGap || "0");
-        setActive(step > 0 ? Math.round(rail.scrollLeft / step) : 0);
+        /* Derived from the scroll range through the same `round(x / step)` the
+           active index uses, so the last dot is always the one the last scroll
+           position resolves to — no rounding seam between the two. */
+        const reachable =
+            step > 0
+                ? Math.min(
+                      count,
+                      Math.max(
+                          1,
+                          Math.round(
+                              (rail.scrollWidth - rail.clientWidth) / step,
+                          ) + 1,
+                      ),
+                  )
+                : 1;
+        setPages(reachable);
+        setActive(
+            step > 0
+                ? Math.min(reachable - 1, Math.round(rail.scrollLeft / step))
+                : 0,
+        );
         setAtStart(rail.scrollLeft < 4);
         setAtEnd(rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 4);
-    }, []);
+    }, [count]);
 
     useEffect(() => {
         const rail = railRef.current;
@@ -181,7 +209,7 @@ export default function Rail({
                        also lets `min-width: auto` resolve to one dot instead of
                        the whole strip, so the row can shrink at all. */
                     <div className="inline-flex flex-wrap items-center gap-4">
-                        {Array.from({ length: count }, (_, i) => (
+                        {Array.from({ length: pages }, (_, i) => (
                             <button
                                 key={i}
                                 type="button"

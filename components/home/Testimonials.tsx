@@ -12,8 +12,8 @@ import TestimonialCard from "./TestimonialCard";
  * ineligible for review rich results on Organization/LocalBusiness, so marking
  * them up risks a manual action rather than winning stars in the SERP.
  *
- * One dot per slide: the live site renders ten indicators for five slides, so
- * half of them do nothing.
+ * One dot per reachable scroll position — see Rail. The live site renders ten
+ * indicators for five slides, so half of them do nothing.
  */
 export default function Testimonials() {
     return (
