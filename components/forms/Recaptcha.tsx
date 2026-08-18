@@ -56,11 +56,20 @@ export default function Recaptcha({
     active,
     action,
     tone = "dark",
+    disclosure = true,
 }: {
     active: boolean;
     action: string;
     /** Panel this renders on — "dark" (default) for the usual dark panels, "light" for white cards. */
     tone?: "dark" | "light";
+    /**
+     * Google's terms require the badge or the disclosure wording naming both
+     * policies, and the badge is hidden site-wide — so this defaults to true
+     * and only a caller that renders the same wording itself may switch it off.
+     * The homepage hero card does: the wording is part of its design, set with
+     * a lock mark and brand links.
+     */
+    disclosure?: boolean;
 }) {
     const [token, setToken] = useState("");
     const [failed, setFailed] = useState(false);
@@ -149,7 +158,7 @@ export default function Recaptcha({
                 value={token}
                 readOnly
             />
-            {failed ? (
+            {!disclosure ? null : failed ? (
                 <p
                     className={
                         tone === "light"

@@ -16,10 +16,9 @@ import { ArrowIcon } from "@/components/ui/icons";
  *   to the lockup so it can sit on one line beside the stars. It is drawn at
  *   28px tall against a 50px-tall source, so it is still ~1.8× oversampled.
  *
- * Deliberately shows **no rating figure and no review count**. Those are claims
- * about a third party and can only come from Trustpilot's own widget — hard-
- * coding them here would be inventing them, and they would go stale the moment
- * a review landed.
+ * A rating figure and review count are only shown where a caller passes them.
+ * They are claims about a third party and go stale the moment a review lands,
+ * so they are never assumed here.
  */
 
 /* Five-point star inscribed in a 36×36 box: outer radius 13.5, inner 5.16
@@ -55,6 +54,12 @@ function TrustpilotStars({
   );
 }
 
+/**
+ * `rating` and `reviewCount` are optional: they are claims about a third party
+ * and go stale the moment a review lands, so they are never assumed here. The
+ * homepage passes both (its design states them); the landing heroes pass
+ * neither and fall back to `label`.
+ */
 export default function TrustpilotBadge({
   href,
   label,
@@ -63,6 +68,8 @@ export default function TrustpilotBadge({
   stars,
   linkLabel,
   className,
+  rating,
+  reviewCount,
 }: {
   href: string;
   label: string;
@@ -71,6 +78,8 @@ export default function TrustpilotBadge({
   stars: number;
   linkLabel: string;
   className?: string;
+  rating?: string;
+  reviewCount?: string;
 }) {
   return (
     <a
@@ -109,6 +118,15 @@ export default function TrustpilotBadge({
         className="h-4 w-auto shrink-0 [@media(min-width:40rem)_and_(min-height:54rem)]:h-[17px]"
       />
 
+      {rating && (
+        <span
+          className="shrink-0 font-display text-sm leading-none font-extrabold text-white [@media(min-width:40rem)_and_(min-height:54rem)]:text-[0.95rem]"
+          aria-hidden="true"
+        >
+          {rating}
+        </span>
+      )}
+
       <span
         className="h-4 w-px shrink-0 bg-white/15 [@media(min-width:40rem)_and_(min-height:54rem)]:h-5"
         aria-hidden="true"
@@ -131,7 +149,7 @@ export default function TrustpilotBadge({
         className="hidden text-xs font-semibold tracking-[0.02em] whitespace-nowrap text-white/55 transition-colors duration-300 group-hover:text-white/85 sm:inline lg:hidden xl:inline"
         aria-hidden="true"
       >
-        {label}
+        {reviewCount ?? label}
       </span>
 
       <ArrowIcon className="shrink-0 text-white/45 transition-all duration-300 ease-out group-hover:translate-x-[3px] group-hover:text-white/85" />

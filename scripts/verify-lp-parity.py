@@ -122,6 +122,14 @@ CAROUSEL_ONLY = {
 
 # Live runs the rebuild deliberately does not reproduce.
 REPLACED = {
+    # ------------------------------------------------------------------
+    # The old landline. The client replaced it site-wide with +44 7853 354207
+    # (2026-08); every page, the JSON-LD and all four landing pages print the
+    # new number from `contact` in content/site.ts. The live pages still show
+    # the old one, so the reverse check sees it as dropped copy — it is a
+    # deliberate business change, recorded in docs/CONTENT-PARITY.md.
+    # ------------------------------------------------------------------
+    "0204-511-2054",
     # Live placeholders. The rebuild gives every input a real <label> instead
     # (Field.tsx floats the label; a placeholder-only input fails WCAG 3.3.2),
     # and the module records the placeholders separately.

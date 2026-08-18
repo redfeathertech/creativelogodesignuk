@@ -85,8 +85,20 @@ const fieldText = (fields: MailField[]) =>
         .map((f) => `${f.label}: ${f.value}`)
         .join("\n");
 
+/**
+ * Recipient lists are comma- or semicolon-separated in the environment, so the
+ * team notification can fan out to several inboxes: `a@x.com, b@x.com`.
+ * Blank entries and stray whitespace are dropped.
+ */
+function recipients(value: string | undefined): string[] {
+    return (value ?? "")
+        .split(/[,;]/)
+        .map((address) => address.trim())
+        .filter(Boolean);
+}
+
 async function send(options: {
-    to: string;
+    to: string | string[];
     subject: string;
     html: string;
     text: string;
@@ -97,7 +109,7 @@ async function send(options: {
 
     if (!tx) {
         console.warn(
-            `[mail] SMTP not configured — email not sent.\nTo: ${options.to}\nSubject: ${options.subject}\n${options.text}`,
+            `[mail] SMTP not configured — email not sent.\nTo: ${[options.to].flat().join(", ")}\nSubject: ${options.subject}\n${options.text}`,
         );
         return;
     }
@@ -121,7 +133,8 @@ export async function sendAdminNotification(params: {
     meta: MailField[];
     replyTo?: string;
 }): Promise<void> {
-    const to = process.env.LEAD_NOTIFY_TO ?? contact.email;
+    const to = recipients(process.env.LEAD_NOTIFY_TO);
+    if (to.length === 0) to.push(contact.email);
     const name =
         params.fields.find((f) => f.label === "Name")?.value ?? "New enquiry";
 

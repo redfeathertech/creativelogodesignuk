@@ -48,6 +48,7 @@ Changes that are not indexed prose, made because they were defects:
 |---|---|---|
 | `Alomofire` | `Alamofire` | Misspelling of the library name, in a decorative tool grid |
 | `tel:02045112054` | `tel:+442045112054` | E.164 — the live link cannot be dialled from abroad |
+| `0204-511-2054` (every page, the JSON-LD, all four landing pages, the `/contact-us` meta description) | `+44 7853 354207` | **Client instruction, 2026-08.** A business change, not a rewrite: the old number is being retired, so keeping it for parity would print a dead line. Held once in `contact` in `content/site.ts`; every occurrence derives from it. Declared in the `REPLACED` set of all four landing parity scripts |
 | `alt="portfolio 1"`, `"Pen Tool 2"`, `"Logo 3"`, `"center"` | Descriptive alt text | Alt text is an accessibility and image-SEO signal, not body copy |
 | 6 section titles at `h3`/`h4`/`h5` | `h2` | Heading **text** unchanged; only the level. Live picked levels by font size |
 | 16 tool names as `<h4>` | `<p>` | "Figma", "CSS" are labels, not section headings — this was heading spam |

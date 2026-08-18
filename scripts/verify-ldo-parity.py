@@ -105,6 +105,15 @@ CAROUSEL_ONLY = {
 
 # Live runs the rebuild deliberately does not reproduce.
 REPLACED = {
+    # ------------------------------------------------------------------
+    # The old landline. The client replaced it site-wide with +44 7853 354207
+    # (2026-08); every page, the JSON-LD and all four landing pages print the
+    # new number from `contact` in content/site.ts. The live pages still show
+    # the old one, so the reverse check sees it as dropped copy — it is a
+    # deliberate business change, recorded in docs/CONTENT-PARITY.md.
+    # ------------------------------------------------------------------
+    "0204 511 2054",
+    "0204-511-2054",
     # The cookie banner is the live page's own third-party widget.
     "This website uses cookies to improve your experience.",
     "Decline",

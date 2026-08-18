@@ -86,6 +86,16 @@ FROM_BITMAP = {
 # something that does the same job better. Reasons in docs/CONTENT-PARITY.md.
 # ---------------------------------------------------------------------------
 REPLACED = {
+    # ------------------------------------------------------------------
+    # The old landline. The client replaced it site-wide with +44 7853 354207
+    # (2026-08); every page, the JSON-LD and all four landing pages print the
+    # new number from `contact` in content/site.ts. The live pages still show
+    # the old one, so the reverse check sees it as dropped copy — it is a
+    # deliberate business change, recorded in docs/CONTENT-PARITY.md.
+    # ------------------------------------------------------------------
+    "Phone Number 0204-511-2054",
+    "0204-511-2054",
+    "Call Now: 0204-511-2054",
     # Client-side validation text, shown by the live page's inline jQuery.
     # Validation is a Server Action with zod here, and the messages come from
     # `lib/validation.ts` so the browser can never disagree with the server.

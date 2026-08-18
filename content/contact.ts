@@ -29,7 +29,7 @@ export const contactMeta = {
     /* "Contact Us" is the live <title>; the root layout appends the brand. */
     title: "Contact Us",
     description:
-        "Talk to Creative Logo Design about your website, app, branding, SEO or digital marketing project. Call 0204-511-2054, email us, or send a brief and get a free expert proposal within one working day.",
+        "Talk to Creative Logo Design about your website, app, branding, SEO or digital marketing project. Call +44 7853 354207, email us, or send a brief and get a free expert proposal within one working day.",
 } as const;
 
 /* =============================== HERO ================================= */

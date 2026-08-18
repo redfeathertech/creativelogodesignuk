@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import {
     callbackSchema,
     landingQuoteSchema,
+    heroEnquirySchema,
     leadSchema,
     logoBriefSchema,
     proposalSchema,
@@ -245,6 +246,63 @@ export async function submitProposal(
         ]);
     } catch (error) {
         console.error("[forms] proposal delivery failed", error);
+        return { status: "error", message: GENERIC_ERROR };
+    }
+
+    return { status: "success", message: SUCCESS };
+}
+
+/** Homepage hero card — the short enquiry form in the fold. */
+export async function submitHeroEnquiry(
+    _prev: FormState,
+    formData: FormData,
+): Promise<FormState> {
+    const blocked = await guard(formData, "hero_enquiry");
+    if (blocked) return blocked;
+
+    const parsed = heroEnquirySchema.safeParse({
+        full_name: formData.get("full_name"),
+        phone: formData.get("phone"),
+        email: formData.get("email"),
+        required_service: formData.get("required_service"),
+        project_goals: formData.get("project_goals"),
+    });
+
+    if (!parsed.success) {
+        return {
+            status: "error",
+            message: "Please check the highlighted fields.",
+            errors: parsed.error.flatten().fieldErrors as Record<
+                string,
+                string[]
+            >,
+        };
+    }
+
+    const d = parsed.data;
+    const fields: MailField[] = [
+        { label: "Name", value: d.full_name },
+        { label: "Phone", value: d.phone },
+        { label: "Email", value: d.email },
+        { label: "Required service", value: d.required_service ?? "" },
+        { label: "Project & business goals", value: d.project_goals ?? "" },
+    ];
+
+    try {
+        await Promise.all([
+            sendAdminNotification({
+                formName: "New homepage enquiry",
+                fields,
+                meta: await submissionMeta("Homepage hero form"),
+                replyTo: d.email,
+            }),
+            sendUserConfirmation({
+                to: d.email,
+                firstName: d.full_name.split(" ")[0],
+            }),
+        ]);
+    } catch (error) {
+        console.error("[forms] hero enquiry delivery failed", error);
         return { status: "error", message: GENERIC_ERROR };
     }
 

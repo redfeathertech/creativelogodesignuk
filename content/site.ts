@@ -23,10 +23,12 @@ export const site = {
 } as const;
 
 export const contact = {
-  /* Displayed as dialled locally; href uses E.164 so it works internationally.
-     The live site links `tel:02045112054`, which fails from abroad. */
-  phoneDisplay: "0204-511-2054",
-  phoneE164: "+442045112054",
+  /* Client-supplied number, replacing the old 0204-511-2054 landline site-wide
+     (2026-08). Displayed in international form because it is the number every
+     page, the JSON-LD and all four landing pages now print; the href is the
+     same digits in E.164 so it dials from anywhere. */
+  phoneDisplay: "+44 7853 354207",
+  phoneE164: "+447853354207",
   email: "support@creativelogodesign.co.uk",
   hours: "Mon – Fri: 9:00 AM to 6:00 PM",
   whatsapp: "https://wa.me/447380107663",
@@ -57,8 +59,8 @@ export const offices = [
     postalCode: "HA0 4LY",
     countryCode: "GB",
     address: "Continental House, 497 Sunleigh Road, Wembley, England, HA0 4LY",
-    phoneDisplay: "0204-511-2054",
-    phoneE164: "+442045112054",
+    phoneDisplay: "+44 7853 354207",
+    phoneE164: "+447853354207",
     image: "/assets/img/about/office-uk.webp",
     imageAlt: "Aerial view of Westminster and the River Thames in London",
   },

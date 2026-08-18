@@ -44,6 +44,22 @@ export const leadSchema = z.object({
     project_details: z.string().trim().max(4000).optional().or(z.literal("")),
 });
 
+/**
+ * Homepage hero enquiry card.
+ *
+ * A deliberately shorter field set than `proposalSchema`: the hero card sits in
+ * the fold and asks for the minimum a strategist needs to call back — one name
+ * field, a number, an email, plus two optional lines. Anything longer pushes
+ * the card past the fold on a laptop and costs conversions.
+ */
+export const heroEnquirySchema = z.object({
+    full_name: name,
+    phone,
+    email,
+    required_service: optionalText,
+    project_goals: z.string().trim().max(4000).optional().or(z.literal("")),
+});
+
 export const proposalSchema = z.object({
     first_name: name,
     last_name: name,
@@ -203,6 +219,7 @@ export type WebsiteBriefInput = z.infer<typeof websiteBriefSchema>;
 export type LogoBriefInput = z.infer<typeof logoBriefSchema>;
 
 export type LeadInput = z.infer<typeof leadSchema>;
+export type HeroEnquiryInput = z.infer<typeof heroEnquirySchema>;
 export type ProposalInput = z.infer<typeof proposalSchema>;
 export type LandingQuoteInput = z.infer<typeof landingQuoteSchema>;
 export type CallbackInput = z.infer<typeof callbackSchema>;

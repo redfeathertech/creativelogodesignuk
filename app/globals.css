@@ -449,6 +449,67 @@
         background: var(--color-magenta-500);
         color: #fff;
     }
+
+    /* Brand-gradient scrollbar: the magenta -> violet ramp the rest of the
+     site runs on. The track is a 14% violet wash, so the same rule reads on
+     the dark canvas and on the one light page (`/seo-services`) without a
+     page-scoped override. */
+
+    /* Firefox only. Chrome/Edge DISABLE the `::-webkit-scrollbar` pseudo-
+     elements the moment either standard property is set, which flattens the
+     gradient below to one colour — so this is gated to engines that have no
+     webkit pseudo-elements at all. */
+    @supports not selector(::-webkit-scrollbar) {
+        html {
+            scrollbar-color: var(--color-magenta-500) var(--color-ink-850);
+            scrollbar-width: thin;
+        }
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: color-mix(
+            in srgb,
+            var(--color-violet-500) 14%,
+            transparent
+        );
+    }
+
+    /* A fixed 40vh gradient run, tiled: the thumb resizes with the document,
+     and a 100%-of-thumb ramp on a long page collapses into a near-flat
+     colour. Fixing the run keeps the magenta -> violet sweep readable at
+     every thumb length. */
+    ::-webkit-scrollbar-thumb {
+        background-image: linear-gradient(
+            180deg,
+            var(--color-magenta-400) 0%,
+            var(--color-violet-400) 50%,
+            var(--color-magenta-400) 100%
+        );
+        background-size: 100% 40vh;
+        border-radius: 999px;
+        /* Padding-box inset: the border stays transparent, so the thumb reads
+         as a floating pill rather than filling the gutter edge to edge. */
+        border: 2px solid transparent;
+        background-clip: padding-box;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-image: linear-gradient(
+            180deg,
+            var(--color-magenta-300) 0%,
+            var(--color-violet-300) 50%,
+            var(--color-magenta-300) 100%
+        );
+    }
+
+    ::-webkit-scrollbar-corner {
+        background: transparent;
+    }
 }
 
 /* ==========================================================================

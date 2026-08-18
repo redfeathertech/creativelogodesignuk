@@ -3,11 +3,15 @@ import { about } from "@/content/home";
 import { Eyebrow, Section } from "@/components/ui/Section";
 import { LeadButton } from "@/components/chrome/LeadPanel";
 import Counter from "@/components/ui/Counter";
-import PlayCta from "./PlayCta";
+import { ArrowIcon } from "@/components/ui/icons";
 
 /**
  * About. Copy on the left, an offset two-image stack on the right sitting on a
- * soft brand glow, with the availability badge overhanging the lower edge.
+ * soft brand glow.
+ *
+ * Both CTAs open the lead panel — they always did, the second was just dressed
+ * as a play button — so they are now a plain primary/outline pair, matching the
+ * hero and every other section.
  */
 export default function About() {
     return (
@@ -31,30 +35,50 @@ export default function About() {
                         {about.lead}
                     </p>
 
-                    <div className="mt-6 mb-12 flex flex-wrap items-center gap-6">
-                        <LeadButton variant="outline">
+                    <div className="mt-6 mb-10 flex flex-wrap items-center gap-4">
+                        <LeadButton variant="primary">
                             {about.primaryCta}
+                            <ArrowIcon />
                         </LeadButton>
-                        <PlayCta label={about.playCta} />
+                        <LeadButton variant="outline">
+                            {about.secondaryCta}
+                        </LeadButton>
                     </div>
 
-                    <dl className="grid grid-cols-3 border-t border-ink-900/10">
-                        {about.stats.map((stat, i) => (
+                    {/* Ruled top and bottom, icon beside each figure — the same
+                        rail as the hero's trust strip, on the light canvas. The
+                        dividers are borders on the items rather than separate
+                        elements, so a wrap drops the leading rule with the item
+                        instead of stranding it. Below `sm` the three stack:
+                        three icon + figure + label groups do not fit a phone
+                        width without the labels wrapping mid-word. */}
+                    <dl className="flex flex-col gap-5 border-y border-ink-900/10 py-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-0">
+                        {about.stats.map((stat) => (
                             <div
                                 key={stat.label}
-                                className={`px-3 pt-6 text-center ${i > 0 ? "border-l border-ink-900/10" : ""}`}
+                                className="flex items-center gap-3 sm:pe-5 sm:ps-5 sm:first:ps-0 sm:not-first:border-s sm:not-first:border-ink-900/10"
                             >
-                                <dt className="sr-only">{stat.label}</dt>
-                                <dd>
-                                    <Counter
-                                        value={stat.value}
-                                        suffix={stat.suffix}
-                                        className="gradient-text-brand block font-display text-[clamp(1.9rem,1.2rem+2.6vw,2.9rem)] leading-none font-extrabold tracking-[-0.02em]"
-                                    />
-                                    <span className="mt-2 block text-xs tracking-[0.08em] text-onlight-muted uppercase">
-                                        {stat.label}
-                                    </span>
-                                </dd>
+                                <Image
+                                    src={stat.icon}
+                                    alt=""
+                                    aria-hidden="true"
+                                    width={48}
+                                    height={48}
+                                    className="h-10 w-10 shrink-0 object-contain"
+                                />
+                                <div className="min-w-0">
+                                    <dt className="sr-only">{stat.label}</dt>
+                                    <dd>
+                                        <Counter
+                                            value={stat.value}
+                                            suffix={stat.suffix}
+                                            className="gradient-text-brand block font-display text-[clamp(1.5rem,1.1rem+1.5vw,2rem)] leading-none font-extrabold tracking-[-0.02em]"
+                                        />
+                                        <span className="mt-1.5 block text-[0.6875rem] tracking-[0.08em] text-onlight-muted uppercase">
+                                            {stat.label}
+                                        </span>
+                                    </dd>
+                                </div>
                             </div>
                         ))}
                     </dl>
@@ -71,14 +95,18 @@ export default function About() {
                         aria-hidden="true"
                     />
 
-                    <div className="grid grid-cols-1 items-start gap-4 min-[576px]:grid-cols-2">
+                    {/* The stack: the back plate sits high and to the right,
+                        the front one drops below it. `items-start` plus the
+                        offsets do that without absolute positioning, so the
+                        pair still reflows to a single column on a phone. */}
+                    <div className="grid grid-cols-1 items-start gap-5 min-[576px]:grid-cols-2">
                         <Image
                             src={about.images.back.src}
                             alt={about.images.back.alt}
                             width={480}
                             height={640}
                             sizes="(max-width: 992px) 45vw, 24vw"
-                            className="hidden aspect-[3/4] w-full rounded-lg object-cover shadow-lg min-[576px]:mt-[clamp(1.5rem,4vw,3.5rem)] min-[576px]:block"
+                            className="hidden aspect-[3/4] w-full rounded-2xl object-cover shadow-[0_24px_60px_-24px_rgb(13_3_28/0.35)] min-[576px]:mt-[clamp(1.5rem,4vw,3.5rem)] min-[576px]:block"
                         />
                         <Image
                             src={about.images.front.src}
@@ -86,17 +114,9 @@ export default function About() {
                             width={480}
                             height={640}
                             sizes="(max-width: 992px) 45vw, 24vw"
-                            className="aspect-[4/3] w-full rounded-lg object-cover shadow-lg min-[576px]:mb-[clamp(1.5rem,4vw,3.5rem)] min-[576px]:aspect-[3/4]"
+                            className="aspect-[4/3] w-full rounded-2xl object-cover shadow-[0_24px_60px_-24px_rgb(13_3_28/0.35)] min-[576px]:mb-[clamp(1.5rem,4vw,3.5rem)] min-[576px]:aspect-[3/4]"
                         />
                     </div>
-
-                    {/* <div className="mt-4 inline-flex items-center gap-3 rounded-full bg-white px-6 py-3 font-display text-sm font-bold text-onlight shadow-lg min-[576px]:absolute min-[576px]:right-[clamp(-0.5rem,-1vw,0rem)] min-[576px]:bottom-[clamp(1rem,3vw,2.5rem)] min-[576px]:mt-0 min-[576px]:flex">
-                        <span
-                            className="size-2.5 shrink-0 rounded-full bg-teal-500 shadow-[0_0_0_4px_rgb(24_207_171/0.22)]"
-                            aria-hidden="true"
-                        />
-                        {about.badge}
-                    </div> */}
                 </div>
             </div>
         </Section>
