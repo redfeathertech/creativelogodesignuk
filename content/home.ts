@@ -738,7 +738,12 @@ export const testimonials = {
     eyebrow: "Testimonials",
     titleLead: "Clients’ valuable",
     titleAccent: "feedback",
-    mark: "/assets/img/home/quote-mark.webp",
+    lead: "Real stories from amazing clients who trusted us and loved the results.",
+    /* The pink double-quote that sits in the top-right corner of every card.
+       Replaces the single 360px mark that used to hold its own column beside
+       the rail — the redesign has no such column. Decorative either way, so it
+       carries no alt text and no copy moved. */
+    mark: "/assets/img/home/quote-glyph.png",
     /* CLIENT-SUPPLIED REPLACEMENT (13 Aug 2026). The five anonymous quotes that
      were here — job title + industry, no names — were replaced wholesale with
      the ten real reviews the client sent over, verbatim including their own
@@ -830,8 +835,45 @@ export const testimonials = {
 
 export const challenges = {
     eyebrow: "Your challenges",
-    title: "Creative Logo Design Solves Your Design, Development & Marketing Challenges",
+    /* Split for the two-tone heading only. Joined with a single space these are
+       the live title, unchanged: "Creative Logo Design Solves Your Design,
+       Development & Marketing Challenges". Same titleLead/titleAccent pattern
+       the rest of the page already uses. */
+    titleLead: "Creative Logo Design Solves Your Design, Development &",
+    titleAccent: "Marketing Challenges",
+    /* Net-new copy for the 2026-08 rebuild of this section. No live equivalent,
+       so it carries no ranking risk — docs/CONTENT-PARITY.md, "Kept from the
+       redesign (net-new, no live equivalent)". Two entries because the design
+       breaks the line. */
+    lead: [
+        "Every business faces roadblocks.",
+        "We turn them into opportunities for growth.",
+    ],
     cta: "Get Started",
+    /* The four-reason panel beneath the heading. Icons are the 78px set from
+       the design export — decorative, so they render with alt="". */
+    pillars: [
+        {
+            title: "One Partner. Every Solution.",
+            body: "From branding to marketing, we’ve got you covered at every step.",
+            icon: "/assets/img/home/challenges/pillar-partner.svg",
+        },
+        {
+            title: "Strategy-First Approach",
+            body: "We solve the root problem, not just the symptoms.",
+            icon: "/assets/img/home/challenges/pillar-strategy.svg",
+        },
+        {
+            title: "Results That Matter",
+            body: "Our solutions are built to deliver measurable growth.",
+            icon: "/assets/img/home/challenges/pillar-results.svg",
+        },
+        {
+            title: "Dedicated Support",
+            body: "A team that’s with you, whenever you need us.",
+            icon: "/assets/img/home/challenges/pillar-support.svg",
+        },
+    ],
     items: [
         {
             q: "Could a stronger brand identity make you the talk of the town?",
@@ -841,6 +883,10 @@ export const challenges = {
                 "Custom logo & identity design",
                 "Consistent storytelling across every channel",
             ],
+            icon: "/assets/img/home/challenges/branding.svg",
+            /* Card artwork, shown beside the bullet list. Decorative, so it
+               renders with alt="". Only this item has one so far. */
+            art: "/assets/img/home/challenges/branding.png",
             ctaLabel: "Explore Branding",
             href: "/branding-services",
         },
@@ -852,6 +898,7 @@ export const challenges = {
                 "Conversion-focused redesigns",
                 "Responsive layouts for every device",
             ],
+            icon: "/assets/img/home/challenges/website.svg",
             ctaLabel: "Explore Web Designing",
             href: "/web-design-services",
         },
@@ -863,6 +910,7 @@ export const challenges = {
                 "Seamless integrations with payment systems",
                 "Data-driven improvements to boost sales",
             ],
+            icon: "/assets/img/home/challenges/ecommerce.svg",
             ctaLabel: "Explore E-Com Development",
             href: "/web-development-services",
         },
@@ -875,6 +923,7 @@ export const challenges = {
                 "Targeted social media strategies",
                 "Paid ads that bring high-value leads",
             ],
+            icon: "/assets/img/home/challenges/marketing.svg",
             ctaLabel: "Explore Digital Marketing",
             href: "/digital-marketing-services",
         },
@@ -886,6 +935,7 @@ export const challenges = {
                 "Regular reports & performance insights",
                 "Flexible support tailored to your goals",
             ],
+            icon: "/assets/img/home/challenges/campaigns.svg",
             ctaLabel: "Explore Web Development",
             href: "/web-development-services",
         },
@@ -898,6 +948,7 @@ export const challenges = {
                 "UX upgrades for smoother navigation",
                 "Future-proof functionality",
             ],
+            icon: "/assets/img/home/challenges/redesign.svg",
             ctaLabel: "Explore Website Redesign",
             href: "/web-design-services/website-redesign",
         },
@@ -909,6 +960,7 @@ export const challenges = {
                 "On-page and technical SEO fixes",
                 "Fully responsive web design",
             ],
+            icon: "/assets/img/home/challenges/seo.svg",
             ctaLabel: "Explore SEO Services",
             href: "/seo-services",
         },
@@ -920,6 +972,7 @@ export const challenges = {
                 "Custom strategies based on your audience",
                 "Data-backed recommendations to scale smart",
             ],
+            icon: "/assets/img/home/challenges/channels.svg",
             ctaLabel: "Explore Sales Automation",
             href: "/automation-services/marketing-sales-automation",
         },

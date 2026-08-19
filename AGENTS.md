@@ -62,6 +62,7 @@ npx tsc --noEmit # type-check
 npx next typegen # regenerate route types after adding a route
 
 # verification — none of these are optional before shipping a page
+node scripts/verify-home-parity.mjs                # homepage, forward only (see its header)
 python scripts/verify-content-parity.py            # all 36 service pages
 python scripts/verify-landing-parity.py            # /creative-logo-design, both directions
 python scripts/verify-ldo-parity.py                # /logo-design-offer, both directions
@@ -114,6 +115,8 @@ content/    site nav footer routes home about contact clients
 lib/        seo mail validation antispam recaptcha cn
 scripts/    verify-content-parity.py verify-landing-parity.py verify-ldo-parity.py
             verify-lp-parity.py capture-rendered.mjs audit-responsive.mjs
+            verify-home-parity.mjs <- the homepage gate; Node, not Python, so it
+                                      runs wherever the build does
             gen-routes-table.mjs   <- regenerates the tables in docs/ROUTES.md
 docs/       the detail behind all of this
 ```

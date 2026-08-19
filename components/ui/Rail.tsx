@@ -24,6 +24,7 @@ export default function Rail({
     label,
     itemNoun = "slide",
     showDots = false,
+    showNav = true,
     className,
     navClassName,
     align = "end",
@@ -39,10 +40,15 @@ export default function Rail({
       server/client boundary as props. */
     itemNoun?: string;
     showDots?: boolean;
+    /** Drops the arrow cluster entirely, for a rail the design navigates with
+      dots alone. The rail itself is still swipeable, focusable and
+      keyboard-scrollable, and every dot is a real button, so nothing becomes
+      unreachable. */
+    showNav?: boolean;
     className?: string;
     navClassName?: string;
     /** Where the arrow cluster sits when dots are also shown. */
-    align?: "end" | "between";
+    align?: "end" | "between" | "center";
     navPlacement?: "below" | "head" | "sides";
     /** Rendered opposite the arrows when `navPlacement` is "head". */
     heading?: React.ReactNode;
@@ -181,6 +187,41 @@ export default function Rail({
         </div>
     );
 
+    const dots = showDots ? (
+        /* gap-4, not gap-2: each dot carries a 24px invisible hit area (below),
+           and 16px of gap is the least that keeps two neighbouring hit areas
+           from overlapping — an overlap would hand the tap to whichever dot
+           paints last.
+
+           `flex-wrap` because that 24px pitch adds up: ten dots plus the arrow
+           cluster want 384px, and a 320px phone has 280px of gutter-to-gutter
+           room. Without it the row pushed the document sideways. Wrapping also
+           lets `min-width: auto` resolve to one dot instead of the whole strip,
+           so the row can shrink at all. */
+        <div className="inline-flex flex-wrap items-center gap-4">
+            {Array.from({ length: pages }, (_, i) => (
+                <button
+                    key={i}
+                    type="button"
+                    onClick={() => goTo(i)}
+                    aria-label={`Go to ${itemNoun} ${i + 1}`}
+                    aria-current={i === active}
+                    className={cn(
+                        "relative h-2 cursor-pointer rounded-full transition-all duration-300",
+                        /* The dot is 8px tall — nowhere near a thumb. This grows
+                           the touch target to 24px square (WCAG 2.5.8) around
+                           the same 8px visual. */
+                        "before:absolute before:top-1/2 before:left-1/2 before:h-6 before:w-full before:min-w-6",
+                        "before:-translate-x-1/2 before:-translate-y-1/2 before:content-['']",
+                        i === active
+                            ? "w-7 bg-magenta-500 opacity-100"
+                            : "w-2 bg-current opacity-[0.28] hover:opacity-60",
+                    )}
+                />
+            ))}
+        </div>
+    ) : null;
+
     if (navPlacement === "sides") {
         return (
             <div className="relative">
@@ -199,6 +240,14 @@ export default function Rail({
                 {arrow(
                     1,
                     "absolute top-[42%] right-0 translate-x-1/2 -translate-y-1/2",
+                )}
+
+                {/* The dots stay under the rail so a phone — where the floating
+                    arrows are hidden — still has a visible control. */}
+                {dots && (
+                    <div className="mt-6 flex items-center justify-center">
+                        {dots}
+                    </div>
                 )}
             </div>
         );
@@ -223,47 +272,17 @@ export default function Rail({
             <div
                 className={cn(
                     "mt-6 flex items-center gap-6",
-                    align === "between" ? "justify-between" : "justify-end",
+                    align === "between"
+                        ? "justify-between"
+                        : align === "center"
+                          ? "justify-center"
+                          : "justify-end",
                     navClassName,
                 )}
             >
-                {showDots && (
-                    /* gap-4, not gap-2: each dot carries a 24px invisible hit area
-                       (below), and 16px of gap is the least that keeps two
-                       neighbouring hit areas from overlapping — an overlap would
-                       hand the tap to whichever dot paints last.
+                {dots}
 
-                       `flex-wrap` because that 24px pitch adds up: ten dots plus
-                       the arrow cluster want 384px, and a 320px phone has 280px
-                       of gutter-to-gutter room. Without it the row pushed the
-                       document sideways — 84px at 320px, 45px at 360px. Wrapping
-                       also lets `min-width: auto` resolve to one dot instead of
-                       the whole strip, so the row can shrink at all. */
-                    <div className="inline-flex flex-wrap items-center gap-4">
-                        {Array.from({ length: pages }, (_, i) => (
-                            <button
-                                key={i}
-                                type="button"
-                                onClick={() => goTo(i)}
-                                aria-label={`Go to ${itemNoun} ${i + 1}`}
-                                aria-current={i === active}
-                                className={cn(
-                                    "relative h-2 cursor-pointer rounded-full transition-all duration-300",
-                                    /* The dot is 8px tall — nowhere near a thumb.
-                                       This grows the touch target to 24px square
-                                       (WCAG 2.5.8) around the same 8px visual. */
-                                    "before:absolute before:top-1/2 before:left-1/2 before:h-6 before:w-full before:min-w-6",
-                                    "before:-translate-x-1/2 before:-translate-y-1/2 before:content-['']",
-                                    i === active
-                                        ? "w-7 bg-magenta-500 opacity-100"
-                                        : "w-2 bg-current opacity-[0.28] hover:opacity-60",
-                                )}
-                            />
-                        ))}
-                    </div>
-                )}
-
-                {nav}
+                {showNav && nav}
             </div>
         </>
     );

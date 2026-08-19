@@ -668,6 +668,31 @@
     }
 }
 
+/* Native <details> accordion, opened and closed with a height transition.
+   `interpolate-size: allow-keywords` is what lets `block-size` animate to and
+   from `auto`; `allow-discrete` keeps the content painted for the length of
+   the close. Browsers without `::details-content` still open and close — they
+   just do it instantly, which is the correct fallback for a disclosure. No
+   Tailwind utility can reach a `::details-content` pseudo-element. */
+@layer components {
+    .accordion {
+        interpolate-size: allow-keywords;
+    }
+    .accordion::details-content {
+        block-size: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition:
+            block-size 0.4s var(--ease-out),
+            content-visibility 0.4s allow-discrete,
+            opacity 0.3s var(--ease-out);
+    }
+    .accordion[open]::details-content {
+        block-size: auto;
+        opacity: 1;
+    }
+}
+
 /* reCAPTCHA v3's floating badge. It is fixed to the bottom-right corner, which
    on this site belongs to the WhatsApp button. Google permits hiding it only if
    the page carries the "protected by reCAPTCHA" disclosure naming both

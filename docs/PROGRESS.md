@@ -2,6 +2,111 @@
 
 Where the rebuild stands. Update this at the end of each working session.
 
+## Done — 18–19 Aug 2026 · The homepage redesign shipped — but NOT as planned
+
+Two commits, `a00cdfe` (18 Aug: hero, about, how-it-works) and `fc8560d`
+(19 Aug: the rest). The homepage now composes **13 sections**, up from 11.
+
+Written up after the fact, on 19 Aug, from the commits — this file had gone
+stale at 13 Aug and the whole redesign was undocumented here.
+
+### Read this first: it did not follow its own plan
+
+[`docs/superpowers/plans/2026-08-04-homepage-v2.md`](superpowers/plans/2026-08-04-homepage-v2.md)
+and its [spec](superpowers/specs/2026-08-04-homepage-v2-design.md) called for a
+parallel `components/home2/` behind a noindex `/home-v2` preview route, with
+`components/home/` and `content/home.ts` never touched, so that promoting and
+reverting were each a one-line import change in `app/(site)/page.tsx`.
+
+**None of that happened.** All 73 of the plan's checkboxes are still unticked,
+there is no `components/home2/` and no `/home-v2` route. The redesign was done
+**in place**. Consequences, in descending order of how much they will cost:
+
+- **There is no cheap revert.** Rolling the homepage back now means reverting
+  two commits that also carry unrelated work — the form actions, `lib/mail.ts`,
+  `lib/validation.ts`, the reCAPTCHA component and all four landing parity
+  scripts were changed in `a00cdfe` too.
+- Three approved sections were **never built**: Industries, Locations, and
+  Awards & recognition. All three were to reuse copy and assets already shipped
+  on the About page, so they remain cheap to add.
+- The approved reorder — client logos from 6th to 2nd, the one change the spec
+  flagged as more than pixels — was **not done**. `Logos` still sits 7th.
+
+The plan and spec are kept as-is rather than back-fitted to what shipped. They
+are the record of what was approved; this section is the record of what landed.
+
+### What actually changed
+
+| Rebuilt | New | Untouched |
+|---|---|---|
+| Hero, About, HowItWork, WhatYouGet, Toolbox, Results, Methodology | **Portfolio** (filterable work rail), **VideoTestimonials** + **VideoLightbox** | Logos, Testimonials, Challenges, Proposal |
+
+Assets were reworked substantially: the 16 numbered `tools/*.png` are now named
+files, the methodology art is split into icon + illustration pairs per step, and
+the offer, results and video bands got new backdrops. `methodology.orbitIcons`
+was correctly deleted along with the orbit it fed — it built its paths as
+`/assets/img/tools/${n}.png`, so every one of its eight was a 404 the moment the
+toolbox was renamed.
+
+**Content parity held, and visibly so.** `content/home.ts` grew 379 lines and
+every rejected reword is annotated in place with why it was not taken:
+`whatYouGet.titleAccent` stays lower case, `toolbox.cta` stays "Get Started" and
+not the mock's "Get started now", all five tab bodies keep the live wording, and
+`methodology` splits into `titleLead`/`titleAccent` that concatenate back to the
+live heading exactly. `docs/CONTENT-PARITY.md` records the one net-new figure
+(95%).
+
+### The homepage finally has a parity gate — 19 Aug
+
+`scripts/verify-home-parity.mjs`. The 36 service pages and all 4 landing pages
+were gated; the homepage, the page this rebuild exists to protect most, never
+was, and it was redesigned without one. This was the plan's Task 10, and it is
+the one task from that plan that did get done.
+
+It walks every string in `content/home.ts` and fails if any is missing from the
+prerendered `.next/server/app/index.html`. **Verified in both directions** —
+it passes against the intact build, and it was pointed at four separately
+damaged copies (a body paragraph, a heading half, a testimonial `datetime`, a
+video result strapline) and named the missing string in each, exiting 1.
+
+Two deliberate departures from the plan's spec for it:
+
+- **Node, not Python.** All six existing gates are `.py`, and none of them can
+  run on a machine with no Python — which is the machine this was written on,
+  and this is a Next.js repo where Node is guaranteed. A gate that cannot be run
+  will not be run. Logic, folding rules and report format match
+  `verify-landing-parity.py` deliberately; read that one for the reasoning.
+- **Forward only.** The reverse direction — walk the live page, assert every run
+  of its text survived — is the one that catches a whole section vanishing, and
+  it needs `page-source.html` in the repo root. That file is gitignored and was
+  not in this checkout. Re-capture it and the reverse check is worth writing;
+  the script's header says so too.
+
+**Its first run found something.** `about.badge` ("Taking on new projects") is
+in `content/home.ts` and on no page. It is **not** a redesign regression — it
+was already inside a `{/* … */}` block in `About.tsx` as of `a00cdfe^`, and the
+About rewrite only deleted the dead markup around it. It is declared in the
+script's `NOT_RENDERED` map, with that evidence, rather than quietly skipped;
+the map prints on every run. Someone still has to decide whether to restore the
+availability pill or drop the key — deleting homepage copy is a content
+decision, not a cleanup, which is why it was left in place.
+
+### Also cleaned up
+
+- `82d5d9d` ("fix") had commented out both `.superpowers` lines in `.gitignore`
+  and committed the brainstorming working files, including `server.pid` and
+  `.last-token`. Both ignore lines are restored and the files are untracked.
+
+### Still open on the homepage
+
+- `videoTestimonials.vimeoId` is **Vimeo's public demo reel**, on all five
+  cards, and four of the five items carry identical placeholder "WeBuild Inc."
+  copy. No `VideoObject` structured data until real videos land — emitting it
+  against a placeholder id would publish false data. See `SEO-PLAYBOOK.md`.
+- `recentWork.viewAll` ("View All Projects") renders **without a link** —
+  there is no portfolio route. Give it an `href` the day that page ships.
+- The three unbuilt sections and the logo-wall reorder above, if still wanted.
+
 ## Done — 13 Aug 2026 · The SEO plan's URL restructure is COMPLETE (all 8 groups)
 
 **Groups 4–8 of 8.** SEO, Web Design and Web Development shipped previously;

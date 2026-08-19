@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { testimonials } from "@/content/home";
 import { Eyebrow } from "@/components/ui/Section";
 import Rail from "@/components/ui/Rail";
@@ -12,36 +11,30 @@ import TestimonialCard from "./TestimonialCard";
  * ineligible for review rich results on Organization/LocalBusiness, so marking
  * them up risks a manual action rather than winning stars in the SERP.
  *
- * One dot per reachable scroll position — see Rail. The live site renders ten
- * indicators for five slides, so half of them do nothing.
+ * The band is centred rather than split down the middle: the 360px quote mark
+ * that used to hold its own column beside the rail is gone, and the same glyph
+ * now sits in the corner of each card. That hands the rail the full width, so
+ * three cards read at once on a laptop instead of two and a sliver. Every word
+ * of copy is unchanged; the lead under the heading is the one addition, and it
+ * comes from the approved design.
+ *
+ * One dot per reachable scroll position — see Rail. Prev/next arrows float
+ * over the left and right edges of the rail from 768px up; below that the
+ * gutters are too narrow for a half-overhanging 52px circle, so a phone swipes
+ * the rail or taps a dot — each dot is a real button.
  */
 export default function Testimonials() {
     return (
         <section className="bg-mist-100 py-section text-onlight">
-            {/* `grid-cols-[minmax(0,1fr)]` is load-bearing, not decoration. Below `lg:`
-          this is a single-column grid, and a grid item defaults to
-          `min-width: auto` — its min-content size. The rail's slides are
-          `flex: 0 0 auto`, so their min-content is the full card, which blew
-          the implicit column out past the viewport and pushed the whole
-          document sideways on every phone. The `lg:` template already guards
-          against this with `minmax(0, …)`; the mobile one has to as well. */}
-            <div className="container-site grid grid-cols-[minmax(0,1fr)] items-center gap-[clamp(2rem,1.5rem+4vw,4rem)] lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
-                <div className="reveal">
-                    <Image
-                        src={testimonials.mark}
-                        alt=""
-                        aria-hidden="true"
-                        width={360}
-                        height={360}
-                        sizes="(max-width: 992px) 70vw, 320px"
-                        className="mx-auto h-auto w-[min(320px,70%)]"
-                    />
-                </div>
-
-                <div className="reveal">
-                    <Eyebrow className="text-magenta-500">
+            <div className="container-site">
+                {/* Same centred head as components/home/Methodology.tsx: a
+                    flanked eyebrow, the two-tone title, the brand rule, then
+                    the lead. */}
+                <div className="reveal mx-auto max-w-[52rem] text-center">
+                    <Eyebrow flanked className="text-magenta-500">
                         {testimonials.eyebrow}
                     </Eyebrow>
+
                     <h2 className="text-h2">
                         {testimonials.titleLead}{" "}
                         <span className="gradient-text-brand">
@@ -49,27 +42,50 @@ export default function Testimonials() {
                         </span>
                     </h2>
 
-                    <div className="mt-8">
-                        <Rail
-                            label="Client testimonials"
-                            count={testimonials.items.length}
-                            showDots
-                            align="between"
-                            itemNoun="testimonial"
-                            tone="light"
-                        >
-                            {testimonials.items.map((item) => (
-                                <TestimonialCard
-                                    key={item.name + item.dateISO}
-                                    name={item.name}
-                                    date={item.date}
-                                    dateISO={item.dateISO}
-                                    stars={item.stars}
-                                    body={item.body}
-                                />
-                            ))}
-                        </Rail>
-                    </div>
+                    <span
+                        aria-hidden="true"
+                        className="mx-auto mt-5 block h-0.5 w-[clamp(28px,6vw,60px)] rounded-sm bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)]"
+                    />
+
+                    <p className="mx-auto mt-6 max-w-[56ch] text-lead text-pretty text-onlight-muted">
+                        {testimonials.lead}
+                    </p>
+                </div>
+
+                {/* Capped at exactly three cards plus their two gaps —
+                    3 x 21.5rem + 2 x 1.5rem = 67.5rem — so the row ends on a
+                    card edge instead of slicing the third one.
+                    `container-site` runs to 1560px, which would put four and a
+                    half cards on the row and leave the head floating over a
+                    band twice its width.
+
+                    `grid-cols-[minmax(0,1fr)]` is load-bearing, not decoration:
+                    a grid item defaults to `min-width: auto` — its min-content
+                    size — and the rail's slides are `flex: 0 0 auto`, so their
+                    min-content is the full card, which blows the column out
+                    past the viewport and pushes the whole document sideways on
+                    a phone. */}
+                <div className="reveal mx-auto mt-12 grid max-w-[67.5rem] grid-cols-[minmax(0,1fr)]">
+                    <Rail
+                        label="Client testimonials"
+                        count={testimonials.items.length}
+                        showDots
+                        navPlacement="sides"
+                        itemNoun="testimonial"
+                        tone="light"
+                    >
+                        {testimonials.items.map((item) => (
+                            <TestimonialCard
+                                key={item.name + item.dateISO}
+                                name={item.name}
+                                date={item.date}
+                                dateISO={item.dateISO}
+                                stars={item.stars}
+                                body={item.body}
+                                mark={testimonials.mark}
+                            />
+                        ))}
+                    </Rail>
                 </div>
             </div>
         </section>

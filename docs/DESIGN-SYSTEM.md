@@ -92,6 +92,7 @@ short; reach for utilities first.
 | `rail` | Scroll-snap horizontal rail (replaces Slick/Swiper) |
 | `mask-edges` | Fades the marquee in/out at both edges |
 | `.reveal` / `.reveal.is-visible` | Scroll-reveal states |
+| `.accordion` | `<details>` open/close height transition (`::details-content`) |
 
 Keyframes: `marquee`, `orbit`, `orbit-reverse`, `ping-slow`.
 
