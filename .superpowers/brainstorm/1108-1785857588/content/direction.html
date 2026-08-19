@@ -1,0 +1,218 @@
+<style>
+  .cld-wrap { --mag:#cc067f; --vio:#662e91; --teal:#18cfab; --ink:#0d031c; --ink2:#07020f; }
+  .cld-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; align-items:start; }
+  @media (max-width:1100px){ .cld-grid{ grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:620px){ .cld-grid{ grid-template-columns:1fr;} }
+
+  .col { border:2px solid transparent; border-radius:14px; padding:10px; cursor:pointer; transition:.18s; background:rgba(127,127,127,.05); }
+  .col:hover { border-color:var(--mag); }
+  .col.selected { border-color:var(--mag); box-shadow:0 0 0 4px rgba(204,6,127,.18); }
+  .col.ref { cursor:default; opacity:.85; }
+  .col.ref:hover { border-color:transparent; }
+
+  .tag { display:inline-block; font-size:10px; letter-spacing:.14em; text-transform:uppercase; font-weight:700;
+         padding:3px 8px; border-radius:999px; margin-bottom:8px; }
+  .tag.a{ background:rgba(127,127,127,.2); }
+  .tag.b{ background:linear-gradient(97deg,var(--vio),var(--mag)); color:#fff; }
+  .tag.c{ background:linear-gradient(97deg,var(--mag),#ff6cc0); color:#fff; }
+  .tag.r{ background:rgba(127,127,127,.15); }
+
+  .col h3 { margin:2px 0 4px; font-size:15px; }
+  .col p.d { font-size:12px; line-height:1.5; opacity:.75; margin:0 0 10px; }
+  .meta { font-size:11px; opacity:.6; margin-top:8px; line-height:1.6; }
+
+  /* the page thumbnail */
+  .thumb { background:var(--ink); border-radius:8px; overflow:hidden; display:flex; flex-direction:column;
+           box-shadow:0 8px 26px rgba(0,0,0,.4); }
+  .band { position:relative; overflow:hidden; }
+  .dark  { background:var(--ink); }
+  .darker{ background:var(--ink2); }
+  .light { background:#fff; }
+  .alt   { background:#f7f6fa; }
+  .grad  { background:linear-gradient(97deg,var(--vio),var(--mag)); }
+  .mesh::after{ content:""; position:absolute; inset:0;
+    background:radial-gradient(60% 80% at 20% 10%,rgba(204,6,127,.35),transparent 60%),
+               radial-gradient(50% 70% at 85% 60%,rgba(102,46,145,.45),transparent 60%); }
+
+  .l  { height:3px; border-radius:2px; background:rgba(255,255,255,.28); margin:3px 0; }
+  .l.dk{ background:rgba(20,16,28,.22); }
+  .l.g { background:linear-gradient(90deg,#ff6cc0,#b57bff); height:5px; }
+  .pad{ padding:8px 9px; position:relative; z-index:1; }
+  .row{ display:flex; gap:5px; }
+  .box{ border-radius:4px; background:rgba(255,255,255,.09); flex:1; }
+  .box.dk{ background:rgba(20,16,28,.07); }
+  .box.img{ background:linear-gradient(135deg,rgba(204,6,127,.5),rgba(102,46,145,.5)); }
+  .pill{ height:8px; width:34px; border-radius:999px; background:linear-gradient(97deg,var(--vio),var(--mag)); }
+  .chip{ height:6px; flex:1; border-radius:999px; background:rgba(255,255,255,.14); }
+  .num { font-size:22px; font-weight:800; line-height:1;
+         background:linear-gradient(90deg,#ff6cc0,#b57bff); -webkit-background-clip:text; background-clip:text; color:transparent; }
+</style>
+
+<div class="cld-wrap">
+<h2>How radical should the restyle be?</h2>
+<p class="subtitle">Same 11 sections of copy in all three, plus the 4 new blocks you picked. What changes is how far the compositions get rebuilt. Scroll each thumbnail — it's the page rhythm at a glance, same view as the Digital Silk screenshot you sent.</p>
+
+<div class="cld-grid">
+
+  <!-- ===================== REFERENCE: TODAY ===================== -->
+  <div class="col ref">
+    <span class="tag r">Today</span>
+    <h3>Current homepage</h3>
+    <p class="d">For reference. Mostly centred headings over contained grids, alternating dark/light.</p>
+    <div class="thumb">
+      <div class="band dark mesh" style="height:70px">
+        <div class="pad"><div class="pill" style="margin-bottom:5px"></div>
+          <div class="l g" style="width:70%"></div><div class="l" style="width:55%"></div>
+          <div class="row" style="margin-top:6px"><div class="box" style="height:18px"></div><div class="box" style="height:18px"></div></div>
+        </div>
+      </div>
+      <div class="band light" style="height:46px"><div class="pad">
+        <div class="l dk" style="width:45%;margin:0 auto 5px"></div>
+        <div class="row"><div class="box dk" style="height:24px"></div><div class="box dk" style="height:24px"></div></div></div>
+      </div>
+      <div class="band dark" style="height:44px"><div class="pad">
+        <div class="l" style="width:40%;margin:0 auto 5px"></div>
+        <div class="row"><div class="box" style="height:22px"></div><div class="box" style="height:22px"></div><div class="box" style="height:22px"></div></div></div>
+      </div>
+      <div class="band alt" style="height:40px"><div class="pad">
+        <div class="l dk" style="width:38%;margin:0 auto 5px"></div>
+        <div class="row"><div class="box dk" style="height:18px"></div><div class="box dk" style="height:18px"></div><div class="box dk" style="height:18px"></div></div></div>
+      </div>
+      <div class="band light" style="height:26px"><div class="pad"><div class="row">
+        <div class="chip" style="background:rgba(20,16,28,.1)"></div><div class="chip" style="background:rgba(20,16,28,.1)"></div><div class="chip" style="background:rgba(20,16,28,.1)"></div></div></div>
+      </div>
+      <div class="band dark mesh" style="height:38px"><div class="pad">
+        <div class="row"><div class="box" style="height:22px"></div><div class="box" style="height:22px"></div></div></div>
+      </div>
+    </div>
+    <p class="meta">11 sections · contained grids · reveal-on-scroll</p>
+  </div>
+
+  <!-- ===================== A: POLISH ===================== -->
+  <div class="col" data-choice="polish" onclick="toggleSelect(this)">
+    <span class="tag a">Option A</span>
+    <h3>Surface polish</h3>
+    <p class="d">Keep every composition. Upgrade the <em>surfaces</em>: glass cards, glow bloom behind focal points, richer gradients, tighter type scale, better hover states.</p>
+    <div class="thumb">
+      <div class="band dark mesh" style="height:70px">
+        <div class="pad"><div class="pill" style="margin-bottom:5px"></div>
+          <div class="l g" style="width:75%"></div><div class="l" style="width:58%"></div>
+          <div class="row" style="margin-top:6px"><div class="box" style="height:18px;box-shadow:0 0 10px rgba(204,6,127,.6)"></div><div class="box" style="height:18px"></div></div>
+        </div>
+      </div>
+      <div class="band light" style="height:46px"><div class="pad">
+        <div class="l dk" style="width:45%;margin:0 auto 5px"></div>
+        <div class="row"><div class="box dk" style="height:24px;box-shadow:0 3px 10px rgba(102,46,145,.25)"></div><div class="box dk" style="height:24px;box-shadow:0 3px 10px rgba(102,46,145,.25)"></div></div></div>
+      </div>
+      <div class="band dark" style="height:44px"><div class="pad">
+        <div class="l" style="width:40%;margin:0 auto 5px"></div>
+        <div class="row"><div class="box" style="height:22px;border:1px solid rgba(255,255,255,.18)"></div><div class="box" style="height:22px;border:1px solid rgba(255,255,255,.18)"></div><div class="box" style="height:22px;border:1px solid rgba(255,255,255,.18)"></div></div></div>
+      </div>
+      <div class="band alt" style="height:40px"><div class="pad">
+        <div class="l dk" style="width:38%;margin:0 auto 5px"></div>
+        <div class="row"><div class="box dk" style="height:18px"></div><div class="box dk" style="height:18px"></div><div class="box dk" style="height:18px"></div></div></div>
+      </div>
+      <div class="band grad" style="height:20px"></div>
+      <div class="band dark mesh" style="height:38px"><div class="pad">
+        <div class="row"><div class="box" style="height:22px"></div><div class="box" style="height:22px"></div></div></div>
+      </div>
+    </div>
+    <p class="meta"><strong>Impact:</strong> moderate<br><strong>Risk:</strong> very low<br><strong>Effort:</strong> smallest<br>Won't get near Digital Silk's presence.</p>
+  </div>
+
+  <!-- ===================== B: EDITORIAL ===================== -->
+  <div class="col" data-choice="editorial" onclick="toggleSelect(this)">
+    <span class="tag b">Option B — my pick</span>
+    <h3>Editorial recomposition</h3>
+    <p class="d">Sections rebuilt the way Digital Silk builds them: full-bleed alternating bands, oversized numerals, large-format imagery paired with copy, asymmetric splits, gradient interstitial CTAs breaking up the rhythm.</p>
+    <div class="thumb">
+      <div class="band dark mesh" style="height:74px">
+        <div class="pad"><div class="pill" style="margin-bottom:5px"></div>
+          <div class="l g" style="width:85%;height:7px"></div><div class="l g" style="width:60%;height:7px"></div>
+          <div class="l" style="width:70%;margin-top:5px"></div>
+          <div class="row" style="margin-top:6px"><div class="box" style="height:20px;box-shadow:0 0 12px rgba(204,6,127,.7)"></div><div class="box img" style="height:20px"></div></div>
+        </div>
+      </div>
+      <!-- featured work: alternating big cards -->
+      <div class="band darker" style="height:60px"><div class="pad">
+        <div class="row" style="margin-bottom:5px"><div class="box img" style="height:24px;flex:1.6"></div>
+          <div style="flex:1"><div class="l" style="width:80%"></div><div class="l" style="width:60%"></div><div class="l" style="width:70%"></div></div></div>
+        <div class="row"><div style="flex:1"><div class="l" style="width:70%"></div><div class="l" style="width:85%"></div><div class="l" style="width:55%"></div></div>
+          <div class="box img" style="height:24px;flex:1.6"></div></div></div>
+      </div>
+      <div class="band grad" style="height:22px"><div class="pad" style="display:flex;align-items:center;justify-content:space-between">
+        <div class="l" style="width:50%;background:rgba(255,255,255,.6)"></div><div style="width:26px;height:8px;border-radius:999px;background:#fff"></div></div>
+      </div>
+      <!-- oversized numerals process -->
+      <div class="band light" style="height:44px"><div class="pad">
+        <div class="row" style="align-items:flex-start">
+          <div style="flex:1"><div class="num">01</div><div class="l dk" style="width:80%"></div></div>
+          <div style="flex:1"><div class="num">02</div><div class="l dk" style="width:80%"></div></div>
+          <div style="flex:1"><div class="num">03</div><div class="l dk" style="width:80%"></div></div></div></div>
+      </div>
+      <!-- industries split -->
+      <div class="band darker" style="height:42px"><div class="pad"><div class="row">
+        <div class="box img" style="height:26px;flex:1"></div>
+        <div style="flex:1.2"><div class="l" style="width:90%"></div><div class="l" style="width:75%"></div><div class="l" style="width:85%"></div><div class="l" style="width:65%"></div></div></div></div>
+      </div>
+      <div class="band alt" style="height:26px"><div class="pad"><div class="row">
+        <div class="chip" style="background:rgba(20,16,28,.1)"></div><div class="chip" style="background:rgba(20,16,28,.1)"></div><div class="chip" style="background:rgba(20,16,28,.1)"></div><div class="chip" style="background:rgba(20,16,28,.1)"></div></div></div>
+      </div>
+      <!-- locations -->
+      <div class="band dark mesh" style="height:34px"><div class="pad"><div class="row">
+        <div class="box img" style="height:20px"></div><div class="box img" style="height:20px"></div><div class="box img" style="height:20px"></div></div></div>
+      </div>
+    </div>
+    <p class="meta"><strong>Impact:</strong> high — this is the reference look<br><strong>Risk:</strong> low (copy untouched)<br><strong>Effort:</strong> the real build<br>15 sections, all new components.</p>
+  </div>
+
+  <!-- ===================== C: CINEMATIC ===================== -->
+  <div class="col" data-choice="cinematic" onclick="toggleSelect(this)">
+    <span class="tag c">Option C</span>
+    <h3>Editorial + cinematic scroll</h3>
+    <p class="d">Everything in B, plus scroll-driven motion: pinned sticky sequences, parallax imagery, a horizontal work reel, counters and gradients that animate on progress.</p>
+    <div class="thumb">
+      <div class="band dark mesh" style="height:74px">
+        <div class="pad"><div class="pill" style="margin-bottom:5px"></div>
+          <div class="l g" style="width:85%;height:7px"></div><div class="l g" style="width:60%;height:7px"></div>
+          <div class="l" style="width:70%;margin-top:5px"></div>
+          <div class="row" style="margin-top:6px"><div class="box" style="height:20px;box-shadow:0 0 12px rgba(204,6,127,.7)"></div><div class="box img" style="height:20px"></div></div>
+        </div>
+      </div>
+      <div class="band darker" style="height:56px">
+        <div class="pad"><div style="font-size:9px;opacity:.5;letter-spacing:.1em;margin-bottom:4px">◍ PINNED · scrolls horizontally</div>
+        <div class="row"><div class="box img" style="height:34px;flex:1.4"></div><div class="box img" style="height:34px;flex:1.4"></div><div class="box img" style="height:34px;flex:.6;opacity:.4"></div></div></div>
+      </div>
+      <div class="band grad" style="height:22px"><div class="pad" style="display:flex;align-items:center;justify-content:space-between">
+        <div class="l" style="width:50%;background:rgba(255,255,255,.6)"></div><div style="width:26px;height:8px;border-radius:999px;background:#fff"></div></div>
+      </div>
+      <div class="band light" style="height:48px"><div class="pad">
+        <div style="font-size:9px;opacity:.45;letter-spacing:.1em;margin-bottom:3px">◍ STICKY · steps advance on scroll</div>
+        <div class="row" style="align-items:flex-start">
+          <div style="flex:1"><div class="num">01</div><div class="l dk" style="width:80%"></div></div>
+          <div class="box dk" style="height:30px;flex:1.4"></div></div></div>
+      </div>
+      <div class="band darker" style="height:42px"><div class="pad"><div class="row">
+        <div class="box img" style="height:26px;flex:1"></div>
+        <div style="flex:1.2"><div class="l" style="width:90%"></div><div class="l" style="width:75%"></div><div class="l" style="width:85%"></div><div class="l" style="width:65%"></div></div></div></div>
+      </div>
+      <div class="band dark mesh" style="height:34px"><div class="pad">
+        <div style="font-size:9px;opacity:.5;letter-spacing:.1em;margin-bottom:3px">◍ PARALLAX</div>
+        <div class="row"><div class="box img" style="height:16px"></div><div class="box img" style="height:16px"></div><div class="box img" style="height:16px"></div></div></div>
+      </div>
+    </div>
+    <p class="meta"><strong>Impact:</strong> highest<br><strong>Risk:</strong> perf + CLS on mobile; more client JS on a site rebuilt <em>for</em> Core Web Vitals<br><strong>Effort:</strong> largest<br>Every effect needs a reduced-motion path.</p>
+  </div>
+
+</div>
+
+<div class="section" style="margin-top:26px;padding:14px 16px;border-radius:10px;background:rgba(204,6,127,.08);border:1px solid rgba(204,6,127,.25)">
+  <p class="label">Worth knowing before you pick</p>
+  <p style="font-size:13px;line-height:1.6;margin:6px 0 0">
+    The whole reason this repo exists is SEO and Core Web Vitals — the Laravel site was losing to CLS and blocking CSS.
+    <strong>Option C spends that budget back.</strong> Digital Silk's page is heavy; ours is currently fully static with
+    almost no client JS. B gets ~90% of the visual impact at ~20% of the performance cost, which is why I'd take it.
+    If you want cinematic touches, the safer route is B now, then add one or two pinned sequences afterwards and measure.
+  </p>
+</div>
+</div>

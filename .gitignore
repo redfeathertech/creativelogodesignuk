@@ -47,7 +47,7 @@ yarn-error.log*
 /page-source-logo-brief.html
 
 # brainstorming mockups (superpowers visual companion) — working files, not build input
-/.superpowers/
+# /.superpowers/
 
 # vercel
 .vercel
@@ -55,5 +55,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-.superpowers
+# .superpowers
 scripts.zip
