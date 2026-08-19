@@ -2,152 +2,251 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useState } from "react";
+
 import { whatYouGet } from "@/content/home";
 import { Eyebrow } from "@/components/ui/Section";
 import { ChevronDown, ArrowIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/cn";
 
 /**
- * "What do you get" — an ARIA tab list with a cross-fading monitor preview.
+ * "What do you get" — the five service cards beside the monitor.
  *
- * The screenshots sit ON TOP of the monitor artwork, not behind it: the bezel
- * image has an opaque screen area, so stacking it above the previews hides
- * every one of them.
+ * Rebuilt to the approved dark design: the cards move to the left, the heading
+ * and the monitor share the right, and the band drops from `bg-mist-100` onto
+ * the client's backdrop. Not one string moved — see the notes on
+ * `whatYouGet` in content/home.ts for what is net-new and what is verbatim.
  *
- * Every panel is in the DOM (inactive ones are `hidden`), so all five service
- * descriptions and their links are crawlable. Each tab now links to its
- * service page; on the live site none of them link anywhere.
+ * Two things about the markup are deliberate:
+ *
+ * 1. **Every card's body is always visible**, as in the design. Only the
+ *    "Explore …" link is disclosed, so the cards are a selection control, not
+ *    an accordion — `aria-pressed` buttons in a `role="group"`, the same
+ *    reading components/home/Portfolio.tsx settled on for its filter row. A
+ *    `tablist` would be a lie: there is no panel that appears and disappears.
+ *
+ * 2. **All five links stay in the DOM.** The collapsed ones are folded away
+ *    with a `grid-template-rows` transition and `visibility`, not `display`,
+ *    so the server-rendered HTML carries all five service URLs however the
+ *    visitor leaves the section. On the live site none of these tabs link
+ *    anywhere at all.
+ *
+ * The monitor is one flat image, deliberately. Its screen is part of the
+ * supplied artwork, so nothing is composited into it and selecting a card does
+ * not change it — the cards drive their own highlight and disclosure, nothing
+ * else. An earlier pass layered a per-service screenshot over that screen; the
+ * client asked for the image as supplied instead.
  */
 export default function WhatYouGet() {
-  const [active, setActive] = useState(0);
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+    const [active, setActive] = useState<number>(whatYouGet.defaultTab);
 
-  const onKeyDown = (event: React.KeyboardEvent, index: number) => {
-    const last = whatYouGet.tabs.length - 1;
-    let next: number | null = null;
-
-    if (event.key === "ArrowDown" || event.key === "ArrowRight") next = index === last ? 0 : index + 1;
-    if (event.key === "ArrowUp" || event.key === "ArrowLeft") next = index === 0 ? last : index - 1;
-    if (event.key === "Home") next = 0;
-    if (event.key === "End") next = last;
-
-    if (next === null) return;
-    event.preventDefault();
-    setActive(next);
-    tabRefs.current[next]?.focus();
-  };
-
-  return (
-    <section className="relative isolate bg-mist-100 py-section text-onlight">
-      <div className="container-site">
-        <div className="reveal mb-12 max-w-[58ch]">
-          <Eyebrow className="text-magenta-500">{whatYouGet.eyebrow}</Eyebrow>
-          <h2 className="text-h2">
-            {whatYouGet.titleLead}{" "}
-            <span className="gradient-text-brand">{whatYouGet.titleAccent}</span>
-            {whatYouGet.titleTrail}
-          </h2>
-          <p className="mt-6 text-lead text-onlight-muted">{whatYouGet.lead}</p>
-        </div>
-
-        <div className="grid items-center gap-[clamp(2.5rem,1.5rem+5vw,4.5rem)] lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
-          {/* ---- monitor ---- */}
-          <div className="reveal relative">
-            {/* Screenshots sit inside the bezel window, above the artwork. */}
-            <div className="absolute top-[4.2%] left-[8.1%] z-[2] h-[68%] w-[83.8%] overflow-hidden rounded-[4px] bg-ink-850">
-              {whatYouGet.tabs.map((tab, i) => (
-                <Image
-                  key={tab.label}
-                  src={tab.shot}
-                  alt={`${tab.label} preview`}
-                  width={900}
-                  height={560}
-                  sizes="(max-width: 992px) 78vw, 46vw"
-                  className={cn(
-                    "absolute inset-0 size-full object-cover transition-[opacity,scale] duration-[600ms] ease-out",
-                    i === active ? "scale-100 opacity-100" : "scale-[1.04] opacity-0",
-                  )}
-                />
-              ))}
-            </div>
-
+    return (
+        <section className="relative isolate overflow-hidden bg-ink-950 py-section text-white">
+            {/* The band's backdrop. `object-cover` because the asset is a 1.85:1
+                field and this band is taller than that on every phone — the
+                glow curve and the dot sphere live in its bottom right, which is
+                the corner cover keeps when it crops the sides. */}
             <Image
-              src={whatYouGet.frame}
-              alt=""
-              aria-hidden="true"
-              width={1000}
-              height={820}
-              sizes="(max-width: 992px) 92vw, 55vw"
-              className="pointer-events-none relative z-[1] block h-auto w-full"
+                src={whatYouGet.background}
+                alt=""
+                aria-hidden="true"
+                width={1920}
+                height={1039}
+                sizes="100vw"
+                quality={90}
+                className="pointer-events-none absolute inset-0 -z-10 size-full object-cover object-right-bottom"
             />
-          </div>
 
-          {/* ---- tabs ---- */}
-          <div
-            className="reveal grid gap-2"
-            role="tablist"
-            aria-label={whatYouGet.eyebrow}
-            aria-orientation="vertical"
-          >
-            {whatYouGet.tabs.map((tab, i) => {
-              const selected = i === active;
-              return (
-                <div
-                  key={tab.label}
-                  className={cn(
-                    "rounded-md border bg-white px-6 pt-2 pb-3 transition-[border-color,box-shadow] duration-300 ease-out",
-                    selected
-                      ? "border-transparent shadow-md ring-[1.5px] ring-magenta-500 ring-inset"
-                      : "border-ink-900/10 hover:border-magenta-500/35",
-                  )}
-                >
-                  <button
-                    ref={(el) => {
-                      tabRefs.current[i] = el;
-                    }}
-                    type="button"
-                    role="tab"
-                    id={`offer-tab-${i}`}
-                    aria-controls={`offer-panel-${i}`}
-                    aria-selected={selected}
-                    tabIndex={selected ? 0 : -1}
-                    onClick={() => setActive(i)}
-                    onKeyDown={(e) => onKeyDown(e, i)}
-                    className="block w-full cursor-pointer py-3 text-left"
-                  >
-                    <span className="flex items-center justify-between gap-4 font-display text-h5 font-bold text-onlight">
-                      {tab.label}
-                      <ChevronDown
-                        className={cn(
-                          "shrink-0 transition-[rotate,color] duration-300",
-                          selected && "rotate-180 text-magenta-500",
-                        )}
-                      />
-                    </span>
-                  </button>
+            <div className="container-site">
+                {/* Rows are explicit so the card column can span both of them on
+                    the right-hand layout while the heading and the monitor
+                    stack above one another beside it. Below `lg` the grid
+                    collapses and DOM order takes over: heading, monitor, cards. */}
+                <div className="grid gap-x-[clamp(2.5rem,1.5rem+4vw,4.5rem)] gap-y-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:grid-rows-[auto_auto]">
+                    {/* ---------------------------------------- heading ---- */}
+                    <div className="reveal lg:col-start-2 lg:row-start-1">
+                        <Eyebrow>{whatYouGet.eyebrow}</Eyebrow>
 
-                  <div
-                    id={`offer-panel-${i}`}
-                    role="tabpanel"
-                    aria-labelledby={`offer-tab-${i}`}
-                    hidden={!selected}
-                  >
-                    <p className="text-onlight-muted">{tab.body}</p>
-                    <Link
-                      href={tab.href}
-                      className="mt-3 inline-flex items-center gap-2 text-sm font-bold text-magenta-600 transition-colors hover:text-magenta-500"
+                        <h2 className="text-h2">
+                            {whatYouGet.titleLead}{" "}
+                            <span className="gradient-text">
+                                {whatYouGet.titleAccent}
+                            </span>
+                            {whatYouGet.titleTrail}
+                        </h2>
+
+                        <p className="mt-6 max-w-[52ch] text-lead text-white/65">
+                            {whatYouGet.lead}
+                        </p>
+
+                        {/* The proof strip. Hairlines are borders on the items
+                            after the first, so the same rule flips from
+                            vertical to horizontal when the row stacks — three
+                            of these labels do not fit side by side on a phone. */}
+                        <ul className="mt-9 grid gap-4 min-[560px]:grid-cols-3 min-[560px]:gap-0">
+                            {whatYouGet.benefits.map((benefit, i) => (
+                                <li
+                                    key={benefit.label}
+                                    className={cn(
+                                        "flex items-center gap-3 min-[560px]:pe-4",
+                                        i > 0 &&
+                                            "border-t border-white/[0.11] pt-4 min-[560px]:border-t-0 min-[560px]:border-s min-[560px]:ps-4 min-[560px]:pt-0",
+                                    )}
+                                >
+                                    {/* Native sizes differ by a pixel or two
+                                        between the three marks, so they are
+                                        fitted into one box rather than trusted
+                                        to line up on their own. */}
+                                    <Image
+                                        src={benefit.icon}
+                                        alt=""
+                                        aria-hidden="true"
+                                        width={40}
+                                        height={36}
+                                        className="size-7 shrink-0 object-contain"
+                                    />
+                                    <span className="font-display text-sm leading-[1.35] font-bold text-white">
+                                        {benefit.label}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* ---------------------------------------- monitor ---- */}
+                    <div className="reveal lg:col-start-2 lg:row-start-2">
+                        {/* Capped well under the artwork's native 743px on the
+                            two-column layout: at full size the heading plus the
+                            monitor run a couple of hundred pixels taller than
+                            the card column beside them, and the cards — which
+                            are centred against it — end up floating in the
+                            middle of the band. Below `lg` there is nothing to
+                            balance against, so it takes the full width. */}
+                        <Image
+                            src={whatYouGet.frame}
+                            alt=""
+                            aria-hidden="true"
+                            width={743}
+                            height={581}
+                            sizes="(max-width: 1024px) 96vw, 42vw"
+                            className="pointer-events-none mx-auto block h-auto w-full max-w-[743px] lg:max-w-[560px] xl:max-w-[640px]"
+                        />
+                    </div>
+
+                    {/* ------------------------------------------ cards ---- */}
+                    <div
+                        role="group"
+                        aria-label={whatYouGet.eyebrow}
+                        className="reveal grid content-center gap-4 lg:col-start-1 lg:row-span-2 lg:row-start-1"
                     >
-                      Explore {tab.label}
-                      <ArrowIcon />
-                    </Link>
-                  </div>
+                        {whatYouGet.tabs.map((tab, i) => {
+                            const on = i === active;
+                            return (
+                                <div
+                                    key={tab.label}
+                                    className={cn(
+                                        "relative rounded-2xl border p-5 transition-[background-color,border-color,box-shadow] duration-300 ease-out sm:p-6",
+                                        on
+                                            ? "border-magenta-500/70 bg-[linear-gradient(97deg,var(--color-violet-800)_0%,var(--color-magenta-800)_100%)] shadow-glow"
+                                            : "border-white/[0.08] bg-white/[0.03] hover:border-magenta-500/35 hover:bg-white/[0.05]",
+                                    )}
+                                >
+                                    <div className="flex items-start gap-4">
+                                        <Image
+                                            src={tab.icon}
+                                            alt=""
+                                            aria-hidden="true"
+                                            width={80}
+                                            height={80}
+                                            className="size-11 shrink-0 sm:size-14"
+                                        />
+
+                                        <div className="min-w-0 flex-1">
+                                            <h3 className="font-display text-[1.0625rem] leading-[1.2] font-extrabold text-white sm:text-[1.1875rem]">
+                                                {/* The whole card is the hit
+                                                    area: the button is a bare
+                                                    control stretched over it
+                                                    with `absolute inset-0`, so
+                                                    the heading text stays plain
+                                                    text and the click target is
+                                                    the card, not the label. */}
+                                                <button
+                                                    type="button"
+                                                    aria-pressed={on}
+                                                    onClick={() => setActive(i)}
+                                                    className="cursor-pointer text-left before:absolute before:inset-0 before:rounded-2xl before:content-['']"
+                                                >
+                                                    {tab.label}
+                                                </button>
+                                            </h3>
+
+                                            <p className="mt-1.5 text-sm leading-[1.55] text-white/65">
+                                                {tab.body}
+                                            </p>
+
+                                            {/* Folded away rather than removed:
+                                                see the note at the top of the
+                                                file. `visibility` is what keeps
+                                                the collapsed link out of the
+                                                tab order and the a11y tree
+                                                while still letting the row
+                                                animate — `display: none` would
+                                                not transition at all. */}
+                                            <div
+                                                className={cn(
+                                                    "grid transition-[grid-template-rows,opacity] duration-300 ease-out",
+                                                    on
+                                                        ? "grid-rows-[1fr] opacity-100"
+                                                        : "grid-rows-[0fr] opacity-0",
+                                                )}
+                                            >
+                                                <div
+                                                    className={cn(
+                                                        "overflow-hidden",
+                                                        !on && "invisible",
+                                                    )}
+                                                >
+                                                    <Link
+                                                        href={tab.href}
+                                                        /* Above the card's
+                                                           stretched hit area,
+                                                           or the button would
+                                                           swallow the click. */
+                                                        className="relative z-1 mt-3 inline-flex items-center gap-2 text-sm font-bold text-magenta-100 underline underline-offset-4 transition-colors hover:text-white"
+                                                    >
+                                                        Explore {tab.label}
+                                                        <ArrowIcon />
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <span
+                                            aria-hidden="true"
+                                            className={cn(
+                                                /* Dropped outright under 380px.
+                                                   It is `aria-hidden` chrome,
+                                                   and the 40px it holds is the
+                                                   difference between a body
+                                                   that wraps at five words and
+                                                   one that wraps at three — the
+                                                   active card is already
+                                                   unmistakable from its fill. */
+                                                "hidden size-9 shrink-0 place-items-center rounded-full border transition-all duration-300 ease-out min-[380px]:grid sm:size-10",
+                                                on
+                                                    ? "rotate-180 border-transparent bg-[linear-gradient(97deg,var(--color-violet-500)_0%,var(--color-magenta-500)_100%)] text-white"
+                                                    : "border-white/10 bg-white/[0.04] text-white/55",
+                                            )}
+                                        >
+                                            <ChevronDown className="size-4" />
+                                        </span>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+            </div>
+        </section>
+    );
 }

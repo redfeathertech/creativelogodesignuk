@@ -35,7 +35,7 @@ These six were reworded in the redesign and have been reverted in
 
 - The 8 FAQ answer paragraphs (live had bullets only) — these also feed the
   `FAQPage` schema, so they are a direct SEO gain
-- The Results section figures: 40% / 1,200+ / 98%
+- The Results section figures: 40% / 1,200+ / 98% / 95%
 - The proposal-form benefit bullets
 - "Trusted by brands across the UK, USA and UAE"
 - Hero secondary CTA "See our work"

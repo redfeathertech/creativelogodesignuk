@@ -15,7 +15,8 @@ import { ChevronLeft, ChevronRight } from "./icons";
  * stays crawlable.
  *
  * `navPlacement="head"` puts the arrows on the section heading row instead of
- * under the rail — the arrangement the recent-work rail uses.
+ * under the rail; `"sides"` floats one over each edge of the rail itself,
+ * which is what the portfolio section uses.
  */
 export default function Rail({
     children,
@@ -42,7 +43,7 @@ export default function Rail({
     navClassName?: string;
     /** Where the arrow cluster sits when dots are also shown. */
     align?: "end" | "between";
-    navPlacement?: "below" | "head";
+    navPlacement?: "below" | "head" | "sides";
     /** Rendered opposite the arrows when `navPlacement` is "head". */
     heading?: React.ReactNode;
     /** Picks the arrow border colour for the surface behind it. */
@@ -130,34 +131,41 @@ export default function Rail({
     };
 
     const arrowClass = cn(
-        "grid size-[52px] cursor-pointer place-items-center rounded-full border bg-transparent text-current",
+        "size-[52px] cursor-pointer place-items-center rounded-full border text-current",
+        /* `sides` hides the arrows below 768px — see the note at the bottom
+           of the component. The display utility has to be decided HERE rather
+           than tacked on at the call site: `hidden` and `grid` set the same
+           property, so which one wins would come down to stylesheet order. */
+        navPlacement === "sides" ? "hidden md:grid" : "grid",
         "transition-all duration-300 ease-out",
         "enabled:hover:scale-[1.06] enabled:hover:border-transparent enabled:hover:text-white",
         "enabled:hover:bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)]",
         "disabled:cursor-default disabled:opacity-30 bg-origin-border",
+        /* Floating over the rail means each circle sits half on a card and half
+           on the section, so it needs a surface of its own; in a heading or
+           footer row it has the section to itself and stays transparent. */
+        navPlacement === "sides"
+            ? "bg-white shadow-[0_10px_30px_-12px_rgb(7_2_15/0.35)]"
+            : "bg-transparent",
         tone === "dark" ? "border-white/20" : "border-ink-900/[0.18]",
+    );
+
+    const arrow = (dir: 1 | -1, extra?: string) => (
+        <button
+            type="button"
+            className={cn(arrowClass, extra)}
+            onClick={() => scrollBy(dir)}
+            disabled={dir === -1 ? atStart : atEnd}
+            aria-label={`${dir === -1 ? "Previous" : "Next"} — ${label}`}
+        >
+            {dir === -1 ? <ChevronLeft /> : <ChevronRight />}
+        </button>
     );
 
     const nav = (
         <div className="inline-flex gap-3">
-            <button
-                type="button"
-                className={arrowClass}
-                onClick={() => scrollBy(-1)}
-                disabled={atStart}
-                aria-label={`Previous — ${label}`}
-            >
-                <ChevronLeft />
-            </button>
-            <button
-                type="button"
-                className={arrowClass}
-                onClick={() => scrollBy(1)}
-                disabled={atEnd}
-                aria-label={`Next — ${label}`}
-            >
-                <ChevronRight />
-            </button>
+            {arrow(-1)}
+            {arrow(1)}
         </div>
     );
 
@@ -172,6 +180,29 @@ export default function Rail({
             {children}
         </div>
     );
+
+    if (navPlacement === "sides") {
+        return (
+            <div className="relative">
+                {rail}
+
+                {/* Each circle straddles the rail edge, so half of it — 26px —
+                    lands in the page gutter. The gutter is 20px at 320px, which
+                    is why these are hidden below 768px rather than allowed to
+                    push the document sideways; a phone swipes the rail. Pinned
+                    at 42% rather than dead centre so they land on the artwork
+                    like the design, not on the card's title row. */}
+                {arrow(
+                    -1,
+                    "absolute top-[42%] left-0 -translate-x-1/2 -translate-y-1/2",
+                )}
+                {arrow(
+                    1,
+                    "absolute top-[42%] right-0 translate-x-1/2 -translate-y-1/2",
+                )}
+            </div>
+        );
+    }
 
     if (navPlacement === "head") {
         return (

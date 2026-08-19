@@ -1,15 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import { process, recentWork } from "@/content/home";
+import { process } from "@/content/home";
 import { Eyebrow, SectionHeading } from "@/components/ui/Section";
-import Rail from "@/components/ui/Rail";
 import { LeadButton } from "@/components/chrome/LeadPanel";
 import { btn } from "@/components/ui/button";
 import { ArrowIcon } from "@/components/ui/icons";
 import ProcessSteps from "./ProcessSteps";
 
 /**
- * Process steps plus the "Our recent work" rail.
+ * Process steps: the intro column, then the three numbered marks.
  *
  * The intro column carries the section's own call to action — the three steps
  * used to end on a full stop, with the next conversion point a whole section
@@ -20,27 +19,26 @@ import ProcessSteps from "./ProcessSteps";
  * reason; the noise overlay goes with it, since the image carries its own
  * texture and the two grains cross-hatch.
  *
- * The work cards are links here. On the live site they are inert <article>
- * elements, wasting six prime internal-link slots on the homepage.
+ * The "Our recent work" rail used to hang off the foot of this section; it is
+ * now its own light band below — components/home/Portfolio.tsx — which is
+ * still where `process.workAnchor` points.
  */
 export default function HowItWork() {
     return (
         <section className="relative isolate overflow-hidden bg-ink-900 py-section text-white">
             {/* Brand mesh over the whole band, as on every other dark section.
                 It fills the field above the backdrop, which only occupies the
-                foot of the process half. */}
+                foot of the band. */}
             <div
                 className="pointer-events-none absolute inset-0 -z-20 bg-mesh"
                 aria-hidden="true"
             />
 
-            {/* The process half. `relative` so the backdrop below anchors to
-                THIS block rather than the whole section — the section also
-                carries the recent-work rail, which more than doubles its
-                height. */}
+            {/* `relative` so the backdrop below anchors to this block and its
+                own foot rather than to the section box around it. */}
             <div className="relative pb-[clamp(2rem,4vw,4.5rem)]">
                 {/* The client backdrop, at its own 1920x730 aspect and pinned to
-                    the foot of the process half — where its dot grid and its
+                    the foot of the band — where its dot grid and its
                     curves are drawn.
 
                     NOT `object-cover`: the source is a 2.63:1 banner and this
@@ -90,9 +88,9 @@ export default function HowItWork() {
                                     {process.primaryCta}
                                     <ArrowIcon />
                                 </LeadButton>
-                                {/* Same section, further down: the rail is what
-                                "our work" means on this page, and there is no
-                                portfolio route to send anyone to. */}
+                                {/* The section below: that rail is what "our
+                                work" means on this page, and there is no
+                                portfolio route to send anyone to yet. */}
                                 <Link
                                     href={process.workAnchor}
                                     className={btn("ghost")}
@@ -145,39 +143,6 @@ export default function HowItWork() {
                         <ProcessSteps />
                     </div>
                 </div>
-            </div>
-
-            {/* ---- recent work ---- */}
-            <div id="recent-work" className="container-site mt-section">
-                <Rail
-                    label={recentWork.title}
-                    count={recentWork.items.length}
-                    navPlacement="head"
-                    heading={<h2 className="text-h2">{recentWork.title}</h2>}
-                >
-                    {recentWork.items.map((item) => (
-                        <Link
-                            key={item.img}
-                            href={item.href}
-                            className="group relative w-[clamp(240px,74vw,340px)] overflow-hidden rounded-lg bg-ink-800 shadow-md transition-transform duration-300 ease-out hover:-translate-y-1.5"
-                        >
-                            <Image
-                                src={item.img}
-                                alt={`${item.lead} ${item.trail} project by Creative Logo Design`}
-                                width={340}
-                                height={425}
-                                sizes="(max-width: 576px) 74vw, 340px"
-                                className="block aspect-4/5 w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-105"
-                            />
-                            <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,transparent,rgb(7_2_15/0.88)_62%)] px-6 pt-8 pb-6">
-                                <h3 className="font-display text-h4 leading-[1.1] font-extrabold text-white">
-                                    <span className="block">{item.lead}</span>
-                                    <span className="block">{item.trail}</span>
-                                </h3>
-                            </div>
-                        </Link>
-                    ))}
-                </Rail>
             </div>
         </section>
     );

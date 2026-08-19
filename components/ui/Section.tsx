@@ -5,8 +5,24 @@ import { cn } from "@/lib/cn";
  *
  * The leading hairline bar is part of the mark — it is what ties the eyebrow to
  * the heading beneath it on every section of the clduk design.
+ *
+ * `flanked` adds the matching bar on the far side, for the sections whose head
+ * is centred rather than left-aligned (components/home/Methodology.tsx). The
+ * second bar mirrors the gradient so the pair reads outward from the label
+ * instead of both ramping the same way.
  */
-export function Eyebrow({ children, className }: { children: React.ReactNode; className?: string }) {
+export function Eyebrow({
+  children,
+  className,
+  flanked = false,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  flanked?: boolean;
+}) {
+  const bar =
+    "h-0.5 w-[clamp(28px,6vw,60px)] shrink-0 rounded-sm bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)]";
+
   return (
     <span
       className={cn(
@@ -14,11 +30,9 @@ export function Eyebrow({ children, className }: { children: React.ReactNode; cl
         className,
       )}
     >
-      <span
-        aria-hidden="true"
-        className="h-0.5 w-[clamp(28px,6vw,60px)] shrink-0 rounded-sm bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)]"
-      />
+      <span aria-hidden="true" className={bar} />
       {children}
+      {flanked && <span aria-hidden="true" className={cn(bar, "rotate-180")} />}
     </span>
   );
 }

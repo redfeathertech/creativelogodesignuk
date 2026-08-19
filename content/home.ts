@@ -131,7 +131,7 @@ export const process = {
     background: "/assets/img/home/how-it-works-bg.png",
     /* Net-new: the section had no call to action at all, so the three steps ended
      on a full stop. Nothing existing is reworded (docs/CONTENT-PARITY.md). The
-     secondary CTA points at the recent-work rail further down this section. */
+     secondary CTA points at the portfolio section directly below. */
     primaryCta: "Request A Proposal",
     secondaryCta: "See our work",
     workAnchor: "#recent-work",
@@ -173,41 +173,68 @@ export const process = {
 } as const;
 
 export const recentWork = {
+    eyebrow: "Our Portfolio",
+    /* `title` is the section's accessible name (it labels the rail). The
+       heading renders `titleLead` + `titleAccent`, which concatenate to
+       exactly it — the live heading text is unchanged. */
     title: "Our Recent Work",
+    titleLead: "Our",
+    titleAccent: "Recent Work",
+    /* TODO — RENDERED WITHOUT A LINK ON PURPOSE. There is no portfolio route
+       yet; give this button an `href` the moment that page ships. */
+    viewAll: "View All Projects",
+    /* Filter labels are new UI chrome, not ported copy — the live rail has no
+       filters. Every item's `category` is one of these ids, and "all" is the
+       default, so the server-rendered HTML carries all six cards and their
+       links whatever the visitor clicks afterwards. */
+    filters: [
+        { id: "all", label: "All Work" },
+        { id: "web-design", label: "Web Design" },
+        { id: "ui-ux", label: "UI/UX" },
+        { id: "branding", label: "Branding" },
+        { id: "app-development", label: "App Development" },
+        { id: "marketing", label: "Marketing" },
+    ],
     items: [
         {
             lead: "App",
             trail: "Development",
+            category: "app-development",
             img: "/assets/img/work/app-development.webp",
             href: "/app-development-services",
         },
         {
             lead: "Blog",
             trail: "Design",
+            category: "web-design",
             img: "/assets/img/work/blog-design.webp",
             href: "/web-design-services/corporate-blog-design",
         },
         {
             lead: "Branding",
             trail: "Design",
+            category: "branding",
             img: "/assets/img/work/branding-design.webp",
             href: "/branding-services",
         },
         {
             lead: "Web",
             trail: "Design",
+            category: "web-design",
             img: "/assets/img/work/seo-aeo.webp",
             href: "/web-design-services",
         },
         {
             lead: "Social",
             trail: "Media",
+            category: "marketing",
             img: "/assets/img/work/social-media.webp",
             href: "/digital-marketing-services/social-media-marketing",
         },
         {
             lead: "UI UX",
             trail: "Design",
+            category: "ui-ux",
             img: "/assets/img/work/ui-ux-design.webp",
             href: "/web-design-services/ui-ux-design",
         },
@@ -219,43 +246,77 @@ export const recentWork = {
 export const whatYouGet = {
     eyebrow: "What you get",
     titleLead: "What do You Get with",
+    /* Lower case on purpose. The live heading reads "What do You Get with
+       creative logo design?" verbatim — the approved mock title-cases the
+       accent, but heading text is exactly what docs/CONTENT-PARITY.md says
+       must not move, so the casing stays as it ranks. */
     titleAccent: "creative logo design",
     titleTrail: "?",
     lead: "Complete solution at one place, including Design, Development, Branding, and Growth. You don't have to go anywhere else.",
-    frame: "/assets/img/home/monitor.webp",
-    tabs: [
+    /* The band's backdrop: a 1920x1039 field with the glow curve and the dot
+       sphere already drawn into it, so neither is a DOM element. */
+    background: "/assets/img/home/offer-bg.webp",
+    /* The monitor, exactly as supplied and rendered as one flat image. Its
+       screen is part of the artwork, so nothing is layered over it and
+       selecting a card does not change it. */
+    frame: "/assets/img/home/offer-monitor.webp",
+    /* Net-new: the live section has no proof strip under its lead. Nothing
+       existing is reworded (docs/CONTENT-PARITY.md). */
+    benefits: [
         {
-            label: "UI/UX Design",
-            body: "Let us craft experiences your users will love from the very first click.",
-            shot: "/assets/img/screens/ui-ux-design.webp",
-            href: "/web-design-services/ui-ux-design",
+            label: "All-in-one Solution",
+            icon: "/assets/img/home/offer/benefit-all-in-one.webp",
         },
+        {
+            label: "Tailored for Your Brand",
+            icon: "/assets/img/home/offer/benefit-tailored.webp",
+        },
+        {
+            label: "Focus on Growth and Results",
+            icon: "/assets/img/home/offer/benefit-growth.webp",
+        },
+    ],
+    /* Order follows the approved design, which leads on Web Design; the live
+       page leads on UI/UX. Reordering moves no string and drops no link, so it
+       is a layout change, not a content one. Each `body` is the live copy word
+       for word — the mock rewrites all five, and those rewrites are NOT taken.
+       `icon` and `href` are net-new; on the live site no tab links anywhere. */
+    tabs: [
         {
             label: "Web Design",
             body: "Launch a site that doesn't just look good. It sells for you 24/7.",
-            shot: "/assets/img/screens/web-design.webp",
+            icon: "/assets/img/home/offer/icon-web-design.webp",
             href: "/web-design-services",
+        },
+        {
+            label: "UI/UX Design",
+            body: "Let us craft experiences your users will love from the very first click.",
+            icon: "/assets/img/home/offer/icon-ui-ux-design.webp",
+            href: "/web-design-services/ui-ux-design",
         },
         {
             label: "App Development",
             body: "Turn your idea into a high-performing app that customers keep coming back to.",
-            shot: "/assets/img/screens/app-development.webp",
+            icon: "/assets/img/home/offer/icon-app-development.webp",
             href: "/app-development-services",
         },
         {
             label: "Branding",
             body: "Stand out instantly with branding that leaves a lasting impression everywhere you show up.",
-            shot: "/assets/img/screens/branding.webp",
+            icon: "/assets/img/home/offer/icon-branding.webp",
             href: "/branding-services",
         },
         {
             // [live] retains "about the new trends, start growing with campaigns that will maximise"
             label: "Marketing",
             body: "Stop guessing about the new trends, start growing with campaigns that will maximise every marketing pound.",
-            shot: "/assets/img/screens/marketing.webp",
+            icon: "/assets/img/home/offer/icon-marketing.webp",
             href: "/digital-marketing-services",
         },
     ],
+    /* The default open tab. UI/UX, not the first card: it is the state the
+       approved design shows. */
+    defaultTab: 1,
 } as const;
 
 /* ============================== TOOLBOX =============================== */
@@ -264,66 +325,174 @@ export const toolbox = {
     eyebrow: "Creative Toolkit",
     titleLead: "Our toolbox for",
     titleAccent: "innovation",
+    /* The approved mock labels this button "Get started now". The live button
+       reads "Get started" and that is what ships — a mock rewrite of existing
+       copy is not taken (docs/CONTENT-PARITY.md), same call as the five
+       `whatYouGet` tab bodies above. */
     cta: "Get Started",
+    /* Three presentational fields per tool, none of them copy:
+       — `w`/`h` are the artwork's own pixel size. They differ per mark because
+         these are the brand assets as exported, not a normalised set, and
+         next/image needs the true intrinsic box or it reports the wrong aspect
+         ratio (AGENTS.md rule 5). The card fits each one into a square.
+       — `plated` says the artwork already carries its own background: the six
+         Adobe marks, Swift, MVVM, TypeScript and CSS are all a coloured tile
+         with a glyph on it, while Figma, Framer, React, Vue, HTML5 and
+         Alamofire are bare glyphs on transparency. The card seats the bare ones
+         on a tinted plate and lets the plated ones fill the box, which is what
+         the mock does.
+       — `accent` was sampled from the artwork itself (most common saturated
+         colour, opaque pixels only) rather than guessed, and drives nothing but
+         the card's hairline, glow and plate tint. Photoshop and Lightroom share
+         one blue and InDesign and InCopy one pink because Adobe genuinely uses
+         the same value for each pair. */
     // "Alomofire" on the live site is a misspelling of the Alamofire library. It is
     // a tool name in a decorative grid, not indexed copy, so it is corrected here.
     tools: [
-        { name: "Figma", kind: "Design Tool", icon: "/assets/img/tools/1.png" },
+        {
+            name: "Figma",
+            kind: "Design Tool",
+            icon: "/assets/img/tools/figma.png",
+            w: 36,
+            h: 54,
+            plated: false,
+            accent: "#f24e1e",
+        },
         {
             name: "InDesign",
             kind: "Design Tool",
-            icon: "/assets/img/tools/2.png",
+            icon: "/assets/img/tools/indesign.png",
+            w: 58,
+            h: 56,
+            plated: true,
+            accent: "#ff3366",
         },
-        { name: "Swift", kind: "Web Tool", icon: "/assets/img/tools/3.png" },
+        {
+            name: "Swift",
+            kind: "Web Tool",
+            icon: "/assets/img/tools/swift.png",
+            w: 56,
+            h: 56,
+            plated: true,
+            accent: "#f05138",
+        },
         {
             name: "Alamofire",
             kind: "Mobile App Tool",
-            icon: "/assets/img/tools/4.png",
+            icon: "/assets/img/tools/alamofire.png",
+            w: 40,
+            h: 53,
+            plated: false,
+            accent: "#dc4424",
         },
         {
             name: "Framer",
             kind: "Design Tool",
-            icon: "/assets/img/tools/5.png",
+            icon: "/assets/img/tools/framer.png",
+            w: 40,
+            h: 60,
+            plated: false,
+            accent: "#0055ff",
         },
         {
             name: "Photoshop",
             kind: "Design Tool",
-            icon: "/assets/img/tools/6.png",
+            icon: "/assets/img/tools/photoshop.png",
+            w: 58,
+            h: 56,
+            plated: true,
+            accent: "#31a8ff",
         },
         {
             name: "MVVM",
             kind: "Mobile App Tool",
-            icon: "/assets/img/tools/7.png",
+            icon: "/assets/img/tools/mvvm.png",
+            w: 56,
+            h: 56,
+            plated: true,
+            accent: "#ec2c6c",
         },
-        { name: "React", kind: "Web Tool", icon: "/assets/img/tools/8.png" },
+        {
+            name: "React",
+            kind: "Web Tool",
+            icon: "/assets/img/tools/react.png",
+            w: 61,
+            h: 54,
+            plated: false,
+            accent: "#61dafb",
+        },
         {
             name: "Illustrator",
             kind: "Design Tool",
-            icon: "/assets/img/tools/9.png",
+            icon: "/assets/img/tools/illustrator.png",
+            w: 58,
+            h: 56,
+            plated: true,
+            accent: "#ff9a00",
         },
         {
             name: "Lightroom",
             kind: "Design Tool",
-            icon: "/assets/img/tools/10.png",
+            icon: "/assets/img/tools/lightroom.png",
+            w: 58,
+            h: 56,
+            plated: true,
+            accent: "#31a8ff",
         },
-        { name: "Vue", kind: "Web Tool", icon: "/assets/img/tools/11.png" },
-        { name: "HTML5", kind: "Web Tool", icon: "/assets/img/tools/12.png" },
+        {
+            name: "Vue",
+            kind: "Web Tool",
+            icon: "/assets/img/tools/vue.png",
+            w: 56,
+            h: 49,
+            plated: false,
+            accent: "#4fc08d",
+        },
+        {
+            name: "HTML5",
+            kind: "Web Tool",
+            icon: "/assets/img/tools/html5.png",
+            w: 49,
+            h: 56,
+            plated: false,
+            accent: "#e34f26",
+        },
         {
             name: "Adobe XD",
             kind: "Design Tool",
-            icon: "/assets/img/tools/13.png",
+            icon: "/assets/img/tools/adobe-xd.png",
+            w: 58,
+            h: 56,
+            plated: true,
+            accent: "#ff61f6",
         },
         {
             name: "InCopy",
             kind: "Design Tool",
-            icon: "/assets/img/tools/14.png",
+            icon: "/assets/img/tools/incopy.png",
+            w: 59,
+            h: 56,
+            plated: true,
+            accent: "#ff3366",
         },
         {
             name: "TypeScript",
             kind: "Web Tool",
-            icon: "/assets/img/tools/15.png",
+            icon: "/assets/img/tools/typescript.png",
+            w: 56,
+            h: 56,
+            plated: true,
+            accent: "#3178c6",
         },
-        { name: "CSS", kind: "Web Tool", icon: "/assets/img/tools/16.png" },
+        {
+            name: "CSS",
+            kind: "Web Tool",
+            icon: "/assets/img/tools/css.png",
+            w: 56,
+            h: 56,
+            plated: true,
+            accent: "#663399",
+        },
     ],
 } as const;
 
@@ -340,58 +509,227 @@ export const toolbox = {
 export const results = {
     eyebrow: "The numbers",
     titleLead: "Our average success rate when",
+    /* Sentence case, as it ranks. The approved mock title-cases the whole
+       heading ("Our Average Success Rate When Working With Clients"); heading
+       text is exactly what docs/CONTENT-PARITY.md says must not move, so the
+       casing stays — same call as `whatYouGet.titleAccent` above. */
     titleAccent: "working with clients",
     lead: "We measure what matters. Here’s what partnering with us typically moves.",
+    /* The band's backdrop: a 1920x1006 field with the 3D bar chart, its icon
+       rail and the particle waves already drawn into its right half, so none
+       of them is a DOM element.
+
+       It replaces the old photo-plus-scrim AND the conic-ring meter that used
+       to fill this section's right column. The ring's only label repeated the
+       first stat's word for word — "Faster time-to-market for apps" — so
+       nothing is lost by dropping it, and the 98% the artwork draws is one of
+       the figures below. */
     bg: "/assets/img/home/results-bg.webp",
+    /* `label` + " " + `note` is the live label verbatim in every case: the
+       two-line card is the approved design's layout, not a rewrite. `icon` is
+       net-new — the live list carries no marks at all.
+
+       The fourth figure IS net-new copy, from the approved design. The first
+       three are the ones docs/CONTENT-PARITY.md already records as kept from
+       the redesign. */
     items: [
-        { value: 40, suffix: "%", label: "Faster time-to-market for apps" },
+        {
+            value: 40,
+            suffix: "%",
+            label: "Faster time-to-market",
+            note: "for apps",
+            icon: "/assets/img/home/results/icon-time-to-market.webp",
+        },
         {
             value: 1200,
             suffix: "+",
-            label: "Projects shipped across branding, web and marketing",
+            label: "Projects shipped",
+            note: "across branding, web and marketing",
+            icon: "/assets/img/home/results/icon-projects.webp",
         },
         {
             value: 98,
             suffix: "%",
-            label: "Clients who come back for their next project",
+            label: "Clients who come back",
+            note: "for their next project",
+            icon: "/assets/img/home/results/icon-repeat-clients.webp",
+        },
+        {
+            value: 95,
+            suffix: "%",
+            label: "Client satisfaction",
+            note: "rate across all projects",
+            icon: "/assets/img/home/results/icon-satisfaction.webp",
         },
     ],
-    meter: { value: 40, suffix: "%", label: "Faster time-to-market for apps" },
 } as const;
 
 /* ============================ METHODOLOGY ============================= */
 
 export const methodology = {
     eyebrow: "How we work",
-    titleLead: "Our methodology for",
-    titleAccent: "success",
+    /* Split after "methodology", not after "for": the approved design breaks the
+       heading into two lines and puts the gradient on the whole second one. The
+       two fields still concatenate to the live heading text — "Our methodology
+       for success" — which is what docs/CONTENT-PARITY.md protects. Lower case
+       stays as it ranks; the mock title-cases both lines, and that rewrite is
+       not taken (same call as the `whatYouGet` tab bodies). */
+    titleLead: "Our methodology",
+    titleAccent: "for success",
+    /* Net-new: the live section head is an eyebrow and a heading with nothing
+       under it. Taken from the approved design, so nothing existing is reworded. */
+    lead: "A proven process that helps us deliver exceptional results for your business.",
     cta: "Get Started",
-    orbitIcons: [1, 2, 3, 4, 5, 6, 7, 8].map(
-        (n) => `/assets/img/tools/${n}.png`,
-    ),
-    /* Step marks, also client-supplied complete badges. 117x117 native. */
+    /* The centre of the diagram, supplied pre-cropped to a circle on
+       transparency — 463x463 native. The ring around it and its four nodes are
+       drawn in CSS, not part of the asset.
+
+       `orbitIcons` is gone with the orbit it fed. It built its paths as
+       `/assets/img/tools/${n}.png`, and those sixteen numbered files were
+       renamed when the toolbox was rebuilt, so every one of the eight was a 404
+       by the time this section was redrawn. The tool marks are still on the page
+       — components/home/Toolbox.tsx is what shows them. */
+    photo: "/assets/img/home/method/team.webp",
+    /* Two marks per step, both client-supplied and both complete artwork:
+       — `icon` is the round gradient badge, 78x78 native, ring and glyph baked in.
+       — `art` is the small illustration on the far side of the card's hairline.
+         Native sizes differ per step (102x77 to 102x87) because these are the
+         Figma exports as they came, and next/image needs each one's true
+         intrinsic box (AGENTS.md rule 5) — the card fits them to a common width.
+       The four step titles and bodies are the live copy, word for word. */
     steps: [
         {
             title: "Discovery & Strategy",
             body: "We begin by understanding your goals, audience and competitive landscape.",
-            img: "/assets/img/home/method-discovery.webp",
+            icon: "/assets/img/home/method/icon-discovery.webp",
+            art: "/assets/img/home/method/art-discovery.webp",
+            artW: 102,
+            artH: 87,
         },
         {
             title: "Concept Development",
             body: "Brainstorming, creative direction and agreed success criteria.",
-            img: "/assets/img/home/method-concept.webp",
+            icon: "/assets/img/home/method/icon-concept.webp",
+            art: "/assets/img/home/method/art-concept.webp",
+            artW: 102,
+            artH: 77,
         },
         {
             title: "Design & Iteration",
             body: "Wireframes, prototypes and user feedback cycles.",
-            img: "/assets/img/home/method-design.webp",
+            icon: "/assets/img/home/method/icon-design.webp",
+            art: "/assets/img/home/method/art-design.webp",
+            artW: 102,
+            artH: 83,
         },
         {
             title: "Development & Execution",
             body: "Full build, QA testing and final deployment.",
-            img: "/assets/img/home/method-development.webp",
+            icon: "/assets/img/home/method/icon-development.webp",
+            art: "/assets/img/home/method/art-development.webp",
+            artW: 102,
+            artH: 77,
         },
     ],
+} as const;
+
+/* ========================= VIDEO TESTIMONIALS ========================= */
+
+/**
+ * Net-new. The live homepage has no video section at all, so nothing here is
+ * ported copy and docs/CONTENT-PARITY.md has nothing to protect — every string
+ * is taken from the approved design.
+ *
+ * Two deliberate departures from the mock, both placeholder-art artefacts:
+ *   — the mock's lead reads "…and marketing-and saw growth…", a hyphen doing an
+ *     em dash's job. Fixed, since there is no ranking copy to preserve.
+ *   — the mock's featured card names "AutoKeyFix" on the video and "WeBuild
+ *     Inc." on the quote card overlaying it. One client per testimonial here;
+ *     the featured headline renders as `client — project`, which is exactly the
+ *     string the mock draws.
+ *
+ * The videos are NOT hosted. Each card opens a lightbox that mounts a Vimeo
+ * iframe on click and unmounts it on close, so a visitor who never clicks pays
+ * nothing — no third-party request, no cookie, no player JS.
+ */
+export const videoTestimonials = {
+    eyebrow: "Video Testimonials",
+    /* The section's accessible name. `titleLead` + `titleAccent` concatenate to
+       exactly this. */
+    title: "See Why Clients Trust Creative Logo Design Real Stories.",
+    titleLead: "See Why Clients Trust Creative Logo Design",
+    titleAccent: "Real Stories.",
+    lead: "Real results. Hear directly from business owners who trusted us with their branding, web design, app development, and marketing — and saw growth that speaks for itself.",
+
+    /* PLACEHOLDER — Vimeo's own public demo reel, the same id their embed docs
+       use. One id for all five so the real client videos are a single
+       find-and-replace once they land; at that point each item gets its own
+       `vimeoId` and this constant goes away. */
+    vimeoId: "76979871",
+
+    /* UI chrome, not ported copy — the accessible name of a card's play control
+       and of the lightbox's close button. */
+    playPrefix: "Play video testimonial from",
+    close: "Close video",
+
+    /* items[0] renders as the featured panel: the large still, the overlaid
+       quote card, and the result strapline along the foot. items[1..4] render
+       as the compact cards in the right-hand column. `avatar` and the two
+       `result*` fields exist on the featured item alone — the tuple is
+       `as const`, so items[0] keeps its own precise type and the other four
+       stay a clean union. */
+    items: [
+        {
+            client: "AutoKeyFix",
+            project: "Website Redesign & SEO",
+            quote: "They delivered a beautiful website and a seamless user experience. The attention to detail and communication were top-notch. They delivered a beautiful website and a seamless user experience.",
+            stars: 5,
+            thumb: "/assets/img/home/video/thumb-1.webp",
+            duration: "02:55",
+            durationSpoken: "2 minutes 55 seconds",
+            avatar: "/assets/img/home/video/avatar-webuild.webp",
+            resultValue: "156%",
+            resultText: "increase in organic traffic & 3x more enquiries",
+        },
+        {
+            client: "WeBuild Inc.",
+            project: "Web Design Project",
+            quote: "They delivered a beautiful website and a seamless user experience.",
+            stars: 5,
+            thumb: "/assets/img/home/video/thumb-1.webp",
+            duration: "02:55",
+            durationSpoken: "2 minutes 55 seconds",
+        },
+        {
+            client: "WeBuild Inc.",
+            project: "Web Design Project",
+            quote: "They delivered a beautiful website and a seamless user experience.",
+            stars: 5,
+            thumb: "/assets/img/home/video/thumb-1.webp",
+            duration: "02:55",
+            durationSpoken: "2 minutes 55 seconds",
+        },
+        {
+            client: "WeBuild Inc.",
+            project: "Web Design Project",
+            quote: "They delivered a beautiful website and a seamless user experience.",
+            stars: 5,
+            thumb: "/assets/img/home/video/thumb-1.webp",
+            duration: "02:55",
+            durationSpoken: "2 minutes 55 seconds",
+        },
+        {
+            client: "WeBuild Inc.",
+            project: "Web Design Project",
+            quote: "They delivered a beautiful website and a seamless user experience.",
+            stars: 5,
+            thumb: "/assets/img/home/video/thumb-1.webp",
+            duration: "02:55",
+            durationSpoken: "2 minutes 55 seconds",
+        },
+    ],
+    /* Full-bleed backdrop, client-supplied. 1920x1146 native. */
+    bg: "/assets/img/home/video/video-bg.webp",
 } as const;
 
 /* ============================ TESTIMONIALS ============================ */

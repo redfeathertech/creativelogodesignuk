@@ -13,15 +13,19 @@ import Hero from "@/components/home/Hero";
  * so each section's HTML is prerendered into the page same as a normal
  * import — this only splits the *client* chunk each section hydrates from
  * into its own file, so the browser fetches (and parses/executes) less JS
- * before the fold, instead of loading all 11 sections' scripts up front.
+ * before the fold, instead of loading all 13 sections' scripts up front.
  */
 const About = dynamic(() => import("@/components/home/About"));
 const HowItWork = dynamic(() => import("@/components/home/HowItWork"));
+const Portfolio = dynamic(() => import("@/components/home/Portfolio"));
 const WhatYouGet = dynamic(() => import("@/components/home/WhatYouGet"));
 const Toolbox = dynamic(() => import("@/components/home/Toolbox"));
 const Logos = dynamic(() => import("@/components/home/Logos"));
 const Results = dynamic(() => import("@/components/home/Results"));
 const Methodology = dynamic(() => import("@/components/home/Methodology"));
+const VideoTestimonials = dynamic(
+    () => import("@/components/home/VideoTestimonials"),
+);
 const Testimonials = dynamic(() => import("@/components/home/Testimonials"));
 const Challenges = dynamic(() => import("@/components/home/Challenges"));
 const Proposal = dynamic(() => import("@/components/home/Proposal"));
@@ -55,11 +59,13 @@ export default function Home() {
             <Hero />
             <About />
             <HowItWork />
+            <Portfolio />
             <WhatYouGet />
             <Toolbox />
             <Logos />
             <Results />
             <Methodology />
+            <VideoTestimonials />
             <Testimonials />
             <Challenges />
             <Proposal />
