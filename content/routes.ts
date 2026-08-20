@@ -134,9 +134,17 @@ export const routes: RouteEntry[] = [
 
        Since the 2026-08 restructure this URL is also the SEO pillar in the
        services mega-menu, and the SEO sub-services nest under it
-       (`/seo-services/seo-audit`, …). The nested routes render in `app/(site)/`
-       with full chrome; this page itself still renders in `app/(landing)/`
-       until it is rebuilt as a real pillar page.
+       (`/seo-services/seo-audit`, …). It now renders in `app/(site)/` with full
+       chrome, on the shared service-page design system, like every one of its
+       children — the 2026-08 redesign moved it out of `app/(landing)/`. A route
+       group is not a path segment, so the URL did not change and no redirect
+       was needed.
+
+       `group` stays "landing" on purpose. It is not a service-content route:
+       its copy lives in `content/landing/seo-services.ts`, not
+       `content/services/`, and flipping it to "service" would put the slug into
+       `serviceParams` and have `app/(site)/[slug]/page.tsx` try to render it
+       from content that does not exist.
 
        The live page is an un-rebranded third-party template: it names another
        agency ten times, prices in US dollars, and canonicals to the homepage.

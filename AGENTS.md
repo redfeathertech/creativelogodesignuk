@@ -87,12 +87,13 @@ app/
     [slug]/page.tsx     pillar + flat service pages, from content/services/
     [slug]/[child]/page.tsx  nested sub-service pages (2026-08 pillar restructure)
     about-us/ contact-us/ + the 4 legal folders
+    seo-services/page.tsx    the SEO pillar. Was a (landing) page until the
+                             2026-08 redesign — see CONTENT-PARITY.md
   (landing)/            paid-traffic pages — NO site nav, own header + footer
     layout.tsx
     creative-logo-design/page.tsx
     logo-design-offer/page.tsx
     lp/page.tsx
-    seo-services/page.tsx     the one LIGHT page — see CONTENT-PARITY.md
   actions/forms.ts      "use server" — all four form handlers
   robots.ts sitemap.ts manifest.ts opengraph-image.tsx
   not-found.tsx error.tsx
@@ -102,11 +103,11 @@ components/
   about/    the About Us sections (Offices is shared with Contact Us)
   contact/  the Contact Us sections
   services/ the shared service-page sections
-  landing/      QuoteDialogBase (shared by all four landing pages)
+  services/seo/ the /seo-services sections + its own icon set
+  landing/      QuoteDialogBase (shared by the landing pages and /seo-services)
   landing/cld/  the /creative-logo-design sections
   landing/ldo/  the /logo-design-offer sections
   landing/lp/   the /lp sections
-  landing/seo/  the /seo-services sections + its own icon set
   forms/    Field FormShell LeadForm ProposalForm Recaptcha
   ui/       Section Rail Counter Reveal Breadcrumbs button icons
 content/    site nav footer routes home about contact clients

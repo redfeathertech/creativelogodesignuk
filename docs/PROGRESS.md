@@ -230,7 +230,14 @@ one level under each.
 - **Routing**: `app/(site)/[slug]` (pillars + flat) and new
   `app/(site)/[slug]/[child]` (sub-services), both `dynamicParams = false`,
   everything still ○/●. The SEO sub-services nest under `/seo-services`, whose
-  own page remains the `(landing)` route.
+  own page **moved into `app/(site)/` in the 2026-08 redesign** — it was the
+  last `(landing)` page under that pillar and now renders with full site chrome
+  on the shared service-page design system, like all eight of its children. The
+  URL did not change (a route group is not a path segment) and no redirect was
+  added. `content/routes.ts` still files it under `group: "landing"`, because
+  its copy lives in `content/landing/seo-services.ts` rather than
+  `content/services/` and it must stay out of `serviceParams`.
+  See [CONTENT-PARITY.md](CONTENT-PARITY.md#2026-08-redesign--layout-only).
 - **Mega-menu redesigned** as a two-pane rail: 8 pillar rows left, active
   pillar's sub-services right; all 8 panels server-rendered (`hidden`, not
   unmounted) so every service URL stays crawlable from every page. Groups

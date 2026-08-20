@@ -1,7 +1,8 @@
 import { faq } from "@/content/landing/seo-services";
+import { Eyebrow, Section, SectionHeading } from "@/components/ui/Section";
 
 /**
- * FAQ — nine questions on the white canvas, centred heading over a 900px column.
+ * FAQ — nine questions on the light surface, centred head over a 900px column.
  *
  * The live page is a CSS-only accordion built from nine `<input type="radio">`
  * elements sharing one name. That gives exclusivity but two defects: the
@@ -25,50 +26,45 @@ import { faq } from "@/content/landing/seo-services";
  */
 export default function Faq() {
     return (
-        <section className="bg-white py-[clamp(3.75rem,2rem+5.5vw,6.875rem)]">
+        <Section tone="light">
             <div className="container-site">
-                {/* ------------------------------------------------- heading -- */}
-                <div className="mb-[clamp(2rem,1rem+3vw,4.375rem)] text-center">
-                    <p className="font-display text-xs font-bold tracking-[0.14em] text-seo-pink uppercase">
-                        {faq.eyebrow}
-                    </p>
-
-                    <h2 className="mt-4 font-display text-[clamp(1.375rem,1rem+1.9vw,2.5rem)] leading-[1.2] font-extrabold text-seo-ink">
-                        {faq.title}
-                    </h2>
+                <div className="reveal mx-auto max-w-[56rem] text-center">
+                    <Eyebrow className="justify-center text-magenta-500">{faq.eyebrow}</Eyebrow>
+                    <SectionHeading
+                        lead={faq.title}
+                        accentClassName="gradient-text-brand"
+                        className="mx-auto text-balance"
+                    />
                 </div>
 
-                {/* ----------------------------------------------- accordion -- */}
-                <div className="mx-auto max-w-[900px]">
+                <div className="reveal mx-auto mt-12 max-w-[56rem]">
                     {faq.items.map((item, index) => (
                         <details
                             key={item.q}
                             name="seo-faq"
                             open={index === 0}
-                            className="group/item border-b border-seo-border"
+                            className="group/item border-b border-ink-900/[0.08] first:border-t"
                         >
-                            <summary className="group/q flex cursor-pointer list-none items-center justify-between gap-4 py-[1.375rem] sm:gap-5 sm:py-7 [&::-webkit-details-marker]:hidden">
-                                <h3 className="min-w-0 font-display text-base leading-[1.5] font-bold text-seo-ink transition-colors duration-200 group-hover/q:text-seo-pink sm:text-lg sm:leading-[1.6]">
+                            <summary className="group/q flex cursor-pointer list-none items-center justify-between gap-5 py-7 [&::-webkit-details-marker]:hidden">
+                                <h3 className="min-w-0 font-display text-h5 font-bold text-onlight transition-colors duration-200 group-hover/q:text-magenta-500">
                                     {item.q}
                                 </h3>
 
                                 {/* The live `+` glyph, drawn as two bars so it can rotate cleanly. */}
                                 <span
                                     aria-hidden="true"
-                                    className="relative grid size-6 shrink-0 place-items-center text-seo-pink transition-transform duration-300 ease-out group-open/item:rotate-45 sm:size-7"
+                                    className="relative grid size-7 shrink-0 place-items-center text-magenta-500 transition-transform duration-300 ease-out group-open/item:rotate-45"
                                 >
-                                    <span className="absolute h-0.5 w-5 rounded-sm bg-current sm:w-6" />
-                                    <span className="absolute h-5 w-0.5 rounded-sm bg-current sm:h-6" />
+                                    <span className="absolute h-0.5 w-6 rounded-sm bg-current" />
+                                    <span className="absolute h-6 w-0.5 rounded-sm bg-current" />
                                 </span>
                             </summary>
 
-                            <p className="max-w-[760px] pb-[1.375rem] text-sm leading-[1.8] text-seo-body sm:pb-7 sm:text-base sm:leading-[1.9]">
-                                {item.a}
-                            </p>
+                            <p className="max-w-[62ch] pb-7 text-onlight-muted">{item.a}</p>
                         </details>
                     ))}
                 </div>
             </div>
-        </section>
+        </Section>
     );
 }

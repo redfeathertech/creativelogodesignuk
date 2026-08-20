@@ -527,8 +527,42 @@ Set against that: publishing another company's brand name ten times on the
 client's own domain, quoting US dollars to UK buyers, and asserting "no offshore
 work" about a business with two overseas offices.
 
-**Approved 3 Aug 2026.** Layout, section order and visual design are the live
-page's, unchanged — the design was signed off as-is. Only the words moved.
+**Approved 3 Aug 2026.** Only the words moved.
+
+### 2026-08 redesign — layout only
+
+The first build kept the live page's visual design as signed off: a white
+canvas, its own magenta → coral → cream ramp, its own offer bar and its own
+footer, rendering in `app/(landing)/` with no site navigation.
+
+That stopped being the right shape once the pillar restructure nested the eight
+SEO sub-services under this URL. A pillar page that looks nothing like its own
+children — and carries no way to reach them — reads as a different site. The
+page therefore moved to `app/(site)/seo-services/page.tsx` and every section was
+rebuilt on the shared service-page design system (`components/ui/Section`, the
+brand ramp, the `py-section` rhythm, the dark/light tone alternation). Its
+sections live in `components/services/seo/`.
+
+**No copy changed.** Not a word was added, cut or reworded, section order is
+still the live page's, and neither `content/landing/seo-services.ts` nor
+`scripts/verify-seo-services-parity.py` was touched — the rebrand table below is
+still the whole list of wording changes this page has ever had.
+
+Three things to know about the move:
+
+- **The URL is unchanged.** A route group is not a path segment, so
+  `/seo-services` still serves from `/seo-services` and no redirect was added.
+- **`content/routes.ts` still files it under `group: "landing"`.** Its copy
+  lives in `content/landing/`, not `content/services/`, and flipping the group
+  would put the slug into `serviceParams` and have `app/(site)/[slug]/page.tsx`
+  try to render it from service content that does not exist.
+- **The page's own top bar and footer became two page sections** — `OfferBar`
+  and `ContactBand` — carrying only what the site chrome has no equivalent of
+  (the limited-time offer, and the contact/social block). One label did not
+  survive: the live footer's **"Terms And Conditions"** link is now the site
+  footer's "Terms of Use", pointing at the same page. Both labels are in the
+  parity script's `AUTHORED` set, so neither direction of the gate is affected.
+- The shared client-logo wall every other service page carries was added.
 
 ### The full list of changes
 

@@ -20,8 +20,10 @@ import { heroForm } from "@/content/landing/seo-services";
  * fails WCAG 3.3.2 and leaves each field unnamed the moment a value is typed —
  * the same defect the other three landing pages had.
  *
- * `tone="light"` on every control: this is the only light-canvas page in the
- * build, and the default dark styling is invisible on it.
+ * Every control runs the DEFAULT dark tone. The 2026-08 redesign moved this
+ * page off the live template's white canvas onto the same near-black service
+ * surface every other inner page uses, so the `tone="light"` overrides this
+ * file used to carry are gone.
  *
  * `packageName` rides in a hidden input rather than the schema, matching the
  * other landing pages — the action matches it against a `Set` built from the
@@ -39,11 +41,11 @@ export default function EnquiryForm({
 
     if (state.status === "success") {
         return (
-            <div className="rounded-xl border border-emerald-600/40 bg-emerald-50 p-6 text-center">
-                <p className="font-display text-h5 font-bold text-seo-ink">
+            <div className="rounded-lg border border-teal-500/40 bg-teal-500/8 p-6 text-center">
+                <p className="font-display text-h5 font-bold text-white">
                     {heroForm.successTitle}
                 </p>
-                <p className="mt-2 text-sm text-seo-body">{state.message}</p>
+                <p className="mt-2 text-sm text-white/65">{state.message}</p>
             </div>
         );
     }
@@ -55,7 +57,6 @@ export default function EnquiryForm({
 
             <div className="grid gap-4 sm:grid-cols-2">
                 <Field
-                    tone="light"
                     label={heroForm.firstName}
                     name="first_name"
                     required
@@ -63,7 +64,6 @@ export default function EnquiryForm({
                     errors={errorsFor("first_name")}
                 />
                 <Field
-                    tone="light"
                     label={heroForm.lastName}
                     name="last_name"
                     required
@@ -73,7 +73,6 @@ export default function EnquiryForm({
             </div>
 
             <Field
-                tone="light"
                 label={heroForm.email}
                 name="email"
                 type="email"
@@ -82,14 +81,12 @@ export default function EnquiryForm({
                 errors={errorsFor("email")}
             />
             <Field
-                tone="light"
                 label={heroForm.subject}
                 name="subject"
                 required
                 errors={errorsFor("subject")}
             />
             <Field
-                tone="light"
                 label={heroForm.phone}
                 name="phone"
                 type="tel"
@@ -98,7 +95,6 @@ export default function EnquiryForm({
                 errors={errorsFor("phone")}
             />
             <TextareaField
-                tone="light"
                 label={heroForm.message}
                 name="message"
                 rows={5}
@@ -106,10 +102,10 @@ export default function EnquiryForm({
                 errors={errorsFor("message")}
             />
 
-            <Recaptcha active={engaged} action="seo_enquiry" tone="light" />
-            <FormStatus state={state} tone="light" />
+            <Recaptcha active={engaged} action="seo_enquiry" />
+            <FormStatus state={state} />
 
-            <button type="submit" disabled={pending} className={btn("seo", "lg", "w-full")}>
+            <button type="submit" disabled={pending} className={btn("primary", "lg", "w-full")}>
                 {pending ? "Sending…" : submitLabel}
             </button>
         </form>

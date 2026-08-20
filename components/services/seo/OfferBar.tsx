@@ -3,15 +3,22 @@ import { topBar } from "@/content/landing/seo-services";
 import { PhoneIcon, WhatsAppIcon } from "@/components/ui/icons";
 
 /**
- * The offer bar above the hero.
+ * The offer strip, first thing in the page body.
  *
- * The live bar is magenta above 768px and switches to a dark slate blue
- * (`#11314f`) below it, via two overlapping media queries that set the same
- * three properties twice. One `md:` switch here, same two colours.
+ * Before the 2026-08 redesign this page carried its own utility bar ABOVE its
+ * own header, because it rendered in `app/(landing)/` with no site chrome. It
+ * is a real service page now, so the site's `TopBar` and mega-menu header sit
+ * above it and this keeps only the part the site chrome has no equivalent of:
+ * the limited-time offer, and the two contact links that ride beside it.
+ *
+ * The live bar is magenta above 768px and a dark slate blue below it. Both
+ * colours are now the site's own — the brand gradient on the wide layout, the
+ * `ink-950` canvas the header already sits on when it stacks — so the strip
+ * reads as part of the chrome above rather than as a third palette.
  */
-export default function TopBar() {
+export default function OfferBar() {
     return (
-        <div className="bg-[#11314f] text-white md:bg-seo-pink">
+        <div className="bg-ink-950 text-white md:bg-[linear-gradient(97deg,var(--color-violet-500)_0%,var(--color-magenta-500)_100%)]">
             <div className="container-site flex flex-col items-center gap-2 py-3 text-center text-xs sm:text-sm md:flex-row md:justify-between md:py-[5px] md:text-left">
                 <p className="m-0 font-display font-semibold">{topBar.offer}</p>
 
