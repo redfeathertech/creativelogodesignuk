@@ -26,7 +26,7 @@ export default function ProposalForm({
   successTitle?: string;
 } = {}) {
   const [state, formAction, pending] = useActionState(submitProposal, initialFormState);
-  const { engaged, engagementProps } = useFormEngagement();
+  const { engaged, engagementProps, errorsFor } = useFormEngagement(state);
 
   if (state.status === "success") {
     return (
@@ -43,18 +43,18 @@ export default function ProposalForm({
       {source && <input type="hidden" name="form_source" value={source} />}
 
       <div className="grid grid-cols-1 gap-4 min-[576px]:grid-cols-2">
-        <Field label="First Name" name="first_name" required autoComplete="given-name" errors={state.errors?.first_name} />
-        <Field label="Last Name" name="last_name" required autoComplete="family-name" errors={state.errors?.last_name} />
-        <Field label="Job Title" name="job_title" autoComplete="organization-title" errors={state.errors?.job_title} />
-        <Field label="Company" name="company" autoComplete="organization" errors={state.errors?.company} />
-        <Field label="Email" name="email" type="email" required autoComplete="email" errors={state.errors?.email} />
-        <Field label="Phone" name="phone" type="tel" required autoComplete="tel" errors={state.errors?.phone} />
+        <Field label="First Name" name="first_name" required autoComplete="given-name" errors={errorsFor("first_name")} />
+        <Field label="Last Name" name="last_name" required autoComplete="family-name" errors={errorsFor("last_name")} />
+        <Field label="Job Title" name="job_title" autoComplete="organization-title" errors={errorsFor("job_title")} />
+        <Field label="Company" name="company" autoComplete="organization" errors={errorsFor("company")} />
+        <Field label="Email" name="email" type="email" required autoComplete="email" errors={errorsFor("email")} />
+        <Field label="Phone" name="phone" type="tel" required autoComplete="tel" errors={errorsFor("phone")} />
 
         <TextareaField
           label="What are your business goals?"
           name="business_goals"
           rows={4}
-          errors={state.errors?.business_goals}
+          errors={errorsFor("business_goals")}
           className="col-span-full"
         />
 

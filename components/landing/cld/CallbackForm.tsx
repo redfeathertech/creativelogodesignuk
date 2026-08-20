@@ -13,7 +13,7 @@ import { footer } from "@/content/landing/creative-logo-design";
 /** The landing page footer's "Request a Callback" form: a name and a number. */
 export default function CallbackForm() {
     const [state, formAction, pending] = useActionState(submitCallback, initialFormState);
-    const { engaged, engagementProps } = useFormEngagement();
+    const { engaged, engagementProps, errorsFor } = useFormEngagement(state);
 
     if (state.status === "success") {
         return (
@@ -35,7 +35,7 @@ export default function CallbackForm() {
                 name="full_name"
                 required
                 autoComplete="name"
-                errors={state.errors?.full_name}
+                errors={errorsFor("full_name")}
             />
             <Field
                 label={footer.callback.phone}
@@ -43,7 +43,7 @@ export default function CallbackForm() {
                 type="tel"
                 required
                 autoComplete="tel"
-                errors={state.errors?.phone}
+                errors={errorsFor("phone")}
             />
 
             <Recaptcha active={engaged} action="callback" />

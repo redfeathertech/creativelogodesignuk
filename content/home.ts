@@ -901,7 +901,6 @@ export const challenges = {
         "Every business faces roadblocks.",
         "We turn them into opportunities for growth.",
     ],
-    cta: "Get Started",
     /* The four-reason panel beneath the heading. Icons are the 78px set from
        the design export. Each carries an `iconAlt` describing the mark in
        the context of the pillar it sits beside. */

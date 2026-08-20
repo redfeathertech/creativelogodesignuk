@@ -1,24 +1,118 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useCallback, useId, useState } from "react";
 import { HONEYPOT_FIELD } from "@/lib/antispam";
+import { ruleFor, validateValue } from "@/lib/form-rules";
 import type { FormState } from "@/lib/validation";
 
 /**
- * Shared plumbing for both forms: the honeypot, and the "has the user engaged
- * yet" flag that gates the reCAPTCHA download.
+ * Shared plumbing for every form on the site: the honeypot, the "has the user
+ * engaged yet" flag that gates the reCAPTCHA download, and the single
+ * browser-side validation handler.
  */
 
-export function useFormEngagement() {
-  const [engaged, setEngaged] = useState(false);
+type FieldErrors = Record<string, string[]>;
 
-  // Any focus or pointer press inside the form counts as intent to submit.
+/** Every control in the form this handler has a rule for. */
+function ruledControls(form: HTMLFormElement) {
+  return Array.from(form.elements).filter(
+    (el): el is HTMLInputElement =>
+      el instanceof HTMLInputElement &&
+      Boolean(el.name) &&
+      el.name !== HONEYPOT_FIELD &&
+      ruleFor(el.name, el.type) !== null,
+  );
+}
+
+/**
+ * Engagement + validation for one form.
+ *
+ * There is exactly one of these, spread onto every `<form>` in the project, so
+ * the name and phone rules cannot drift between the twelve forms — they are
+ * enforced here, from `lib/form-rules.ts`, which the Zod schemas read too.
+ *
+ * The handlers are attached to the form, not to each input: `focusout` and
+ * `input` both bubble, so one listener covers however many fields a page's form
+ * happens to have and no caller has to remember to wire a field up.
+ *
+ * `onSubmit` runs before React hands the submission to the Server Action, so
+ * `preventDefault()` there stops the request from ever leaving the browser. The
+ * server still re-validates — the browser is a courtesy, never the gate.
+ *
+ * Pass the `useActionState` state in so the returned `errorsFor` is the one
+ * place a field asks for its message, whichever side produced it.
+ */
+export function useFormEngagement(state?: FormState) {
+  const [engaged, setEngaged] = useState(false);
+  const [clientErrors, setClientErrors] = useState<FieldErrors>({});
+
+  /** Re-check one control and add or drop its message. */
+  const checkControl = useCallback((el: HTMLInputElement) => {
+    const message = validateValue(el.name, el.value, {
+      required: el.required,
+      inputType: el.type,
+    });
+    setClientErrors((prev) => {
+      const current = prev[el.name]?.[0];
+      if (current === message || (!current && !message)) return prev;
+      const next = { ...prev };
+      if (message) next[el.name] = [message];
+      else delete next[el.name];
+      return next;
+    });
+  }, []);
+
+  const handleFieldEvent = useCallback(
+    (event: React.SyntheticEvent) => {
+      const el = event.target;
+      if (el instanceof HTMLInputElement && ruleFor(el.name, el.type)) {
+        checkControl(el);
+      }
+    },
+    [checkControl],
+  );
+
+  const handleSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
+    const form = event.currentTarget;
+    const found: FieldErrors = {};
+    let firstInvalid: HTMLInputElement | null = null;
+
+    for (const el of ruledControls(form)) {
+      const message = validateValue(el.name, el.value, {
+        required: el.required,
+        inputType: el.type,
+      });
+      if (message) {
+        found[el.name] = [message];
+        firstInvalid ??= el;
+      }
+    }
+
+    setClientErrors(found);
+
+    if (firstInvalid) {
+      event.preventDefault();
+      firstInvalid.focus();
+    }
+  }, []);
+
   const engagementProps = {
+    // Any focus or pointer press inside the form counts as intent to submit.
     onFocus: () => setEngaged(true),
     onPointerDown: () => setEngaged(true),
+    // focusout, in React's delegated form — it bubbles, unlike native blur.
+    onBlur: handleFieldEvent,
+    // Clears a message as soon as the visitor fixes the value.
+    onInput: handleFieldEvent,
+    onSubmit: handleSubmit,
   };
 
-  return { engaged, engagementProps };
+  /* Client messages win: they describe the value in the box right now, where a
+     server message describes the one that was posted. */
+  const fieldErrors: FieldErrors = { ...state?.errors, ...clientErrors };
+  const errorsFor = (name: string): string[] | undefined => fieldErrors[name];
+
+  return { engaged, engagementProps, fieldErrors, errorsFor };
 }
 
 /**

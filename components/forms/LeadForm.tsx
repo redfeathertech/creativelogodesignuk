@@ -17,7 +17,7 @@ export default function LeadForm() {
         submitLead,
         initialFormState,
     );
-    const { engaged, engagementProps } = useFormEngagement();
+    const { engaged, engagementProps, errorsFor } = useFormEngagement(state);
 
     if (state.status === "success") {
         return (
@@ -40,14 +40,14 @@ export default function LeadForm() {
                     name="first_name"
                     required
                     autoComplete="given-name"
-                    errors={state.errors?.first_name}
+                    errors={errorsFor("first_name")}
                 />
                 <Field
                     label="Last Name"
                     name="last_name"
                     required
                     autoComplete="family-name"
-                    errors={state.errors?.last_name}
+                    errors={errorsFor("last_name")}
                 />
                 <Field
                     label="Email"
@@ -55,7 +55,7 @@ export default function LeadForm() {
                     type="email"
                     required
                     autoComplete="email"
-                    errors={state.errors?.email}
+                    errors={errorsFor("email")}
                 />
                 <Field
                     label="Phone"
@@ -63,21 +63,21 @@ export default function LeadForm() {
                     type="tel"
                     required
                     autoComplete="tel"
-                    errors={state.errors?.phone}
+                    errors={errorsFor("phone")}
                 />
                 <Field
                     label="Company"
                     name="company"
                     required
                     autoComplete="organization"
-                    errors={state.errors?.company}
+                    errors={errorsFor("company")}
                 />
                 <SelectField
                     label="How did you hear about us?"
                     name="source"
                     options={SOURCE_OPTIONS}
                     required
-                    errors={state.errors?.source}
+                    errors={errorsFor("source")}
                 />
 
                 <fieldset className="col-span-full m-0 border-0 p-0">
@@ -106,7 +106,7 @@ export default function LeadForm() {
                     label="Project details"
                     name="project_details"
                     rows={3}
-                    errors={state.errors?.project_details}
+                    errors={errorsFor("project_details")}
                     className="col-span-full"
                 />
 

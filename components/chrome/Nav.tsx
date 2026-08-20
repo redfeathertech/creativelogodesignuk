@@ -199,10 +199,10 @@ export default function Nav() {
                         className="shrink-0"
                     >
                         <Image
-                            src="/assets/img/logo.webp"
+                            src="/assets/img/logo-header.webp"
                             alt="Creative Logo Design"
-                            width={220}
-                            height={56}
+                            width={1538}
+                            height={423}
                             // The logo is above the fold on every page; it is the one asset
                             // worth preloading. (`priority` is deprecated in Next 16.)
                             preload
@@ -542,10 +542,10 @@ export default function Nav() {
                 <div className="flex-1 overflow-y-auto p-6">
                     <div className="mb-6 flex items-center justify-between">
                         <Image
-                            src="/assets/img/logo.webp"
+                            src="/assets/img/logo-header.webp"
                             alt="Creative Logo Design"
-                            width={160}
-                            height={40}
+                            width={1538}
+                            height={423}
                             className="h-9 w-auto"
                         />
                         <button

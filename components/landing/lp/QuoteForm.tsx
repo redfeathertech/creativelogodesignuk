@@ -37,7 +37,7 @@ export default function QuoteForm({
     submitLabel?: string;
 }) {
     const [state, formAction, pending] = useActionState(submitLandingQuote, initialFormState);
-    const { engaged, engagementProps } = useFormEngagement();
+    const { engaged, engagementProps, errorsFor } = useFormEngagement(state);
 
     if (state.status === "success") {
         return (
@@ -61,7 +61,7 @@ export default function QuoteForm({
                 name="full_name"
                 required
                 autoComplete="name"
-                errors={state.errors?.full_name}
+                errors={errorsFor("full_name")}
             />
             <Field
                 label={quoteDialog.phone}
@@ -69,7 +69,7 @@ export default function QuoteForm({
                 type="tel"
                 required
                 autoComplete="tel"
-                errors={state.errors?.phone}
+                errors={errorsFor("phone")}
             />
             <Field
                 label={quoteDialog.email}
@@ -77,13 +77,13 @@ export default function QuoteForm({
                 type="email"
                 required
                 autoComplete="email"
-                errors={state.errors?.email}
+                errors={errorsFor("email")}
             />
             <TextareaField
                 label={quoteDialog.message}
                 name="message"
                 rows={3}
-                errors={state.errors?.message}
+                errors={errorsFor("message")}
             />
 
             <Recaptcha active={engaged} action="landing_quote" />

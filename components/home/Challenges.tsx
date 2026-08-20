@@ -3,7 +3,6 @@ import Link from "next/link";
 
 import { challenges } from "@/content/home";
 import { Eyebrow } from "@/components/ui/Section";
-import { LeadButton } from "@/components/chrome/LeadPanel";
 import { btn } from "@/components/ui/button";
 import { CheckIcon } from "@/components/ui/icons";
 
@@ -87,10 +86,6 @@ export default function Challenges() {
               </li>
             ))}
           </ul>
-
-          <LeadButton size="lg" className="mt-10">
-            {challenges.cta}
-          </LeadButton>
         </div>
 
         {/* ------------------------------ right ------------------------------ */}

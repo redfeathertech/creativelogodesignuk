@@ -71,10 +71,10 @@ export default function Footer() {
           <div className="sm:col-span-2 md:col-span-3 min-[86.25rem]:col-span-1">
             <Link href="/" aria-label={`${site.name} — home`} className="inline-block">
               <Image
-                src="/assets/img/logo.webp"
+                src="/assets/img/logo-header.webp"
                 alt={site.name}
-                width={220}
-                height={62}
+                width={1538}
+                height={423}
                 className="h-16 w-auto"
               />
             </Link>

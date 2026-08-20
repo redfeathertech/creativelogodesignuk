@@ -1,5 +1,12 @@
 import { z } from "zod";
 
+import {
+    NAME_MESSAGE,
+    NAME_PATTERN,
+    PHONE_MESSAGE,
+    PHONE_PATTERN,
+} from "./form-rules";
+
 /**
  * Form schemas. Validation runs on the server inside the Server Action — the
  * browser-side checks are a convenience, never the gate.
@@ -10,7 +17,7 @@ const name = z
     .trim()
     .min(1, "Required")
     .max(50, "Too long")
-    .regex(/^[a-zA-Z][a-zA-Z\s'-]*$/, "Letters only");
+    .regex(NAME_PATTERN, NAME_MESSAGE);
 
 const email = z
     .string()
@@ -19,15 +26,15 @@ const email = z
     .email("Enter a valid email address")
     .max(120);
 
-/* Digits, spaces and the usual separators. Deliberately permissive: the field
-   is fed by intl-tel-input style formatting and over-strict phone regexes
-   reject valid international numbers. */
+/* Digits only, with an optional leading "+" for the country code — the shared
+   rule in lib/form-rules.ts, which the browser-side guard enforces from the
+   same constants. This was permissive (spaces, brackets, dashes) until the
+   client asked for the stricter form site-wide, 2026-08. */
 const phone = z
     .string()
     .trim()
-    .min(6, "Enter a valid phone number")
-    .max(32)
-    .regex(/^[+()\d\s-]+$/, "Enter a valid phone number");
+    .min(1, "Required")
+    .regex(PHONE_PATTERN, PHONE_MESSAGE);
 
 const optionalText = z.string().trim().max(120).optional().or(z.literal(""));
 
@@ -128,25 +135,32 @@ const briefBlock = z.string().trim().max(2000).optional().or(z.literal(""));
  * Required-versus-optional is the live `js/script.js`, not the asterisks in the
  * labels — a visitor who can submit the live form can still submit this one.
  *
- * `client_name` is `z.string`, not the shared `name` primitive: the live check
- * is "at least 3 characters" and the field is asked as "Full Name", so a name
- * carrying a digit or an accent must not be rejected where it is accepted
- * today. Same for `phone`, which the live script accepts empty.
+ * `client_name` used to be a bare `z.string` so that a name carrying a digit or
+ * an accent was accepted here exactly as it is on the live form. The client's
+ * 2026-08 rule ("alphabets and spaces only, on every form") overrides that, so
+ * it now carries the shared pattern with the live 3-character minimum kept on
+ * top. `phone` stays optional — the live script accepts it empty — but is held
+ * to the shared digits-only pattern when it is filled in.
  *
  * The three checkbox arrays are NOT validated for membership here — the action
  * matches them against `CHECKBOX_OPTIONS` before they reach an email. This
  * schema only bounds their size.
  */
 export const websiteBriefSchema = z.object({
-    client_name: z.string().trim().min(3, "Please enter your full name").max(80),
+    client_name: z
+        .string()
+        .trim()
+        .min(3, "Please enter your full name")
+        .max(80)
+        .regex(NAME_PATTERN, NAME_MESSAGE),
     company: z.string().trim().min(1, "Company name is required").max(120),
     email,
     phone: z
         .string()
         .trim()
         .max(32)
-        .refine((v) => v === "" || /^[+()\d\s-]{7,}$/.test(v), {
-            message: "Enter a valid phone number",
+        .refine((v) => v === "" || PHONE_PATTERN.test(v), {
+            message: PHONE_MESSAGE,
         })
         .optional()
         .or(z.literal("")),
@@ -185,7 +199,12 @@ export const websiteBriefSchema = z.object({
  * Information" and placeheld "Phone or email", so it is bounded, not typed.
  */
 export const logoBriefSchema = z.object({
-    full_name: z.string().trim().min(3, "Please enter your full name").max(80),
+    full_name: z
+        .string()
+        .trim()
+        .min(3, "Please enter your full name")
+        .max(80)
+        .regex(NAME_PATTERN, NAME_MESSAGE),
     email,
     business_name: z.string().trim().min(1, "Business name is required").max(120),
     business_description: z

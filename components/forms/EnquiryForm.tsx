@@ -188,7 +188,7 @@ export default function EnquiryForm({
         submitEnquiry,
         initialFormState,
     );
-    const { engaged, engagementProps } = useFormEngagement();
+    const { engaged, engagementProps, errorsFor } = useFormEngagement(state);
 
     if (state.status === "success") {
         return (
@@ -213,7 +213,7 @@ export default function EnquiryForm({
                     <FieldRow
                         key={field.name}
                         {...field}
-                        errors={state.errors?.[field.name]}
+                        errors={errorsFor(field.name)}
                     />
                 ))}
             </div>

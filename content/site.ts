@@ -31,7 +31,7 @@ export const contact = {
   phoneE164: "+447853354207",
   email: "support@creativelogodesign.co.uk",
   hours: "Mon – Fri: 9:00 AM to 6:00 PM",
-  whatsapp: "https://wa.me/447380107663",
+  whatsapp: "https://wa.me/447853354207",
 } as const;
 
 export const social = [

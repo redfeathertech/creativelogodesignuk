@@ -29,7 +29,7 @@ export default function WebsiteBriefForm() {
         submitWebsiteBrief,
         initialFormState,
     );
-    const { engaged, engagementProps } = useFormEngagement();
+    const { engaged, engagementProps, fieldErrors } = useFormEngagement(state);
 
     if (state.status === "success") {
         return (
@@ -50,7 +50,7 @@ export default function WebsiteBriefForm() {
                 <BriefSectionBlock
                     key={section.title}
                     section={section}
-                    errors={state.errors}
+                    errors={fieldErrors}
                 />
             ))}
 

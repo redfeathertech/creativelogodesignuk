@@ -35,7 +35,7 @@ export default function EnquiryForm({
     submitLabel?: string;
 }) {
     const [state, formAction, pending] = useActionState(submitSeoEnquiry, initialFormState);
-    const { engaged, engagementProps } = useFormEngagement();
+    const { engaged, engagementProps, errorsFor } = useFormEngagement(state);
 
     if (state.status === "success") {
         return (
@@ -60,7 +60,7 @@ export default function EnquiryForm({
                     name="first_name"
                     required
                     autoComplete="given-name"
-                    errors={state.errors?.first_name}
+                    errors={errorsFor("first_name")}
                 />
                 <Field
                     tone="light"
@@ -68,7 +68,7 @@ export default function EnquiryForm({
                     name="last_name"
                     required
                     autoComplete="family-name"
-                    errors={state.errors?.last_name}
+                    errors={errorsFor("last_name")}
                 />
             </div>
 
@@ -79,14 +79,14 @@ export default function EnquiryForm({
                 type="email"
                 required
                 autoComplete="email"
-                errors={state.errors?.email}
+                errors={errorsFor("email")}
             />
             <Field
                 tone="light"
                 label={heroForm.subject}
                 name="subject"
                 required
-                errors={state.errors?.subject}
+                errors={errorsFor("subject")}
             />
             <Field
                 tone="light"
@@ -95,7 +95,7 @@ export default function EnquiryForm({
                 type="tel"
                 required
                 autoComplete="tel"
-                errors={state.errors?.phone}
+                errors={errorsFor("phone")}
             />
             <TextareaField
                 tone="light"
@@ -103,7 +103,7 @@ export default function EnquiryForm({
                 name="message"
                 rows={5}
                 required
-                errors={state.errors?.message}
+                errors={errorsFor("message")}
             />
 
             <Recaptcha active={engaged} action="seo_enquiry" tone="light" />
