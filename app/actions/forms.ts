@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import {
     callbackSchema,
     landingQuoteSchema,
-    heroEnquirySchema,
+    enquirySchema,
     leadSchema,
     logoBriefSchema,
     proposalSchema,
@@ -52,6 +52,12 @@ const GENERIC_ERROR =
     "Something went wrong. Please try again, or email us directly.";
 const SUCCESS =
     "Thanks — we've got your details and will be in touch within one working day.";
+
+/**
+ * `sendUserConfirmation` greets by first name; the enquiry card, both landing
+ * quote forms and the two briefs all ask for one name field instead of two.
+ */
+const firstNameOf = (fullName: string) => fullName.trim().split(/\s+/)[0] ?? "";
 
 async function submissionMeta(formName: string): Promise<MailField[]> {
     const h = await headers(); // async in Next 16
@@ -252,15 +258,55 @@ export async function submitProposal(
     return { status: "success", message: SUCCESS };
 }
 
-/** Homepage hero card — the short enquiry form in the fold. */
-export async function submitHeroEnquiry(
+/**
+ * Which copy of the homepage enquiry card the submission came from.
+ *
+ * Same arrangement, and the same reasoning, as `PROPOSAL_SOURCES` above: the
+ * value arrives in a hidden input, so it is visitor-editable, and it ends up in
+ * an email subject line and an `<h1>`. It is therefore looked up here rather
+ * than echoed, and a `Map` is used so `"constructor"` cannot survive the `??`.
+ *
+ * One reCAPTCHA action covers both cards. Deriving the action from this key
+ * would make a security parameter a function of visitor input — the check
+ * would still fail closed, but the value a token is verified against should
+ * not be something the visitor picks.
+ */
+const ENQUIRY_SOURCES = new Map<string, { formName: string; meta: string }>([
+    ["hero", { formName: "New homepage enquiry", meta: "Homepage hero form" }],
+    [
+        "home-proposal",
+        { formName: "New proposal request", meta: "Homepage proposal form" },
+    ],
+    /* `components/home/Proposal` is the closing band of `/about-us` too — the
+       approved design shares it, the same way the Blade template `@include`s
+       one partial on both pages. It takes its source as a required prop so the
+       two cannot be told apart only by which page happened to render first. */
+    [
+        "about-proposal",
+        { formName: "New proposal request", meta: "About Us proposal form" },
+    ],
+]);
+const DEFAULT_ENQUIRY_SOURCE = {
+    formName: "New proposal request",
+    meta: "Enquiry form",
+};
+
+/**
+ * The homepage enquiry card — the short form in the hero, and the same card in
+ * the proposal band above the footer.
+ */
+export async function submitEnquiry(
     _prev: FormState,
     formData: FormData,
 ): Promise<FormState> {
-    const blocked = await guard(formData, "hero_enquiry");
+    const blocked = await guard(formData, "enquiry");
     if (blocked) return blocked;
 
-    const parsed = heroEnquirySchema.safeParse({
+    const origin =
+        ENQUIRY_SOURCES.get(String(formData.get("form_source") ?? "")) ??
+        DEFAULT_ENQUIRY_SOURCE;
+
+    const parsed = enquirySchema.safeParse({
         full_name: formData.get("full_name"),
         phone: formData.get("phone"),
         email: formData.get("email"),
@@ -291,18 +337,18 @@ export async function submitHeroEnquiry(
     try {
         await Promise.all([
             sendAdminNotification({
-                formName: "New homepage enquiry",
+                formName: origin.formName,
                 fields,
-                meta: await submissionMeta("Homepage hero form"),
+                meta: await submissionMeta(origin.meta),
                 replyTo: d.email,
             }),
             sendUserConfirmation({
                 to: d.email,
-                firstName: d.full_name.split(" ")[0],
+                firstName: firstNameOf(d.full_name),
             }),
         ]);
     } catch (error) {
-        console.error("[forms] hero enquiry delivery failed", error);
+        console.error("[forms] enquiry delivery failed", error);
         return { status: "error", message: GENERIC_ERROR };
     }
 
@@ -399,9 +445,6 @@ const DEFAULT_LANDING_SOURCE: LandingSource = {
     meta: "Creative Logo Design landing page",
     subject: "New logo design enquiry",
 };
-
-/** `sendUserConfirmation` greets by first name; this form asks for one field. */
-const firstNameOf = (fullName: string) => fullName.trim().split(/\s+/)[0] ?? "";
 
 /** The landing page's hero card and its package dialog — both post here. */
 export async function submitLandingQuote(

@@ -982,14 +982,46 @@ export const challenges = {
 /* ========================== PROPOSAL SECTION ========================== */
 
 export const proposal = {
+    /* The design export labels this band "Your challenges" — the eyebrow of the
+       section ABOVE it. Client-confirmed as a slip in the export, not a rename,
+       so the band keeps its own eyebrow. */
     eyebrow: "RULE THE WEB!",
     titleLead: "Kickstart Your Project with a",
     titleAccent: "Free Expert Proposal",
     lead: "Tell us where you want to get to. We’ll come back with a plan, a timeline and a straight answer on what it takes.",
-    bg: "/assets/img/home/proposal-bg.webp",
+    /* Three titled benefits, replacing the three plain bullets this band used to
+       carry. Safe: docs/CONTENT-PARITY.md files "the proposal-form benefit
+       bullets" under "Kept from the redesign (net-new, no live equivalent)" —
+       they have never been on the live site, so no ranking depends on them.
+       Icons are the 59px set from the design export, decorative (alt=""). */
     benefits: [
-        "A senior strategist reviews your brief personally",
-        "Clear scope and timings — no vague estimates",
-        "No obligation, and we reply within one working day",
+        {
+            title: "Tailored Strategies",
+            body: "Custom solutions designed for your unique goals.",
+            icon: "/assets/img/home/proposal/benefit-strategies.webp",
+        },
+        {
+            title: "Proven Results",
+            body: "Data-driven strategies that deliver real growth.",
+            icon: "/assets/img/home/proposal/benefit-results.webp",
+        },
+        {
+            title: "Reliable Support",
+            body: "A dedicated team with you, every step of the way.",
+            icon: "/assets/img/home/proposal/benefit-support.webp",
+        },
     ],
+    /* The card head. The five fields, their labels and the reCAPTCHA disclosure
+       are the form's own contract and live with it in
+       components/forms/EnquiryForm.tsx — see the note there. */
+    form: {
+        /* Keyed `icon`, not `mark`: scripts/verify-home-parity.mjs skips a
+           short list of key names it knows hold URLs rather than copy, and
+           `icon` is on it. A new name would be walked as a sentence. */
+        icon: "/assets/img/home/proposal/form-mark.webp",
+        title: "Tell Us Your Challenges",
+        sub: "Share your goals and we’ll create a plan to overcome your challenges and grow your business.",
+        submit: "Submit Your Challenge",
+        assurances: ["No obligation", "Quick response", "100% confidential"],
+    },
 } as const;

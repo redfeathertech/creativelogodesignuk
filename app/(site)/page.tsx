@@ -68,7 +68,7 @@ export default function Home() {
             <VideoTestimonials />
             <Testimonials />
             <Challenges />
-            <Proposal />
+            <Proposal source="home-proposal" />
         </>
     );
 }
