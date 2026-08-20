@@ -45,14 +45,16 @@ export const leadSchema = z.object({
 });
 
 /**
- * Homepage hero enquiry card.
+ * The homepage enquiry card — rendered twice, in the hero and in the proposal
+ * band above the footer.
  *
- * A deliberately shorter field set than `proposalSchema`: the hero card sits in
- * the fold and asks for the minimum a strategist needs to call back — one name
- * field, a number, an email, plus two optional lines. Anything longer pushes
- * the card past the fold on a laptop and costs conversions.
+ * A deliberately shorter field set than `proposalSchema`: the hero copy of the
+ * card sits in the fold and asks for the minimum a strategist needs to call
+ * back — one name field, a number, an email, plus two optional lines. Anything
+ * longer pushes the card past the fold on a laptop and costs conversions. The
+ * proposal band shares it because the approved design draws the two identically.
  */
-export const heroEnquirySchema = z.object({
+export const enquirySchema = z.object({
     full_name: name,
     phone,
     email,
@@ -219,7 +221,7 @@ export type WebsiteBriefInput = z.infer<typeof websiteBriefSchema>;
 export type LogoBriefInput = z.infer<typeof logoBriefSchema>;
 
 export type LeadInput = z.infer<typeof leadSchema>;
-export type HeroEnquiryInput = z.infer<typeof heroEnquirySchema>;
+export type EnquiryInput = z.infer<typeof enquirySchema>;
 export type ProposalInput = z.infer<typeof proposalSchema>;
 export type LandingQuoteInput = z.infer<typeof landingQuoteSchema>;
 export type CallbackInput = z.infer<typeof callbackSchema>;

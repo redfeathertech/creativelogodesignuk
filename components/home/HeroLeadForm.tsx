@@ -1,4 +1,4 @@
-import HeroEnquiryForm from "./HeroEnquiryForm";
+import EnquiryForm from "@/components/forms/EnquiryForm";
 import { hero } from "@/content/home";
 
 /**
@@ -8,7 +8,8 @@ import { hero } from "@/content/home";
  * on; a form in the fold does.
  *
  * The light treatment is deliberate and is why this card does not reuse
- * `ProposalForm` — see `HeroEnquiryForm` for the field set and the reasoning.
+ * `ProposalForm` — see `components/forms/EnquiryForm` for the field set and the
+ * reasoning. The proposal band above the footer renders the same card.
  *
  * `overflow-y-auto` is the safety valve: the hero is pinned to one screen
  * height (`--hero-h`) on desktop, and the full field set is taller than that
@@ -41,7 +42,11 @@ export default function HeroLeadForm() {
                     <p className="mt-2 mb-5 text-[0.95rem] text-onlight-muted">
                         {hero.form.sub}
                     </p>
-                    <HeroEnquiryForm />
+                    <EnquiryForm
+                        source="hero"
+                        submitLabel={hero.form.submit}
+                        assurances={hero.form.assurances}
+                    />
                 </div>
             </div>
         </div>

@@ -2,17 +2,10 @@
 
 import { useActionState, useId } from "react";
 
-import { submitHeroEnquiry } from "@/app/actions/forms";
+import { submitEnquiry } from "@/app/actions/forms";
 import { initialFormState } from "@/lib/validation";
-import {
-    FormStatus,
-    HoneypotFields,
-    useFormEngagement,
-} from "@/components/forms/FormShell";
-import Recaptcha from "@/components/forms/Recaptcha";
-import { hero } from "@/content/home";
-import { cn } from "@/lib/cn";
-import { ArrowIcon } from "@/components/ui/icons";
+import { FormStatus, HoneypotFields, useFormEngagement } from "./FormShell";
+import Recaptcha from "./Recaptcha";
 import {
     ConfidentialIcon,
     LockIcon,
@@ -23,19 +16,91 @@ import {
     QuickResponseIcon,
     ServiceFieldIcon,
     UserFieldIcon,
-} from "./heroIcons";
+} from "./fieldIcons";
+import { ArrowIcon } from "@/components/ui/icons";
+import { cn } from "@/lib/cn";
 
 /**
- * The hero card's enquiry form — a light card on the hero's dark canvas, so it
- * cannot reuse the shared dark `Field`. Five fields rather than the proposal
- * form's seven: this one sits in the fold, and every extra row pushes the card
- * past it on a laptop.
+ * The five-field enquiry card — a light card on a dark canvas, rendered twice
+ * on the homepage: in the hero, and in the proposal band above the footer.
+ *
+ * It cannot reuse the shared dark `Field`, which is why the control styling is
+ * written out here. Five fields rather than `ProposalForm`'s seven: the hero
+ * copy of this card sits in the fold, and every extra row pushes it past that
+ * on a laptop. The proposal band inherited the same set because the approved
+ * design draws the two cards identically.
  *
  * Labels are real `<label>`s, rendered `sr-only` because the design puts the
  * label text inside the control. The visible copy is the placeholder, so the
  * two always read the same string — a placeholder-only field (what the live
  * site ships) leaves screen-reader users with unnamed inputs, WCAG 3.3.2.
+ *
+ * `source` rides along as a hidden input rather than a schema field. The action
+ * looks it up in a fixed table to label the team's notification email, and
+ * never feeds it to `enquirySchema` — so a visitor editing it in devtools can
+ * neither fail validation on a field they cannot see nor put their own text in
+ * an email subject line.
  */
+
+/**
+ * The field set is a module constant, not page copy in `content/`.
+ *
+ * Each label is bound one-to-one with its `name`, `type` and `autoComplete` —
+ * rename "Phone" and the `tel` input and the `phone` key the server action
+ * reads have to move with it. That makes the row a contract rather than copy,
+ * and both cards render it identically. Splitting the visible half out to
+ * `content/home.ts` would put one half of each pair a file away from the other
+ * and invite them to drift, for two copies of the same five strings.
+ */
+const FIELDS = [
+    {
+        label: "Your Name",
+        name: "full_name",
+        required: true,
+        autoComplete: "name",
+        icon: UserFieldIcon,
+    },
+    {
+        label: "Phone",
+        name: "phone",
+        type: "tel",
+        required: true,
+        autoComplete: "tel",
+        icon: PhoneFieldIcon,
+    },
+    {
+        label: "Email",
+        name: "email",
+        type: "email",
+        required: true,
+        autoComplete: "email",
+        icon: MailFieldIcon,
+    },
+    {
+        label: "Required Service",
+        name: "required_service",
+        icon: ServiceFieldIcon,
+    },
+    {
+        label: "What is your project & business goals?",
+        name: "project_goals",
+        icon: NoteFieldIcon,
+        textarea: true,
+    },
+] as const satisfies readonly FieldSpec[];
+
+interface FieldSpec {
+    label: string;
+    name: string;
+    type?: string;
+    required?: boolean;
+    autoComplete?: string;
+    icon: (p: { className?: string }) => React.ReactElement;
+    textarea?: boolean;
+}
+
+/** Positional, matching the three strings each caller passes in. */
+const ASSURANCE_ICONS = [NoObligationIcon, QuickResponseIcon, ConfidentialIcon];
 
 const CONTROL =
     "w-full rounded-md border border-mist-300 bg-white py-3 ps-11 pe-4 text-[0.95rem] text-onlight " +
@@ -55,16 +120,7 @@ function FieldRow({
     errors,
     icon: Icon,
     textarea,
-}: {
-    label: string;
-    name: string;
-    type?: string;
-    required?: boolean;
-    autoComplete?: string;
-    errors?: string[];
-    icon: (p: { className?: string }) => React.ReactElement;
-    textarea?: boolean;
-}) {
+}: FieldSpec & { errors?: string[] }) {
     const id = useId();
     const errorId = `${id}-error`;
     const hasError = Boolean(errors?.length);
@@ -107,11 +163,29 @@ function FieldRow({
     );
 }
 
-const ASSURANCE_ICONS = [NoObligationIcon, QuickResponseIcon, ConfidentialIcon];
+/**
+ * The success heading is a default rather than a `content/home.ts` string on
+ * purpose: it only ever renders after a submit, so a copy string for it would
+ * be absent from the prerendered HTML and would have to be argued into
+ * `NOT_RENDERED` in scripts/verify-home-parity.mjs to keep that gate honest.
+ * Both cards say the same thing, so there is nothing for the page to vary.
+ */
+const SUCCESS_TITLE = "Thanks — we’ve got your details";
 
-export default function HeroEnquiryForm() {
+export default function EnquiryForm({
+    source,
+    submitLabel,
+    assurances,
+    successTitle = SUCCESS_TITLE,
+}: {
+    /** Matched against the action's own table — see the note above. */
+    source: string;
+    submitLabel: string;
+    assurances: readonly string[];
+    successTitle?: string;
+}) {
     const [state, formAction, pending] = useActionState(
-        submitHeroEnquiry,
+        submitEnquiry,
         initialFormState,
     );
     const { engaged, engagementProps } = useFormEngagement();
@@ -120,7 +194,7 @@ export default function HeroEnquiryForm() {
         return (
             <div className="rounded-md border border-teal-600/30 bg-teal-500/10 p-8 text-center">
                 <p className="font-display text-h5 text-onlight">
-                    Thanks — we’ve got your details
+                    {successTitle}
                 </p>
                 <p className="mt-3 text-sm text-onlight-muted">
                     {state.message}
@@ -132,59 +206,30 @@ export default function HeroEnquiryForm() {
     return (
         <form action={formAction} className="relative" {...engagementProps}>
             <HoneypotFields />
+            <input type="hidden" name="form_source" value={source} />
 
             <div className="flex flex-col gap-3">
-                <FieldRow
-                    label="Your Name"
-                    name="full_name"
-                    required
-                    autoComplete="name"
-                    icon={UserFieldIcon}
-                    errors={state.errors?.full_name}
-                />
-                <FieldRow
-                    label="Phone"
-                    name="phone"
-                    type="tel"
-                    required
-                    autoComplete="tel"
-                    icon={PhoneFieldIcon}
-                    errors={state.errors?.phone}
-                />
-                <FieldRow
-                    label="Email"
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    icon={MailFieldIcon}
-                    errors={state.errors?.email}
-                />
-                <FieldRow
-                    label="Required Service"
-                    name="required_service"
-                    icon={ServiceFieldIcon}
-                    errors={state.errors?.required_service}
-                />
-                <FieldRow
-                    label="What is your project &amp; business goals?"
-                    name="project_goals"
-                    icon={NoteFieldIcon}
-                    textarea
-                    errors={state.errors?.project_goals}
-                />
+                {FIELDS.map((field) => (
+                    <FieldRow
+                        key={field.name}
+                        {...field}
+                        errors={state.errors?.[field.name]}
+                    />
+                ))}
             </div>
 
-            {/* The three reassurances, in the same order as the design. */}
+            {/* The three reassurances, in the order the design lists them. */}
             <ul className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-                {hero.form.assurances.map((text, i) => {
+                {assurances.map((text, i) => {
                     const Icon = ASSURANCE_ICONS[i];
                     return (
                         <li
                             key={text}
                             className="flex items-center gap-1.5 text-[0.68rem] font-semibold tracking-[0.06em] text-onlight-muted uppercase"
                         >
-                            <Icon className="h-[0.95rem] w-[0.95rem] text-magenta-500" />
+                            {Icon && (
+                                <Icon className="h-[0.95rem] w-[0.95rem] text-magenta-500" />
+                            )}
                             {text}
                         </li>
                     );
@@ -198,7 +243,7 @@ export default function HeroEnquiryForm() {
             <div className="mt-5 [&>*:not(:last-child)]:mb-3">
                 <Recaptcha
                     active={engaged}
-                    action="hero_enquiry"
+                    action="enquiry"
                     tone="light"
                     disclosure={false}
                 />
@@ -210,13 +255,18 @@ export default function HeroEnquiryForm() {
                         "inline-flex w-full cursor-pointer items-center justify-center gap-3 rounded-full",
                         "bg-[linear-gradient(97deg,var(--color-violet-500)_0%,var(--color-magenta-500)_100%)]",
                         "bg-[length:160%_100%] bg-[position:0%_50%] hover:bg-[position:100%_50%]",
-                        "px-8 py-[0.95rem] font-display text-[0.9rem] font-bold tracking-[0.08em] text-white uppercase",
+                        // `px-5` below `sm`: at 32px of inset the proposal
+                        // card's longer label ("Submit Your Challenge") wraps
+                        // to two lines on a 390px phone, and the arrow ends up
+                        // beside a two-line block.
+                        "px-5 py-[0.95rem] sm:px-8",
+                        "font-display text-[0.9rem] font-bold tracking-[0.08em] text-white uppercase",
                         "shadow-glow transition-[background-position,box-shadow] duration-500",
                         "disabled:pointer-events-none disabled:opacity-45",
                         "[&>svg]:transition-transform [&>svg]:duration-300 hover:[&>svg]:translate-x-[3px]",
                     )}
                 >
-                    {pending ? "Sending…" : hero.form.submit}
+                    {pending ? "Sending…" : submitLabel}
                     <ArrowIcon />
                 </button>
             </div>

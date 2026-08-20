@@ -65,7 +65,7 @@ export default function AboutPage() {
             <Industries />
             <Clients />
             <Credentials />
-            <Proposal />
+            <Proposal source="about-proposal" />
         </>
     );
 }
