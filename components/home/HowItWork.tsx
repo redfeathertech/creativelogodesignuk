@@ -54,7 +54,7 @@ export default function HowItWork() {
                     where it meets the flat canvas under the rail. */}
                 <Image
                     src={process.background}
-                    alt=""
+                    alt={process.backgroundAlt}
                     aria-hidden="true"
                     width={1920}
                     height={730}
@@ -121,10 +121,10 @@ export default function HowItWork() {
                                         at 52. */}
                                         <Image
                                             src={item.icon}
-                                            alt=""
-                                            aria-hidden="true"
+                                            alt={item.iconAlt}
                                             width={60}
                                             height={60}
+                                            unoptimized
                                             className="size-[52px] shrink-0"
                                         />
                                         <div className="min-w-0">

@@ -83,6 +83,7 @@ export default function Testimonials() {
                                 stars={item.stars}
                                 body={item.body}
                                 mark={testimonials.mark}
+                                markAlt={testimonials.markAlt}
                             />
                         ))}
                     </Rail>

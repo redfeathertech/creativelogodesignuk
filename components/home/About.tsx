@@ -60,10 +60,10 @@ export default function About() {
                             >
                                 <Image
                                     src={stat.icon}
-                                    alt=""
-                                    aria-hidden="true"
+                                    alt={stat.iconAlt}
                                     width={48}
                                     height={48}
+                                    unoptimized
                                     className="h-10 w-10 shrink-0 object-contain"
                                 />
                                 <div className="min-w-0">

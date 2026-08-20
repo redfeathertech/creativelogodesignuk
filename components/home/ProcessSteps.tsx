@@ -130,11 +130,10 @@ export default function ProcessSteps() {
                                 and "Development" breaks mid-word. */}
                             <Image
                                 src={step.icon}
-                                alt=""
-                                aria-hidden="true"
+                                alt={step.iconAlt}
                                 width={117}
                                 height={117}
-                                sizes="84px"
+                                unoptimized
                                 className="hidden size-[clamp(52px,8vw,84px)] shrink-0 transition-transform duration-300 group-hover:scale-105 min-[360px]:block"
                             />
                         </article>

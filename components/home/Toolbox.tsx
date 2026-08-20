@@ -119,9 +119,16 @@ export default function Toolbox() {
                             >
                                 <Image
                                     src={tool.icon}
-                                    alt=""
+                                    alt={`${tool.name} logo`}
                                     width={tool.w}
                                     height={tool.h}
+                                    /* SVG is already the smallest form the
+                                       optimiser could produce, and Next refuses
+                                       to run it through /_next/image without
+                                       `dangerouslyAllowSVG`. Alamofire and MVVM
+                                       are still raster, so they keep the
+                                       AVIF/WebP pipeline. */
+                                    unoptimized={tool.icon.endsWith(".svg")}
                                     className={cn(
                                         "object-contain",
                                         tool.plated

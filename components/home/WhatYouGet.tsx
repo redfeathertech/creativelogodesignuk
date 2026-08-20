@@ -48,7 +48,7 @@ export default function WhatYouGet() {
                 the corner cover keeps when it crops the sides. */}
             <Image
                 src={whatYouGet.background}
-                alt=""
+                alt={whatYouGet.backgroundAlt}
                 aria-hidden="true"
                 width={1920}
                 height={1039}
@@ -99,8 +99,7 @@ export default function WhatYouGet() {
                                         to line up on their own. */}
                                     <Image
                                         src={benefit.icon}
-                                        alt=""
-                                        aria-hidden="true"
+                                        alt={benefit.iconAlt}
                                         width={40}
                                         height={36}
                                         className="size-7 shrink-0 object-contain"
@@ -124,7 +123,7 @@ export default function WhatYouGet() {
                             balance against, so it takes the full width. */}
                         <Image
                             src={whatYouGet.frame}
-                            alt=""
+                            alt={whatYouGet.frameAlt}
                             aria-hidden="true"
                             width={743}
                             height={581}
@@ -154,10 +153,10 @@ export default function WhatYouGet() {
                                     <div className="flex items-start gap-4">
                                         <Image
                                             src={tab.icon}
-                                            alt=""
-                                            aria-hidden="true"
+                                            alt={tab.iconAlt}
                                             width={80}
                                             height={80}
+                                            unoptimized
                                             className="size-11 shrink-0 sm:size-14"
                                         />
 

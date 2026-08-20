@@ -43,7 +43,7 @@ export default function Hero() {
                 aspect ratio, and `preload` because it is the LCP background. */}
             <Image
                 src={hero.background}
-                alt=""
+                alt={hero.backgroundAlt}
                 aria-hidden="true"
                 width={1920}
                 height={885}
@@ -98,11 +98,11 @@ export default function Hero() {
                                 >
                                     <Image
                                         src={item.icon}
-                                        alt=""
-                                        aria-hidden="true"
+                                        alt={item.iconAlt}
                                         width={48}
                                         height={48}
-                                        className="h-11 w-11 shrink-0"
+                                        unoptimized
+                                        className="h-11 w-11 shrink-0 object-contain"
                                     />
                                     <div className="flex flex-col gap-0.5">
                                         <dt className="sr-only">{item.label}</dt>

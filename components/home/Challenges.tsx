@@ -72,8 +72,7 @@ export default function Challenges() {
               >
                 <Image
                   src={pillar.icon}
-                  alt=""
-                  aria-hidden="true"
+                  alt={pillar.iconAlt}
                   width={78}
                   height={78}
                   unoptimized
@@ -113,8 +112,7 @@ export default function Challenges() {
 
                 <Image
                   src={item.icon}
-                  alt=""
-                  aria-hidden="true"
+                  alt={item.iconAlt}
                   width={52}
                   height={52}
                   unoptimized

@@ -182,7 +182,7 @@ export default function Methodology() {
                                         the ring is 400px at its widest. */}
                                     <Image
                                         src={methodology.photo}
-                                        alt="Creative Logo Design methodology"
+                                        alt={methodology.photoAlt}
                                         width={463}
                                         height={463}
                                         sizes="(max-width: 1024px) 60vw, 400px"
@@ -250,10 +250,10 @@ export default function Methodology() {
                                     around it. 78px native, rendered at 54. */}
                                 <Image
                                     src={step.icon}
-                                    alt=""
-                                    aria-hidden="true"
+                                    alt={step.iconAlt}
                                     width={78}
                                     height={78}
+                                    unoptimized
                                     className="size-12 shrink-0 sm:size-[54px]"
                                 />
 
@@ -295,7 +295,7 @@ export default function Methodology() {
                                 />
                                 <Image
                                     src={step.art}
-                                    alt=""
+                                    alt={step.artAlt}
                                     aria-hidden="true"
                                     width={step.artW}
                                     height={step.artH}

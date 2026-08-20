@@ -48,7 +48,7 @@ export default function Results() {
                 stops dissolve the last 8% of each edge into the section. */}
             <Image
                 src={results.bg}
-                alt=""
+                alt={results.bgAlt}
                 aria-hidden="true"
                 width={1920}
                 height={1006}
@@ -95,10 +95,10 @@ export default function Results() {
                                             doing behind the card. */}
                                         <Image
                                             src={item.icon}
-                                            alt=""
-                                            aria-hidden="true"
+                                            alt={item.iconAlt}
                                             width={80}
                                             height={80}
+                                            unoptimized
                                             className="size-11 shrink-0 sm:size-14"
                                         />
 

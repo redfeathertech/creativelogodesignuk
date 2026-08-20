@@ -98,8 +98,7 @@ export default function Proposal({
                                     Challenges pillars make. */}
                                 <Image
                                     src={benefit.icon}
-                                    alt=""
-                                    aria-hidden="true"
+                                    alt={benefit.iconAlt}
                                     width={59}
                                     height={59}
                                     unoptimized
@@ -132,8 +131,7 @@ export default function Proposal({
                         <div className="flex items-start gap-4">
                             <Image
                                 src={proposal.form.icon}
-                                alt=""
-                                aria-hidden="true"
+                                alt={proposal.form.iconAlt}
                                 width={64}
                                 height={64}
                                 unoptimized

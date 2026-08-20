@@ -20,25 +20,32 @@ export const hero = {
      whole section — the old build tinted the form half separately, which read
      as two panels rather than one banner. */
     background: "/assets/img/home/hero-bg.png",
-    /* Stat marks, supplied by the client as PNGs rather than drawn in SVG. */
+    backgroundAlt:
+        "Creative Logo Design studio banner backdrop in deep purple and magenta",
+    /* Stat marks, supplied by the client as SVG. Rendered `unoptimized` —
+     Next will not put an SVG through /_next/image without
+     `dangerouslyAllowSVG`, and the vector is already the smallest form. */
     trust: [
         {
             value: 1000,
             suffix: "+",
             label: "Happy clients",
-            icon: "/assets/img/home/stat-clients.png",
+            icon: "/assets/img/home/stat-clients.svg",
+            iconAlt: "Happy clients icon with five-star rating for Creative Logo Design",
         },
         {
             value: 1200,
             suffix: "+",
             label: "Projects delivered",
-            icon: "/assets/img/home/stat-projects.png",
+            icon: "/assets/img/home/stat-projects.svg",
+            iconAlt: "Rocket icon for design projects delivered by Creative Logo Design",
         },
         {
             value: 60,
             suffix: "+",
             label: "Team members",
-            icon: "/assets/img/home/stat-team.png",
+            icon: "/assets/img/home/stat-team.svg",
+            iconAlt: "Expert badge icon for the Creative Logo Design team of 60+ specialists",
         },
     ],
     scrollCue: "Scroll Down",
@@ -91,19 +98,22 @@ export const about = {
             value: 1000,
             suffix: "+",
             label: "Happy Clients",
-            icon: "/assets/img/home/stat-clients.png",
+            icon: "/assets/img/home/stat-clients.svg",
+            iconAlt: "Happy clients icon with five-star rating for Creative Logo Design",
         },
         {
             value: 1200,
             suffix: "+",
             label: "Projects Delivered",
-            icon: "/assets/img/home/stat-projects.png",
+            icon: "/assets/img/home/stat-projects.svg",
+            iconAlt: "Rocket icon for design projects delivered by Creative Logo Design",
         },
         {
             value: 60,
             suffix: "+",
             label: "Team Members",
-            icon: "/assets/img/home/stat-team.png",
+            icon: "/assets/img/home/stat-team.svg",
+            iconAlt: "Expert badge icon for the Creative Logo Design team of 60+ specialists",
         },
     ],
     images: {
@@ -129,45 +139,52 @@ export const process = {
      the hero, so the two dark bands either side of the light About section read
      as one surface rather than a flat panel with an image dropped on it. */
     background: "/assets/img/home/how-it-works-bg.png",
+    backgroundAlt:
+        "Glowing gradient backdrop behind the Creative Logo Design branding process",
     /* Net-new: the section had no call to action at all, so the three steps ended
      on a full stop. Nothing existing is reworded (docs/CONTENT-PARITY.md). The
      secondary CTA points at the portfolio section directly below. */
     primaryCta: "Request A Proposal",
     secondaryCta: "See our work",
     workAnchor: "#recent-work",
-    /* Net-new. The marks are client-supplied PNGs, each a complete badge — the
+    /* Net-new. The marks are client-supplied SVGs, each a complete badge — the
      gradient ring and its glow are baked into the asset, so nothing here draws
-     a ring around them. 60x60 native. */
+     a ring around them. 60x60 viewBox. */
     highlights: [
         {
             title: "Proven Process",
             body: "A step-by-step approach that delivers results.",
-            icon: "/assets/img/home/proven-process.png",
+            icon: "/assets/img/home/proven-process.svg",
+            iconAlt: "Gear and cycle icon for the proven Creative Logo Design branding process",
         },
         {
             title: "Results Driven",
             body: "We focus on growth that truly matters.",
-            icon: "/assets/img/home/results-driven.png",
+            icon: "/assets/img/home/results-driven.svg",
+            iconAlt: "Analytics report icon for results-driven brand and web design work",
         },
     ],
-    /* Step marks, also client-supplied complete badges. 117x117 native. */
+    /* Step marks, also client-supplied complete badges. 117x117 viewBox, SVG. */
     steps: [
         {
             title: "Discovery & Strategy",
             body: "We learn about your goals, look at your competitors, and create a plan that fits your brand’s vision.",
-            icon: "/assets/img/home/step-discovery.png",
+            icon: "/assets/img/home/step-discovery.svg",
+            iconAlt: "Target and arrow icon for the brand discovery and strategy step",
         },
         {
             // [live] "understands your idea and makes it into" — not the redesign's "takes … turns it into"
             title: "Concept Development",
             body: "Our team understands your idea and makes it into something special that connects with your audience.",
-            icon: "/assets/img/home/step-concept.png",
+            icon: "/assets/img/home/step-concept.svg",
+            iconAlt: "Lightbulb and gear icon for the logo concept development step",
         },
         {
             // [live] "each detail" / "Our representative" — not the redesign's "every detail" / "Your representative"
             title: "Design & Delivery",
             body: "We handle each detail. Our representative works closely with you to give the best outcome and also gives personal advice.",
-            icon: "/assets/img/home/step-design.png",
+            icon: "/assets/img/home/step-design.svg",
+            iconAlt: "Rocket icon for the brand design and delivery step",
         },
     ],
 } as const;
@@ -256,24 +273,32 @@ export const whatYouGet = {
     /* The band's backdrop: a 1920x1039 field with the glow curve and the dot
        sphere already drawn into it, so neither is a DOM element. */
     background: "/assets/img/home/offer-bg.webp",
+    backgroundAlt:
+        "Gradient backdrop with a glowing curve behind the Creative Logo Design service line-up",
     /* The monitor, exactly as supplied and rendered as one flat image. Its
        screen is part of the artwork, so nothing is layered over it and
        selecting a card does not change it. */
     frame: "/assets/img/home/offer-monitor.webp",
+    frameAlt:
+        "Desktop monitor showing a website designed and built by Creative Logo Design",
     /* Net-new: the live section has no proof strip under its lead. Nothing
        existing is reworded (docs/CONTENT-PARITY.md). */
     benefits: [
         {
             label: "All-in-one Solution",
             icon: "/assets/img/home/offer/benefit-all-in-one.webp",
+            iconAlt:
+                "Connected nodes icon for an all-in-one design, development and marketing solution",
         },
         {
             label: "Tailored for Your Brand",
             icon: "/assets/img/home/offer/benefit-tailored.webp",
+            iconAlt: "Browser window icon for work tailored to your brand",
         },
         {
             label: "Focus on Growth and Results",
             icon: "/assets/img/home/offer/benefit-growth.webp",
+            iconAlt: "Dashboard and gear icon for a focus on growth and results",
         },
     ],
     /* Order follows the approved design, which leads on Web Design; the live
@@ -285,32 +310,37 @@ export const whatYouGet = {
         {
             label: "Web Design",
             body: "Launch a site that doesn't just look good. It sells for you 24/7.",
-            icon: "/assets/img/home/offer/icon-web-design.webp",
+            icon: "/assets/img/home/offer/icon-web-design.svg",
+            iconAlt: "Web design services icon",
             href: "/web-design-services",
         },
         {
             label: "UI/UX Design",
             body: "Let us craft experiences your users will love from the very first click.",
-            icon: "/assets/img/home/offer/icon-ui-ux-design.webp",
+            icon: "/assets/img/home/offer/icon-ui-ux-design.svg",
+            iconAlt: "UI/UX design services icon",
             href: "/web-design-services/ui-ux-design",
         },
         {
             label: "App Development",
             body: "Turn your idea into a high-performing app that customers keep coming back to.",
-            icon: "/assets/img/home/offer/icon-app-development.webp",
+            icon: "/assets/img/home/offer/icon-app-development.svg",
+            iconAlt: "App development services icon",
             href: "/app-development-services",
         },
         {
             label: "Branding",
             body: "Stand out instantly with branding that leaves a lasting impression everywhere you show up.",
-            icon: "/assets/img/home/offer/icon-branding.webp",
+            icon: "/assets/img/home/offer/icon-branding.svg",
+            iconAlt: "Branding services icon",
             href: "/branding-services",
         },
         {
             // [live] retains "about the new trends, start growing with campaigns that will maximise"
             label: "Marketing",
             body: "Stop guessing about the new trends, start growing with campaigns that will maximise every marketing pound.",
-            icon: "/assets/img/home/offer/icon-marketing.webp",
+            icon: "/assets/img/home/offer/icon-marketing.svg",
+            iconAlt: "Digital marketing services icon",
             href: "/digital-marketing-services",
         },
     ],
@@ -352,7 +382,7 @@ export const toolbox = {
         {
             name: "Figma",
             kind: "Design Tool",
-            icon: "/assets/img/tools/figma.png",
+            icon: "/assets/img/tools/figma.svg",
             w: 36,
             h: 54,
             plated: false,
@@ -361,7 +391,7 @@ export const toolbox = {
         {
             name: "InDesign",
             kind: "Design Tool",
-            icon: "/assets/img/tools/indesign.png",
+            icon: "/assets/img/tools/indesign.svg",
             w: 58,
             h: 56,
             plated: true,
@@ -370,7 +400,7 @@ export const toolbox = {
         {
             name: "Swift",
             kind: "Web Tool",
-            icon: "/assets/img/tools/swift.png",
+            icon: "/assets/img/tools/swift.svg",
             w: 56,
             h: 56,
             plated: true,
@@ -388,7 +418,7 @@ export const toolbox = {
         {
             name: "Framer",
             kind: "Design Tool",
-            icon: "/assets/img/tools/framer.png",
+            icon: "/assets/img/tools/framer.svg",
             w: 40,
             h: 60,
             plated: false,
@@ -397,7 +427,7 @@ export const toolbox = {
         {
             name: "Photoshop",
             kind: "Design Tool",
-            icon: "/assets/img/tools/photoshop.png",
+            icon: "/assets/img/tools/photoshop.svg",
             w: 58,
             h: 56,
             plated: true,
@@ -415,7 +445,7 @@ export const toolbox = {
         {
             name: "React",
             kind: "Web Tool",
-            icon: "/assets/img/tools/react.png",
+            icon: "/assets/img/tools/react.svg",
             w: 61,
             h: 54,
             plated: false,
@@ -424,7 +454,7 @@ export const toolbox = {
         {
             name: "Illustrator",
             kind: "Design Tool",
-            icon: "/assets/img/tools/illustrator.png",
+            icon: "/assets/img/tools/illustrator.svg",
             w: 58,
             h: 56,
             plated: true,
@@ -433,7 +463,7 @@ export const toolbox = {
         {
             name: "Lightroom",
             kind: "Design Tool",
-            icon: "/assets/img/tools/lightroom.png",
+            icon: "/assets/img/tools/lightroom.svg",
             w: 58,
             h: 56,
             plated: true,
@@ -442,7 +472,7 @@ export const toolbox = {
         {
             name: "Vue",
             kind: "Web Tool",
-            icon: "/assets/img/tools/vue.png",
+            icon: "/assets/img/tools/vue.svg",
             w: 56,
             h: 49,
             plated: false,
@@ -451,7 +481,7 @@ export const toolbox = {
         {
             name: "HTML5",
             kind: "Web Tool",
-            icon: "/assets/img/tools/html5.png",
+            icon: "/assets/img/tools/html5.svg",
             w: 49,
             h: 56,
             plated: false,
@@ -460,7 +490,7 @@ export const toolbox = {
         {
             name: "Adobe XD",
             kind: "Design Tool",
-            icon: "/assets/img/tools/adobe-xd.png",
+            icon: "/assets/img/tools/adobe-xd.svg",
             w: 58,
             h: 56,
             plated: true,
@@ -469,7 +499,7 @@ export const toolbox = {
         {
             name: "InCopy",
             kind: "Design Tool",
-            icon: "/assets/img/tools/incopy.png",
+            icon: "/assets/img/tools/incopy.svg",
             w: 59,
             h: 56,
             plated: true,
@@ -478,7 +508,7 @@ export const toolbox = {
         {
             name: "TypeScript",
             kind: "Web Tool",
-            icon: "/assets/img/tools/typescript.png",
+            icon: "/assets/img/tools/typescript.svg",
             w: 56,
             h: 56,
             plated: true,
@@ -487,7 +517,7 @@ export const toolbox = {
         {
             name: "CSS",
             kind: "Web Tool",
-            icon: "/assets/img/tools/css.png",
+            icon: "/assets/img/tools/css.svg",
             w: 56,
             h: 56,
             plated: true,
@@ -525,6 +555,8 @@ export const results = {
        nothing is lost by dropping it, and the 98% the artwork draws is one of
        the figures below. */
     bg: "/assets/img/home/results-bg.webp",
+    bgAlt:
+        "3D bar chart backdrop illustrating Creative Logo Design client results",
     /* `label` + " " + `note` is the live label verbatim in every case: the
        two-line card is the approved design's layout, not a rewrite. `icon` is
        net-new — the live list carries no marks at all.
@@ -538,28 +570,32 @@ export const results = {
             suffix: "%",
             label: "Faster time-to-market",
             note: "for apps",
-            icon: "/assets/img/home/results/icon-time-to-market.webp",
+            icon: "/assets/img/home/results/icon-time-to-market.svg",
+            iconAlt: "Stopwatch icon for 40% faster app time-to-market",
         },
         {
             value: 1200,
             suffix: "+",
             label: "Projects shipped",
             note: "across branding, web and marketing",
-            icon: "/assets/img/home/results/icon-projects.webp",
+            icon: "/assets/img/home/results/icon-projects.svg",
+            iconAlt: "Laptop and rocket icon for 1200+ branding, web and marketing projects shipped",
         },
         {
             value: 98,
             suffix: "%",
             label: "Clients who come back",
             note: "for their next project",
-            icon: "/assets/img/home/results/icon-repeat-clients.webp",
+            icon: "/assets/img/home/results/icon-repeat-clients.svg",
+            iconAlt: "Client group and star-rating icon for 98% of clients who come back",
         },
         {
             value: 95,
             suffix: "%",
             label: "Client satisfaction",
             note: "rate across all projects",
-            icon: "/assets/img/home/results/icon-satisfaction.webp",
+            icon: "/assets/img/home/results/icon-satisfaction.svg",
+            iconAlt: "Thumbs-up and five-star icon for 95% client satisfaction",
         },
     ],
 } as const;
@@ -590,8 +626,11 @@ export const methodology = {
        by the time this section was redrawn. The tool marks are still on the page
        — components/home/Toolbox.tsx is what shows them. */
     photo: "/assets/img/home/method/team.webp",
+    photoAlt:
+        "Creative Logo Design team working together at the centre of our methodology",
     /* Two marks per step, both client-supplied and both complete artwork:
-       — `icon` is the round gradient badge, 78x78 native, ring and glyph baked in.
+       — `icon` is the round gradient badge, 78x78 viewBox, SVG, ring and glyph
+         baked in.
        — `art` is the small illustration on the far side of the card's hairline.
          Native sizes differ per step (102x77 to 102x87) because these are the
          Figma exports as they came, and next/image needs each one's true
@@ -601,32 +640,40 @@ export const methodology = {
         {
             title: "Discovery & Strategy",
             body: "We begin by understanding your goals, audience and competitive landscape.",
-            icon: "/assets/img/home/method/icon-discovery.webp",
+            icon: "/assets/img/home/method/icon-discovery.svg",
+            iconAlt: "Target icon for the discovery and strategy stage of our design methodology",
             art: "/assets/img/home/method/art-discovery.webp",
+            artAlt: "Illustration of the discovery and strategy stage",
             artW: 102,
             artH: 87,
         },
         {
             title: "Concept Development",
             body: "Brainstorming, creative direction and agreed success criteria.",
-            icon: "/assets/img/home/method/icon-concept.webp",
+            icon: "/assets/img/home/method/icon-concept.svg",
+            iconAlt: "Lightbulb and gear icon for the concept development stage of our design methodology",
             art: "/assets/img/home/method/art-concept.webp",
+            artAlt: "Illustration of the concept development stage",
             artW: 102,
             artH: 77,
         },
         {
             title: "Design & Iteration",
             body: "Wireframes, prototypes and user feedback cycles.",
-            icon: "/assets/img/home/method/icon-design.webp",
+            icon: "/assets/img/home/method/icon-design.svg",
+            iconAlt: "Artboard and pen-tool icon for the design and iteration stage of our design methodology",
             art: "/assets/img/home/method/art-design.webp",
+            artAlt: "Illustration of the design and iteration stage",
             artW: 102,
             artH: 83,
         },
         {
             title: "Development & Execution",
             body: "Full build, QA testing and final deployment.",
-            icon: "/assets/img/home/method/icon-development.webp",
+            icon: "/assets/img/home/method/icon-development.svg",
+            iconAlt: "Rocket icon for the development and execution stage of our design methodology",
             art: "/assets/img/home/method/art-development.webp",
+            artAlt: "Illustration of the development and execution stage",
             artW: 102,
             artH: 77,
         },
@@ -688,6 +735,7 @@ export const videoTestimonials = {
             duration: "02:55",
             durationSpoken: "2 minutes 55 seconds",
             avatar: "/assets/img/home/video/avatar-webuild.webp",
+            avatarAlt: "AutoKeyFix company logo",
             resultValue: "156%",
             resultText: "increase in organic traffic & 3x more enquiries",
         },
@@ -730,6 +778,7 @@ export const videoTestimonials = {
     ],
     /* Full-bleed backdrop, client-supplied. 1920x1146 native. */
     bg: "/assets/img/home/video/video-bg.webp",
+    bgAlt: "Dark gradient backdrop behind the client video testimonials",
 } as const;
 
 /* ============================ TESTIMONIALS ============================ */
@@ -741,9 +790,12 @@ export const testimonials = {
     lead: "Real stories from amazing clients who trusted us and loved the results.",
     /* The pink double-quote that sits in the top-right corner of every card.
        Replaces the single 360px mark that used to hold its own column beside
-       the rail — the redesign has no such column. Decorative either way, so it
-       carries no alt text and no copy moved. */
+       the rail — the redesign has no such column. Purely typographic, so
+       `markAlt` names the glyph and nothing more — the card is wrapped
+       `aria-hidden`, so it is an image-SEO signal, not a tenth announcement of
+       the word "quotation" to a screen reader. No copy moved. */
     mark: "/assets/img/home/quote-glyph.png",
+    markAlt: "Quotation mark",
     /* CLIENT-SUPPLIED REPLACEMENT (13 Aug 2026). The five anonymous quotes that
      were here — job title + industry, no names — were replaced wholesale with
      the ten real reviews the client sent over, verbatim including their own
@@ -851,27 +903,32 @@ export const challenges = {
     ],
     cta: "Get Started",
     /* The four-reason panel beneath the heading. Icons are the 78px set from
-       the design export — decorative, so they render with alt="". */
+       the design export. Each carries an `iconAlt` describing the mark in
+       the context of the pillar it sits beside. */
     pillars: [
         {
             title: "One Partner. Every Solution.",
             body: "From branding to marketing, we’ve got you covered at every step.",
             icon: "/assets/img/home/challenges/pillar-partner.svg",
+            iconAlt: "Hand selecting from a network of connected services",
         },
         {
             title: "Strategy-First Approach",
             body: "We solve the root problem, not just the symptoms.",
             icon: "/assets/img/home/challenges/pillar-strategy.svg",
+            iconAlt: "Chess piece icon for our strategy-first approach",
         },
         {
             title: "Results That Matter",
             body: "Our solutions are built to deliver measurable growth.",
             icon: "/assets/img/home/challenges/pillar-results.svg",
+            iconAlt: "Upward graph icon for results that matter",
         },
         {
             title: "Dedicated Support",
             body: "A team that’s with you, whenever you need us.",
             icon: "/assets/img/home/challenges/pillar-support.svg",
+            iconAlt: "Headset icon for dedicated client support",
         },
     ],
     items: [
@@ -884,9 +941,12 @@ export const challenges = {
                 "Consistent storytelling across every channel",
             ],
             icon: "/assets/img/home/challenges/branding.svg",
-            /* Card artwork, shown beside the bullet list. Decorative, so it
-               renders with alt="". Only this item has one so far. */
+            iconAlt: "Star in a frame icon for brand identity design",
+            /* Card artwork, shown beside the bullet list. Only this item
+               has one so far. */
             art: "/assets/img/home/challenges/branding.png",
+            artAlt:
+                "Neon illustration of a brand identity board with pen tools and a star mark",
             ctaLabel: "Explore Branding",
             href: "/branding-services",
         },
@@ -899,6 +959,7 @@ export const challenges = {
                 "Responsive layouts for every device",
             ],
             icon: "/assets/img/home/challenges/website.svg",
+            iconAlt: "Browser window icon for website design",
             ctaLabel: "Explore Web Designing",
             href: "/web-design-services",
         },
@@ -911,6 +972,7 @@ export const challenges = {
                 "Data-driven improvements to boost sales",
             ],
             icon: "/assets/img/home/challenges/ecommerce.svg",
+            iconAlt: "Shopping icon for ecommerce development",
             ctaLabel: "Explore E-Com Development",
             href: "/web-development-services",
         },
@@ -924,6 +986,7 @@ export const challenges = {
                 "Paid ads that bring high-value leads",
             ],
             icon: "/assets/img/home/challenges/marketing.svg",
+            iconAlt: "Monitor and cursor icon for digital marketing",
             ctaLabel: "Explore Digital Marketing",
             href: "/digital-marketing-services",
         },
@@ -936,6 +999,7 @@ export const challenges = {
                 "Flexible support tailored to your goals",
             ],
             icon: "/assets/img/home/challenges/campaigns.svg",
+            iconAlt: "Icon for fully managed multi-channel campaigns",
             ctaLabel: "Explore Web Development",
             href: "/web-development-services",
         },
@@ -949,6 +1013,7 @@ export const challenges = {
                 "Future-proof functionality",
             ],
             icon: "/assets/img/home/challenges/redesign.svg",
+            iconAlt: "Icon for a modern website redesign",
             ctaLabel: "Explore Website Redesign",
             href: "/web-design-services/website-redesign",
         },
@@ -961,6 +1026,7 @@ export const challenges = {
                 "Fully responsive web design",
             ],
             icon: "/assets/img/home/challenges/seo.svg",
+            iconAlt: "Icon for SEO and responsive web design",
             ctaLabel: "Explore SEO Services",
             href: "/seo-services",
         },
@@ -973,6 +1039,7 @@ export const challenges = {
                 "Data-backed recommendations to scale smart",
             ],
             icon: "/assets/img/home/challenges/channels.svg",
+            iconAlt: "Icon for choosing the right marketing channels",
             ctaLabel: "Explore Sales Automation",
             href: "/automation-services/marketing-sales-automation",
         },
@@ -993,22 +1060,26 @@ export const proposal = {
        carry. Safe: docs/CONTENT-PARITY.md files "the proposal-form benefit
        bullets" under "Kept from the redesign (net-new, no live equivalent)" —
        they have never been on the live site, so no ranking depends on them.
-       Icons are the 59px set from the design export, decorative (alt=""). */
+       Icons are the 59px SVG set from the design export, each with its own
+       `iconAlt`. */
     benefits: [
         {
             title: "Tailored Strategies",
             body: "Custom solutions designed for your unique goals.",
-            icon: "/assets/img/home/proposal/benefit-strategies.webp",
+            icon: "/assets/img/home/proposal/benefit-strategies.svg",
+            iconAlt: "Gear and hand icon for strategies tailored to your goals",
         },
         {
             title: "Proven Results",
             body: "Data-driven strategies that deliver real growth.",
-            icon: "/assets/img/home/proposal/benefit-results.webp",
+            icon: "/assets/img/home/proposal/benefit-results.svg",
+            iconAlt: "Rising bar chart icon for proven, data-driven results",
         },
         {
             title: "Reliable Support",
             body: "A dedicated team with you, every step of the way.",
-            icon: "/assets/img/home/proposal/benefit-support.webp",
+            icon: "/assets/img/home/proposal/benefit-support.svg",
+            iconAlt: "Support agent icon for a dedicated, reliable team",
         },
     ],
     /* The card head. The five fields, their labels and the reCAPTCHA disclosure
@@ -1018,7 +1089,8 @@ export const proposal = {
         /* Keyed `icon`, not `mark`: scripts/verify-home-parity.mjs skips a
            short list of key names it knows hold URLs rather than copy, and
            `icon` is on it. A new name would be walked as a sentence. */
-        icon: "/assets/img/home/proposal/form-mark.webp",
+        icon: "/assets/img/home/proposal/form-mark.svg",
+        iconAlt: "Flask icon for a free expert project proposal",
         title: "Tell Us Your Challenges",
         sub: "Share your goals and we’ll create a plan to overcome your challenges and grow your business.",
         submit: "Submit Your Challenge",

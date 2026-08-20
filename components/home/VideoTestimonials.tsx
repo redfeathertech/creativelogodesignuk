@@ -43,6 +43,7 @@ const {
     close,
     items,
     bg,
+    bgAlt,
 } = videoTestimonials;
 
 /* items[0] is the featured panel, the rest are the compact column. Destructured
@@ -126,7 +127,7 @@ export default function VideoTestimonials() {
                 to stay in its column. */}
             <Image
                 src={bg}
-                alt=""
+                alt={bgAlt}
                 aria-hidden="true"
                 width={1920}
                 height={1146}
@@ -171,8 +172,7 @@ export default function VideoTestimonials() {
                             <div className="group relative aspect-[845/540] overflow-hidden rounded-lg border border-white/10">
                                 <Image
                                     src={featured.thumb}
-                                    alt=""
-                                    aria-hidden="true"
+                                    alt={`Video testimonial from ${featured.client} about their ${featured.project}`}
                                     width={845}
                                     height={540}
                                     sizes="(max-width: 1024px) 92vw, 46vw"
@@ -258,8 +258,7 @@ export default function VideoTestimonials() {
                                 <figcaption className="mt-5 flex items-center gap-3">
                                     <Image
                                         src={featured.avatar}
-                                        alt=""
-                                        aria-hidden="true"
+                                        alt={featured.avatarAlt}
                                         width={53}
                                         height={53}
                                         className="size-9 shrink-0 rounded-full"
@@ -300,8 +299,7 @@ export default function VideoTestimonials() {
                                     <div className="relative w-[clamp(5.5rem,24vw,11rem)] shrink-0 overflow-hidden rounded-md">
                                         <Image
                                             src={item.thumb}
-                                            alt=""
-                                            aria-hidden="true"
+                                            alt={`Video testimonial from ${item.client} about their ${item.project}`}
                                             width={845}
                                             height={540}
                                             sizes="(max-width: 1024px) 24vw, 176px"

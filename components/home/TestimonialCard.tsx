@@ -132,6 +132,7 @@ export default function TestimonialCard({
     stars,
     body,
     mark,
+    markAlt,
 }: {
     name: string;
     date: string;
@@ -140,6 +141,7 @@ export default function TestimonialCard({
     body: string;
     /** The decorative quote glyph in the top-right corner. */
     mark: string;
+    markAlt: string;
 }) {
     const bodyRef = useRef<HTMLParagraphElement>(null);
     const [expanded, setExpanded] = useState(false);
@@ -209,7 +211,7 @@ export default function TestimonialCard({
                     pixels. Decorative: the review is the content. */}
                 <Image
                     src={mark}
-                    alt=""
+                    alt={markAlt}
                     aria-hidden="true"
                     width={48}
                     height={36}
