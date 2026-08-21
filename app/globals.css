@@ -330,8 +330,11 @@
    ========================================================================== */
 
 @media (min-width: 62rem) and (max-height: 800px) {
-    /* The card's own inset, normally clamp(1.25rem, 0.75rem + 2vw, 2rem). */
-    .hero-form {
+    /* The card body's inset, normally clamp(1.25rem, 0.75rem + 1.6vw, 2rem).
+       It has to land on the body, not on `.hero-form` itself: the card is the
+       clipping shell that also carries the gradient cap, so padding it insets
+       the rule too and the cap stops meeting the card's edges. */
+    .hero-form-body {
         padding: 1.125rem;
     }
 

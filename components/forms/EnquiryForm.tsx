@@ -19,6 +19,7 @@ import {
 } from "./fieldIcons";
 import { ArrowIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/cn";
+import { ValidMark, VALID_MARK_TONE } from "./ValidMark";
 
 /**
  * The five-field enquiry card — a light card on a dark canvas, rendered twice
@@ -103,10 +104,13 @@ interface FieldSpec {
 const ASSURANCE_ICONS = [NoObligationIcon, QuickResponseIcon, ConfidentialIcon];
 
 const CONTROL =
-    "w-full rounded-md border border-mist-300 bg-white py-3 ps-11 pe-4 text-[0.95rem] text-onlight " +
+    "peer w-full rounded-md border border-mist-300 bg-white py-3 ps-11 pe-4 text-[0.95rem] text-onlight " +
     "placeholder:text-mist-500 transition-[border-color,box-shadow] duration-200 ease-out " +
     "focus:border-magenta-500 focus:outline-none focus:shadow-[0_0_0_3px_rgb(204_6_127/0.15)] " +
-    "aria-[invalid=true]:border-red-500";
+    "aria-[invalid=true]:border-red-500 " +
+    /* The tick shares the row with the leading icon, so it takes the end
+       padding only when it is actually showing. */
+    "data-[valid=true]:border-emerald-600/70 data-[valid=true]:pe-10";
 
 const ICON =
     "pointer-events-none absolute start-4 top-[0.95rem] h-[1.15rem] w-[1.15rem] text-mist-500";
@@ -154,6 +158,12 @@ function FieldRow({
                     className={CONTROL}
                 />
             )}
+            <ValidMark
+                className={cn(
+                    "end-3.5 top-[0.95rem]",
+                    VALID_MARK_TONE.light,
+                )}
+            />
             {hasError && (
                 <span id={errorId} className="mt-1 block text-xs text-red-600">
                     {errors![0]}

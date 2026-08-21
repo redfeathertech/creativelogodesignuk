@@ -90,30 +90,30 @@ export const about = {
     primaryCta: "Request A Proposal",
     secondaryCta: "Start Your Project Today",
     badge: "Taking on new projects",
-    /* [redesign] "Completed Projects" -> "Projects Delivered", signed off with
-     the About-section redesign. Stat labels are not indexed heading or body
-     copy; the numbers, which are the ranking-relevant claim, are unchanged. */
-    stats: [
+    /* [redesign] The counter strip is gone from About. It duplicated
+     `hero.trust` verbatim — the same 1000+/1200+/60+ figures, the same three
+     marks — so the ranking-relevant numbers still render, once, in the hero.
+     In its place: three proof points about how the studio works, each with a
+     client-supplied gradient SVG. Rendered `unoptimized` for the same reason
+     the hero marks are (see the note on `hero.trust`). */
+    features: [
         {
-            value: 1000,
-            suffix: "+",
-            label: "Happy Clients",
-            icon: "/assets/img/home/stat-clients.svg",
-            iconAlt: "Happy clients icon with five-star rating for Creative Logo Design",
+            title: "Proven",
+            label: "Creative Process",
+            icon: "/assets/img/home/about-proven.svg",
+            iconAlt: "Checklist icon for the proven creative process at Creative Logo Design",
         },
         {
-            value: 1200,
-            suffix: "+",
-            label: "Projects Delivered",
-            icon: "/assets/img/home/stat-projects.svg",
-            iconAlt: "Rocket icon for design projects delivered by Creative Logo Design",
+            title: "Quick",
+            label: "Response Times",
+            icon: "/assets/img/home/about-quick.svg",
+            iconAlt: "Stopwatch icon for the quick response times at Creative Logo Design",
         },
         {
-            value: 60,
-            suffix: "+",
-            label: "Team Members",
-            icon: "/assets/img/home/stat-team.svg",
-            iconAlt: "Expert badge icon for the Creative Logo Design team of 60+ specialists",
+            title: "Results",
+            label: "Driven Approach",
+            icon: "/assets/img/home/about-results.svg",
+            iconAlt: "Report chart icon for the results-driven approach at Creative Logo Design",
         },
     ],
     images: {
@@ -695,6 +695,12 @@ export const methodology = {
  *     the featured headline renders as `client — project`, which is exactly the
  *     string the mock draws.
  *
+ * The mock's round avatar on the featured quote card is now the client's own
+ * logo, drawn `object-contain` in a fixed-height box rather than cropped into a
+ * circle — a wordmark like "PLUM CREEK LAWNCARE" is 3:1 and survives neither a
+ * circular mask nor a square one. `logo` is null wherever the client has not
+ * supplied a mark and the card falls back to the name alone.
+ *
  * The videos are NOT hosted. Each card opens a lightbox that mounts a Vimeo
  * iframe on click and unmounts it on close, so a visitor who never clicks pays
  * nothing — no third-party request, no cookie, no player JS.
@@ -708,72 +714,107 @@ export const videoTestimonials = {
     titleAccent: "Real Stories.",
     lead: "Real results. Hear directly from business owners who trusted us with their branding, web design, app development, and marketing — and saw growth that speaks for itself.",
 
-    /* PLACEHOLDER — Vimeo's own public demo reel, the same id their embed docs
-       use. One id for all five so the real client videos are a single
-       find-and-replace once they land; at that point each item gets its own
-       `vimeoId` and this constant goes away. */
-    vimeoId: "76979871",
-
     /* UI chrome, not ported copy — the accessible name of a card's play control
        and of the lightbox's close button. */
     playPrefix: "Play video testimonial from",
     close: "Close video",
 
     /* items[0] renders as the featured panel: the large still, the overlaid
-       quote card, and the result strapline along the foot. items[1..4] render
-       as the compact cards in the right-hand column. `avatar` and the two
-       `result*` fields exist on the featured item alone — the tuple is
-       `as const`, so items[0] keeps its own precise type and the other four
-       stay a clean union. */
+       quote card, and the result strapline along the foot. items[1..3] render
+       as the compact cards in the right-hand column. `logo` is on every item so
+       the union stays uniform — it is `null` for the one client whose mark we
+       do not hold — while `avatar` and the two `result*` fields exist on the
+       featured item alone. The tuple is `as const`, so items[0] keeps its own
+       precise type and the other three stay a clean union.
+
+       REAL CLIENT VIDEOS (21 Aug 2026). Every `vimeoId` is the client's own
+       upload, so each item now carries its own id instead of the single shared
+       placeholder that used to sit above this list. `duration` /
+       `durationSpoken` are the true lengths, read off Vimeo's oEmbed endpoint —
+       do not hand-edit them without re-checking.
+
+       All four are shot vertically (9:16), which is why `portrait` is set on
+       each one: components/home/VideoLightbox.tsx sizes its frame from this and
+       would otherwise pillarbox a phone-shaped video inside a 16:9 box.
+
+       The quotes are the clients' own words, lifted verbatim from the video
+       descriptions. The one exception is flagged inline below. */
     items: [
         {
-            client: "AutoKeyFix",
-            project: "Website Redesign & SEO",
-            quote: "They delivered a beautiful website and a seamless user experience. The attention to detail and communication were top-notch. They delivered a beautiful website and a seamless user experience.",
+            client: "Infinity Plumbing",
+            project: "Branding & Web Design",
+            vimeoId: "1102525715",
+            portrait: true,
+            quote: "I cannot fault Nick and his team enough. Absolutely outstanding and very highly recommended… Nothing is too much trouble.",
             stars: 5,
-            thumb: "/assets/img/home/video/thumb-1.webp",
-            duration: "02:55",
-            durationSpoken: "2 minutes 55 seconds",
-            avatar: "/assets/img/home/video/avatar-webuild.webp",
-            avatarAlt: "AutoKeyFix company logo",
-            resultValue: "156%",
-            resultText: "increase in organic traffic & 3x more enquiries",
+            thumb: "/assets/img/home/video/thumb-featured.webp",
+            duration: "01:00",
+            durationSpoken: "1 minute",
+            logo: {
+                src: "/assets/img/home/video/logos/infinity.webp",
+                alt: "Infinity Plumbing & Maintenance SW logo",
+                width: 224,
+                height: 120,
+            },
+            /* Deliberately NOT a percentage. The figures that used to sit here
+               belonged to a placeholder client and were invented; there are no
+               measured numbers for this account yet. Swap in a real metric the
+               moment one exists — the strapline is built for one. */
+            resultValue: "Ongoing partner",
+            resultText: "for branding, website and digital marketing",
         },
         {
-            client: "WeBuild Inc.",
-            project: "Web Design Project",
-            quote: "They delivered a beautiful website and a seamless user experience.",
+            client: "LH Carpentry",
+            project: "Logo Design",
+            vimeoId: "1098784940",
+            portrait: true,
+            quote: "Absolutely fantastic service. I recommend them to everyone.",
             stars: 5,
-            thumb: "/assets/img/home/video/thumb-1.webp",
-            duration: "02:55",
-            durationSpoken: "2 minutes 55 seconds",
+            thumb: "/assets/img/home/video/thumb-1-lh.webp",
+            duration: "00:14",
+            durationSpoken: "14 seconds",
+            /* No mark supplied by the client — the card falls back to the name
+               alone. Drop the file in and fill this out to light it up. */
+            logo: null,
         },
         {
-            client: "WeBuild Inc.",
-            project: "Web Design Project",
-            quote: "They delivered a beautiful website and a seamless user experience.",
+            client: "Rami Physique Coach",
+            project: "Fitness Website Design",
+            vimeoId: "1098784956",
+            portrait: true,
+            quote: "They boosted my business to a higher level and helped me promote myself in the market.",
             stars: 5,
-            thumb: "/assets/img/home/video/thumb-1.webp",
-            duration: "02:55",
-            durationSpoken: "2 minutes 55 seconds",
+            thumb: "/assets/img/home/video/thumb-2.webp",
+            duration: "00:55",
+            durationSpoken: "55 seconds",
+            logo: {
+                src: "/assets/img/home/video/logos/rami.webp",
+                alt: "Rami Physique Coach logo",
+                width: 123,
+                height: 120,
+            },
         },
         {
-            client: "WeBuild Inc.",
-            project: "Web Design Project",
-            quote: "They delivered a beautiful website and a seamless user experience.",
+            client: "Plum Creek Lawn Care",
+            project: "Website, SEO & Social Media",
+            vimeoId: "1098784691",
+            portrait: true,
+            /* PLACEHOLDER — the only line in this section that is not the
+               client's own words. Matt's video carries no quotable sentence in
+               its description, so this paraphrases what the video is about
+               rather than putting words in his mouth. Replace with his real
+               quote when the client sends one. */
+            quote: "From a Google listing to the top of local search — better clients, more calls, real growth.",
             stars: 5,
-            thumb: "/assets/img/home/video/thumb-1.webp",
-            duration: "02:55",
-            durationSpoken: "2 minutes 55 seconds",
-        },
-        {
-            client: "WeBuild Inc.",
-            project: "Web Design Project",
-            quote: "They delivered a beautiful website and a seamless user experience.",
-            stars: 5,
-            thumb: "/assets/img/home/video/thumb-1.webp",
-            duration: "02:55",
-            durationSpoken: "2 minutes 55 seconds",
+            thumb: "/assets/img/home/video/thumb-3.webp",
+            duration: "02:08",
+            durationSpoken: "2 minutes 8 seconds",
+            logo: {
+                src: "/assets/img/home/video/logos/plum-creek.webp",
+                alt: "Plum Creek Lawn Care logo",
+                width: 358,
+                height: 120,
+            },
         },
     ],
     /* Full-bleed backdrop, client-supplied. 1920x1146 native. */

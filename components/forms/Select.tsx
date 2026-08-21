@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 import type { FieldTone } from "./Field";
+import { ValidMark, VALID_MARK_TONE } from "./ValidMark";
 
 /**
  * Custom listbox replacing the native <select>.
@@ -18,10 +19,13 @@ import type { FieldTone } from "./Field";
  * for a five-option field.
  *
  * The value is submitted by `<input type="hidden">`, which is exempt from
- * constraint validation — so `required` is enforced server-side by zod and the
- * message comes back through `state.errors`. A visually hidden *required*
- * <select> would have been the alternative and is a trap: Chrome refuses to
- * submit and logs "An invalid form control is not focusable" with no visible UI.
+ * constraint validation — so `required` is carried by the `data-*` contract in
+ * `lib/form-rules.ts` and checked by `useFormEngagement` alongside every other
+ * field, with zod re-checking it in the action. It used to be server-only,
+ * which cost a visitor who skipped a dropdown a full round trip to be told so.
+ * A visually hidden *required* <select> would have been the alternative and is
+ * a trap: Chrome refuses to submit and logs "An invalid form control is not
+ * focusable" with no visible UI.
  */
 
 const PLACEHOLDER = "Please choose…";
@@ -33,19 +37,28 @@ const PLACEHOLDER = "Please choose…";
  */
 export type SelectSkin = FieldTone | "brief";
 
+/**
+ * `data-valid` is written onto this button, not onto the hidden input that
+ * carries the value: `useFormEngagement` follows the same `data-focus-target`
+ * it uses to send a failed submit here, because a hidden input has no border to
+ * turn green. See `VALID_ATTR` in lib/form-rules.ts.
+ */
 const TRIGGER: Record<SelectSkin, string> = {
     dark:
         "border-white/[0.11] bg-white/[0.04] text-white " +
         "hover:border-white/20 " +
-        "aria-[invalid=true]:border-red-400/60",
+        "aria-[invalid=true]:border-red-400/60 " +
+        "data-[valid=true]:border-emerald-400/55",
     light:
         "border-seo-border bg-white text-seo-ink " +
         "hover:border-seo-body/50 " +
-        "aria-[invalid=true]:border-red-500",
+        "aria-[invalid=true]:border-red-500 " +
+        "data-[valid=true]:border-emerald-600/70",
     brief:
         "border-mist-300 bg-white text-onlight " +
         "hover:border-mist-400 " +
-        "aria-[invalid=true]:border-red-500",
+        "aria-[invalid=true]:border-red-500 " +
+        "data-[valid=true]:border-emerald-600/70",
 };
 
 /* Written out per tone — Tailwind v4 scans for literal class names. */
@@ -152,6 +165,7 @@ export function SelectField({
     const [flip, setFlip] = useState(false);
 
     const rootRef = useRef<HTMLDivElement>(null);
+    const hiddenRef = useRef<HTMLInputElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const listRef = useRef<HTMLUListElement>(null);
     /* Type-ahead buffer, matching native <select> behaviour. */
@@ -204,6 +218,28 @@ export function SelectField({
             window.removeEventListener("resize", onResize);
         };
     }, [open, close]);
+
+    /**
+     * Announce the new value to whatever is listening on the form.
+     *
+     * The value lives in React state and is written to a hidden input, so
+     * choosing an option fires no `input` event of its own and
+     * `useFormEngagement` would keep showing "Please select an option" under a
+     * dropdown that has just been answered. Dispatching the event the platform
+     * would have dispatched keeps that hook's contract identical for every
+     * control, rather than giving the dropdown a private channel.
+     *
+     * Skipped on mount: an empty value is not an answer, and announcing it
+     * would mark the field touched before the visitor has been near it.
+     */
+    const announced = useRef(false);
+    useEffect(() => {
+        if (!announced.current) {
+            announced.current = true;
+            return;
+        }
+        hiddenRef.current?.dispatchEvent(new Event("input", { bubbles: true }));
+    }, [value]);
 
     /* Keep the highlighted row in view when arrowing past the scroll edge. */
     useEffect(() => {
@@ -267,7 +303,20 @@ export function SelectField({
 
     return (
         <div ref={rootRef} className={cn("relative", className)}>
-            <input type="hidden" name={name} value={value} />
+            {/* The value the form posts. A hidden input is exempt from the
+                platform's constraint validation, so it opts into the shared
+                engine instead (lib/form-rules.ts): `data-validate` makes it
+                visible to `validatableControls`, and `data-focus-target` sends
+                a failed submit to the trigger button, which can take focus. */}
+            <input
+                ref={hiddenRef}
+                type="hidden"
+                name={name}
+                value={value}
+                data-validate="select"
+                data-required={required ? "true" : undefined}
+                data-focus-target={id}
+            />
 
             <button
                 ref={triggerRef}
@@ -290,7 +339,7 @@ export function SelectField({
                 onClick={() => (open ? close() : openList())}
                 onKeyDown={onKeyDown}
                 className={cn(
-                    "flex w-full min-w-0 items-center gap-2 border text-left focus:outline-none",
+                    "peer flex w-full min-w-0 items-center gap-2 border text-left focus:outline-none",
                     "transition-[border-color,background-color,box-shadow] duration-300 ease-out",
                     plain
                         ? "rounded-lg px-3.5 py-2.5 text-sm"
@@ -327,6 +376,13 @@ export function SelectField({
                     />
                 </svg>
             </button>
+
+            <ValidMark
+                className={cn(
+                    plain ? "end-9 top-3" : "end-11 top-[1.15rem]",
+                    VALID_MARK_TONE[tone],
+                )}
+            />
 
             {!plain && (
                 <span id={`${id}-label`} className={labelBase(tone as FieldTone)}>

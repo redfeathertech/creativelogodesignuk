@@ -1,8 +1,10 @@
 import { z } from "zod";
 
 import {
+    EMAIL_MESSAGE,
     NAME_MESSAGE,
     NAME_PATTERN,
+    normalisePhone,
     PHONE_MESSAGE,
     PHONE_PATTERN,
 } from "./form-rules";
@@ -23,18 +25,30 @@ const email = z
     .string()
     .trim()
     .min(1, "Required")
-    .email("Enter a valid email address")
+    .email(EMAIL_MESSAGE)
     .max(120);
 
-/* Digits only, with an optional leading "+" for the country code — the shared
-   rule in lib/form-rules.ts, which the browser-side guard enforces from the
-   same constants. This was permissive (spaces, brackets, dashes) until the
-   client asked for the stricter form site-wide, 2026-08. */
+/**
+ * A phone number in any of the shapes people write one.
+ *
+ * `.transform` runs before the check, so "+44 7853 354207", "+447853354207",
+ * "(020) 7946 0018" and "07853-354207" are all judged — and all *stored*, and
+ * all mailed to the team — as the dialable form. Parsing the number is the
+ * server's job as much as the browser's: `normalisePhone` is the same function
+ * `useFormEngagement` runs on blur, from `lib/form-rules.ts`, so neither side
+ * can accept what the other rejects.
+ *
+ * The site was digits-only, no separators, from the client's 2026-08 rule until
+ * they asked for the flexible form. The stricter rule cost a visitor who typed
+ * their number the way it is printed on their own website a rejection.
+ */
 const phone = z
     .string()
     .trim()
     .min(1, "Required")
-    .regex(PHONE_PATTERN, PHONE_MESSAGE);
+    .max(32)
+    .transform(normalisePhone)
+    .refine((v) => PHONE_PATTERN.test(v), { message: PHONE_MESSAGE });
 
 const optionalText = z.string().trim().max(120).optional().or(z.literal(""));
 
@@ -139,8 +153,8 @@ const briefBlock = z.string().trim().max(2000).optional().or(z.literal(""));
  * an accent was accepted here exactly as it is on the live form. The client's
  * 2026-08 rule ("alphabets and spaces only, on every form") overrides that, so
  * it now carries the shared pattern with the live 3-character minimum kept on
- * top. `phone` stays optional — the live script accepts it empty — but is held
- * to the shared digits-only pattern when it is filled in.
+ * top. `phone` stays optional — the live script accepts it empty — but is
+ * normalised and held to the shared pattern when it is filled in.
  *
  * The three checkbox arrays are NOT validated for membership here — the action
  * matches them against `CHECKBOX_OPTIONS` before they reach an email. This
@@ -155,15 +169,16 @@ export const websiteBriefSchema = z.object({
         .regex(NAME_PATTERN, NAME_MESSAGE),
     company: z.string().trim().min(1, "Company name is required").max(120),
     email,
+    /* Optional — the live script accepts it empty — but normalised and held
+       to the shared pattern the moment it is filled in. */
     phone: z
         .string()
         .trim()
         .max(32)
+        .transform(normalisePhone)
         .refine((v) => v === "" || PHONE_PATTERN.test(v), {
             message: PHONE_MESSAGE,
-        })
-        .optional()
-        .or(z.literal("")),
+        }),
     business_overview: z
         .string()
         .trim()

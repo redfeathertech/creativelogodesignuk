@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
+
+import { cn } from "@/lib/cn";
 
 /**
  * The modal a video testimonial opens into.
@@ -25,12 +28,21 @@ const FOCUSABLE = 'a[href], button:not([disabled]), iframe, [tabindex]:not([tabi
 
 export default function VideoLightbox({
     vimeoId,
+    portrait = false,
     title,
     closeLabel,
     onClose,
 }: {
     vimeoId: string;
-    /** Names both the dialog and the iframe, e.g. "AutoKeyFix — Website Redesign & SEO". */
+    /**
+     * True for a 9:16 upload — every client testimonial so far is filmed on a
+     * phone. Vimeo letterboxes the video inside whatever box the iframe is
+     * given, so a portrait clip in the default 16:9 frame draws about a third
+     * the picture with two black bars either side of it. This swaps the frame
+     * to 9:16 and caps its height against the viewport instead of its width.
+     */
+    portrait?: boolean;
+    /** Names both the dialog and the iframe, e.g. "LH Carpentry — Logo Design". */
     title: string;
     closeLabel: string;
     onClose: () => void;
@@ -96,7 +108,17 @@ export default function VideoLightbox({
         `https://player.vimeo.com/video/${vimeoId}` +
         "?autoplay=1&dnt=1&title=0&byline=0&portrait=0";
 
-    return (
+    /* PORTALLED TO <body>, and it has to be. The section that renders this is
+       `isolate`, which opens a stacking context — so in place, the overlay's
+       z-1040 and the dialog's z-1045 are only ever compared against each other
+       and against that ONE section, never against the chrome. The sticky Nav is
+       z-1030 at the root and therefore painted on top of the whole modal,
+       swallowing the close button; the WhatsApp FAB (z-1000) came through it
+       too. `position: fixed` was never the problem — the stacking context was.
+
+       Safe to reach for `document` unguarded: the parent only mounts this from
+       a click handler, so it never renders on the server. */
+    return createPortal(
         <>
             <div
                 onClick={onClose}
@@ -110,11 +132,22 @@ export default function VideoLightbox({
                     role="dialog"
                     aria-modal="true"
                     aria-label={title}
-                    /* Capped on BOTH axes. Width alone leaves a 16:9 frame taller
-                       than a landscape phone, which puts the player's own
-                       controls off-screen; `max-h` with the aspect ratio doing
-                       the width lets it shrink to fit either way round. */
-                    className="relative m-auto w-full max-w-[64rem]"
+                    /* Both branches size the frame so it always fits on screen,
+                       because the aspect ratio below turns whatever width lands
+                       here into a height. */
+                    className={cn(
+                        "relative m-auto",
+                        /* Portrait is sized off the VIEWPORT HEIGHT, not the
+                           width: at 9:16 a frame wide enough to look deliberate
+                           is taller than any laptop. `100dvh` minus ~8rem
+                           leaves room for the wrapper padding and the close
+                           button that sits above the frame; the 24rem cap stops
+                           it turning into a skyscraper on a tall monitor, and
+                           the 100% term keeps it inside a narrow phone. */
+                        portrait
+                            ? "w-[min(24rem,100%,calc((100dvh-8rem)*0.5625))]"
+                            : "w-full max-w-[64rem]",
+                    )}
                 >
                     <button
                         ref={closeRef}
@@ -136,7 +169,12 @@ export default function VideoLightbox({
                         </svg>
                     </button>
 
-                    <div className="aspect-video w-full overflow-hidden rounded-lg border border-white/10 bg-black shadow-lg">
+                    <div
+                        className={cn(
+                            "w-full overflow-hidden rounded-lg border border-white/10 bg-black shadow-lg",
+                            portrait ? "aspect-[9/16]" : "aspect-video",
+                        )}
+                    >
                         <iframe
                             src={src}
                             title={title}
@@ -147,6 +185,7 @@ export default function VideoLightbox({
                     </div>
                 </div>
             </div>
-        </>
+        </>,
+        document.body,
     );
 }

@@ -2,6 +2,7 @@
 
 import { useId } from "react";
 import { cn } from "@/lib/cn";
+import { ValidMark, VALID_MARK_TONE } from "./ValidMark";
 
 /**
  * Labelled form control with a floating label.
@@ -25,15 +26,27 @@ import { cn } from "@/lib/cn";
  */
 export type FieldTone = "dark" | "light";
 
+/**
+ * The failure and success borders are written out per tone for the same reason
+ * everything else in this file is: Tailwind v4 scans source text, so a composed
+ * `aria-[invalid=true]:${x}` would generate no CSS at all.
+ *
+ * They cannot both apply — `useFormEngagement` only sets `data-valid` on a
+ * control it found no message for — so their order relative to each other is
+ * moot. The extra end padding is applied by the same variant, so it arrives
+ * with the tick and no field reserves space for a tick it may never show.
+ */
 const CONTROL: Record<FieldTone, string> = {
     dark:
         "border-white/[0.11] bg-white/[0.04] text-white " +
         "hover:border-white/20 focus:border-magenta-400 focus:bg-white/[0.07] " +
-        "focus:shadow-[0_0_0_3px_rgb(204_6_127/0.22)] aria-[invalid=true]:border-red-400/60",
+        "focus:shadow-[0_0_0_3px_rgb(204_6_127/0.22)] aria-[invalid=true]:border-red-400/60 " +
+        "data-[valid=true]:border-emerald-400/55 data-[valid=true]:pe-11",
     light:
         "border-seo-border bg-white text-seo-ink " +
         "hover:border-seo-body/50 focus:border-seo-pink focus:bg-white " +
-        "focus:shadow-[0_0_0_3px_rgb(209_0_143/0.16)] aria-[invalid=true]:border-red-500",
+        "focus:shadow-[0_0_0_3px_rgb(209_0_143/0.16)] aria-[invalid=true]:border-red-500 " +
+        "data-[valid=true]:border-emerald-600/70 data-[valid=true]:pe-11",
 };
 
 const controlClass = (tone: FieldTone) =>
@@ -121,6 +134,7 @@ export function Field({
                 aria-describedby={hasError ? errorId : undefined}
                 className={controlClass(tone)}
             />
+            <ValidMark className={cn("end-[1.05rem] top-[1.15rem]", VALID_MARK_TONE[tone])} />
             <label
                 htmlFor={id}
                 className={cn(labelBase(tone), labelReactive(tone))}
@@ -173,6 +187,8 @@ export function TextareaField({
                     "min-h-32 resize-y pt-[1.7rem]",
                 )}
             />
+            {/* Pinned to the top of a resizable box, not its centre. */}
+            <ValidMark className={cn("end-[1.05rem] top-[1.35rem]", VALID_MARK_TONE[tone])} />
             <label
                 htmlFor={id}
                 className={cn(labelBase(tone), labelReactive(tone))}

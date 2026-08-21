@@ -1,5 +1,6 @@
 import { cn } from "@/lib/cn";
 import { SelectField } from "@/components/forms/Field";
+import { ValidMark, VALID_MARK_TONE } from "@/components/forms/ValidMark";
 import type { BriefField, BriefSection } from "@/content/landing/brief-types";
 
 /**
@@ -15,7 +16,9 @@ import type { BriefField, BriefSection } from "@/content/landing/brief-types";
  * by the OS, so `components/forms/Select.tsx` is used in its `plain` variant
  * with a `brief` skin — the label and the error line still come from here.
  * That control posts through a hidden input, which is exempt from constraint
- * validation, so `required` on a select is enforced by zod in the action.
+ * validation, so `required` on a select rides the `data-*` contract in
+ * `lib/form-rules.ts` and is checked in the browser like every other field,
+ * with zod re-checking it in the action.
  *
  * Labels are rendered exactly as the content module gives them, asterisks
  * included. Where the live page marks nothing — the whole logo brief — the
@@ -23,9 +26,10 @@ import type { BriefField, BriefSection } from "@/content/landing/brief-types";
  */
 
 const control =
-    "w-full min-w-0 rounded-lg border border-mist-300 bg-white px-3.5 py-2.5 text-sm text-onlight " +
+    "peer w-full min-w-0 rounded-lg border border-mist-300 bg-white px-3.5 py-2.5 text-sm text-onlight " +
     "placeholder:text-mist-500 focus:border-magenta-500 focus:outline-none " +
-    "focus:ring-2 focus:ring-magenta-500/30 disabled:opacity-50";
+    "focus:ring-2 focus:ring-magenta-500/30 disabled:opacity-50 " +
+    "data-[valid=true]:border-emerald-600/70 data-[valid=true]:pe-9";
 
 const invalid = "border-red-500 focus:border-red-500 focus:ring-red-500/30";
 
@@ -87,10 +91,16 @@ export function BriefFieldControl({
                             key={option}
                             className="flex min-w-0 items-center gap-2.5 text-sm text-onlight"
                         >
+                            {/* A group is one answer, not one control per box,
+                                so the shared engine reads its requiredness off
+                                the members — see `checkboxGroups` in
+                                lib/form-rules.ts. Never `required`: that would
+                                make the platform demand *every* box. */}
                             <input
                                 type="checkbox"
                                 name={field.name}
                                 value={option}
+                                data-required={field.required ? "true" : undefined}
                                 className="size-4 shrink-0 accent-magenta-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-magenta-500/40"
                             />
                             <span className="min-w-0">{option}</span>
@@ -131,7 +141,7 @@ export function BriefFieldControl({
     return (
         <div>
             <Label htmlFor={id}>{field.label}</Label>
-            <div className="mt-1.5">
+            <div className="relative mt-1.5">
                 {field.kind === "textarea" ? (
                     <textarea
                         id={id}
@@ -158,6 +168,14 @@ export function BriefFieldControl({
                         className={cn(control, bad && invalid)}
                     />
                 )}
+                <ValidMark
+                    className={cn(
+                        field.kind === "textarea"
+                            ? "end-3 top-3"
+                            : "end-3 top-[0.7rem]",
+                        VALID_MARK_TONE.brief,
+                    )}
+                />
             </div>
             <Errors id={errorId} errors={errors} />
         </div>

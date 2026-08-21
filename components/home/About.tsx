@@ -2,7 +2,6 @@ import Image from "next/image";
 import { about } from "@/content/home";
 import { Eyebrow, Section } from "@/components/ui/Section";
 import { LeadButton } from "@/components/chrome/LeadPanel";
-import Counter from "@/components/ui/Counter";
 import { ArrowIcon } from "@/components/ui/icons";
 
 /**
@@ -45,43 +44,39 @@ export default function About() {
                         </LeadButton>
                     </div>
 
-                    {/* Ruled top and bottom, icon beside each figure — the same
-                        rail as the hero's trust strip, on the light canvas. The
-                        dividers are borders on the items rather than separate
-                        elements, so a wrap drops the leading rule with the item
-                        instead of stranding it. Below `sm` the three stack:
-                        three icon + figure + label groups do not fit a phone
-                        width without the labels wrapping mid-word. */}
-                    <dl className="flex flex-col gap-5 border-y border-ink-900/10 py-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-0">
-                        {about.stats.map((stat) => (
-                            <div
-                                key={stat.label}
+                    {/* Three proof points, ruled top and bottom with a
+                        divider between each — the same rail the hero uses, on
+                        the light canvas. The dividers are borders on the items
+                        rather than separate elements, so a wrap drops the
+                        leading rule with its item instead of stranding it.
+                        Below `sm` the three stack: an icon plus two lines of
+                        label does not fit three-up at a phone width without
+                        the second line wrapping mid-word. */}
+                    <ul className="flex flex-col gap-5 border-y border-ink-900/10 py-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-0">
+                        {about.features.map((feature) => (
+                            <li
+                                key={feature.title}
                                 className="flex items-center gap-3 sm:pe-5 sm:ps-5 sm:first:ps-0 sm:not-first:border-s sm:not-first:border-ink-900/10"
                             >
                                 <Image
-                                    src={stat.icon}
-                                    alt={stat.iconAlt}
+                                    src={feature.icon}
+                                    alt={feature.iconAlt}
                                     width={48}
                                     height={48}
                                     unoptimized
-                                    className="h-10 w-10 shrink-0 object-contain"
+                                    className="h-9 w-9 shrink-0 object-contain"
                                 />
                                 <div className="min-w-0">
-                                    <dt className="sr-only">{stat.label}</dt>
-                                    <dd>
-                                        <Counter
-                                            value={stat.value}
-                                            suffix={stat.suffix}
-                                            className="gradient-text-brand block font-display text-[clamp(1.5rem,1.1rem+1.5vw,2rem)] leading-none font-extrabold tracking-[-0.02em]"
-                                        />
-                                        <span className="mt-1.5 block text-[0.6875rem] tracking-[0.08em] text-onlight-muted uppercase">
-                                            {stat.label}
-                                        </span>
-                                    </dd>
+                                    <span className="gradient-text-brand block font-display text-[clamp(1rem,0.9rem+0.4vw,1.125rem)] leading-none font-extrabold tracking-[0.02em] uppercase">
+                                        {feature.title}
+                                    </span>
+                                    <span className="mt-1.5 block text-[0.6875rem] tracking-[0.08em] text-onlight-muted uppercase">
+                                        {feature.label}
+                                    </span>
                                 </div>
-                            </div>
+                            </li>
                         ))}
-                    </dl>
+                    </ul>
                 </div>
 
                 {/* `overflow-x-clip` contains the glow below. It bleeds 6% past

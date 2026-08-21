@@ -10,7 +10,7 @@ import { cn } from "@/lib/cn";
 import VideoLightbox from "./VideoLightbox";
 
 /**
- * Video testimonials — a featured player beside a column of four compact cards,
+ * Video testimonials — a featured player beside a column of three compact cards,
  * every one of which opens components/home/VideoLightbox.tsx.
  *
  * Net-new; the live homepage has no equivalent. See the note on
@@ -20,17 +20,18 @@ import VideoLightbox from "./VideoLightbox";
  * **Nothing is hosted here and nothing is embedded until a click.** The stills
  * are ordinary `next/image` assets and the Vimeo iframe is mounted by the
  * lightbox only while it is open, so the section's cost on first load is the
- * five thumbnails and no third-party bytes at all.
+ * four thumbnails and no third-party bytes at all.
  *
  * A client component for the same reason as components/home/Portfolio.tsx — it
  * holds state (which card is playing). Every word of copy is still in the
  * prerendered HTML: the lightbox is the only thing gated behind hydration, and
  * it contains no text a crawler needs.
  *
- * No `VideoObject` structured data yet, deliberately. The schema needs a real
- * `contentUrl`, `uploadDate` and `thumbnailUrl`, and emitting those against a
- * placeholder Vimeo id would publish false data. Add it the moment the client's
- * own videos replace `videoTestimonials.vimeoId` — see docs/SEO-PLAYBOOK.md.
+ * No `VideoObject` structured data yet, deliberately. The ids are now the
+ * clients' real uploads, so the blocker is no longer false data — it is that
+ * the schema also wants an `uploadDate` and a `description` per video, and
+ * those have to come from the client rather than be guessed. Next job on this
+ * section; see docs/SEO-PLAYBOOK.md.
  */
 
 const {
@@ -38,7 +39,6 @@ const {
     titleLead,
     titleAccent,
     lead,
-    vimeoId,
     playPrefix,
     close,
     items,
@@ -48,8 +48,8 @@ const {
 
 /* items[0] is the featured panel, the rest are the compact column. Destructured
    at module scope because the tuple is `as const` — this is what gives
-   `featured` its own type, with the `avatar` and `result*` fields the other four
-   do not carry. */
+   `featured` its own type, with the `result*` fields the other three do not
+   carry. */
 const [featured, ...compact] = items;
 
 const HEADING_ID = "video-testimonials-heading";
@@ -137,45 +137,55 @@ export default function VideoTestimonials() {
             />
 
             <div className="container-site">
+                {/* The heading block spans the full width rather than sitting in
+                    the left column. Its own `max-w` caps still hold, so it draws
+                    identically — but it no longer adds ~330px to the left
+                    column's height, which is what the right-hand column is
+                    stretched against. With three compact cards instead of four
+                    that difference is the whole ball game: measured against the
+                    still alone the cards land at their natural size, measured
+                    against heading + still they stretch to ~280px each and open
+                    ~85px of dead space above and below their content. */}
+                <div className="reveal">
+                    <Eyebrow>{eyebrow}</Eyebrow>
+
+                    {/* The accent is `block` so it takes a line of its own,
+                        which is how the approved design sets this heading — the
+                        same call as `methodology`. It changes where the line
+                        breaks fall and nothing else: the two fields still
+                        concatenate to the one heading string in the DOM. */}
+                    <h2 id={HEADING_ID} className="text-h2 max-w-[22ch]">
+                        {titleLead}{" "}
+                        <span className="gradient-text-brand block">
+                            {titleAccent}
+                        </span>
+                    </h2>
+
+                    <p className="mt-6 max-w-[52ch] text-lead text-white/65">
+                        {lead}
+                    </p>
+                </div>
+
                 {/* `minmax(0,…)` on both tracks, never `1fr`: a grid item defaults
                     to `min-width: auto`, and a compact card's longest word plus its
                     still is wider than a 320px phone. */}
-                <div className="grid items-start gap-[clamp(2.5rem,1.5rem+3vw,3.5rem)] lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+                <div className="mt-10 grid items-start gap-[clamp(2.5rem,1.5rem+3vw,3.5rem)] lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
                     {/* ------------------------------------------ left column -- */}
                     <div>
-                        <div className="reveal">
-                            <Eyebrow>{eyebrow}</Eyebrow>
-
-                            {/* The accent is `block` so it takes a line of its
-                                own, which is how the approved design sets this
-                                heading — the same call as `methodology`. It
-                                changes where the line breaks fall and nothing
-                                else: the two fields still concatenate to the
-                                one heading string in the DOM. */}
-                            <h2 id={HEADING_ID} className="text-h2 max-w-[22ch]">
-                                {titleLead}{" "}
-                                <span className="gradient-text-brand block">
-                                    {titleAccent}
-                                </span>
-                            </h2>
-
-                            <p className="mt-6 max-w-[52ch] text-lead text-white/65">
-                                {lead}
-                            </p>
-                        </div>
-
                         {/* `relative` is the containing block the pull-quote goes
-                            absolute against from `lg:` up. Below that it is an
+                            absolute against from `xl:` up. Below that it is an
                             ordinary block and the quote sits under the still
-                            rather than covering two thirds of it. */}
-                        <div className="reveal relative mt-10">
+                            rather than covering two thirds of it — at `lg` the
+                            still is only ~330px tall and the quote card does not
+                            fit inside it without clipping its own text. */}
+                        <div className="reveal relative">
                             <div className="group relative aspect-[845/540] overflow-hidden rounded-lg border border-white/10">
                                 <Image
                                     src={featured.thumb}
                                     alt={`Video testimonial from ${featured.client} about their ${featured.project}`}
-                                    width={845}
-                                    height={540}
-                                    sizes="(max-width: 1024px) 92vw, 46vw"
+                                    width={1690}
+                                    height={1080}
+                                    sizes="(max-width: 1024px) 92vw, 56vw"
                                     className="size-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.03]"
                                 />
 
@@ -203,14 +213,20 @@ export default function VideoTestimonials() {
                                     className="absolute inset-0 z-20 cursor-pointer"
                                 />
 
-                                {/* Centred on the still, and from `lg:` up nudged
-                                    into the part of it the pull-quote does not
-                                    cover. */}
+                                {/* Centred on the still, and from `xl:` up nudged
+                                    left into the part of it the pull-quote does
+                                    not cover. Below `xl` it lifts instead: the
+                                    quote card has dropped out of the tile by
+                                    then, so the only thing left to dodge is the
+                                    caption along the foot, which on a phone is
+                                    two lines of client-and-project plus the
+                                    strapline and reaches the middle of the
+                                    still. */}
                                 <span
                                     aria-hidden="true"
                                     className="pointer-events-none absolute inset-0 z-10 grid place-items-center"
                                 >
-                                    <span className="grid size-[clamp(3rem,10vw,4.5rem)] place-items-center rounded-full bg-[linear-gradient(97deg,var(--color-violet-500)_0%,var(--color-magenta-500)_100%)] text-white shadow-glow ring-4 ring-white/25 transition-transform duration-300 ease-out group-hover:scale-110 lg:-translate-x-[36%] [&>svg]:size-[clamp(1rem,3vw,1.375rem)] [&>svg]:translate-x-px">
+                                    <span className="grid size-[clamp(3rem,10vw,4.5rem)] place-items-center rounded-full bg-[linear-gradient(97deg,var(--color-violet-500)_0%,var(--color-magenta-500)_100%)] text-white shadow-glow ring-4 ring-white/25 transition-transform duration-300 ease-out group-hover:scale-110 max-xl:-translate-y-[14%] xl:-translate-x-[36%] [&>svg]:size-[clamp(1rem,3vw,1.375rem)] [&>svg]:translate-x-px">
                                         <PlayIcon />
                                     </span>
                                 </span>
@@ -222,18 +238,25 @@ export default function VideoTestimonials() {
                                     className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-2/5 bg-linear-to-t from-ink-950/92 to-transparent"
                                 />
 
-                                <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-[clamp(1rem,3vw,1.5rem)] lg:max-w-[62%]">
+                                <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-[clamp(1rem,3vw,1.5rem)] xl:max-w-[62%]">
                                     <p className="font-display text-[clamp(0.9375rem,2.4vw,1.125rem)] font-extrabold text-white">
                                         {featured.client} — {featured.project}
                                     </p>
 
-                                    <p className="mt-1 flex items-baseline gap-1.5 text-[clamp(0.75rem,2vw,0.875rem)] text-white/75">
-                                        <span className="self-center text-magenta-300">
+                                    {/* Flows as ONE paragraph, not a flex row.
+                                        As a flex row each span is its own item,
+                                        so a strapline that names services rather
+                                        than a single "156%" wraps into two
+                                        stacked blocks and the arrow ends up
+                                        orphaned beside them. Inline, the whole
+                                        line wraps the way a sentence does. */}
+                                    <p className="mt-1 text-[clamp(0.75rem,2vw,0.875rem)] text-white/75">
+                                        <span className="mr-1.5 inline-block translate-y-px text-magenta-300">
                                             <TrendIcon />
                                         </span>
                                         <span className="font-display font-bold text-magenta-300">
                                             {featured.resultValue}
-                                        </span>
+                                        </span>{" "}
                                         {featured.resultText}
                                     </p>
                                 </div>
@@ -244,7 +267,7 @@ export default function VideoTestimonials() {
                                 it covers would be dead to a click, which is not how
                                 a single tile should behave. It carries no controls,
                                 so nothing is made unreachable. */}
-                            <figure className="mt-4 rounded-lg border border-violet-400/30 bg-violet-900/55 p-5 backdrop-blur-md lg:pointer-events-none lg:absolute lg:top-[16%] lg:right-[3.5%] lg:bottom-[8%] lg:mt-0 lg:flex lg:w-[36%] lg:flex-col lg:justify-center">
+                            <figure className="mt-4 rounded-lg border border-violet-400/30 bg-violet-900/55 p-5 backdrop-blur-md xl:pointer-events-none xl:absolute xl:top-[14%] xl:right-[3.5%] xl:bottom-[8%] xl:mt-0 xl:flex xl:w-[36%] xl:flex-col xl:justify-center">
                                 <QuoteGlyph className="w-[clamp(1.25rem,3vw,1.5rem)] text-violet-300" />
 
                                 <Stars count={featured.stars} className="mt-3" />
@@ -256,13 +279,21 @@ export default function VideoTestimonials() {
                                 </blockquote>
 
                                 <figcaption className="mt-5 flex items-center gap-3">
-                                    <Image
-                                        src={featured.avatar}
-                                        alt={featured.avatarAlt}
-                                        width={53}
-                                        height={53}
-                                        className="size-9 shrink-0 rounded-full"
-                                    />
+                                    {/* `w-auto` beside a fixed height is what lets
+                                        one box hold marks of any proportion — the
+                                        three we have run from 1:1 to 3:1. Without
+                                        it Tailwind's `h-9` fights `next/image`'s
+                                        intrinsic width attribute and the wide ones
+                                        squash. */}
+                                    {featured.logo && (
+                                        <Image
+                                            src={featured.logo.src}
+                                            alt={featured.logo.alt}
+                                            width={featured.logo.width}
+                                            height={featured.logo.height}
+                                            className="h-9 w-auto max-w-24 shrink-0 object-contain object-left"
+                                        />
+                                    )}
 
                                     <span className="flex min-w-0 flex-col">
                                         <cite className="truncate font-display text-[0.9375rem] font-bold text-white not-italic">
@@ -279,15 +310,17 @@ export default function VideoTestimonials() {
 
                     {/* ----------------------------------------- right column -- */}
                     {/* `self-stretch` overrides the row's `items-start` for this
-                        one item, and `auto-rows-fr` then divides the left
-                        column's height into four equal rows.
+                        one item, and `auto-rows-fr` then divides the still's
+                        height into three equal rows.
 
                         The alternative, `content-between`, keeps each card at
                         its natural height and pushes the slack into the gaps —
                         which at this container width (1344px, against the
-                        mock's 1074) means the still is tall enough to open
-                        ~120px voids between cards. Growing the cards keeps the
-                        rhythm the design has; growing the gaps does not. */}
+                        mock's 1074) opens ~90px voids between cards. Growing the
+                        cards keeps the rhythm the design has; growing the gaps
+                        does not. Three rows against the still alone come out at
+                        ~150px each, which is close enough to a card's natural
+                        height that the stretch reads as padding. */}
                     <ul className="reveal grid gap-[clamp(0.75rem,2vw,1.125rem)] lg:auto-rows-fr lg:self-stretch">
                         {compact.map((item, i) => (
                             <li key={i} className="lg:h-full">
@@ -296,13 +329,20 @@ export default function VideoTestimonials() {
                                     keeps that absolute box from resolving against
                                     the initial containing block instead. */}
                                 <figure className="group relative grid h-full grid-cols-[auto_minmax(0,1fr)] items-center gap-[clamp(0.75rem,2.5vw,1rem)] rounded-lg border border-violet-400/25 bg-violet-950/45 p-3 transition-colors duration-300 ease-out hover:border-magenta-500/45 hover:bg-violet-900/55">
-                                    <div className="relative w-[clamp(5.5rem,24vw,11rem)] shrink-0 overflow-hidden rounded-md">
+                                    {/* The stills are title cards with the client's
+                                        name burnt into them, so they have to stay
+                                        big enough to read. `24vw` holds the ratio
+                                        against the card on phones; from `lg:` up
+                                        the card is a fixed fraction of the grid,
+                                        so the width is pinned per breakpoint
+                                        instead. */}
+                                    <div className="relative w-[clamp(6.5rem,24vw,11rem)] shrink-0 overflow-hidden rounded-md lg:w-44 xl:w-50">
                                         <Image
                                             src={item.thumb}
                                             alt={`Video testimonial from ${item.client} about their ${item.project}`}
-                                            width={845}
-                                            height={540}
-                                            sizes="(max-width: 1024px) 24vw, 176px"
+                                            width={768}
+                                            height={480}
+                                            sizes="(max-width: 640px) 24vw, 200px"
                                             className="block aspect-[16/10] w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-105"
                                         />
 
@@ -325,11 +365,24 @@ export default function VideoTestimonials() {
 
                                     <div className="min-w-0">
                                         <figcaption className="flex items-start justify-between gap-2">
+                                            {/* Wraps rather than truncates. At
+                                                `lg` the text column is only what
+                                                is left of a 2fr track after a
+                                                176px still — about 180px — and
+                                                "Plum Creek Lawn Care" clipped to
+                                                "Plum Creek Law…" there and on a
+                                                phone. A second line costs the
+                                                card nothing: the grid row grows.
+                                                Nothing shares this line, which is
+                                                the point — put a 3:1 wordmark
+                                                beside the name at that width and
+                                                the name collapses to one word per
+                                                line. */}
                                             <span className="flex min-w-0 flex-col">
-                                                <cite className="truncate font-display text-[0.9375rem] font-bold text-white not-italic">
+                                                <cite className="font-display text-[0.9375rem] leading-tight font-bold text-white not-italic">
                                                     {item.client}
                                                 </cite>
-                                                <span className="truncate text-xs text-magenta-300">
+                                                <span className="mt-0.5 text-xs text-magenta-300">
                                                     {item.project}
                                                 </span>
                                             </span>
@@ -343,10 +396,32 @@ export default function VideoTestimonials() {
                                             </p>
                                         </blockquote>
 
-                                        <Stars
-                                            count={item.stars}
-                                            className="mt-2 [&>svg]:size-[13px]"
-                                        />
+                                        {/* The client's own mark rides the star
+                                            row, not the name row. This is the one
+                                            line in the card with spare width —
+                                            five 13px stars are ~80px — so a
+                                            wordmark can sit opposite them at any
+                                            breakpoint without pushing anything
+                                            around. `h-6 w-auto` lets one box hold
+                                            marks from 1:1 to 3:1; clients who
+                                            have not sent one just leave the right
+                                            side empty. */}
+                                        <div className="mt-2 flex items-center justify-between gap-2">
+                                            <Stars
+                                                count={item.stars}
+                                                className="[&>svg]:size-[13px]"
+                                            />
+
+                                            {item.logo && (
+                                                <Image
+                                                    src={item.logo.src}
+                                                    alt={item.logo.alt}
+                                                    width={item.logo.width}
+                                                    height={item.logo.height}
+                                                    className="h-6 w-auto max-w-18 shrink-0 object-contain object-right"
+                                                />
+                                            )}
+                                        </div>
                                     </div>
 
                                     {/* Last in the DOM so it stacks over the card
@@ -367,7 +442,8 @@ export default function VideoTestimonials() {
 
             {playing && (
                 <VideoLightbox
-                    vimeoId={vimeoId}
+                    vimeoId={playing.vimeoId}
+                    portrait={playing.portrait}
                     title={`${playing.client} — ${playing.project}`}
                     closeLabel={close}
                     onClose={() => setActive(null)}

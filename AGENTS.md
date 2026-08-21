@@ -72,6 +72,9 @@ python scripts/verify-seo-services-parity.py       # /seo-services, both directi
 # not fetched
 node scripts/capture-rendered.mjs <url> <outFile>
 node scripts/audit-responsive.mjs http://127.0.0.1:3100 /some-path   # 12 widths over CDP
+# browser-side form validation. Needs a served build: the behaviour it asserts
+# exists only once the client components have hydrated
+node scripts/verify-form-validation.mjs http://127.0.0.1:3100
 node scripts/gen-routes-table.mjs --check          # docs/ROUTES.md vs content/routes.ts
 ```
 
@@ -119,6 +122,9 @@ scripts/    verify-content-parity.py verify-landing-parity.py verify-ldo-parity.
             verify-home-parity.mjs <- the homepage gate; Node, not Python, so it
                                       runs wherever the build does
             gen-routes-table.mjs   <- regenerates the tables in docs/ROUTES.md
+            verify-form-validation.mjs <- drives the real forms in headless
+                                      Chrome; the only gate on behaviour that
+                                      does not exist until the page hydrates
 docs/       the detail behind all of this
 ```
 

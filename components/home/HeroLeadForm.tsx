@@ -32,7 +32,7 @@ export default function HeroLeadForm() {
                     aria-hidden="true"
                 />
 
-                <div className="p-[clamp(1.25rem,0.75rem+1.6vw,2rem)]">
+                <div className="hero-form-body p-[clamp(1.25rem,0.75rem+1.6vw,2rem)]">
                     <h2 className="font-display text-[clamp(1.4rem,1.1rem+0.9vw,1.85rem)] leading-tight font-extrabold text-onlight">
                         {hero.form.titleLead}{" "}
                         <span className="text-magenta-500">

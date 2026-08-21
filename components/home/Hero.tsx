@@ -90,11 +90,11 @@ export default function Hero() {
                     {/* One rail, hairline-divided. The dividers are borders on
                         the items rather than separate elements, so a wrap drops
                         the leading rule with the item instead of stranding it. */}
-                    <dl className="mt-hero-gap flex flex-col gap-4 border-t border-white/[0.11] pt-hero-gap sm:flex-row sm:flex-wrap sm:items-center sm:gap-0">
+                    <dl className="mt-hero-gap flex flex-col gap-4 border-t border-white/[0.11] pt-hero-gap sm:flex-row sm:flex-wrap sm:items-center sm:gap-0 lg:flex-nowrap">
                         {hero.trust.map((item) => (
                                 <div
                                     key={item.label}
-                                    className="flex items-center gap-3 sm:pe-6 sm:ps-6 sm:first:ps-0 sm:not-first:border-s sm:not-first:border-white/[0.11]"
+                                    className="flex min-w-0 items-center gap-3 sm:pe-6 sm:ps-6 sm:first:ps-0 sm:not-first:border-s sm:not-first:border-white/[0.11] lg:gap-2.5 lg:pe-4 lg:ps-4 xl:gap-3 xl:pe-6 xl:ps-6"
                                 >
                                     <Image
                                         src={item.icon}
@@ -102,7 +102,7 @@ export default function Hero() {
                                         width={48}
                                         height={48}
                                         unoptimized
-                                        className="h-11 w-11 shrink-0 object-contain"
+                                        className="h-11 w-11 shrink-0 object-contain lg:h-9 lg:w-9 xl:h-11 xl:w-11"
                                     />
                                     <div className="flex flex-col gap-0.5">
                                         <dt className="sr-only">{item.label}</dt>
@@ -112,7 +112,7 @@ export default function Hero() {
                                                 suffix={item.suffix}
                                                 className="gradient-text block font-display text-[clamp(1.5rem,1.1rem+1.6vw,2.1rem)] leading-none font-extrabold"
                                             />
-                                            <span className="mt-1 block text-xs tracking-[0.1em] text-white/40 uppercase">
+                                            <span className="mt-1 block text-xs tracking-[0.1em] whitespace-nowrap text-white/40 uppercase lg:tracking-wider">
                                                 {item.label}
                                             </span>
                                         </dd>
