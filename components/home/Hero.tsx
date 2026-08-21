@@ -89,8 +89,15 @@ export default function Hero() {
 
                     {/* One rail, hairline-divided. The dividers are borders on
                         the items rather than separate elements, so a wrap drops
-                        the leading rule with the item instead of stranding it. */}
-                    <dl className="mt-hero-gap flex flex-col gap-4 border-t border-white/[0.11] pt-hero-gap sm:flex-row sm:flex-wrap sm:items-center sm:gap-0 lg:flex-nowrap">
+                        the leading rule with the item instead of stranding it.
+
+                        Single-row only from 87.5rem: the rail's natural width
+                        (~580px — the counters sit at their clamp cap from
+                        ~1000px) first fits the copy column at ~1360px, with
+                        nothing to spare. Forcing nowrap below that (the old
+                        `lg:`) overflowed the counters into the neighbouring
+                        item's divider on every 1024–1352px viewport. */}
+                    <dl className="mt-hero-gap flex flex-col gap-4 border-t border-white/[0.11] pt-hero-gap sm:flex-row sm:flex-wrap sm:items-center sm:gap-0 min-[87.5rem]:flex-nowrap">
                         {hero.trust.map((item) => (
                                 <div
                                     key={item.label}
