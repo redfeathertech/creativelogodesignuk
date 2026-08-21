@@ -3,15 +3,34 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
+/* Hand the reveal over to this script as early as possible.
+
+   `.reveal` is `opacity: 0` in CSS with an animation that flips it visible on
+   its own after 2s; this class cancels that animation, so setting it is the
+   promise that the observer below will do the revealing instead. It runs at
+   module scope rather than inside the effect because the effect waits for
+   hydration — long enough on a slow connection for the failsafe to fire and
+   pop every element in at once. If this chunk never loads, the class is never
+   set and the CSS reveals the page without us. See app/globals.css.
+
+   Guarded for the server pass: this module is imported by the root layout and
+   evaluated during SSR, where `document` does not exist. */
+if (typeof document !== "undefined") {
+  document.documentElement.classList.add("reveal-js");
+}
+
 /**
  * Scroll-reveal for anything carrying `.reveal`.
  *
  * One observer for the whole document rather than a component per element, so
  * server components can opt in with a class name and stay server-rendered.
  *
- * The content is always in the HTML — only opacity/transform are animated — so
- * crawlers and no-JS users see everything regardless. The safety net below
- * reveals the page if the observer never fires for any reason.
+ * The content is always in the HTML — only opacity/transform are animated —
+ * but that alone does NOT mean crawlers and no-JS users see it: `opacity: 0`
+ * is inlined into every page, so unrevealed content is invisible to anything
+ * that renders. What guarantees it is the CSS failsafe in globals.css, which
+ * needs no JS. The timeout below only covers the narrower case where this
+ * script did load but the observer never fired.
  */
 export default function Reveal() {
   // `Reveal` lives in the root layout, which persists across App Router client
@@ -50,7 +69,8 @@ export default function Reveal() {
 
     nodes.forEach((n) => observer.observe(n));
 
-    // Safety net: never leave content invisible.
+    // Narrow safety net: the observer loaded but never fired. The broader case
+    // — this script never loading at all — is covered by the CSS failsafe.
     const failsafe = window.setTimeout(() => {
       nodes.forEach((n) => n.classList.add("is-visible"));
     }, 2500);

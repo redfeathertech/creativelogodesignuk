@@ -681,8 +681,23 @@
 }
 
 /* Scroll-reveal. Elements start hidden and are flipped by IntersectionObserver
-   in components/ui/Reveal.tsx, which also has a safety net that reveals
-   everything if the observer never fires. */
+   in components/ui/Reveal.tsx.
+
+   The animation is a CSS-only failsafe, and it is not decorative. `inlineCss`
+   ships this stylesheet inside the HTML, so `opacity: 0` always applies, while
+   the script that undoes it arrives over a separate request that can fail — a
+   CDN serving a cached copy of the HTML that points at chunk hashes from an
+   earlier build 404s every one of them. That happened on Hostinger: all 31
+   `.reveal` blocks on the homepage stayed at `opacity: 0` and ~98% of the copy
+   was invisible. The safety-net timeout inside Reveal.tsx could not help,
+   because it is the JS itself that never loaded.
+
+   So the reveal has to be able to complete with no JS at all. `.reveal-js` is
+   set on <html> by Reveal.tsx the moment its chunk executes, which cancels the
+   animation and hands control to the observer; if that never happens, the
+   animation flips everything visible on its own. Keep the delay comfortably
+   longer than a healthy bundle takes to boot — undershooting it just costs the
+   scroll animation on a slow connection, which is the safe direction to err. */
 @layer components {
     .reveal {
         opacity: 0;
@@ -690,8 +705,19 @@
         transition:
             opacity 0.6s var(--ease-out),
             transform 0.6s var(--ease-out);
+        animation: reveal-failsafe 1ms linear 2s forwards;
+    }
+    html.reveal-js .reveal {
+        animation: none;
     }
     .reveal.is-visible {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes reveal-failsafe {
+    to {
         opacity: 1;
         transform: none;
     }
