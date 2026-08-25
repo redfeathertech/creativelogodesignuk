@@ -17,16 +17,30 @@ export type ButtonVariant =
   | "seo-outline";
 export type ButtonSize = "md" | "lg";
 
+/* `max-w-full` and a wrappable label are load-bearing, not cosmetic.
+   `whitespace-nowrap` used to sit on this line, and it meant a button was as
+   wide as its longest label no matter how narrow the column holding it — so on
+   a 320px phone the hero CTA measured 359px inside a 280px column and hung 59px
+   off the side of the screen. Every section on this site is `overflow-hidden`,
+   so the document never scrolled sideways and the only responsive check that
+   existed stayed silent; the label was simply sliced off. Wrapping is the
+   safety net: a two-line pill is a design compromise, a guillotined CTA is a
+   lost lead. Labels still sit on one line at every width where they fit. */
 const base =
-  "inline-flex items-center justify-center gap-3 rounded-full font-display font-bold uppercase tracking-[0.06em] " +
-  "whitespace-nowrap transition-all duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0 " +
+  "inline-flex max-w-full items-center justify-center gap-3 rounded-full font-display font-bold uppercase tracking-[0.06em] " +
+  "text-balance transition-all duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0 " +
   "disabled:pointer-events-none disabled:opacity-45 text-center leading-none cursor-pointer " +
   // The trailing arrow nudges forward with the button.
   "[&>svg]:shrink-0 [&>svg]:transition-transform [&>svg]:duration-300 hover:[&>svg]:translate-x-[3px]";
 
+/* Fluid inline padding. The top of each clamp is the padding these buttons have
+   always had, reached by ~900px (md) and ~1080px (lg), so nothing from tablet up
+   moves a pixel. Below that the space is worth more to the label than to the
+   pill: at 320px a fixed `px-9` spent 72 of the 280 available pixels on empty
+   space either side of the text. */
 const sizes: Record<ButtonSize, string> = {
-  md: "px-7 py-[0.9rem] text-sm",
-  lg: "px-9 py-[1.05rem] text-[0.9375rem]",
+  md: "px-[clamp(1.25rem,0.85rem+1.6vw,1.75rem)] py-[0.9rem] text-sm",
+  lg: "px-[clamp(1.375rem,0.9rem+2vw,2.25rem)] py-[1.05rem] text-[0.9375rem]",
 };
 
 const variants: Record<ButtonVariant, string> = {

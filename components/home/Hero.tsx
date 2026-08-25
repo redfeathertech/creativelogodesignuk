@@ -88,58 +88,65 @@ export default function Hero() {
                         {hero.sub}
                     </p>
 
-                    {/* Below `sm` the two CTAs stack and fill the column: at
-                        390px the primary already wrapped onto its own full-width
-                        row while the ghost sat at its intrinsic width beside
-                        nothing, which reads as a mistake. Flex items stretch by
-                        default, so the direction is the whole change.
-
-                        The four overrides on the buttons themselves are what a
-                        320px screen needs. `btn` is `whitespace-nowrap` with
-                        2.25rem of inline padding and 0.06em of tracking, which
-                        runs "Request Growth Strategy" past the viewport there —
-                        and past it invisibly, since the audit script measures
-                        element boxes and the overflowing part is a text node.
-                        Trimmed to 0.75rem, 0.5rem of icon gap and 0.04em, and
-                        free to wrap, the label holds one line from 360px up (the
-                        reference design’s single-line CTA) and breaks onto a
-                        second at 320 instead of overflowing. None of that is
-                        visible above 360: the button is stretched well past its
-                        content, so the padding only sets a floor.
-                        `leading-tight` is only so the second line has leading;
-                        `btn` sets `leading-none` for the single-line case. */}
-                    <div className="hero-ctas flex flex-wrap gap-4 max-lg:justify-center max-sm:flex-col max-sm:[&>*]:gap-2 max-sm:[&>*]:px-3 max-sm:[&>*]:leading-tight max-sm:[&>*]:tracking-[0.04em] max-sm:[&>*]:whitespace-normal">
-                        <LeadButton variant="primary" size="lg">
+                    {/* Full-width and stacked until both pills fit side by side.
+                        They already stacked below `sm` — 359px + 208px has
+                        never fitted in a 320px screen's 280px column — but they
+                        stacked at their intrinsic widths, so the primary CTA
+                        was 79px wider than the column it sat in and the hero's
+                        `overflow-hidden` sliced the end off it. Full-width is
+                        the fix that also reads as deliberate: two matched pills
+                        rather than two ragged ones. */}
+                    <div className="hero-ctas flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+                        <LeadButton
+                            variant="primary"
+                            size="lg"
+                            className="w-full sm:w-auto"
+                        >
                             {hero.primaryCta}
                             <ArrowIcon />
                         </LeadButton>
-                        <Link href="/about-us" className={btn("ghost", "lg")}>
+                        <Link
+                            href="/about-us"
+                            className={btn("ghost", "lg", "w-full sm:w-auto")}
+                        >
                             {hero.secondaryCta}
                         </Link>
                     </div>
 
-                    {/* One rail, hairline-divided, at every width. The three
-                        marks used to stack below `sm`, which spent ~130px of the
-                        fold on three lines of what the design shows as one and
-                        left the Trustpilot badge on the floor of the viewport,
-                        under the WhatsApp FAB.
+                    {/* One rail, hairline-divided, and it WRAPS. It used to be
+                        `lg:flex-nowrap`, which forced three badges into a
+                        column that is half the viewport from `lg` up and does
+                        not offer their full 665px until 97rem. The badges are
+                        `min-w-0` flex items that held `whitespace-nowrap`
+                        labels, so being over-constrained neither shrank them
+                        nor clipped them — each badge simply ran through the
+                        next one's divider. Measured at rest, the rail needed
+                        641px at 1440 and had 617: 24px of overlap, on every
+                        width from 992 to ~1500. See `--rail-icon` in
+                        globals.css for the scale that replaces it. Wrapping to
+                        a second row costs one row of height under ~1215px and
+                        cannot collide at any width.
 
-                        Below `sm` the items are equal thirds and everything
-                        inside them is `vw`-scaled: three columns in the 280px a
-                        320px screen leaves is 93px each, and fixed type does not
-                        fit that. The label keeps its `nowrap` from `sm` up but
-                        is free to wrap below it — measured, "Projects delivered"
-                        holds one line from 360px up, and under that a second
-                        line beats an overflow.
-
-                        The dividers are borders on the items rather than
-                        separate elements, so a wrap drops the leading rule with
-                        the item instead of stranding it. */}
-                    <dl className="mt-hero-gap flex flex-row items-center border-t border-white/[0.11] pt-hero-gap sm:flex-wrap sm:gap-0 lg:flex-nowrap">
-                        {hero.trust.map((item) => (
+                        The rule between badges is a leading border on each
+                        badge, which on a wrapped row would strand a vertical
+                        hairline at the start of row two with nothing before it.
+                        The wrapper clips it: the rail is pulled one padding
+                        step plus one border into the wrapper's `overflow`, so
+                        the FIRST badge of EVERY row loses its rule and every
+                        rule that survives has a badge on both sides of it. That
+                        is also why the badges no longer need `first:ps-0`. */}
+                    {/* `--rail-keepout` is the WhatsApp FAB's corner, and is
+                        0px at every size where the two cannot meet — see
+                        globals.css. It moves the rule with the badges rather
+                        than just the badges, so the whole trust cluster steps
+                        in as one block alongside the Trustpilot badge below,
+                        which has always had the same offset. */}
+                    <div className="mt-hero-gap border-t border-white/[0.11] pt-hero-gap ms-[var(--rail-keepout)] sm:overflow-hidden">
+                        <dl className="flex flex-col gap-4 sm:-ms-[calc(var(--rail-pad)+1px)] sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-0 sm:gap-y-5">
+                            {hero.trust.map((item) => (
                                 <div
                                     key={item.label}
-                                    className="flex min-w-0 items-center gap-3 not-first:border-s not-first:border-white/[0.11] max-sm:flex-1 max-sm:justify-center max-sm:gap-[clamp(0.2rem,1.2vw,0.5rem)] max-sm:px-1 sm:pe-6 sm:ps-6 sm:first:ps-0 lg:gap-2.5 lg:pe-4 lg:ps-4 xl:gap-3 xl:pe-6 xl:ps-6"
+                                    className="flex min-w-0 items-center gap-[var(--rail-gap)] sm:border-s sm:border-white/[0.11] sm:pe-[var(--rail-pad)] sm:ps-[var(--rail-pad)]"
                                 >
                                     <Image
                                         src={item.icon}
@@ -147,24 +154,32 @@ export default function Hero() {
                                         width={48}
                                         height={48}
                                         unoptimized
-                                        className="h-11 w-11 shrink-0 object-contain max-sm:h-[clamp(1rem,4vw,1.75rem)] max-sm:w-[clamp(1rem,4vw,1.75rem)] lg:h-9 lg:w-9 xl:h-11 xl:w-11"
+                                        className="size-[var(--rail-icon)] shrink-0 object-contain"
                                     />
-                                    <div className="flex flex-col gap-0.5">
+                                    <div className="flex min-w-0 flex-col gap-0.5">
                                         <dt className="sr-only">{item.label}</dt>
                                         <dd>
                                             <Counter
                                                 value={item.value}
                                                 suffix={item.suffix}
-                                                className="gradient-text block font-display text-[clamp(1.5rem,1.1rem+1.6vw,2.1rem)] leading-none font-extrabold max-sm:text-[clamp(0.875rem,4.2vw,1.5rem)]"
+                                                className="gradient-text block font-display text-[length:clamp(1.5rem,1.1rem+1.6vw,var(--rail-num))] leading-none font-extrabold"
                                             />
-                                            <span className="mt-1 block text-xs tracking-[0.1em] whitespace-nowrap text-white/40 uppercase max-sm:mt-0.5 max-sm:text-[clamp(0.4375rem,1.8vw,0.75rem)] max-sm:tracking-[0.02em] max-sm:whitespace-normal lg:tracking-wider">
+                                            {/* Wrappable on purpose. `min-w-0`
+                                                is inert against a nowrap label:
+                                                the badge shrinks and the text
+                                                walks out of it. Given the wrap
+                                                above this is now a backstop, but
+                                                it is the one that makes the rail
+                                                safe at any label length. */}
+                                            <span className="mt-1 block text-[length:var(--rail-label)] tracking-[0.1em] text-white/40 uppercase lg:tracking-wider">
                                                 {item.label}
                                             </span>
                                         </dd>
                                     </div>
                                 </div>
-                        ))}
-                    </dl>
+                            ))}
+                        </dl>
+                    </div>
 
                     {/* Closes the trust cluster at the foot of the copy column.
                         `mt-hero-gap` ties it to the same viewport-height rhythm

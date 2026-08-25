@@ -2,6 +2,89 @@
 
 Where the rebuild stands. Update this at the end of each working session.
 
+## Done — 22 Aug 2026 · Two real hero defects, and the reason they shipped
+
+Reported from a live 320px screenshot and a 1342px one: the primary hero CTA ran
+off the side of the screen, and the three stat badges ran into one another. Both
+were real. Both had been measured and called clean.
+
+### Why the audit said "clean"
+
+`scripts/audit-responsive.mjs` only ever asked one question — *does the document
+scroll sideways* — and every section on this site is `overflow-hidden`, so the
+answer was no in both cases while the content was destroyed anyway.
+
+| Defect | What the page did | Why the check missed it |
+|---|---|---|
+| Hero CTA at 320px | 359px button in a 280px column: **59px off-screen**, sliced by the hero's `overflow-hidden` (19px at 360) | Clipped content never widens the document |
+| Hero stat badges | Needed 641px at 1440, had 617: **24px of overlap**, on every width from 992 to ~1500 | Two overlapping siblings neither scroll nor clip |
+| FAQ CTAs at 320px | "Explore E-Com Development" 31px off-screen once its question is opened | Same clip; also invisible until opened |
+
+The third one nobody had reported — it is the same button bug in the accordion.
+
+**And the tool was measuring mid-animation.** Settle was 250ms; `Counter` runs
+for **1400ms**, and "1,000+" is ~95px wide on the way up against 112px when it
+lands. Every rail reading was ~50px narrow. That is the single reason the 1440
+collision scored clean, and why the first fix looked adequate when it was not.
+
+### The tool now fails on three independent classes
+
+- **SCROLL** — the document scrolls sideways. The original check.
+- **CUT** — content escapes the viewport into an `overflow:hidden` ancestor.
+  A scrollable rail (`auto`/`scroll`) and anything with a running animation
+  between it and its clipper — a marquee — stay exempt.
+- **COLLIDE** — two in-flow flex/grid siblings whose ink overlaps on both axes.
+
+Three sources of phantom collisions had to be handled before the signal was
+usable: content behind a clipper *inside* the subtree; a **closed `<details>`**,
+whose panel keeps its full intrinsic rect because the clip lives on the
+`::details-content` pseudo-element (the 8-item FAQ produced ~16 phantoms); and
+**rotation**, since `getBoundingClientRect` returns the axis-aligned box around a
+rotated shape — the `rotate-[-4deg]` price tag on `/creative-logo-design` showed
+7px "overlaps" while looking perfect. Settle is now 1900ms, and `--widths=`
+sweeps arbitrary widths: the 12 defaults are **device sizes, not breakpoints**,
+and the rail broke across a band the grid steps straight over (834 → 1024 →
+1280 → 1440).
+
+### The fixes
+
+- **`components/ui/button.ts`** — dropped `whitespace-nowrap`, added
+  `max-w-full` and fluid inline padding. A button can no longer be wider than
+  the column holding it, at any width, for any label. The clamps reach the old
+  padding by ~900px (md) and ~1080px (lg), so nothing from tablet up moves.
+- **Hero CTAs** stack full-width below `sm` instead of stacking ragged.
+- **The stat rail wraps.** It was `lg:flex-nowrap` with `whitespace-nowrap`
+  labels, which is over-constrained and cannot degrade — it can only overlap.
+  It is now `flex-wrap` with a wrappable label, and the leading divider of every
+  wrapped row is clipped by a wrapper the rail is pulled into, so a rule only
+  ever appears between two badges.
+- **`--rail-*` tokens** size the badge off the *column*, not the viewport. The
+  old `xl:` bump restored full scale at 1280 where the column is still 543px,
+  which is what drove the labels through their neighbours. Full scale now
+  returns at 97rem, where its 665px actually exists.
+- **`--rail-keepout`** clears the WhatsApp FAB where a wrapped second row would
+  land in its corner (62–78.74rem wide **and** ≤53rem tall, 0px everywhere else).
+
+### Verified
+
+| Check | Result |
+|---|---|
+| 17 pages × 12 widths | **204 measurements, 0 failing** |
+| Homepage, 46 extra widths incl. both sides of every new media query | **0 failing** |
+| Rail rows at rest, 640→3840 | one row wherever it fits, two where it does not, **never an overlap** |
+| Content parity — home, 36 service, 4 landing | 0 new deviations |
+| `verify-form-validation.mjs` | 29/29 |
+| `tsc --noEmit`, `gen-routes-table --check` | clean |
+
+Pre-existing and untouched: 1 eslint error in `components/chrome/Nav.tsx` and 2
+unused-import warnings in `components/services/Hero.tsx`.
+
+**Still open — the FAB overlaps scrolling content.** It is `fixed bottom-5
+left-5`, so it sits over whatever scrolls under it on every page; the keep-out
+above only handles the hero's own first screen. `Hero.tsx` has carried two
+`@media` keep-outs for this since before the redesign. Moving it to bottom-right
+retires all three, and is a design decision, not a bug fix.
+
 ## Done — 18–19 Aug 2026 · The homepage redesign shipped — but NOT as planned
 
 Two commits, `a00cdfe` (18 Aug: hero, about, how-it-works) and `fc8560d`

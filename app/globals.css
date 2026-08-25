@@ -160,6 +160,37 @@
     --spacing-hero-block: clamp(1rem, 3.2svh, 4.5rem);
     --spacing-hero-gap: clamp(0.625rem, 2svh, 1.75rem);
 
+    /* ---- hero stat rail --------------------------------------------------- */
+    /* The three stat badges are sized off the COLUMN they sit in, not the
+     viewport — which is why they need tokens rather than plain `xl:` utilities.
+     From `lg` the copy column is half the screen, and at this scale the three
+     badges need 665px of it: 3 icons (132) + 3 gaps (36) + the three numbers at
+     their FINAL value (112 + 139 + 102 = 353) + 6 padding edges (144).
+
+     Measure them at their final value or not at all. `Counter` animates up, so
+     "1,000+" is 112px at rest but ~95px a few hundred ms in, and every reading
+     taken while it was still counting understated the rail by ~50px. That is
+     what hid this: the old rail was `lg:flex-nowrap` with `whitespace-nowrap`
+     labels, so from 62rem it was over-constrained on every screen narrower than
+     ~1500px and the badges ran through each other rather than wrapping or
+     clipping — 24px of overlap at 1440, which an audit sampling at 250ms scored
+     clean.
+
+     So the compact scale below spans 62rem–97rem, and the full scale returns
+     only at 97rem where 665px is actually on offer.
+
+     A badge is only ever as narrow as its widest line, so the whole badge has
+     to scale together or nothing moves. At full size the numbers are widest
+     (353 vs 340) and `--rail-num` is the lever; shrink only the numbers and the
+     LABELS become the floor at 340px and the rail still will not fit 1280.
+     Hence `--rail-label` as well — with both, three badges need 534px and 1280
+     offers 558. */
+    --rail-icon: 2.75rem;
+    --rail-gap: 0.75rem;
+    --rail-pad: 1.5rem;
+    --rail-num: 2.1rem;
+    --rail-label: 0.75rem;
+
     /* ---- radii ---------------------------------------------------------- */
     --radius-sm: 8px;
     --radius-md: 14px;
@@ -311,6 +342,40 @@
 @media (min-width: 62rem) {
     :root {
         --topbar-h: 2.5rem;
+    }
+}
+
+/* The hero copy column is half the viewport across this band and cannot hold
+   three full-scale stat badges: it does not offer their 665px until 97rem.
+   Written as a closed range rather than as two competing min-width variants so
+   there is no ordering to get wrong — the same trap `--breakpoint-lg`
+   documents above. See `--rail-icon`. */
+@media (min-width: 62rem) and (max-width: 96.99rem) {
+    :root {
+        --rail-icon: 2.25rem;
+        --rail-gap: 0.625rem;
+        --rail-pad: 0.875rem;
+        --rail-num: 1.75rem;
+        --rail-label: 0.6875rem;
+    }
+}
+
+/* Inline-start offset that clears the WhatsApp FAB, which is fixed at
+   bottom-left and owns the first 76px of that corner on every page.
+
+   It is zero everywhere the two cannot meet, and it only has to exist at all
+   where the rail WRAPS: a second row puts a badge at the bottom of the copy
+   column, and on a short screen that is the FAB's corner. Above 78.74rem the
+   rail is a single row that never reaches down there, and above 53rem of
+   height the hero is tall enough that its centred content clears the FAB on
+   its own — indenting in either case would just push the rail out of line with
+   the H1 for no reason. Retire this the day the FAB moves to bottom-right. */
+:root {
+    --rail-keepout: 0px;
+}
+@media (min-width: 62rem) and (max-width: 78.74rem) and (max-height: 53rem) {
+    :root {
+        --rail-keepout: max(0px, calc(5rem - var(--spacing-gutter)));
     }
 }
 
@@ -692,8 +757,23 @@
 }
 
 /* Scroll-reveal. Elements start hidden and are flipped by IntersectionObserver
-   in components/ui/Reveal.tsx, which also has a safety net that reveals
-   everything if the observer never fires. */
+   in components/ui/Reveal.tsx.
+
+   The animation is a CSS-only failsafe, and it is not decorative. `inlineCss`
+   ships this stylesheet inside the HTML, so `opacity: 0` always applies, while
+   the script that undoes it arrives over a separate request that can fail — a
+   CDN serving a cached copy of the HTML that points at chunk hashes from an
+   earlier build 404s every one of them. That happened on Hostinger: all 31
+   `.reveal` blocks on the homepage stayed at `opacity: 0` and ~98% of the copy
+   was invisible. The safety-net timeout inside Reveal.tsx could not help,
+   because it is the JS itself that never loaded.
+
+   So the reveal has to be able to complete with no JS at all. `.reveal-js` is
+   set on <html> by Reveal.tsx the moment its chunk executes, which cancels the
+   animation and hands control to the observer; if that never happens, the
+   animation flips everything visible on its own. Keep the delay comfortably
+   longer than a healthy bundle takes to boot — undershooting it just costs the
+   scroll animation on a slow connection, which is the safe direction to err. */
 @layer components {
     .reveal {
         opacity: 0;
@@ -701,8 +781,19 @@
         transition:
             opacity 0.6s var(--ease-out),
             transform 0.6s var(--ease-out);
+        animation: reveal-failsafe 1ms linear 2s forwards;
+    }
+    html.reveal-js .reveal {
+        animation: none;
     }
     .reveal.is-visible {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes reveal-failsafe {
+    to {
         opacity: 1;
         transform: none;
     }

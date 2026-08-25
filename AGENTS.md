@@ -75,7 +75,15 @@ python scripts/verify-seo-services-parity.py       # /seo-services, both directi
 # /logo-design-offer and /lp render client-side, so their source must be run,
 # not fetched
 node scripts/capture-rendered.mjs <url> <outFile>
-node scripts/audit-responsive.mjs http://127.0.0.1:3100 /some-path   # 12 widths over CDP
+# 12 widths over CDP. Fails on three independent classes: SCROLL (the document
+# scrolls sideways), CUT (content swallowed by an `overflow:hidden` ancestor)
+# and COLLIDE (two in-flow siblings overlapping). Measures at rest, 1900ms in —
+# `Counter` runs for 1400ms and reads ~50px narrow before it lands.
+node scripts/audit-responsive.mjs http://127.0.0.1:3100 /some-path
+# The 12 defaults are device sizes, NOT breakpoints. After changing a media
+# query, sweep both sides of it — a layout can break across a whole band and
+# still pass the default grid.
+node scripts/audit-responsive.mjs --widths=1200,1259,1260,1280 http://127.0.0.1:3100 /
 # browser-side form validation. Needs a served build: the behaviour it asserts
 # exists only once the client components have hydrated
 node scripts/verify-form-validation.mjs http://127.0.0.1:3100
