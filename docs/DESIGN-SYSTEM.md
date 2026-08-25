@@ -75,7 +75,9 @@ live site's 23 `<h4>`s were fixed without changing a word.
   top bar to the footer. There is no second, wider token — a section that needs
   to bleed (hero backgrounds) does it with absolute layers behind the container,
   not with a different container.
-- `py-section` — `clamp(4rem, 2rem + 8vw, 8.5rem)`
+- `py-section` — `clamp(4rem, 2rem + 8vw, 6.25rem)`, overridden to a flat
+  `3.125rem` (50px) below `md` (48rem): the viewport-driven clamp still left
+  ~62px on a phone, which over-spaces every stacked section
 - Radii: `sm 8` · `md 14` · `lg 22` · `xl 32` · `rounded-full`
 
 ## Custom CSS — the complete list

@@ -557,6 +557,11 @@ export const results = {
     bg: "/assets/img/home/results-bg.webp",
     bgAlt:
         "3D bar chart backdrop illustrating Creative Logo Design client results",
+    /* Below `lg` the backdrop is cropped to its empty left half, so the chart
+       it draws never reaches the screen. This is that same chart on its own
+       transparent field, laid under the cards so the phone layout still ends
+       on it, exactly as the wide one does. */
+    chart: "/assets/img/home/results/chart.webp",
     /* `label` + " " + `note` is the live label verbatim in every case: the
        two-line card is the approved design's layout, not a rewrite. `icon` is
        net-new — the live list carries no marks at all.
@@ -720,20 +725,20 @@ export const videoTestimonials = {
     close: "Close video",
 
     /* items[0] renders as the featured panel: the large still, the overlaid
-       quote card, and the result strapline along the foot. items[1..3] render
-       as the compact cards in the right-hand column. `logo` is on every item so
-       the union stays uniform — it is `null` for the one client whose mark we
-       do not hold — while `avatar` and the two `result*` fields exist on the
-       featured item alone. The tuple is `as const`, so items[0] keeps its own
-       precise type and the other three stay a clean union.
+       quote card, and the result strapline along the foot. items[1..4] render
+       as the compact cards in the right-hand column. `logo` is on every item —
+       all five clients' marks are now in hand — while the two
+       `result*` fields exist on the featured item alone. The tuple is `as const`, so items[0] keeps its own
+       precise type and the other four stay a clean union.
 
-       REAL CLIENT VIDEOS (21 Aug 2026). Every `vimeoId` is the client's own
+       REAL CLIENT VIDEOS (21 Aug 2026; Ocean Initiative added 25 Aug 2026).
+       Every `vimeoId` is the client's own
        upload, so each item now carries its own id instead of the single shared
        placeholder that used to sit above this list. `duration` /
        `durationSpoken` are the true lengths, read off Vimeo's oEmbed endpoint —
        do not hand-edit them without re-checking.
 
-       All four are shot vertically (9:16), which is why `portrait` is set on
+       All five are shot vertically (9:16), which is why `portrait` is set on
        each one: components/home/VideoLightbox.tsx sizes its frame from this and
        would otherwise pillarbox a phone-shaped video inside a 16:9 box.
 
@@ -773,9 +778,12 @@ export const videoTestimonials = {
             thumb: "/assets/img/home/video/thumb-1-lh.webp",
             duration: "00:14",
             durationSpoken: "14 seconds",
-            /* No mark supplied by the client — the card falls back to the name
-               alone. Drop the file in and fill this out to light it up. */
-            logo: null,
+            logo: {
+                src: "/assets/img/home/video/logos/lh-carpentry.webp",
+                alt: "LH Carpentry logo",
+                width: 332,
+                height: 120,
+            },
         },
         {
             client: "Rami Physique Coach",
@@ -813,6 +821,29 @@ export const videoTestimonials = {
                 src: "/assets/img/home/video/logos/plum-creek.webp",
                 alt: "Plum Creek Lawn Care logo",
                 width: 358,
+                height: 120,
+            },
+        },
+        {
+            client: "Ocean Initiative",
+            project: "Web Design",
+            vimeoId: "1221178715",
+            portrait: true,
+            /* PLACEHOLDER — same case as Plum Creek above. The Vimeo upload
+               ("Ocean Initiative Video testimonial", 25 Aug 2026) carries an
+               empty description, so there is no verbatim sentence to lift.
+               Replace with the client's own words when they land. */
+            quote: "A website that finally matches the work — clear, credible and built to bring the right people in.",
+            stars: 5,
+            /* Client-supplied still. Placeholder per the client: a proper frame
+               grab is to follow, so expect this file to be replaced in place. */
+            thumb: "/assets/img/home/video/thumb-4-ocean.webp",
+            duration: "00:39",
+            durationSpoken: "39 seconds",
+            logo: {
+                src: "/assets/img/home/video/logos/ocean.webp",
+                alt: "Ocean Initiative logo",
+                width: 116,
                 height: 120,
             },
         },

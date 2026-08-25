@@ -294,6 +294,17 @@
     --hero-foot: var(--spacing-hero-block);
 }
 
+/* Phone rhythm. The clamp above is viewport-driven, which still leaves ~62px of
+   block padding on a 375px screen — enough that every section below the hero
+   reads as over-spaced when the columns have stacked and the whole page is one
+   narrow ribbon. Flat 50px below `md`, so section-to-section spacing on a phone
+   is the gap the design calls for and not a scaled-down desktop one. */
+@media (width < 48rem) {
+    :root {
+        --spacing-section: 3.125rem;
+    }
+}
+
 /* 62rem, matching `--breakpoint-lg` exactly. TopBar is `hidden lg:block`, so if
    this query flipped at a different width the bar would be on screen while
    `--topbar-h` still read 0 — and `--hero-h` would overflow the fold by 40px. */

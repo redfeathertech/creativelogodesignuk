@@ -64,11 +64,11 @@ export default function Footer() {
             min-content, so the contact block below — which is allowed to run a
             little wider than its column — would otherwise inflate track 1 and
             steal width from the other five. */}
-        <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3 min-[86.25rem]:grid-cols-[minmax(0,1.49fr)_minmax(0,1.05fr)_minmax(0,1.02fr)_minmax(0,1.32fr)_minmax(0,1.04fr)_minmax(0,1.12fr)] min-[86.25rem]:gap-x-6">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:gap-x-8 sm:gap-y-12 md:grid-cols-3 min-[86.25rem]:grid-cols-[minmax(0,1.49fr)_minmax(0,1.05fr)_minmax(0,1.02fr)_minmax(0,1.32fr)_minmax(0,1.04fr)_minmax(0,1.12fr)] min-[86.25rem]:gap-x-6">
           {/* ---- brand ---------------------------------------------------- */}
           {/* Spans the whole row below xl so the contact block never strands a
               half-empty cell beside a service column. */}
-          <div className="sm:col-span-2 md:col-span-3 min-[86.25rem]:col-span-1">
+          <div className="col-span-2 md:col-span-3 min-[86.25rem]:col-span-1">
             <Link href="/" aria-label={`${site.name} — home`} className="inline-block">
               <Image
                 src="/assets/img/logo-header.webp"
@@ -109,7 +109,7 @@ export default function Footer() {
             {/* The design lets this block run into the gutter so the email fits
                 on one line — the service column beside it has already ended by
                 this height, so nothing collides. */}
-            <ul className="mt-9 space-y-3.5 min-[86.25rem]:w-[calc(100%+1.5rem)]">
+            <ul className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3.5 min-[86.25rem]:block min-[86.25rem]:w-[calc(100%+1.5rem)] min-[86.25rem]:space-y-3.5">
               <li>
                 <a
                   href={`tel:${contact.phoneE164}`}
@@ -167,7 +167,7 @@ export default function Footer() {
           ))}
 
           {/* ---- locations ------------------------------------------------ */}
-          <section className="min-w-0" aria-labelledby="footer-locations">
+          <section className="col-span-2 min-w-0 md:col-span-1" aria-labelledby="footer-locations">
             <h2 id="footer-locations" className={HEADING}>
               {locationsHeading}
             </h2>
@@ -175,7 +175,13 @@ export default function Footer() {
             <ul className="mt-5 space-y-6">
               {offices.map((office) => (
                 <li key={office.country}>
-                  <h3 className="text-[0.9375rem] font-semibold text-white">{office.country}</h3>
+                  {/* Body font, not the display face the global h1–h6 rule
+                      applies: Montserrat bold reads as a different typeface
+                      from every other line in this column and looks oversized
+                      on mobile. */}
+                  <h3 className="font-body text-[0.9375rem] leading-snug font-semibold text-white">
+                    {office.country}
+                  </h3>
                   <address className="mt-1.5 text-[0.8125rem] leading-relaxed text-white/55 not-italic">
                     {oneLineAddress(office)}
                   </address>
@@ -195,12 +201,12 @@ export default function Footer() {
             All Rights Reserved &copy; {year} {site.name}.
           </p>
           <nav aria-label="Legal">
-            <ul className="flex flex-wrap items-center justify-center gap-x-7 gap-y-2">
+            <ul className="flex flex-nowrap items-center justify-center gap-x-3.5 sm:flex-wrap sm:gap-x-7 sm:gap-y-2">
               {legalLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-[0.8125rem] text-white/45 transition-colors hover:text-white"
+                    className="text-[0.6875rem] whitespace-nowrap text-white/45 transition-colors hover:text-white sm:text-[0.8125rem]"
                   >
                     {link.label}
                   </Link>

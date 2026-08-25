@@ -64,8 +64,10 @@ export default function WhatYouGet() {
                     collapses and DOM order takes over: heading, monitor, cards. */}
                 <div className="grid gap-x-[clamp(2.5rem,1.5rem+4vw,4.5rem)] gap-y-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:grid-rows-[auto_auto]">
                     {/* ---------------------------------------- heading ---- */}
-                    <div className="reveal lg:col-start-2 lg:row-start-1">
-                        <Eyebrow>{whatYouGet.eyebrow}</Eyebrow>
+                    <div className="reveal max-lg:text-center lg:col-start-2 lg:row-start-1">
+                        <Eyebrow className="max-lg:justify-center max-lg:[&>span]:hidden">
+                            {whatYouGet.eyebrow}
+                        </Eyebrow>
 
                         <h2 className="text-h2">
                             {whatYouGet.titleLead}{" "}
@@ -75,22 +77,27 @@ export default function WhatYouGet() {
                             {whatYouGet.titleTrail}
                         </h2>
 
-                        <p className="mt-6 max-w-[52ch] text-lead text-white/65">
+                        <p className="mt-6 max-w-[52ch] text-lead text-white/65 max-lg:mx-auto">
                             {whatYouGet.lead}
                         </p>
 
-                        {/* The proof strip. Hairlines are borders on the items
-                            after the first, so the same rule flips from
-                            vertical to horizontal when the row stacks — three
-                            of these labels do not fit side by side on a phone. */}
-                        <ul className="mt-9 grid gap-4 min-[560px]:grid-cols-3 min-[560px]:gap-0">
+                        {/* The proof strip, rebuilt to the approved mock:
+                            three bare marks sitting straight on the backdrop,
+                            divided by hairlines — no plate, no fill, no border
+                            around the row. Hairlines are borders on the items
+                            after the first. The row stays three-across at
+                            every width, as both mocks show, so the labels are
+                            allowed to wrap to two lines rather than the row
+                            stacking; the mark and the gaps shrink on a phone to
+                            buy them the width to do it. */}
+                        <ul className="mt-9 grid grid-cols-3 max-lg:text-start">
                             {whatYouGet.benefits.map((benefit, i) => (
                                 <li
                                     key={benefit.label}
                                     className={cn(
-                                        "flex items-center gap-3 min-[560px]:pe-4",
+                                        "flex items-center gap-2 py-1 pe-2 sm:gap-3 sm:pe-4",
                                         i > 0 &&
-                                            "border-t border-white/[0.11] pt-4 min-[560px]:border-t-0 min-[560px]:border-s min-[560px]:ps-4 min-[560px]:pt-0",
+                                            "border-s border-white/[0.14] ps-3 sm:ps-4",
                                     )}
                                 >
                                     {/* Native sizes differ by a pixel or two
@@ -102,9 +109,9 @@ export default function WhatYouGet() {
                                         alt={benefit.iconAlt}
                                         width={40}
                                         height={36}
-                                        className="size-7 shrink-0 object-contain"
+                                        className="size-7 shrink-0 object-contain sm:size-9"
                                     />
-                                    <span className="font-display text-sm leading-[1.35] font-bold text-white">
+                                    <span className="font-display text-[0.8125rem] leading-tight font-semibold text-balance text-white sm:text-[0.9375rem]">
                                         {benefit.label}
                                     </span>
                                 </li>

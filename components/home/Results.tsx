@@ -64,20 +64,22 @@ export default function Results() {
                     two in step as the container grows — at 1920 the cards stop
                     exactly where the chart's plinth begins. */}
                 <div className="grid gap-x-[clamp(2.5rem,1.5rem+4vw,4.5rem)] lg:grid-cols-2">
-                    <div className="reveal">
-                        <Eyebrow>{results.eyebrow}</Eyebrow>
+                    <div className="reveal max-lg:text-center">
+                        <Eyebrow className="max-lg:justify-center max-lg:[&>span]:hidden">
+                            {results.eyebrow}
+                        </Eyebrow>
 
                         <SectionHeading
                             lead={results.titleLead}
                             accent={results.titleAccent}
-                            className="max-w-[20ch]"
+                            className="max-w-[20ch] max-lg:mx-auto"
                         />
 
-                        <p className="mt-6 max-w-[56ch] text-lead text-white/65">
+                        <p className="mt-6 max-w-[56ch] text-lead text-white/65 max-lg:mx-auto">
                             {results.lead}
                         </p>
 
-                        <ul className="mt-9 grid gap-4 sm:gap-5">
+                        <ul className="mt-9 grid gap-4 max-lg:text-start sm:gap-5">
                             {results.items.map((item) => (
                                 <li
                                     key={item.label}
@@ -136,6 +138,20 @@ export default function Results() {
                                 </li>
                             ))}
                         </ul>
+
+                        {/* Phone and tablet only: from `lg` up the backdrop
+                            already puts this chart in the empty right column,
+                            so a second copy would double it. Decorative — the
+                            98% it draws is the third stat above. */}
+                        <Image
+                            src={results.chart}
+                            alt=""
+                            aria-hidden="true"
+                            width={870}
+                            height={700}
+                            sizes="(min-width: 1024px) 0px, 100vw"
+                            className="mx-auto mt-10 h-auto w-full max-w-[26rem] lg:hidden"
+                        />
                     </div>
                 </div>
             </div>

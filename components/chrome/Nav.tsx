@@ -540,7 +540,7 @@ export default function Nav() {
                 )}
             >
                 <div className="flex-1 overflow-y-auto p-6">
-                    <div className="mb-6 flex items-center justify-between">
+                    <div className="mb-4 flex items-center justify-between">
                         <Image
                             src="/assets/img/logo-header.webp"
                             alt="Creative Logo Design"
@@ -571,14 +571,14 @@ export default function Nav() {
                         </button>
                     </div>
 
-                    <ul className="mb-4 space-y-1">
+                    <ul className="mb-2 space-y-0.5">
                         {primaryNav.map((item) => (
                             <li key={item.href}>
                                 <Link
                                     href={item.href}
                                     onClick={() => setDrawerOpen(false)}
                                     className={cn(
-                                        "block rounded-md px-3 py-2.5 font-display font-bold hover:bg-white/5",
+                                        "block rounded-md px-3 py-1.5 font-display font-bold hover:bg-white/5",
                                         isActive(item.href)
                                             ? "text-magenta-300"
                                             : "text-white",
@@ -594,26 +594,29 @@ export default function Nav() {
                         <details
                             key={group.label}
                             open={groupActive(group)}
-                            className="border-t border-white/10 py-1"
+                            className="group border-t border-white/10"
                         >
                             <summary
                                 className={cn(
-                                    "cursor-pointer list-none px-3 py-2.5 font-display font-bold marker:content-['']",
+                                    "flex cursor-pointer list-none items-center justify-between gap-2 px-3 py-2 font-display font-bold marker:content-['']",
                                     groupActive(group)
                                         ? "text-magenta-300"
                                         : "text-white",
                                 )}
                             >
                                 {group.label}
+                                {group.items.length > 0 && (
+                                    <ChevronDown className="h-2 w-3 shrink-0 text-white/50 transition-transform duration-200 group-open:rotate-180" />
+                                )}
                             </summary>
-                            <ul className="pb-2 pl-3">
+                            <ul className="pb-1.5 pl-3">
                                 {group.href && (
                                     <li>
                                         <Link
                                             href={group.href}
                                             onClick={() => setDrawerOpen(false)}
                                             className={cn(
-                                                "block py-1.5 pr-3 pl-7 text-sm text-magenta-300",
+                                                "block py-1 pr-3 pl-7 text-[13px]/5 text-magenta-300",
                                                 isActive(group.href) &&
                                                     "font-bold",
                                             )}
@@ -628,9 +631,9 @@ export default function Nav() {
                                             href={item.href}
                                             onClick={() => setDrawerOpen(false)}
                                             className={cn(
-                                                "block py-1.5 pr-3 pl-7 text-sm hover:text-white",
+                                                "block py-1 pr-3 pl-7 text-[13px]/5 hover:text-white",
                                                 bulletClass,
-                                                "before:top-4",
+                                                "before:top-3.5",
                                                 isActive(item.href)
                                                     ? "font-bold text-magenta-300"
                                                     : "text-white/70 before:opacity-45",
@@ -644,7 +647,7 @@ export default function Nav() {
                         </details>
                     ))}
 
-                    <div className="mt-6" onClick={() => setDrawerOpen(false)}>
+                    <div className="mt-5" onClick={() => setDrawerOpen(false)}>
                         <LeadButton
                             variant="primary"
                             size="lg"

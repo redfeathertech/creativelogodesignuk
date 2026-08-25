@@ -16,6 +16,13 @@ import { hero } from "@/content/home";
  * on short viewports. Scrolling inside the card keeps the composition intact
  * instead of pushing the section past the fold.
  *
+ * The extra bottom padding below `lg` is the scroll cue's keep-out. The cue is
+ * absolutely positioned against the section floor and the columns are stacked
+ * on a phone, so the card — the last thing in the flow — ran straight under it
+ * on every viewport tall enough to show it. Measured, the cue occupies ~4.9rem
+ * off the floor; 5rem clears it and is only paid on the widths and heights that
+ * actually render the cue, so nothing changes on a short phone or on desktop.
+ *
  * The column lives inside the hero's `container-site`, which supplies the
  * horizontal gutter — no `px` of its own, or the card pays it twice and drops
  * to 240px on a 320px screen. `lg:justify-end` puts the card's right edge on
@@ -23,7 +30,7 @@ import { hero } from "@/content/home";
  */
 export default function HeroLeadForm() {
     return (
-        <div className="reveal relative flex min-h-[46svh] items-center justify-center overflow-y-auto py-hero-block lg:min-h-full lg:justify-end lg:ps-hero-pad lg:py-hero-block">
+        <div className="reveal relative flex min-h-[46svh] items-center justify-center overflow-y-auto py-hero-block [@media(max-width:63.99rem)_and_(min-height:800px)]:pb-[calc(var(--spacing-hero-block)+5rem)] lg:min-h-full lg:justify-end lg:ps-hero-pad lg:py-hero-block">
             <div className="hero-form w-full max-w-[30rem] overflow-hidden rounded-sm bg-white shadow-[0_30px_80px_-30px_rgb(0_0_0/0.65)]">
                 {/* The gradient cap. A plain block rather than a border so it
                     keeps its full weight at every width. */}

@@ -99,9 +99,9 @@ export default function Portfolio() {
         >
             <div className="container-site">
                 {/* Heading left, the (as yet unlinked) portfolio CTA right. */}
-                <div className="reveal flex flex-wrap items-end justify-between gap-x-12 gap-y-8">
+                <div className="reveal flex flex-wrap items-end justify-between gap-x-12 gap-y-8 max-lg:flex-col max-lg:items-center max-lg:text-center">
                     <div>
-                        <Eyebrow className="text-magenta-500">
+                        <Eyebrow className="text-magenta-500 max-lg:justify-center max-lg:[&>span]:hidden">
                             {recentWork.eyebrow}
                         </Eyebrow>
 
@@ -118,7 +118,7 @@ export default function Portfolio() {
                         announces itself to assistive tech as a control that
                         does nothing. Swap it for a <Link href="…"> the moment
                         that route ships. */}
-                    <span className={btn("outline", "md", "select-none")}>
+                    <span className={btn("outline", "md", "select-none max-sm:w-full")}>
                         {recentWork.viewAll}
                     </span>
                 </div>
@@ -126,7 +126,7 @@ export default function Portfolio() {
                 {/* Filter chips. Buttons with `aria-pressed`, not a tablist —
                     there are no tab panels here, only one rail being filtered. */}
                 <div
-                    className="reveal mt-12 flex flex-wrap gap-3"
+                    className="reveal mt-12 flex flex-wrap gap-3 max-lg:justify-center"
                     role="group"
                     aria-label={`Filter ${recentWork.title.toLowerCase()}`}
                 >

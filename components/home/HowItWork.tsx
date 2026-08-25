@@ -65,8 +65,10 @@ export default function HowItWork() {
 
                 <div className="container-site">
                     <div className="grid items-center gap-[clamp(2.5rem,1.5rem+5vw,5rem)] lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-                        <div className="reveal">
-                            <Eyebrow>{process.eyebrow}</Eyebrow>
+                        <div className="reveal max-lg:text-center">
+                            <Eyebrow className="max-lg:justify-center max-lg:[&>span]:hidden">
+                                {process.eyebrow}
+                            </Eyebrow>
                             <SectionHeading
                                 lead={process.titleLead}
                                 accent={process.titleAccent}
@@ -76,14 +78,14 @@ export default function HowItWork() {
                             block, closing it off. */}
                             <span
                                 aria-hidden="true"
-                                className="mt-5 block h-0.5 w-[clamp(28px,6vw,60px)] rounded-sm bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)]"
+                                className="mt-5 block h-0.5 w-[clamp(28px,6vw,60px)] rounded-sm bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)] max-lg:hidden"
                             />
 
-                            <p className="mt-6 max-w-[62ch] text-lead text-white/65">
+                            <p className="mt-6 max-w-[62ch] text-lead text-white/65 max-lg:mx-auto">
                                 {process.lead}
                             </p>
 
-                            <div className="mt-8 flex flex-wrap gap-4">
+                            <div className="mt-8 flex flex-wrap gap-4 max-lg:justify-center max-sm:flex-col">
                                 <LeadButton variant="primary">
                                     {process.primaryCta}
                                     <ArrowIcon />
@@ -100,38 +102,38 @@ export default function HowItWork() {
                             </div>
 
                             {/* The two-up proof strip. One bordered panel with a
-                            hairline between the items, splitting to a stack
-                            below 576px — two marks plus two lines of label do
-                            not fit a phone width side by side. The divider is a
-                            border on the second item rather than its own
-                            element, so it flips from vertical to horizontal
-                            with the same rule. */}
-                            <dl className="mt-10 grid gap-5 rounded-2xl border border-white/[0.11] bg-white/[0.03] p-5 backdrop-blur-[2px] min-[576px]:grid-cols-2 min-[576px]:gap-0">
+                            hairline between the items, two-up at every width:
+                            the approved phone comp keeps the pair side by side,
+                            so the mark and the label scale down rather than the
+                            panel splitting to a stack. The divider is a border
+                            on the second item rather than its own element. */}
+                            <dl className="mt-10 grid grid-cols-2 rounded-2xl border border-white/[0.11] bg-white/[0.03] p-4 backdrop-blur-[2px] max-lg:text-start min-[576px]:p-5">
                                 {process.highlights.map((item, i) => (
                                     <div
                                         key={item.title}
                                         className={
                                             i === 0
-                                                ? "flex items-center gap-3.5 min-[576px]:pe-5"
-                                                : "flex items-center gap-3.5 border-t border-white/[0.11] pt-5 min-[576px]:border-t-0 min-[576px]:border-s min-[576px]:ps-5 min-[576px]:pt-0"
+                                                ? "flex items-center gap-2 pe-2.5 min-[576px]:gap-3.5 min-[576px]:pe-5"
+                                                : "flex items-center gap-2 border-s border-white/[0.11] ps-2.5 min-[576px]:gap-3.5 min-[576px]:ps-5"
                                         }
                                     >
                                         {/* Complete badge in the asset, like the
                                         step marks — 60x60 native, rendered
-                                        at 52. */}
+                                        at 52, and at 34 on a phone where the
+                                        pair share the width. */}
                                         <Image
                                             src={item.icon}
                                             alt={item.iconAlt}
                                             width={60}
                                             height={60}
                                             unoptimized
-                                            className="size-[52px] shrink-0"
+                                            className="size-[34px] shrink-0 min-[576px]:size-[52px]"
                                         />
                                         <div className="min-w-0">
-                                            <dt className="font-display text-[1.0625rem] font-bold text-white">
+                                            <dt className="font-display text-[0.75rem] font-bold leading-[1.3] text-white min-[576px]:text-[1.0625rem]">
                                                 {item.title}
                                             </dt>
-                                            <dd className="mt-0.5 text-sm leading-[1.5] text-white/60">
+                                            <dd className="mt-0.5 text-[0.6875rem] leading-[1.45] text-white/60 min-[576px]:text-sm">
                                                 {item.body}
                                             </dd>
                                         </div>

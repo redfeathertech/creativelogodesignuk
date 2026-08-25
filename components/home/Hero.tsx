@@ -60,8 +60,19 @@ export default function Hero() {
                 {/* `--hero-foot` is the block padding plus room for the scroll cue —
             and collapses back to plain padding on the viewports too short to
             show the cue at all. */}
-                <div className="hero-copy reveal mx-auto flex w-full max-w-[46rem] flex-col justify-center py-hero-block lg:mx-0 lg:max-w-none lg:pe-hero-pad lg:pb-[var(--hero-foot)]">
-                    <Eyebrow>{hero.eyebrow}</Eyebrow>
+                {/* Below `lg` the copy is the whole fold — one centred column,
+                    as the approved mobile design has it. Above `lg` it is the
+                    left half of a split banner and stays left-aligned, so every
+                    mobile rule here is a `max-lg:` override rather than a
+                    default the desktop layout has to undo. */}
+                <div className="hero-copy reveal mx-auto flex w-full max-w-[46rem] flex-col justify-center py-hero-block max-lg:text-center lg:mx-0 lg:max-w-none lg:pe-hero-pad lg:pb-[var(--hero-foot)]">
+                    {/* The eyebrow's leading hairline bar is a left-aligned
+                        mark — it reads as a stray dash once the label is
+                        centred, so the centred layout drops it. The bar is the
+                        only `<span>` child; the label itself is a text node. */}
+                    <Eyebrow className="max-lg:justify-center max-lg:[&>span]:hidden">
+                        {hero.eyebrow}
+                    </Eyebrow>
 
                     <h1 className="mb-hero-gap text-hero">
                         <span className="block">{hero.titleLead}</span>
@@ -73,11 +84,31 @@ export default function Hero() {
                     {/* Tighter than the 1.65 body leading: at display size this reads as
               a standfirst, and five lines of it is the widest single block in
               the fold. */}
-                    <p className="mb-hero-gap max-w-[52ch] text-lead leading-[1.55] text-white/65">
+                    <p className="mb-hero-gap max-w-[52ch] text-lead leading-[1.55] text-white/65 max-lg:mx-auto">
                         {hero.sub}
                     </p>
 
-                    <div className="hero-ctas flex flex-wrap gap-4">
+                    {/* Below `sm` the two CTAs stack and fill the column: at
+                        390px the primary already wrapped onto its own full-width
+                        row while the ghost sat at its intrinsic width beside
+                        nothing, which reads as a mistake. Flex items stretch by
+                        default, so the direction is the whole change.
+
+                        The four overrides on the buttons themselves are what a
+                        320px screen needs. `btn` is `whitespace-nowrap` with
+                        2.25rem of inline padding and 0.06em of tracking, which
+                        runs "Request Growth Strategy" past the viewport there —
+                        and past it invisibly, since the audit script measures
+                        element boxes and the overflowing part is a text node.
+                        Trimmed to 0.75rem, 0.5rem of icon gap and 0.04em, and
+                        free to wrap, the label holds one line from 360px up (the
+                        reference design’s single-line CTA) and breaks onto a
+                        second at 320 instead of overflowing. None of that is
+                        visible above 360: the button is stretched well past its
+                        content, so the padding only sets a floor.
+                        `leading-tight` is only so the second line has leading;
+                        `btn` sets `leading-none` for the single-line case. */}
+                    <div className="hero-ctas flex flex-wrap gap-4 max-lg:justify-center max-sm:flex-col max-sm:[&>*]:gap-2 max-sm:[&>*]:px-3 max-sm:[&>*]:leading-tight max-sm:[&>*]:tracking-[0.04em] max-sm:[&>*]:whitespace-normal">
                         <LeadButton variant="primary" size="lg">
                             {hero.primaryCta}
                             <ArrowIcon />
@@ -87,14 +118,28 @@ export default function Hero() {
                         </Link>
                     </div>
 
-                    {/* One rail, hairline-divided. The dividers are borders on
-                        the items rather than separate elements, so a wrap drops
-                        the leading rule with the item instead of stranding it. */}
-                    <dl className="mt-hero-gap flex flex-col gap-4 border-t border-white/[0.11] pt-hero-gap sm:flex-row sm:flex-wrap sm:items-center sm:gap-0 lg:flex-nowrap">
+                    {/* One rail, hairline-divided, at every width. The three
+                        marks used to stack below `sm`, which spent ~130px of the
+                        fold on three lines of what the design shows as one and
+                        left the Trustpilot badge on the floor of the viewport,
+                        under the WhatsApp FAB.
+
+                        Below `sm` the items are equal thirds and everything
+                        inside them is `vw`-scaled: three columns in the 280px a
+                        320px screen leaves is 93px each, and fixed type does not
+                        fit that. The label keeps its `nowrap` from `sm` up but
+                        is free to wrap below it — measured, "Projects delivered"
+                        holds one line from 360px up, and under that a second
+                        line beats an overflow.
+
+                        The dividers are borders on the items rather than
+                        separate elements, so a wrap drops the leading rule with
+                        the item instead of stranding it. */}
+                    <dl className="mt-hero-gap flex flex-row items-center border-t border-white/[0.11] pt-hero-gap sm:flex-wrap sm:gap-0 lg:flex-nowrap">
                         {hero.trust.map((item) => (
                                 <div
                                     key={item.label}
-                                    className="flex min-w-0 items-center gap-3 sm:pe-6 sm:ps-6 sm:first:ps-0 sm:not-first:border-s sm:not-first:border-white/[0.11] lg:gap-2.5 lg:pe-4 lg:ps-4 xl:gap-3 xl:pe-6 xl:ps-6"
+                                    className="flex min-w-0 items-center gap-3 not-first:border-s not-first:border-white/[0.11] max-sm:flex-1 max-sm:justify-center max-sm:gap-[clamp(0.2rem,1.2vw,0.5rem)] max-sm:px-1 sm:pe-6 sm:ps-6 sm:first:ps-0 lg:gap-2.5 lg:pe-4 lg:ps-4 xl:gap-3 xl:pe-6 xl:ps-6"
                                 >
                                     <Image
                                         src={item.icon}
@@ -102,7 +147,7 @@ export default function Hero() {
                                         width={48}
                                         height={48}
                                         unoptimized
-                                        className="h-11 w-11 shrink-0 object-contain lg:h-9 lg:w-9 xl:h-11 xl:w-11"
+                                        className="h-11 w-11 shrink-0 object-contain max-sm:h-[clamp(1rem,4vw,1.75rem)] max-sm:w-[clamp(1rem,4vw,1.75rem)] lg:h-9 lg:w-9 xl:h-11 xl:w-11"
                                     />
                                     <div className="flex flex-col gap-0.5">
                                         <dt className="sr-only">{item.label}</dt>
@@ -110,9 +155,9 @@ export default function Hero() {
                                             <Counter
                                                 value={item.value}
                                                 suffix={item.suffix}
-                                                className="gradient-text block font-display text-[clamp(1.5rem,1.1rem+1.6vw,2.1rem)] leading-none font-extrabold"
+                                                className="gradient-text block font-display text-[clamp(1.5rem,1.1rem+1.6vw,2.1rem)] leading-none font-extrabold max-sm:text-[clamp(0.875rem,4.2vw,1.5rem)]"
                                             />
-                                            <span className="mt-1 block text-xs tracking-[0.1em] whitespace-nowrap text-white/40 uppercase lg:tracking-wider">
+                                            <span className="mt-1 block text-xs tracking-[0.1em] whitespace-nowrap text-white/40 uppercase max-sm:mt-0.5 max-sm:text-[clamp(0.4375rem,1.8vw,0.75rem)] max-sm:tracking-[0.02em] max-sm:whitespace-normal lg:tracking-wider">
                                                 {item.label}
                                             </span>
                                         </dd>
@@ -154,7 +199,8 @@ export default function Hero() {
                         badge sitting slightly right of the heading. */}
                     <TrustpilotBadge
                         {...hero.trustpilot}
-                        className="mt-hero-gap [@media(min-width:62rem)_and_(max-width:74.99rem)_and_(max-height:60rem)]:ms-[max(0px,calc(5rem-var(--spacing-gutter)))] [@media(min-width:75rem)_and_(max-height:53rem)]:ms-[max(0px,calc(5rem-var(--spacing-gutter)))]"
+                        full
+                        className="mt-hero-gap max-lg:mx-auto [@media(min-width:62rem)_and_(max-width:74.99rem)_and_(max-height:60rem)]:ms-[max(0px,calc(5rem-var(--spacing-gutter)))] [@media(min-width:75rem)_and_(max-height:53rem)]:ms-[max(0px,calc(5rem-var(--spacing-gutter)))]"
                     />
                 </div>
 
@@ -171,13 +217,22 @@ export default function Hero() {
             {/* Decorative, and the first thing to go: below 800px of viewport the
           space it occupies is worth more to the copy. Paired with --hero-foot,
           which stops reserving that space at the same breakpoint. */}
-            <span
-                className="pointer-events-none absolute bottom-5 left-1/2 z-[2] hidden -translate-x-1/2 flex-col items-center gap-1.5 text-xs tracking-[0.06em] text-white/45 [@media(min-height:800px)]:inline-flex"
-                aria-hidden="true"
+            {/* An anchor, not a bare mark: the cue points at the next section
+          (`#about`), so clicking it scrolls there. `scroll-behavior: smooth`
+          and the `scroll-padding-top` that clears the sticky nav are both
+          already set globally on `html`, so the anchor needs neither. Focusable
+          and labelled, since it is a control now rather than decoration. */}
+            <a
+                href="#about"
+                aria-label={hero.scrollCue}
+                className="absolute bottom-5 left-1/2 z-[2] hidden -translate-x-1/2 flex-col items-center gap-1.5 text-xs tracking-[0.06em] text-white/45 transition-colors hover:text-white/80 focus-visible:text-white/80 [@media(min-height:800px)]:inline-flex"
             >
-                <ScrollMouseIcon className="h-9 w-auto text-white/75" />
-                {hero.scrollCue}
-            </span>
+                <ScrollMouseIcon
+                    className="h-9 w-auto text-white/75"
+                    aria-hidden="true"
+                />
+                <span aria-hidden="true">{hero.scrollCue}</span>
+            </a>
         </section>
     );
 }

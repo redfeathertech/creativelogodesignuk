@@ -59,6 +59,13 @@ function TrustpilotStars({
  * and go stale the moment a review lands, so they are never assumed here. The
  * homepage passes both (its design states them); the landing heroes pass
  * neither and fall back to `label`.
+ *
+ * `full` is the phone treatment from the approved hero design: below `sm` the
+ * pill chrome comes off and the badge becomes a full-width bar with the review
+ * count always shown, sized in `vw` so the whole lockup — stars, rating, logo
+ * and count — still fits the 280px a 320px screen leaves inside the gutter.
+ * Everything from `sm` up is untouched, so the landing heroes, which do not
+ * pass it, keep the pill at every width.
  */
 export default function TrustpilotBadge({
   href,
@@ -70,6 +77,7 @@ export default function TrustpilotBadge({
   className,
   rating,
   reviewCount,
+  full = false,
 }: {
   href: string;
   label: string;
@@ -80,6 +88,7 @@ export default function TrustpilotBadge({
   className?: string;
   rating?: string;
   reviewCount?: string;
+  full?: boolean;
 }) {
   return (
     <a
@@ -109,18 +118,28 @@ export default function TrustpilotBadge({
         "transition-[translate,border-color,background-color,box-shadow] duration-300 ease-out",
         "hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--tp)_45%,transparent)]",
         "hover:bg-white/[0.08] hover:shadow-[0_16px_40px_-16px_color-mix(in_srgb,var(--tp)_60%,transparent)]",
+        full &&
+          "max-sm:w-full max-sm:justify-center max-sm:gap-[clamp(0.25rem,1.8vw,0.625rem)] " +
+            "max-sm:rounded-none max-sm:border-transparent max-sm:bg-transparent " +
+            "max-sm:px-0 max-sm:py-1 max-sm:backdrop-blur-none",
         className,
       )}
       style={{ "--tp": TRUSTPILOT_GREEN } as React.CSSProperties}
     >
       <TrustpilotStars
         count={stars}
-        className="h-4 w-auto shrink-0 [@media(min-width:40rem)_and_(min-height:54rem)]:h-[17px]"
+        className={cn(
+          "h-4 w-auto shrink-0 [@media(min-width:40rem)_and_(min-height:54rem)]:h-[17px]",
+          full && "max-sm:h-[clamp(0.75rem,4.1vw,1.25rem)]",
+        )}
       />
 
       {rating && (
         <span
-          className="shrink-0 font-display text-sm leading-none font-extrabold text-white [@media(min-width:40rem)_and_(min-height:54rem)]:text-[0.95rem]"
+          className={cn(
+            "shrink-0 font-display text-sm leading-none font-extrabold text-white [@media(min-width:40rem)_and_(min-height:54rem)]:text-[0.95rem]",
+            full && "max-sm:text-[clamp(0.6875rem,3.4vw,1rem)]",
+          )}
           aria-hidden="true"
         >
           {rating}
@@ -128,7 +147,10 @@ export default function TrustpilotBadge({
       )}
 
       <span
-        className="h-4 w-px shrink-0 bg-white/15 [@media(min-width:40rem)_and_(min-height:54rem)]:h-5"
+        className={cn(
+          "h-4 w-px shrink-0 bg-white/15 [@media(min-width:40rem)_and_(min-height:54rem)]:h-5",
+          full && "max-sm:h-[clamp(0.625rem,2.8vw,1rem)]",
+        )}
         aria-hidden="true"
       />
 
@@ -138,7 +160,10 @@ export default function TrustpilotBadge({
         width={200}
         height={50}
         quality={90}
-        className="h-6 w-auto shrink-0 [@media(min-width:40rem)_and_(min-height:54rem)]:h-7"
+        className={cn(
+          "h-6 w-auto shrink-0 [@media(min-width:40rem)_and_(min-height:54rem)]:h-7",
+          full && "max-sm:h-[clamp(0.875rem,5.2vw,1.5rem)]",
+        )}
         aria-hidden="true"
       />
 
@@ -146,13 +171,23 @@ export default function TrustpilotBadge({
           two columns but the copy column has not grown back, and the label is
           the only part of the badge that is not the Trustpilot mark itself. */}
       <span
-        className="hidden text-xs font-semibold tracking-[0.02em] whitespace-nowrap text-white/55 transition-colors duration-300 group-hover:text-white/85 sm:inline lg:hidden xl:inline"
+        className={cn(
+          "hidden text-xs font-semibold tracking-[0.02em] whitespace-nowrap text-white/55 transition-colors duration-300 group-hover:text-white/85 sm:inline lg:hidden xl:inline",
+          full && "max-sm:inline max-sm:text-[clamp(0.5rem,2.9vw,0.75rem)]",
+        )}
         aria-hidden="true"
       >
         {reviewCount ?? label}
       </span>
 
-      <ArrowIcon className="shrink-0 text-white/45 transition-all duration-300 ease-out group-hover:translate-x-[3px] group-hover:text-white/85" />
+      {/* Dropped from the full-width bar: with the pill gone there is no
+          affordance for it to sit inside, and the count needs the room. */}
+      <ArrowIcon
+        className={cn(
+          "shrink-0 text-white/45 transition-all duration-300 ease-out group-hover:translate-x-[3px] group-hover:text-white/85",
+          full && "max-sm:hidden",
+        )}
+      />
     </a>
   );
 }

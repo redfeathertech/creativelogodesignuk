@@ -228,17 +228,28 @@ export default function EnquiryForm({
                 ))}
             </div>
 
-            {/* The three reassurances, in the order the design lists them. */}
-            <ul className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+            {/* The three reassurances, in the order the design lists them —
+                one row at every width, as the design draws them.
+
+                Below `sm` they do not fit at their set size: the three labels
+                measure 380px of text, against the 240px the card leaves inside
+                its padding on a 320px screen. They wrapped to two rows at 390
+                and stacked into three at 320. The whole lockup is `vw`-scaled
+                instead — type, icon and both gaps — and the labels keep
+                `nowrap`, so the row stays a row rather than becoming three
+                ragged two-line items. Measured, it clears its container from
+                320px up and reaches full size by ~544px, before `sm` takes
+                over. Everything from `sm` up is untouched. */}
+            <ul className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 max-sm:flex-nowrap max-sm:gap-x-[clamp(0.25rem,1.2vw,1rem)]">
                 {assurances.map((text, i) => {
                     const Icon = ASSURANCE_ICONS[i];
                     return (
                         <li
                             key={text}
-                            className="flex items-center gap-1.5 text-[0.68rem] font-semibold tracking-[0.06em] text-onlight-muted uppercase"
+                            className="flex items-center gap-1.5 text-[0.68rem] font-semibold tracking-[0.06em] text-onlight-muted uppercase max-sm:gap-[clamp(0.15rem,0.8vw,0.375rem)] max-sm:text-[clamp(0.4rem,2vw,0.68rem)] max-sm:tracking-[0.02em] max-sm:whitespace-nowrap"
                         >
                             {Icon && (
-                                <Icon className="h-[0.95rem] w-[0.95rem] text-magenta-500" />
+                                <Icon className="h-[0.95rem] w-[0.95rem] shrink-0 text-magenta-500 max-sm:h-[clamp(0.55rem,2.9vw,0.95rem)] max-sm:w-[clamp(0.55rem,2.9vw,0.95rem)]" />
                             )}
                             {text}
                         </li>

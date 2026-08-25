@@ -10,7 +10,7 @@ import { cn } from "@/lib/cn";
 import VideoLightbox from "./VideoLightbox";
 
 /**
- * Video testimonials — a featured player beside a column of three compact cards,
+ * Video testimonials — a featured player beside a column of four compact cards,
  * every one of which opens components/home/VideoLightbox.tsx.
  *
  * Net-new; the live homepage has no equivalent. See the note on
@@ -20,7 +20,7 @@ import VideoLightbox from "./VideoLightbox";
  * **Nothing is hosted here and nothing is embedded until a click.** The stills
  * are ordinary `next/image` assets and the Vimeo iframe is mounted by the
  * lightbox only while it is open, so the section's cost on first load is the
- * four thumbnails and no third-party bytes at all.
+ * five thumbnails and no third-party bytes at all.
  *
  * A client component for the same reason as components/home/Portfolio.tsx — it
  * holds state (which card is playing). Every word of copy is still in the
@@ -48,7 +48,7 @@ const {
 
 /* items[0] is the featured panel, the rest are the compact column. Destructured
    at module scope because the tuple is `as const` — this is what gives
-   `featured` its own type, with the `result*` fields the other three do not
+   `featured` its own type, with the `result*` fields the other four do not
    carry. */
 const [featured, ...compact] = items;
 
@@ -137,48 +137,47 @@ export default function VideoTestimonials() {
             />
 
             <div className="container-site">
-                {/* The heading block spans the full width rather than sitting in
-                    the left column. Its own `max-w` caps still hold, so it draws
-                    identically — but it no longer adds ~330px to the left
-                    column's height, which is what the right-hand column is
-                    stretched against. With three compact cards instead of four
-                    that difference is the whole ball game: measured against the
-                    still alone the cards land at their natural size, measured
-                    against heading + still they stretch to ~280px each and open
-                    ~85px of dead space above and below their content. */}
-                <div className="reveal">
-                    <Eyebrow>{eyebrow}</Eyebrow>
-
-                    {/* The accent is `block` so it takes a line of its own,
-                        which is how the approved design sets this heading — the
-                        same call as `methodology`. It changes where the line
-                        breaks fall and nothing else: the two fields still
-                        concatenate to the one heading string in the DOM. */}
-                    <h2 id={HEADING_ID} className="text-h2 max-w-[22ch]">
-                        {titleLead}{" "}
-                        <span className="gradient-text-brand block">
-                            {titleAccent}
-                        </span>
-                    </h2>
-
-                    <p className="mt-6 max-w-[52ch] text-lead text-white/65">
-                        {lead}
-                    </p>
-                </div>
-
                 {/* `minmax(0,…)` on both tracks, never `1fr`: a grid item defaults
                     to `min-width: auto`, and a compact card's longest word plus its
-                    still is wider than a 320px phone. */}
-                <div className="mt-10 grid items-start gap-[clamp(2.5rem,1.5rem+3vw,3.5rem)] lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+                    still is wider than a 320px phone.
+
+                    The heading sits INSIDE the left column, not above the grid.
+                    That is what lets the card column start level with the
+                    heading and run the full height of the section — the cards
+                    are stretched against heading + lead + still, which is the
+                    arrangement the approved design asks for. */}
+                <div className="grid items-start gap-[clamp(2.5rem,1.5rem+3vw,3.5rem)] lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
                     {/* ------------------------------------------ left column -- */}
                     <div>
+                        <div className="reveal max-lg:text-center">
+                            <Eyebrow className="max-lg:justify-center max-lg:[&>span]:hidden">
+                                {eyebrow}
+                            </Eyebrow>
+
+                            {/* The accent is `block` so it takes a line of its own,
+                                which is how the approved design sets this heading — the
+                                same call as `methodology`. It changes where the line
+                                breaks fall and nothing else: the two fields still
+                                concatenate to the one heading string in the DOM. */}
+                            <h2 id={HEADING_ID} className="text-h2 max-w-[22ch] max-lg:mx-auto">
+                                {titleLead}{" "}
+                                <span className="gradient-text-brand block">
+                                    {titleAccent}
+                                </span>
+                            </h2>
+
+                            <p className="mt-6 max-w-[52ch] text-lead text-white/65 max-lg:mx-auto">
+                                {lead}
+                            </p>
+                        </div>
+
                         {/* `relative` is the containing block the pull-quote goes
                             absolute against from `xl:` up. Below that it is an
                             ordinary block and the quote sits under the still
                             rather than covering two thirds of it — at `lg` the
                             still is only ~330px tall and the quote card does not
                             fit inside it without clipping its own text. */}
-                        <div className="reveal relative">
+                        <div className="reveal relative mt-10">
                             <div className="group relative aspect-[845/540] overflow-hidden rounded-lg border border-white/10">
                                 <Image
                                     src={featured.thumb}
@@ -281,7 +280,7 @@ export default function VideoTestimonials() {
                                 <figcaption className="mt-5 flex items-center gap-3">
                                     {/* `w-auto` beside a fixed height is what lets
                                         one box hold marks of any proportion — the
-                                        three we have run from 1:1 to 3:1. Without
+                                        four we have run from 1:1 to 3:1. Without
                                         it Tailwind's `h-9` fights `next/image`'s
                                         intrinsic width attribute and the wide ones
                                         squash. */}
@@ -309,26 +308,28 @@ export default function VideoTestimonials() {
                     </div>
 
                     {/* ----------------------------------------- right column -- */}
-                    {/* `self-stretch` overrides the row's `items-start` for this
-                        one item, and `auto-rows-fr` then divides the still's
-                        height into three equal rows.
+                    {/* `self-end`, NOT `self-stretch`. Stretching the column to
+                        the left one splits ~890px of heading + still across four
+                        rows, and since a card's natural height is ~170px each row
+                        opens ~50px of dead space above and below its content.
+                        Left at their own height and hung off the bottom, the
+                        cards close level with the featured still and the slack
+                        collects as one gap at the top — which is where the design
+                        puts it.
 
-                        The alternative, `content-between`, keeps each card at
-                        its natural height and pushes the slack into the gaps —
-                        which at this container width (1344px, against the
-                        mock's 1074) opens ~90px voids between cards. Growing the
-                        cards keeps the rhythm the design has; growing the gaps
-                        does not. Three rows against the still alone come out at
-                        ~150px each, which is close enough to a card's natural
-                        height that the stretch reads as padding. */}
-                    <ul className="reveal grid gap-[clamp(0.75rem,2vw,1.125rem)] lg:auto-rows-fr lg:self-stretch">
+                        `content-between` was the other way to spend that slack,
+                        but it pushes it into the gaps instead: at this container
+                        width (1344px, against the mock's 1074) that opened ~90px
+                        voids BETWEEN the cards, which reads as four loose cards
+                        rather than one column. */}
+                    <ul className="reveal grid gap-[clamp(0.75rem,2vw,1.125rem)] lg:self-end">
                         {compact.map((item, i) => (
-                            <li key={i} className="lg:h-full">
+                            <li key={i}>
                                 {/* `relative` is load-bearing twice over: it is the
                                     containing block for the stretched button, and it
                                     keeps that absolute box from resolving against
                                     the initial containing block instead. */}
-                                <figure className="group relative grid h-full grid-cols-[auto_minmax(0,1fr)] items-center gap-[clamp(0.75rem,2.5vw,1rem)] rounded-lg border border-violet-400/25 bg-violet-950/45 p-3 transition-colors duration-300 ease-out hover:border-magenta-500/45 hover:bg-violet-900/55">
+                                <figure className="group relative grid grid-cols-[auto_minmax(0,1fr)] items-center gap-[clamp(0.75rem,2.5vw,1rem)] rounded-xl border border-violet-400/25 bg-violet-950/45 p-3.5 transition-colors duration-300 ease-out hover:border-magenta-500/45 hover:bg-violet-900/55">
                                     {/* The stills are title cards with the client's
                                         name burnt into them, so they have to stay
                                         big enough to read. `24vw` holds the ratio
@@ -336,7 +337,7 @@ export default function VideoTestimonials() {
                                         the card is a fixed fraction of the grid,
                                         so the width is pinned per breakpoint
                                         instead. */}
-                                    <div className="relative w-[clamp(6.5rem,24vw,11rem)] shrink-0 overflow-hidden rounded-md lg:w-44 xl:w-50">
+                                    <div className="relative w-[clamp(6.5rem,24vw,11rem)] shrink-0 overflow-hidden rounded-lg lg:w-44 xl:w-56">
                                         <Image
                                             src={item.thumb}
                                             alt={`Video testimonial from ${item.client} about their ${item.project}`}
@@ -387,7 +388,7 @@ export default function VideoTestimonials() {
                                                 </span>
                                             </span>
 
-                                            <QuoteGlyph className="mt-0.5 w-4 shrink-0 text-violet-300/70" />
+                                            <QuoteGlyph className="mt-0.5 w-5 shrink-0 text-magenta-500" />
                                         </figcaption>
 
                                         <blockquote className="mt-2">
@@ -399,17 +400,17 @@ export default function VideoTestimonials() {
                                         {/* The client's own mark rides the star
                                             row, not the name row. This is the one
                                             line in the card with spare width —
-                                            five 13px stars are ~80px — so a
+                                            five 15px stars are ~95px — so a
                                             wordmark can sit opposite them at any
                                             breakpoint without pushing anything
                                             around. `h-6 w-auto` lets one box hold
                                             marks from 1:1 to 3:1; clients who
                                             have not sent one just leave the right
                                             side empty. */}
-                                        <div className="mt-2 flex items-center justify-between gap-2">
+                                        <div className="mt-2.5 flex items-center justify-between gap-2">
                                             <Stars
                                                 count={item.stars}
-                                                className="[&>svg]:size-[13px]"
+                                                className="gap-1 [&>svg]:size-[15px]"
                                             />
 
                                             {item.logo && (

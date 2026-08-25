@@ -54,8 +54,10 @@ export default function Proposal({
 
             <div className="relative z-[1] container-site grid items-start gap-[clamp(2.5rem,1.5rem+5vw,4.5rem)] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
                 {/* ------------------------------ left ------------------------------ */}
-                <div className="reveal">
-                    <Eyebrow>{proposal.eyebrow}</Eyebrow>
+                <div className="reveal max-lg:text-center">
+                    <Eyebrow className="max-lg:justify-center max-lg:[&>span]:hidden">
+                        {proposal.eyebrow}
+                    </Eyebrow>
 
                     {/* Sized locally rather than with `text-h2`, same as the
                         `Challenges` heading above. `text-h2` tops out at 56px,
@@ -78,15 +80,15 @@ export default function Proposal({
                     </h2>
 
                     <span
-                        className="mt-5 block h-0.5 w-[clamp(28px,6vw,60px)] rounded-sm bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)]"
+                        className="mt-5 block h-0.5 w-[clamp(28px,6vw,60px)] rounded-sm bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)] max-lg:hidden"
                         aria-hidden="true"
                     />
 
-                    <p className="mt-6 max-w-[46ch] text-lead text-white/70">
+                    <p className="mt-6 max-w-[46ch] text-lead text-white/70 max-lg:mx-auto">
                         {proposal.lead}
                     </p>
 
-                    <ul className="mt-10 grid gap-7">
+                    <ul className="mt-10 grid gap-7 max-lg:text-start">
                         {proposal.benefits.map((benefit) => (
                             <li
                                 key={benefit.title}
