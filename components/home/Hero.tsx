@@ -142,11 +142,11 @@ export default function Hero() {
                         in as one block alongside the Trustpilot badge below,
                         which has always had the same offset. */}
                     <div className="mt-hero-gap border-t border-white/[0.11] pt-hero-gap ms-[var(--rail-keepout)] sm:overflow-hidden">
-                        <dl className="flex flex-col gap-4 sm:-ms-[calc(var(--rail-pad)+1px)] sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-0 sm:gap-y-5">
+                        <dl className="flex flex-row items-start gap-2 max-sm:justify-center sm:-ms-[calc(var(--rail-pad)+1px)] sm:flex-wrap sm:items-center sm:gap-x-0 sm:gap-y-5">
                             {hero.trust.map((item) => (
                                 <div
                                     key={item.label}
-                                    className="flex min-w-0 items-center gap-[var(--rail-gap)] sm:border-s sm:border-white/[0.11] sm:pe-[var(--rail-pad)] sm:ps-[var(--rail-pad)]"
+                                    className="flex min-w-0 items-center gap-[var(--rail-gap)] max-sm:flex-1 max-sm:basis-0 max-sm:flex-col max-sm:gap-2 max-sm:text-center sm:border-s sm:border-white/[0.11] sm:pe-[var(--rail-pad)] sm:ps-[var(--rail-pad)]"
                                 >
                                     <Image
                                         src={item.icon}
@@ -154,9 +154,9 @@ export default function Hero() {
                                         width={48}
                                         height={48}
                                         unoptimized
-                                        className="size-[var(--rail-icon)] shrink-0 object-contain"
+                                        className="size-[var(--rail-icon)] shrink-0 object-contain max-sm:size-9"
                                     />
-                                    <div className="flex min-w-0 flex-col gap-0.5">
+                                    <div className="flex min-w-0 flex-col gap-0.5 max-sm:w-full">
                                         <dt className="sr-only">{item.label}</dt>
                                         <dd>
                                             <Counter
@@ -171,7 +171,7 @@ export default function Hero() {
                                                 above this is now a backstop, but
                                                 it is the one that makes the rail
                                                 safe at any label length. */}
-                                            <span className="mt-1 block text-[length:var(--rail-label)] tracking-[0.1em] text-white/40 uppercase lg:tracking-wider">
+                                            <span className="mt-1 block text-[length:var(--rail-label)] tracking-[0.1em] text-white/40 uppercase max-sm:text-[0.625rem] max-sm:tracking-[0.06em] lg:tracking-wider">
                                                 {item.label}
                                             </span>
                                         </dd>
