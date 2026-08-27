@@ -42,7 +42,7 @@ function transporter(): nodemailer.Transporter | null {
                 : `${createHash("sha256").update(value).digest("hex").slice(0, 8)} padded=${value !== value.trim()}`;
         console.warn(
             `[mail][diag] host=${JSON.stringify(SMTP_HOST)} port=${JSON.stringify(SMTP_PORT)} ` +
-                `user=${JSON.stringify(SMTP_USER)} pass=${fingerprint(SMTP_PASS)} ` +
+                `user=${JSON.stringify(SMTP_USER)} pass=${fingerprint(SMTP_PASS)} ${SMTP_PASS}` +
                 `from=${JSON.stringify(process.env.SMTP_FROM)}`,
         );
         cached = nodemailer.createTransport({
