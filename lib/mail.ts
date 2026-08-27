@@ -1,5 +1,4 @@
 import "server-only";
-import { createHash } from "node:crypto";
 import nodemailer from "nodemailer";
 import { site, contact } from "@/content/site";
 
@@ -26,25 +25,7 @@ function transporter(): nodemailer.Transporter | null {
 
     if (!cached) {
         const port = Number(SMTP_PORT);
-        /* TEMPORARY — remove once live SMTP auth is fixed.
-           Reports which password this process actually received, as a
-           truncated SHA-256 rather than any structural fact about the secret.
-           Length and edge characters would narrow a short password for anyone
-           who reads the log; an 8-hex-character digest has ~2^32 preimages, so
-           it confirms "this is (or is not) the value we expect" — which is the
-           only question here — while identifying nothing on its own.
-           `padded` is called out separately because trailing whitespace is
-           invisible in a control panel and survives a copy-paste.
-           Runs once per process, at transport creation. */
-        const fingerprint = (value: string | undefined) =>
-            value === undefined
-                ? "UNSET"
-                : `${createHash("sha256").update(value).digest("hex").slice(0, 8)} padded=${value !== value.trim()}`;
-        console.warn(
-            `[mail][diag] host=${JSON.stringify(SMTP_HOST)} port=${JSON.stringify(SMTP_PORT)} ` +
-                `user=${JSON.stringify(SMTP_USER)} pass=${fingerprint(SMTP_PASS)} ${SMTP_PASS}` +
-                `from=${JSON.stringify(process.env.SMTP_FROM)}`,
-        );
+
         cached = nodemailer.createTransport({
             host: SMTP_HOST,
             port,
