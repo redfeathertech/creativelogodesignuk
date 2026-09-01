@@ -11,16 +11,25 @@ import { PhoneIcon, WhatsAppIcon } from "@/components/ui/icons";
  * above it and this keeps only the part the site chrome has no equivalent of:
  * the limited-time offer, and the two contact links that ride beside it.
  *
- * The live bar is magenta above 768px and a dark slate blue below it. Both
- * colours are now the site's own — the brand gradient on the wide layout, the
- * `ink-950` canvas the header already sits on when it stacks — so the strip
- * reads as part of the chrome above rather than as a third palette.
+ * The strip runs one solid gradient at every width — magenta #CC067F on the
+ * left to violet #6E0BBA on the right — over the `ink-950` canvas the header
+ * above it sits on, so it reads as part of the chrome rather than as a third
+ * palette.
  */
 export default function OfferBar() {
     return (
-        <div className="bg-ink-950 text-white md:bg-[linear-gradient(97deg,var(--color-violet-500)_0%,var(--color-magenta-500)_100%)]">
-            <div className="container-site flex flex-col items-center gap-2 py-3 text-center text-xs sm:text-sm md:flex-row md:justify-between md:py-[5px] md:text-left">
-                <p className="m-0 font-display font-semibold">{topBar.offer}</p>
+        <div className="border-b border-white/[0.07] bg-ink-950 text-white/70 bg-[linear-gradient(90deg,#CC067F_0%,#6E0BBA_100%)]">
+            {/* A flat height rather than one derived from padding — `--hero-h`
+                already subtracts `--offerbar-h`, and a strip whose real height
+                drifts from that token is what puts the hero's scroll cue below
+                the fold. See the token in globals.css. */}
+            <div className="container-site flex h-[var(--offerbar-h)] flex-col items-center justify-center gap-1 text-center text-ui-11 sm:text-xs md:flex-row md:justify-between md:text-left">
+                <p className="m-0 flex items-center gap-2 font-display font-semibold text-white">
+                    <span aria-hidden="true" className="text-white">
+                        &bull;
+                    </span>
+                    {topBar.offer}
+                </p>
 
                 <ul className="m-0 flex list-none flex-wrap items-center justify-center gap-x-5 gap-y-1 p-0">
                     <li>

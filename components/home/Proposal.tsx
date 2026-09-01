@@ -23,8 +23,8 @@ import EnquiryForm from "@/components/forms/EnquiryForm";
  * and a visitor who has scrolled the whole page should not meet a second,
  * longer version of the form they already skipped in the fold.
  *
- * `source` is required, not defaulted, because this band closes `/about-us` as
- * well as the homepage — the design shares it, exactly as the Blade template
+ * `source` is required, not defaulted, because this band closes `/about-us` and
+ * `/seo-services` as well as the homepage — the design shares it, exactly as the Blade template
  * `@include`s one partial on both pages. A default would silently label About
  * Us enquiries as the homepage in the team's notification email, and the third
  * page to render this would inherit that same wrong label. See
@@ -33,12 +33,12 @@ import EnquiryForm from "@/components/forms/EnquiryForm";
 export default function Proposal({
     source,
 }: {
-    source: "home-proposal" | "about-proposal";
+    source: "home-proposal" | "about-proposal" | "seo-proposal";
 }) {
     return (
         <section
             id="proposal"
-            className="relative isolate overflow-hidden bg-ink-950 py-section text-white"
+            className="relative isolate overflow-hidden bg-[#0C0026] py-section text-white"
         >
             {/* Brand glow, then grain over it, so the near-black canvas never
                 reads as flat black. Both decorative. Lighter than the

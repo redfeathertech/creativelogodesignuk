@@ -84,6 +84,46 @@ export const hero = {
     ctaPrimary: "Get Started",
     ctaPhone: contact.phoneDisplay,
 
+    /* Not on the live page: the cue is an anchor down to the trust strip, and
+       an anchor needs an accessible name. Declared in the parity script's
+       AUTHORED set alongside the other names the live template ships unnamed. */
+    scrollCue: "Scroll Down",
+
+    /* The hero backdrop and the artwork beside the copy, supplied by the client
+       for the 2026-09 hero redesign. The illustration replaces nothing: the
+       search-result mockup below still renders, one panel further down. Keys
+       ending `Alt` and the `src`/`width`/`height` trio are not copy — see
+       NOT_COPY in scripts/verify-seo-services-parity.py.
+
+       WebP, not the PNGs first supplied: the backdrop is 72KB against 5.6MB for
+       the same 3840x1770 pixels, and it is `preload`ed as the fold's first
+       paint. The artwork is the client's own tighter crop — 649x560, not the
+       PNG's 700x700 square with its transparent margin — so the intrinsic ratio
+       here is what `next/image` reserves and there is no layout shift. */
+    background: {
+        src: "/assets/img/services/seo/hero-bg.webp",
+        width: 3840,
+        height: 1770,
+    },
+    /* The tablet/phone backdrop, supplied by the client (2026-09). The desktop
+       wave is a 3840x1770 panorama: at 1024px and below the fold stacks, that
+       crop collapses to a sliver, and pinning it to the desktop fold height
+       leaves a hard seam across the section where it ends. This square crop
+       covers the stacked fold instead and is the only backdrop rendered below
+       `lg`. `src`/`width`/`height` are NOT_COPY — see the parity script. */
+    backgroundTablet: {
+        src: "/assets/img/services/seo/hero-bg-tablet.webp",
+        width: 1024,
+        height: 1024,
+    },
+    illustration: {
+        src: "/assets/img/services/seo/hero-illustration.webp",
+        width: 649,
+        height: 560,
+    },
+    illustrationAlt:
+        "Neon 3D illustration of a magnifying glass over a rising bar chart, a target and a search ranking panel",
+
     mockup: {
         /* [fix] "best+HVAC+company+near+me" is kept; only the result's locality
            moves off Lynchburg, VA. */
@@ -100,12 +140,14 @@ export const hero = {
             "Trusted HVAC experts serving London since 2010. 5-star rated, fully accredited & insured. Free estimates.",
     },
 
-    /* These four read as claims about the agency, not as mockup decoration. */
+    /* These four read as claims about the agency, not as mockup decoration.
+       `icon` names a mark in components/services/seo/heroIcons.tsx; it is a
+       token, not copy, and NOT_COPY skips the key. */
     stats: [
-        { value: "3.2x", label: "Avg. traffic increase" },
-        { value: "94%", label: "Client retention rate" },
-        { value: "Top 3", label: "Avg. local ranking" },
-        { value: "150+", label: "Businesses ranked" },
+        { icon: "rocket", value: "3.2x", label: "Avg. traffic increase" },
+        { icon: "retention", value: "94%", label: "Client retention rate" },
+        { icon: "ranking", value: "Top 3", label: "Avg. local ranking" },
+        { icon: "businesses", value: "150+", label: "Businesses ranked" },
     ],
 } as const;
 
@@ -130,21 +172,6 @@ export const heroForm = {
     successTitle: "Thanks — your enquiry is in.",
 } as const;
 
-/* ----------------------------------------------------------------- trust -- */
-
-export const trust = {
-    /* [fix] was "Don't see what you need? TinyBull provides fully custom SEO
-       plans!" */
-    bannerText: `Don't see what you need? ${site.name} provides fully custom SEO plans!`,
-    bannerCta: "Get Started",
-    features: [
-        { icon: "shield", title: "Google Partner Certified" },
-        { icon: "contract", title: "No Long-Term Contracts" },
-        { icon: "chart", title: "Monthly Reporting" },
-        { icon: "manager", title: "Dedicated Account Manager" },
-    ],
-} as const;
-
 /* ------------------------------------------------------------ what is SEO -- */
 
 export const info = {
@@ -159,7 +186,6 @@ export const info = {
         "Search engines like Google use complex algorithms to decide which websites deserve to appear at the top of results. These algorithms evaluate hundreds of factors — the quality and relevance of your content, how many other websites link to yours, how fast your pages load, whether your site works on mobile, and dozens more signals.",
         "SEO isn’t a one-time fix or a shortcut. It’s a disciplined, ongoing process of improving your website’s authority and relevance so Google trusts it enough to show it to searchers. Done right, it’s one of the highest-ROI investments a small business can make — because unlike paid ads, organic traffic doesn’t stop the moment you stop paying.",
     ],
-    statsHeading: "WHY SEO CAN'T BE IGNORED",
     stats: [
         {
             value: "68%",
@@ -184,6 +210,13 @@ export const info = {
 export const pillars = {
     /* [fix] was "THE TINYBULL APPROACH" */
     eyebrow: "OUR APPROACH",
+    /* The client's 2026-09 backdrop for this section — the neon dot-and-line
+       field the three cards sit on. Sized, like every image in this build. */
+    background: {
+        src: "/assets/img/services/seo/approach-bg.webp",
+        width: 3840,
+        height: 2125,
+    },
     title: "How Our SEO Service Works",
     /* [fix] "TinyBull builds all three simultaneously" → "We build all three
        simultaneously" */
@@ -194,6 +227,9 @@ export const pillars = {
             tag: "PILLAR 01",
             accent: "blue",
             title: "Technical SEO",
+            icon: "/assets/img/services/seo/pillar-technical-seo.svg",
+            iconAlt:
+                "Technical SEO icon: a browser window with a settings gear, on a glowing purple disc",
             text: "The foundation of everything. Before Google can rank you, it has to be able to crawl, index, and understand your website. Technical SEO ensures your site is fast, mobile-friendly, secure, and structured in a way that search engines can read clearly.",
             points: [
                 "Site speed optimisation",
@@ -207,6 +243,9 @@ export const pillars = {
             tag: "PILLAR 02",
             accent: "green",
             title: "On-Page SEO",
+            icon: "/assets/img/services/seo/pillar-on-page-seo.svg",
+            iconAlt:
+                "On-page SEO icon: a document page with optimised headings and text, on a glowing purple disc",
             text: "What's actually on your pages matters enormously. On-page SEO is the process of optimising your content, headings, meta tags, images, and internal links so each page clearly communicates its topic to Google — and delivers genuine value to the people reading it.",
             points: [
                 "Keyword research & mapping",
@@ -220,6 +259,9 @@ export const pillars = {
             tag: "PILLAR 03",
             accent: "pink",
             title: "Off-Page SEO & Authority",
+            icon: "/assets/img/services/seo/pillar-off-page-seo.svg",
+            iconAlt:
+                "Off-page SEO icon: linked websites forming an authority network, on a glowing purple disc",
             text: "Google treats links from other websites like votes of confidence. The more high-quality, relevant websites that link to yours, the more authority Google assigns your site. Off-page SEO builds that authority through strategic link building, local citations, and reputation signals.",
             points: [
                 "Link building campaigns",
@@ -236,17 +278,22 @@ export const pillars = {
 
 export const industries = {
     eyebrow: "INDUSTRY EXPERTISE",
-    title: "SEO Built for Your Specific Industry",
+    titleLead: "SEO Built for Your",
+    titleAccent: "Specific Industry",
     description:
         "Every industry has different search behaviour, different keyword competition, and different local factors. We bring specific experience to the industries that matter most to us.",
     items: [
         {
-            icon: "house",
+            icon: "/assets/img/services/seo/industry-home-services.svg",
+            iconAlt:
+                "Home Services icon: a house with a spanner, on a magenta gradient disc",
             title: "Home Services",
             text: "HVAC, plumbing, electrical, roofing, landscaping — we rank home service companies for the high-intent “near me” searches that turn into booked jobs. Local SEO is our speciality.",
         },
         {
-            icon: "heart",
+            icon: "/assets/img/services/seo/industry-healthcare-medical.svg",
+            iconAlt:
+                "Healthcare and medical icon: a caring hand holding a heart with a pulse line, on a magenta gradient disc",
             title: "Healthcare & Medical",
             /* [fix] "HIPAA-sensitive content" → GDPR. HIPAA is US federal
                healthcare law and has no application to a UK clinic; the UK
@@ -254,27 +301,38 @@ export const industries = {
             text: "Dental practices, med spas, chiropractors, and healthcare clinics. We understand GDPR-sensitive content, patient intent keywords, and the trust signals that medical SEO requires.",
         },
         {
-            icon: "toolbox",
+            icon: "/assets/img/services/seo/industry-contractors-construction.svg",
+            iconAlt:
+                "Contractors and construction icon: a worker in a hard hat, on a magenta gradient disc",
             title: "Contractors & Construction",
             text: "Custom home builders, remodelers, foundation repair, and specialty contractors. We target project-specific keywords with strong commercial intent and build local authority.",
         },
         {
-            icon: "location",
+            icon: "/assets/img/services/seo/industry-restaurants-hospitality.svg",
+            iconAlt:
+                "Restaurants and hospitality icon: a shopfront with an awning, on a magenta gradient disc",
             title: "Restaurants & Hospitality",
             text: "Restaurants, hotels, and entertainment venues. We optimise for local map pack visibility, review signals, and the “open now near me” searches that drive foot traffic.",
         },
         {
-            icon: "file",
+            icon: "/assets/img/services/seo/industry-professional-services.svg",
+            iconAlt:
+                "Professional services icon: a gear wheel, on a magenta gradient disc",
             title: "Professional Services",
             text: "Law firms, financial advisors, accountants, and insurance agencies. Trust and authority are everything in professional services — and SEO is how you build both online.",
         },
         {
-            icon: "globe",
+            icon: "/assets/img/services/seo/industry-moving-logistics.svg",
+            iconAlt:
+                "Moving and logistics icon: a delivery van beside stacked boxes, on a magenta gradient disc",
             title: "Moving & Logistics",
             text: "Moving companies, storage facilities, and logistics providers. High competition, high intent — we use hyperlocal SEO and review generation to put you at the top when customers need you most.",
         },
     ],
-    bottomTextLead: "Don’t see your industry? We work across dozens of verticals.",
+    calloutIcon: "/assets/img/services/seo/industry-callout.svg",
+    calloutIconAlt: "A magenta warning triangle with an exclamation mark",
+    calloutTitle: "Don’t see your industry?",
+    bottomTextLead: "We work across dozens of verticals.",
     bottomLinkText: "Get in touch",
     bottomTextTrail: "and we’ll tell you exactly how we’d approach your market.",
 } as const;
@@ -284,12 +342,22 @@ export const industries = {
 export const difference = {
     /* [fix] was "WHY TINYBULL" */
     eyebrow: `WHY ${site.name.toUpperCase()}`,
+    /* The client's 2026-09 backdrop for this section — the same neon field the
+       rest of the redesigned page sits on. `src`/`width`/`height` are NOT_COPY
+       in the parity script: artwork, not page copy. */
+    background: {
+        src: "/assets/img/services/seo/difference-bg.webp",
+        width: 1920,
+        height: 846,
+    },
     titleLead: "Small Agency. Big Results.",
     titleTrail: "Here's the Difference.",
     /* [fix] "TinyBull is different" → "We're different" */
     description:
         "Big agencies charge big agency prices and assign your account to a junior account manager you've never met. We're different — and we think that difference matters.",
     bad: {
+        /* Decorative — the list beside it already says which card is which. */
+        icon: "/assets/img/services/seo/difference-bad.svg",
         title: "THE BIG AGENCY EXPERIENCE",
         points: [
             "Locked into 12-month contracts before you see a single result",
@@ -302,6 +370,7 @@ export const difference = {
     good: {
         /* [fix] was "THE TINYBULL DIFFERENCE" / "THE TINYBULL EXPERIENCE" */
         badge: `THE ${site.name.toUpperCase()} DIFFERENCE`,
+        icon: "/assets/img/services/seo/difference-good.svg",
         title: `THE ${site.name.toUpperCase()} EXPERIENCE`,
         points: [
             "Month-to-month — we earn your business every single month",

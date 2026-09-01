@@ -285,6 +285,11 @@ const ENQUIRY_SOURCES = new Map<string, { formName: string; meta: string }>([
         "about-proposal",
         { formName: "New proposal request", meta: "About Us proposal form" },
     ],
+    /* And the closing band of the SEO pillar, `/seo-services`. */
+    [
+        "seo-proposal",
+        { formName: "New proposal request", meta: "SEO Services proposal form" },
+    ],
 ]);
 const DEFAULT_ENQUIRY_SOURCE = {
     formName: "New proposal request",

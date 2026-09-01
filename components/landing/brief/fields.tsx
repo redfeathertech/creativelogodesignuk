@@ -27,6 +27,9 @@ import type { BriefField, BriefSection } from "@/content/landing/brief-types";
 
 const control =
     "peer w-full min-w-0 rounded-lg border border-mist-300 bg-white px-3.5 py-2.5 text-sm text-onlight " +
+    /* Keeps an autofilled field white instead of Chrome's blue — the rule that
+       reads these lives in app/globals.css. */
+    "[--field-fill:#ffffff] [--field-ink:var(--color-onlight)] " +
     "placeholder:text-mist-500 focus:border-magenta-500 focus:outline-none " +
     "focus:ring-2 focus:ring-magenta-500/30 disabled:opacity-50 " +
     "data-[valid=true]:border-emerald-600/70 data-[valid=true]:pe-9";

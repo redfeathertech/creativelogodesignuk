@@ -39,11 +39,16 @@ export type FieldTone = "dark" | "light";
 const CONTROL: Record<FieldTone, string> = {
     dark:
         "border-white/[0.11] bg-white/[0.04] text-white " +
+        /* Opaque equivalents of the two translucent fills above. The autofill
+           shadow in globals.css cannot be transparent, so each tone hands it a
+           flattened colour rather than the browser's blue. */
+        "[--field-fill:#170d25] [--field-ink:#ffffff] focus:[--field-fill:#1e152c] " +
         "hover:border-white/20 focus:border-magenta-400 focus:bg-white/[0.07] " +
         "focus:shadow-[0_0_0_3px_rgb(204_6_127/0.22)] aria-[invalid=true]:border-red-400/60 " +
         "data-[valid=true]:border-emerald-400/55 data-[valid=true]:pe-11",
     light:
         "border-seo-border bg-white text-seo-ink " +
+        "[--field-fill:#ffffff] [--field-ink:var(--color-seo-ink)] " +
         "hover:border-seo-body/50 focus:border-seo-pink focus:bg-white " +
         "focus:shadow-[0_0_0_3px_rgb(209_0_143/0.16)] aria-[invalid=true]:border-red-500 " +
         "data-[valid=true]:border-emerald-600/70 data-[valid=true]:pe-11",

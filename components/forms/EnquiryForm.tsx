@@ -105,6 +105,9 @@ const ASSURANCE_ICONS = [NoObligationIcon, QuickResponseIcon, ConfidentialIcon];
 
 const CONTROL =
     "peer w-full rounded-md border border-mist-300 bg-white py-3 ps-11 pe-4 text-ui-15 text-onlight " +
+    /* Keeps an autofilled field white instead of Chrome's blue — the rule that
+       reads these lives in app/globals.css. */
+    "[--field-fill:#ffffff] [--field-ink:var(--color-onlight)] " +
     "placeholder:text-mist-500 transition-[border-color,box-shadow] duration-200 ease-out " +
     "focus:border-magenta-500 focus:outline-none focus:shadow-[0_0_0_3px_rgb(204_6_127/0.15)] " +
     "aria-[invalid=true]:border-red-500 " +

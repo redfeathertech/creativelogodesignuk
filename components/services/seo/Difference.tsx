@@ -1,52 +1,64 @@
+import Image from "next/image";
+
 import { difference } from "@/content/landing/seo-services";
-import { Eyebrow, Section, SectionHeading } from "@/components/ui/Section";
+import { Eyebrow, SectionHeading } from "@/components/ui/Section";
 import { CheckIcon } from "@/components/ui/icons";
 
 /**
- * Difference — the two-column "them vs us" comparison, on the light surface.
+ * Difference — the two-column "them vs us" comparison.
  *
- * Left card is the big-agency experience (red crosses), right card is ours
- * (green ticks, a brand-gradient badge and a magenta ring). The live page
- * renders both titles as `h3` inside a section whose own title is an `h2`, so
- * the level ladder is already correct and carries over unchanged.
+ * ─────────────────────────────────────────────────────────────────────────────
+ * 2026-09 REDESIGN
+ * ─────────────────────────────────────────────────────────────────────────────
  *
- * The badge is `white-space:nowrap` on the live page because the template's
- * brand name is one short word. Ours is three, so the pill wraps and the
- * highlighted card carries extra top padding below `md` to leave room for the
- * second line.
+ * Was a light section with two flat white cards. Rebuilt to the client's
+ * approved composition: the neon backdrop on the `ink-950` canvas, a centred
+ * head with the flanked eyebrow, and two glass cards — the big-agency one on a
+ * plain hairline border, ours ringed in magenta with an outer glow. Each card
+ * heads with the client's own circular SVG, and the rows are separated by
+ * hairlines rather than gaps.
+ *
+ * **Layout only. No copy changed.** Eyebrow, heading, standfirst, both card
+ * titles and all ten list points are the strings this page has always carried,
+ * and `scripts/verify-seo-services-parity.py` still gates them in both
+ * directions. The "THE … DIFFERENCE" badge is not in the client's mockup and is
+ * no longer rendered (client's call, 2026-09); `difference.good.badge` stays in
+ * the content module so the parity script keeps its live counterpart mapped.
+ *
+ * The new keys are the backdrop and the two `icon` paths; `src`/`icon` sit
+ * outside the parity script's copy set (`NOT_COPY`), the artwork being
+ * something the live page does not carry. Both icons are decorative — the card
+ * title beside each says which side it marks — so they take `alt=""`.
  */
 
-/* fa-xmark — the red list marker. Drawn to the same 20px box as CheckIcon so
-   the two lists' markers sit on the same optical baseline. */
-const CrossIcon = ({ className }: { className?: string }) => (
-    <svg
-        width="18"
-        height="18"
-        viewBox="0 0 20 20"
-        fill="none"
-        aria-hidden="true"
-        className={className}
-    >
-        <path
-            d="M5.5 5.5l9 9M14.5 5.5l-9 9"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-        />
-    </svg>
-);
-
-const cardTitle = "font-display text-sm font-extrabold tracking-[0.14em] uppercase";
-const list = "m-0 mt-8 list-none grid gap-5 p-0";
-const item = "flex gap-3 text-onlight-muted";
-const marker = "mt-1 shrink-0";
+const cardTitle = "font-display text-base font-extrabold tracking-[0.1em] uppercase";
+const list = "m-0 mt-6 list-none grid p-0";
+const item = "flex items-start gap-3 py-3.5 text-sm text-white/70";
 
 export default function Difference() {
     return (
-        <Section tone="light">
+        <section className="relative isolate overflow-hidden bg-ink-950 py-section text-white">
+            {/* Sized rather than `fill`ed — `fill` emits no width/height, and
+                every image in this build carries both. */}
+            <Image
+                src={difference.background.src}
+                alt=""
+                aria-hidden="true"
+                width={difference.background.width}
+                height={difference.background.height}
+                sizes="100vw"
+                quality={90}
+                className="pointer-events-none absolute inset-0 -z-10 size-full object-cover object-center"
+            />
+            {/* Feathers the section into the ones above and below it. */}
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(7_2_15/0.55)_0%,transparent_20%,transparent_80%,rgb(7_2_15/0.55)_100%)]"
+            />
+
             <div className="container-site">
                 <div className="reveal mx-auto max-w-[56rem] text-center">
-                    <Eyebrow className="justify-center text-magenta-500">
+                    <Eyebrow flanked className="justify-center text-magenta-400">
                         {difference.eyebrow}
                     </Eyebrow>
                     <SectionHeading
@@ -55,22 +67,40 @@ export default function Difference() {
                         accentClassName="gradient-text-brand"
                         className="mx-auto text-balance"
                     />
-                    <p className="mx-auto mt-6 max-w-[62ch] text-lead text-onlight-muted">
+                    <p className="mx-auto mt-6 max-w-[62ch] text-lead text-white/65">
                         {difference.description}
                     </p>
                 </div>
 
-                <div className="mx-auto mt-12 grid max-w-[62.5rem] gap-6 lg:grid-cols-2">
+                <div className="mx-auto mt-12 grid max-w-[74rem] items-start gap-6 lg:grid-cols-2">
                     {/* ----------------------------------------------- them -- */}
-                    <div className="reveal rounded-lg border border-ink-900/[0.08] bg-white p-8 shadow-sm">
-                        <h3 className={`${cardTitle} text-onlight-muted`}>
-                            {difference.bad.title}
-                        </h3>
+                    <div className="reveal min-w-0 rounded-2xl border border-white/10 bg-[linear-gradient(180deg,rgb(255_255_255/0.06)_0%,rgb(7_2_15/0.45)_100%)] p-8 shadow-[0_24px_60px_-30px_rgb(0_0_0/0.9)] backdrop-blur-md">
+                        <div className="flex items-center gap-4">
+                            <Image
+                                src={difference.bad.icon}
+                                alt=""
+                                aria-hidden="true"
+                                width={33}
+                                height={33}
+                                className="size-8 shrink-0"
+                            />
+                            <h3 className={`${cardTitle} text-white`}>
+                                {difference.bad.title}
+                            </h3>
+                        </div>
 
                         <ul className={list}>
                             {difference.bad.points.map((point) => (
-                                <li key={point} className={item}>
-                                    <CrossIcon className={`${marker} text-[#ff5b5b]`} />
+                                <li
+                                    key={point}
+                                    className={`${item} border-b border-white/[0.07] last:border-b-0`}
+                                >
+                                    {/* The plain dot marker — the crossed-out
+                                        side carries no tick. */}
+                                    <span
+                                        aria-hidden="true"
+                                        className="mt-1.5 size-2 shrink-0 rounded-full bg-magenta-400"
+                                    />
                                     <span className="min-w-0">{point}</span>
                                 </li>
                             ))}
@@ -78,19 +108,33 @@ export default function Difference() {
                     </div>
 
                     {/* ------------------------------------------------- us -- */}
-                    <div className="reveal relative rounded-lg bg-white p-8 pt-14 shadow-md ring-[1.5px] ring-magenta-500 ring-inset md:pt-11">
-                        <p className="absolute -top-4 left-1/2 m-0 max-w-[calc(100%-2rem)] -translate-x-1/2 rounded-full bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)] px-6 py-2.5 text-center font-display text-ui-10 leading-[1.4] font-bold tracking-[0.14em] text-white uppercase sm:text-xs">
-                            {difference.good.badge}
-                        </p>
-
-                        <h3 className={`${cardTitle} text-magenta-500`}>
-                            {difference.good.title}
-                        </h3>
+                    <div className="reveal relative min-w-0 rounded-2xl bg-[linear-gradient(180deg,rgb(168_85_247/0.16)_0%,rgb(7_2_15/0.5)_100%)] p-8 shadow-[0_0_60px_-12px_rgb(217_70_239/0.55)] ring-[1.5px] ring-magenta-500 ring-inset backdrop-blur-md">
+                        <div className="flex items-center gap-4">
+                            <Image
+                                src={difference.good.icon}
+                                alt=""
+                                aria-hidden="true"
+                                width={41}
+                                height={39}
+                                className="size-8 shrink-0 object-contain"
+                            />
+                            <h3 className={`${cardTitle} text-white`}>
+                                {difference.good.title}
+                            </h3>
+                        </div>
 
                         <ul className={list}>
                             {difference.good.points.map((point) => (
-                                <li key={point} className={item}>
-                                    <CheckIcon className={`${marker} text-teal-600`} />
+                                <li
+                                    key={point}
+                                    className={`${item} border-b border-white/[0.07] text-white/80 last:border-b-0`}
+                                >
+                                    <span
+                                        aria-hidden="true"
+                                        className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-[linear-gradient(135deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)] text-white"
+                                    >
+                                        <CheckIcon className="size-3" />
+                                    </span>
                                     <span className="min-w-0">{point}</span>
                                 </li>
                             ))}
@@ -98,6 +142,6 @@ export default function Difference() {
                     </div>
                 </div>
             </div>
-        </Section>
+        </section>
     );
 }

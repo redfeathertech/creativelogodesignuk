@@ -9,12 +9,12 @@ import { faq, meta, pricing } from "@/content/landing/seo-services";
 import { QuoteDialogProvider } from "@/components/services/seo/QuoteDialog";
 import OfferBar from "@/components/services/seo/OfferBar";
 import Hero from "@/components/services/seo/Hero";
+import Proposal from "@/components/home/Proposal";
 import Clients from "@/components/services/Clients";
 
 /* Below-the-fold sections are code-split, as on the other service pages:
    `ssr` still defaults to true, so every section is prerendered into the HTML —
    this only splits the *client* chunk each one hydrates from. */
-const Trust = dynamic(() => import("@/components/services/seo/Trust"));
 const Info = dynamic(() => import("@/components/services/seo/Info"));
 const Pillars = dynamic(() => import("@/components/services/seo/Pillars"));
 const Industries = dynamic(() => import("@/components/services/seo/Industries"));
@@ -87,11 +87,21 @@ export const metadata: Metadata = buildMetadata({
  * - `Clients` — the shared client-logo wall every service page ends its
  *   mid-section run with — is new here.
  *
- * **No copy was added, cut or reworded.** Section order is still the live
- * page's: offer bar → hero → trust strip → what is SEO → the three pillars →
- * industries → big-agency comparison → services → on-page → Google Business
- * Profile → process → pricing → FAQ → closing CTA, with the client wall and the
- * contact band folded in where the service-page rhythm puts them.
+ * Section order follows the live page, with one change: offer bar → hero →
+ * proposal band → what is SEO → the three pillars → industries → big-agency
+ * comparison → services → on-page → Google Business Profile → process →
+ * pricing → FAQ → closing CTA, with the client wall and the contact band
+ * folded in where the service-page rhythm puts them.
+ *
+ * **One section was cut, on the client's instruction (2026-09):** the trust
+ * strip that sat between the hero and the "what is SEO" section — the "fully
+ * custom SEO plans" banner and the four badges under it (Google Partner
+ * Certified, No Long-Term Contracts, Monthly Reporting, Dedicated Account
+ * Manager). Its copy is gone from `content/landing/seo-services.ts`, its
+ * component is deleted, and its four badge titles are
+ * declared in the parity script's REPLACED list, so the reverse check still
+ * passes and the drop is recorded rather than silent. Nothing else was added,
+ * cut or reworded.
  *
  * The copy itself is a deliberate rebrand rather than a verbatim port — the
  * live page is an un-rebranded third-party template that names another agency
@@ -124,7 +134,7 @@ export default function SeoServicesPage() {
 
             <OfferBar />
             <Hero />
-            <Trust />
+            <Proposal source="seo-proposal" />
             <Info />
             <Pillars />
             <Industries />

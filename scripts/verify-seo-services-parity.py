@@ -97,9 +97,10 @@ SPELLING = {
 # Both sides are folded before use, so punctuation and case do not matter.
 # ---------------------------------------------------------------------------
 REBRAND = {
-    # -- the template agency's name, all ten occurrences --------------------
-    "Don’t see what you need? TinyBull provides fully custom SEO plans!":
-        "Don't see what you need? Creative Logo Design provides fully custom SEO plans!",
+    # -- the template agency's name -----------------------------------------
+    # (The tenth occurrence was the trust strip's banner. That whole section
+    # was cut in 2026-09 — see REPLACED, "the trust strip" — so the string is
+    # no longer rebranded, it is simply gone.)
     "— TINYBULL SEO TEAM": "— CREATIVE LOGO DESIGN SEO TEAM",
     "THE TINYBULL APPROACH": "OUR APPROACH",
     "WHY TINYBULL": "WHY CREATIVE LOGO DESIGN",
@@ -204,6 +205,9 @@ AUTHORED = {
     # document has no success state.
     "Thanks — your enquiry is in.",
     # Accessible names for icon-only links the live page ships unnamed.
+    # "Scroll Down" names the hero's scroll-cue anchor, added with the 2026-09
+    # hero redesign — the live page has no cue and therefore no such name.
+    "Scroll Down",
     "Facebook",
     "Instagram",
     "X",
@@ -223,6 +227,18 @@ NOT_COPY = re.compile(
 # Live runs the rebuild deliberately does not reproduce, beyond the rebrand.
 # ---------------------------------------------------------------------------
 REPLACED = {
+    # ------------------------------------------------------------------
+    # The trust strip, cut whole on the client's instruction (2026-09): the
+    # banner that sat under the hero and the four badges beneath it. This is a
+    # deliberate removal of live copy, not a rewording — which is exactly what
+    # this list exists to record, so the reverse pass keeps failing on any
+    # *other* drop.
+    # ------------------------------------------------------------------
+    "Don’t see what you need? TinyBull provides fully custom SEO plans!",
+    "Google Partner Certified",
+    "No Long-Term Contracts",
+    "Monthly Reporting",
+    "Dedicated Account Manager",
     # ------------------------------------------------------------------
     # The old landline. The client replaced it site-wide with +44 7853 354207
     # (2026-08); every page, the JSON-LD and all four landing pages print the
