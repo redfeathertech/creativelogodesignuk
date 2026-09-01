@@ -18,12 +18,19 @@ export default function Enquiry() {
     return (
         <Section tone="dark">
             <div className="container-site grid items-start gap-[clamp(2.5rem,1.5rem+5vw,4.5rem)] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-                <div className="reveal lg:sticky lg:top-32">
-                    <Eyebrow>{enquiry.eyebrow}</Eyebrow>
+                <div className="reveal max-lg:text-center lg:sticky lg:top-32">
+                    <Eyebrow className="max-lg:justify-center max-lg:[&>span]:hidden">
+                        {enquiry.eyebrow}
+                    </Eyebrow>
                     <SectionHeading lead={enquiry.titleLead} accent={enquiry.titleAccent} />
-                    <p className="mt-6 max-w-[62ch] text-lead text-white/65">{enquiry.lead}</p>
+                    <p className="mt-6 max-w-[62ch] text-lead text-white/65 max-lg:mx-auto">
+                        {enquiry.lead}
+                    </p>
 
-                    <ul className="mt-8 grid gap-4">
+                    {/* The ticks stay left-aligned against their labels — the
+                        list is centred as a block instead, so a two-line point
+                        does not ragged-centre under its own tick. */}
+                    <ul className="mt-8 grid gap-4 max-lg:mx-auto max-lg:w-fit max-lg:text-left">
                         {enquiry.points.map((point) => (
                             <li key={point} className="flex items-start gap-3 text-white/65">
                                 <span

@@ -51,12 +51,12 @@ export default function Pricing() {
                                 }`}
                             >
                                 {badge ? (
-                                    <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)] px-5 py-2 font-display text-[0.6875rem] font-bold tracking-[0.125em] whitespace-nowrap text-white">
+                                    <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)] px-5 py-2 font-display text-ui-11 font-bold tracking-[0.125em] whitespace-nowrap text-white">
                                         {badge}
                                     </span>
                                 ) : null}
 
-                                <p className="m-0 font-display text-[0.8125rem] font-bold tracking-[0.15em] text-onlight-muted uppercase">
+                                <p className="m-0 font-display text-ui-13 font-bold tracking-[0.15em] text-onlight-muted uppercase">
                                     {tier.name}
                                 </p>
 
@@ -72,7 +72,7 @@ export default function Pricing() {
                                 <p className="mt-3.5 text-onlight-muted">{tier.text}</p>
 
                                 <p className="mt-3">
-                                    <span className="inline-block rounded-full bg-magenta-50 px-3 py-1 text-[0.8125rem] text-magenta-600 italic">
+                                    <span className="inline-block rounded-full bg-magenta-50 px-3 py-1 text-ui-13 text-magenta-600 italic">
                                         {tier.keywords}
                                     </span>
                                 </p>

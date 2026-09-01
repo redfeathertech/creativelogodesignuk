@@ -38,7 +38,7 @@ export default function DiscountBand() {
                     aria-hidden="true"
                 >
                     <span className="block">
-                        <span className="block text-[0.5625rem] font-bold tracking-[0.12em] text-white/75 uppercase">
+                        <span className="block text-ui-9 font-bold tracking-[0.12em] text-white/75 uppercase">
                             {discountBand.badgeKicker}
                         </span>
                         <span className="block font-display text-h3 leading-none font-extrabold text-star">

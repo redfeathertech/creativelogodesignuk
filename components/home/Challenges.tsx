@@ -101,7 +101,7 @@ export default function Challenges() {
             >
               <summary className="flex cursor-pointer list-none items-center gap-3 p-[clamp(0.85rem,0.6rem+0.7vw,1.15rem)] marker:content-[''] sm:gap-4">
                 <span
-                  className="grid h-7 w-9 shrink-0 place-items-center rounded-md bg-white/[0.07] font-display text-[0.6875rem] font-bold text-white/70 transition-colors duration-300 group-open/item:bg-[linear-gradient(97deg,var(--color-violet-500)_0%,var(--color-magenta-500)_100%)] group-open/item:text-white"
+                  className="grid h-7 w-9 shrink-0 place-items-center rounded-md bg-white/[0.07] font-display text-ui-11 font-bold text-white/70 transition-colors duration-300 group-open/item:bg-[linear-gradient(97deg,var(--color-violet-500)_0%,var(--color-magenta-500)_100%)] group-open/item:text-white"
                   aria-hidden="true"
                 >
                   {String(i + 1).padStart(2, "0")}
@@ -116,7 +116,7 @@ export default function Challenges() {
                   className="hidden size-10 shrink-0 sm:block"
                 />
 
-                <h3 className="min-w-0 flex-1 font-display text-[0.95rem] leading-snug font-bold text-white/85 transition-colors duration-300 group-open/item:text-white sm:text-[1.0625rem]">
+                <h3 className="min-w-0 flex-1 font-display text-ui-15 leading-snug font-bold text-white/85 transition-colors duration-300 group-open/item:text-white sm:text-ui-17">
                   {item.q}
                 </h3>
 

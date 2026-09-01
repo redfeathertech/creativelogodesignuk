@@ -37,7 +37,7 @@ export default function Process() {
                         >
                             <span
                                 aria-hidden="true"
-                                className="grid size-[52px] shrink-0 place-items-center rounded-full border border-white/20 font-display text-[1.1rem] font-extrabold text-white/60"
+                                className="grid size-[52px] shrink-0 place-items-center rounded-full border border-white/20 font-display text-ui-17 font-extrabold text-white/60"
                             >
                                 {step.number}
                             </span>

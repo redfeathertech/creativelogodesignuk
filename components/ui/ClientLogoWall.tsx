@@ -93,7 +93,7 @@ export function ClientLogoWall({
                             {/* Not `white/75`: 11px uppercase over the magenta end of the
                                 gradient measures 3.5:1, under the 4.5:1 AA floor for text
                                 this size. At 90% it clears it at both ends of the ramp. */}
-                            <span className="mt-1.5 block text-[0.6875rem] tracking-[0.12em] text-white/90 uppercase">
+                            <span className="mt-1.5 block text-ui-11 tracking-[0.12em] text-white/90 uppercase">
                                 {stat.label}
                             </span>
                         </span>

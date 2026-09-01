@@ -131,6 +131,36 @@
     --text-body: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
     --text-body--line-height: 1.65;
 
+    /* ---- UI ladder: the small type the fluid scale never covered ---------
+     Buttons, badges, eyebrows, trust indicators, nav links, card titles and
+     form labels all sit BELOW `--text-body`, and every one of them used to be
+     a hand-written arbitrary value (`text-[0.8125rem]`) scattered across 33
+     components. Arbitrary values are literals, so no viewport-banded override —
+     which can only work by re-declaring tokens — can ever reach them. As
+     tokens they are reachable, which is the point of the ladder even though
+     nothing re-declares them today.
+
+     Named for their pixel value at the default root size, and deliberately
+     interleaved with Tailwind's own 12/14/16/18 rungs (`text-xs`, `text-sm`,
+     `text-base`, `text-lg`) rather than replacing them, so the whole ladder is
+     10 · 11 · 12 · 13 · 14 · 15 · 16 · 17 · 18 · 19 · 21 and a component picks
+     the rung it wants. If either these or those four are ever re-declared, move
+     both together so the ladder steps as one piece.
+
+     No `--text-ui-*--line-height` is defined, and that is deliberate: Tailwind
+     emits a `line-height` declaration only when the companion key exists, so
+     these behave exactly like the arbitrary values they replaced — leading is
+     inherited, or set by the `leading-*` sitting next to them. Adding one here
+     would silently re-lead 60+ call sites. */
+    --text-ui-9: 0.5625rem;
+    --text-ui-10: 0.625rem;
+    --text-ui-11: 0.6875rem;
+    --text-ui-13: 0.8125rem;
+    --text-ui-15: 0.9375rem;
+    --text-ui-17: 1.0625rem;
+    --text-ui-19: 1.1875rem;
+    --text-ui-21: 1.3125rem;
+
     /* ---- layout --------------------------------------------------------- */
     /* 62rem = 992px, not Tailwind's 64rem: it is the breakpoint every two-column
      section of the clduk design switches on, so `lg:` maps to it directly.
@@ -323,6 +353,20 @@
      was on its own enough to push the hero past the fold at 1280x832. Restore
      it alongside the cue, not before. */
     --hero-foot: var(--spacing-hero-block);
+
+    /* ---- button metrics --------------------------------------------------
+       Only the CEILING of each pill's inline padding, plus its flat block
+       padding. `components/ui/button.ts` reads these as
+       `clamp(1.25rem, 0.85rem + 1.6vw, var(--btn-px-md))`, so the phone end of
+       that clamp — which exists to stop a 320px CTA hanging off the screen —
+       is untouched and only the desktop value moves. They live here rather
+       than in `@theme` because they generate no utility of their own. If the
+       type scale is ever stepped up, step these with it so a label that has
+       grown 2px is not sitting in the same pill it had at 1440. */
+    --btn-px-md: 1.75rem;
+    --btn-py-md: 0.9rem;
+    --btn-px-lg: 2.25rem;
+    --btn-py-lg: 1.05rem;
 }
 
 /* Phone rhythm. The clamp above is viewport-driven, which still leaves ~62px of

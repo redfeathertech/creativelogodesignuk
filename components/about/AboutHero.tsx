@@ -32,17 +32,19 @@ export default function AboutHero({ trail }: { trail: readonly Crumb[] }) {
                 <Breadcrumbs trail={trail} className="mb-8" />
 
                 <div className="grid items-center gap-[clamp(2rem,1.5rem+4vw,4rem)] lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
-                    <div className="reveal">
-                        <Eyebrow>{aboutHero.eyebrow}</Eyebrow>
+                    <div className="reveal max-lg:text-center">
+                        <Eyebrow className="max-lg:justify-center max-lg:[&>span]:hidden">
+                            {aboutHero.eyebrow}
+                        </Eyebrow>
 
                         <h1 className="text-h1">
                             {aboutHero.titleLead}{" "}
                             <span className="gradient-text">{aboutHero.titleAccent}</span>
                         </h1>
 
-                        <p className="mt-6 max-w-[62ch] text-lead text-white/65">{aboutHero.lead}</p>
+                        <p className="mt-6 max-w-[62ch] text-lead text-white/65 max-lg:mx-auto">{aboutHero.lead}</p>
 
-                        <div className="mt-8 flex flex-wrap gap-4">
+                        <div className="mt-8 flex flex-wrap gap-4 max-lg:justify-center">
                             <LeadButton variant="primary" size="lg">
                                 {aboutHero.primaryCta}
                                 <ArrowIcon />

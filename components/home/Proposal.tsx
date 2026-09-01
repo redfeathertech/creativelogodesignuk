@@ -143,7 +143,7 @@ export default function Proposal({
                                 <h3 className="font-display text-[clamp(1.3rem,1.05rem+0.8vw,1.7rem)] leading-tight font-extrabold text-onlight">
                                     {proposal.form.title}
                                 </h3>
-                                <p className="mt-1.5 text-[0.9rem] leading-[1.5] text-onlight-muted">
+                                <p className="mt-1.5 text-ui-15 leading-[1.5] text-onlight-muted">
                                     {proposal.form.sub}
                                 </p>
                             </div>

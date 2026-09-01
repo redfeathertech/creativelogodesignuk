@@ -79,7 +79,7 @@ export default function Difference() {
 
                     {/* ------------------------------------------------- us -- */}
                     <div className="reveal relative rounded-lg bg-white p-8 pt-14 shadow-md ring-[1.5px] ring-magenta-500 ring-inset md:pt-11">
-                        <p className="absolute -top-4 left-1/2 m-0 max-w-[calc(100%-2rem)] -translate-x-1/2 rounded-full bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)] px-6 py-2.5 text-center font-display text-[0.625rem] leading-[1.4] font-bold tracking-[0.14em] text-white uppercase sm:text-xs">
+                        <p className="absolute -top-4 left-1/2 m-0 max-w-[calc(100%-2rem)] -translate-x-1/2 rounded-full bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)] px-6 py-2.5 text-center font-display text-ui-10 leading-[1.4] font-bold tracking-[0.14em] text-white uppercase sm:text-xs">
                             {difference.good.badge}
                         </p>
 

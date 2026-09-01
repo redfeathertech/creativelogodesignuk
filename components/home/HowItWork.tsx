@@ -130,10 +130,10 @@ export default function HowItWork() {
                                             className="size-[34px] shrink-0 min-[576px]:size-[52px]"
                                         />
                                         <div className="min-w-0">
-                                            <dt className="font-display text-[0.75rem] font-bold leading-[1.3] text-white min-[576px]:text-[1.0625rem]">
+                                            <dt className="font-display text-xs font-bold leading-[1.3] text-white min-[576px]:text-ui-17">
                                                 {item.title}
                                             </dt>
-                                            <dd className="mt-0.5 text-[0.6875rem] leading-[1.45] text-white/60 min-[576px]:text-sm">
+                                            <dd className="mt-0.5 text-ui-11 leading-[1.45] text-white/60 min-[576px]:text-sm">
                                                 {item.body}
                                             </dd>
                                         </div>

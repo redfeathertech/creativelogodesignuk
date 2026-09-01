@@ -24,7 +24,7 @@ export default function TopBar() {
                         {topBar.offer}
                         <QuoteButton
                             variant="light"
-                            className="px-3.5 py-1.5 text-[0.6875rem] tracking-[0.04em] normal-case"
+                            className="px-3.5 py-1.5 text-ui-11 tracking-[0.04em] normal-case"
                         >
                             {topBar.offerCta}
                         </QuoteButton>

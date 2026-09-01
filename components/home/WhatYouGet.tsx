@@ -111,7 +111,7 @@ export default function WhatYouGet() {
                                         height={36}
                                         className="size-7 shrink-0 object-contain sm:size-9"
                                     />
-                                    <span className="font-display text-[0.8125rem] leading-tight font-semibold text-balance text-white sm:text-[0.9375rem]">
+                                    <span className="font-display text-ui-13 leading-tight font-semibold text-balance text-white sm:text-ui-15">
                                         {benefit.label}
                                     </span>
                                 </li>
@@ -168,7 +168,7 @@ export default function WhatYouGet() {
                                         />
 
                                         <div className="min-w-0 flex-1">
-                                            <h3 className="font-display text-[1.0625rem] leading-[1.2] font-extrabold text-white sm:text-[1.1875rem]">
+                                            <h3 className="font-display text-ui-17 leading-[1.2] font-extrabold text-white sm:text-ui-19">
                                                 {/* The whole card is the hit
                                                     area: the button is a bare
                                                     control stretched over it

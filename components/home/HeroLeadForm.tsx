@@ -46,7 +46,7 @@ export default function HeroLeadForm() {
                             {hero.form.titleAccent}
                         </span>
                     </h2>
-                    <p className="mt-2 mb-5 text-[0.95rem] text-onlight-muted">
+                    <p className="mt-2 mb-5 text-ui-15 text-onlight-muted">
                         {hero.form.sub}
                     </p>
                     <EnquiryForm

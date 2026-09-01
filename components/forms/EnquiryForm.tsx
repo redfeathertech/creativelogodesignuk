@@ -104,7 +104,7 @@ interface FieldSpec {
 const ASSURANCE_ICONS = [NoObligationIcon, QuickResponseIcon, ConfidentialIcon];
 
 const CONTROL =
-    "peer w-full rounded-md border border-mist-300 bg-white py-3 ps-11 pe-4 text-[0.95rem] text-onlight " +
+    "peer w-full rounded-md border border-mist-300 bg-white py-3 ps-11 pe-4 text-ui-15 text-onlight " +
     "placeholder:text-mist-500 transition-[border-color,box-shadow] duration-200 ease-out " +
     "focus:border-magenta-500 focus:outline-none focus:shadow-[0_0_0_3px_rgb(204_6_127/0.15)] " +
     "aria-[invalid=true]:border-red-500 " +
@@ -246,7 +246,7 @@ export default function EnquiryForm({
                     return (
                         <li
                             key={text}
-                            className="flex items-center gap-1.5 text-[0.68rem] font-semibold tracking-[0.06em] text-onlight-muted uppercase max-sm:gap-[clamp(0.15rem,0.8vw,0.375rem)] max-sm:text-[clamp(0.4rem,2vw,0.68rem)] max-sm:tracking-[0.02em] max-sm:whitespace-nowrap"
+                            className="flex items-center gap-1.5 text-ui-11 font-semibold tracking-[0.06em] text-onlight-muted uppercase max-sm:gap-[clamp(0.15rem,0.8vw,0.375rem)] max-sm:text-[clamp(0.4rem,2vw,0.68rem)] max-sm:tracking-[0.02em] max-sm:whitespace-nowrap"
                         >
                             {Icon && (
                                 <Icon className="h-[0.95rem] w-[0.95rem] shrink-0 text-magenta-500 max-sm:h-[clamp(0.55rem,2.9vw,0.95rem)] max-sm:w-[clamp(0.55rem,2.9vw,0.95rem)]" />
@@ -281,7 +281,7 @@ export default function EnquiryForm({
                         // to two lines on a 390px phone, and the arrow ends up
                         // beside a two-line block.
                         "px-5 py-[0.95rem] sm:px-8",
-                        "font-display text-[0.9rem] font-bold tracking-[0.08em] text-white uppercase",
+                        "font-display text-ui-15 font-bold tracking-[0.08em] text-white uppercase",
                         "shadow-glow transition-[background-position,box-shadow] duration-500",
                         "disabled:pointer-events-none disabled:opacity-45",
                         "[&>svg]:transition-transform [&>svg]:duration-300 hover:[&>svg]:translate-x-[3px]",
@@ -292,7 +292,7 @@ export default function EnquiryForm({
                 </button>
             </div>
 
-            <p className="mt-4 flex gap-2 text-[0.8rem] leading-[1.45] text-onlight-muted">
+            <p className="mt-4 flex gap-2 text-ui-13 leading-[1.45] text-onlight-muted">
                 <LockIcon className="mt-[0.15rem] h-[0.95rem] w-[0.95rem] shrink-0 text-magenta-500" />
                 <span>
                     This site is protected by reCAPTCHA and the Google{" "}

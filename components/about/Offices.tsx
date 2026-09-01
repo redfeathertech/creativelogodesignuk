@@ -30,8 +30,10 @@ export default function Offices({ copy = locations }: { copy?: OfficesCopy }) {
     return (
         <Section tone="light">
             <div className="container-site">
-                <div className="reveal mb-12 max-w-[58ch]">
-                    <Eyebrow className="text-magenta-500">{copy.eyebrow}</Eyebrow>
+                <div className="reveal mb-12 max-w-[58ch] max-lg:mx-auto max-lg:text-center">
+                    <Eyebrow className="text-magenta-500 max-lg:justify-center max-lg:[&>span]:hidden">
+                        {copy.eyebrow}
+                    </Eyebrow>
                     <SectionHeading
                         lead={copy.titleLead}
                         accent={copy.titleAccent}

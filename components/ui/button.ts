@@ -37,10 +37,16 @@ const base =
    always had, reached by ~900px (md) and ~1080px (lg), so nothing from tablet up
    moves a pixel. Below that the space is worth more to the label than to the
    pill: at 320px a fixed `px-9` spent 72 of the 280 available pixels on empty
-   space either side of the text. */
+   space either side of the text.
+
+   The ceiling of each clamp, and the block padding, come from `--btn-*` in
+   globals.css so the ultra-wide bands can step the pill along with the label
+   inside it — the label is `text-sm`/`text-ui-15`, both of which grow up to
+   3px on a 4K screen. Only the ceiling is tokenised: the 1.25rem/1.375rem
+   floor is what keeps a 320px CTA on screen and must not move. */
 const sizes: Record<ButtonSize, string> = {
-  md: "px-[clamp(1.25rem,0.85rem+1.6vw,1.75rem)] py-[0.9rem] text-sm",
-  lg: "px-[clamp(1.375rem,0.9rem+2vw,2.25rem)] py-[1.05rem] text-[0.9375rem]",
+  md: "px-[clamp(1.25rem,0.85rem+1.6vw,var(--btn-px-md))] py-[var(--btn-py-md)] text-sm",
+  lg: "px-[clamp(1.375rem,0.9rem+2vw,var(--btn-px-lg))] py-[var(--btn-py-lg)] text-ui-15",
 };
 
 const variants: Record<ButtonVariant, string> = {

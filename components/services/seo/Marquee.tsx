@@ -22,7 +22,7 @@ import { services } from "@/content/landing/seo-services";
 export default function Marquee() {
     return (
         <div className="flex items-center overflow-hidden border-y border-white/[0.11] bg-ink-950">
-            <p className="m-0 min-w-max shrink-0 border-r border-white/[0.11] px-[18px] py-4 font-display text-[0.6875rem] font-extrabold tracking-[0.16em] text-white/50 uppercase sm:px-8 sm:py-5 sm:text-sm sm:tracking-[0.2em]">
+            <p className="m-0 min-w-max shrink-0 border-r border-white/[0.11] px-[18px] py-4 font-display text-ui-11 font-extrabold tracking-[0.16em] text-white/50 uppercase sm:px-8 sm:py-5 sm:text-sm sm:tracking-[0.2em]">
                 {services.railTitle}
             </p>
 

@@ -20,10 +20,12 @@ export default function Credentials() {
         <Section tone="light">
             <div className="container-site">
                 <SectionHead
-                    className="reveal"
+                    className="reveal max-lg:flex-col max-lg:items-center max-lg:text-center"
                     action={<LeadButton variant="outline">{credentials.cta}</LeadButton>}
                 >
-                    <Eyebrow className="text-magenta-500">{credentials.eyebrow}</Eyebrow>
+                    <Eyebrow className="text-magenta-500 max-lg:justify-center max-lg:[&>span]:hidden">
+                        {credentials.eyebrow}
+                    </Eyebrow>
                     <SectionHeading
                         lead={credentials.titleLead}
                         accent={credentials.titleAccent}

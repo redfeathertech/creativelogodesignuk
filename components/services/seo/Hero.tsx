@@ -108,7 +108,7 @@ export default function Hero() {
                             </span>
                         </div>
 
-                        <p className="m-0 font-display text-[0.6875rem] font-bold tracking-[0.14em] text-white/45 uppercase">
+                        <p className="m-0 font-display text-ui-11 font-bold tracking-[0.14em] text-white/45 uppercase">
                             {hero.mockup.sponsored}
                         </p>
                         <p className="m-0 mt-1 truncate text-sm text-white/65">
@@ -116,7 +116,7 @@ export default function Hero() {
                         </p>
 
                         <div className="relative mt-8 rounded-lg border border-magenta-500/60 bg-ink-950/60 p-5">
-                            <span className="absolute -top-3.5 left-5 rounded-full bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)] px-3 py-1 text-[0.625rem] font-bold tracking-[0.06em] text-white">
+                            <span className="absolute -top-3.5 left-5 rounded-full bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)] px-3 py-1 text-ui-10 font-bold tracking-[0.06em] text-white">
                                 {hero.mockup.badge}
                             </span>
                             <p className="m-0 mt-1 font-display text-base font-bold text-white">

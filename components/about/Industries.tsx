@@ -12,13 +12,15 @@ export default function Industries() {
     return (
         <Section tone="dark">
             <div className="container-site">
-                <div className="reveal mb-12 max-w-[58ch]">
-                    <Eyebrow>{industries.eyebrow}</Eyebrow>
+                <div className="reveal mb-12 max-w-[58ch] max-lg:mx-auto max-lg:text-center">
+                    <Eyebrow className="max-lg:justify-center max-lg:[&>span]:hidden">
+                        {industries.eyebrow}
+                    </Eyebrow>
                     <SectionHeading lead={industries.titleLead} accent={industries.titleAccent} />
                     <p className="mt-6 text-lead text-white/65">{industries.lead}</p>
                 </div>
 
-                <ul className="reveal flex flex-wrap gap-3">
+                <ul className="reveal flex flex-wrap gap-3 max-lg:justify-center">
                     {industries.items.map((industry) => (
                         <li
                             key={industry}

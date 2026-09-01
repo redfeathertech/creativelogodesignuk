@@ -194,7 +194,7 @@ export default function TestimonialCard({
                     </span>
 
                     <span className="flex min-w-0 flex-col">
-                        <cite className="truncate font-display text-[0.9375rem] font-bold not-italic">
+                        <cite className="truncate font-display text-ui-15 font-bold not-italic">
                             {name}
                         </cite>
                         <time
@@ -229,7 +229,7 @@ export default function TestimonialCard({
                     twice. */}
                 <p
                     aria-hidden="true"
-                    className="font-display text-[0.9375rem] leading-[1.4] font-bold"
+                    className="font-display text-ui-15 leading-[1.4] font-bold"
                 >
                     “{headlineFor(body)}”
                 </p>
@@ -237,7 +237,7 @@ export default function TestimonialCard({
                 <p
                     ref={bodyRef}
                     className={cn(
-                        "mt-2 text-[0.9375rem] leading-[1.55] whitespace-pre-line text-onlight-muted",
+                        "mt-2 text-ui-15 leading-[1.55] whitespace-pre-line text-onlight-muted",
                         !expanded && "line-clamp-4",
                     )}
                 >
@@ -254,7 +254,7 @@ export default function TestimonialCard({
                        means ten more absolutely positioned boxes, and the label
                        reads the same either way. */
                     aria-label={`${expanded ? "See less" : "See more"} of ${name}'s review`}
-                    className="mt-2 cursor-pointer self-start text-[0.9375rem] text-magenta-500 underline-offset-4 hover:underline"
+                    className="mt-2 cursor-pointer self-start text-ui-15 text-magenta-500 underline-offset-4 hover:underline"
                 >
                     {expanded ? "See less" : "See more"}
                 </button>

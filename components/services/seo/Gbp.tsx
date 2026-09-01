@@ -104,7 +104,7 @@ export default function Gbp() {
                                 </p>
 
                                 <p
-                                    className={`m-0 mt-2.5 text-[0.8125rem] leading-snug ${
+                                    className={`m-0 mt-2.5 text-ui-13 leading-snug ${
                                         isGrowth(stat) ? "text-teal-300" : "text-white/45"
                                     }`}
                                 >

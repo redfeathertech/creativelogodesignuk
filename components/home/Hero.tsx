@@ -171,7 +171,7 @@ export default function Hero() {
                                                 above this is now a backstop, but
                                                 it is the one that makes the rail
                                                 safe at any label length. */}
-                                            <span className="mt-1 block text-[length:var(--rail-label)] tracking-[0.1em] text-white/40 uppercase max-sm:text-[0.625rem] max-sm:tracking-[0.06em] lg:tracking-wider">
+                                            <span className="mt-1 block text-[length:var(--rail-label)] tracking-[0.1em] text-white/40 uppercase max-sm:text-ui-10 max-sm:tracking-[0.06em] lg:tracking-wider">
                                                 {item.label}
                                             </span>
                                         </dd>

@@ -36,7 +36,7 @@ function PriceCard({ item }: { item: Package }) {
             }`}
         >
             {item.bestSeller && (
-                <span className="absolute -top-3 left-6 rounded-full bg-[linear-gradient(97deg,var(--color-violet-500)_0%,var(--color-magenta-500)_100%)] px-3.5 py-1 font-display text-[0.625rem] font-extrabold tracking-[0.1em] text-white uppercase">
+                <span className="absolute -top-3 left-6 rounded-full bg-[linear-gradient(97deg,var(--color-violet-500)_0%,var(--color-magenta-500)_100%)] px-3.5 py-1 font-display text-ui-10 font-extrabold tracking-[0.1em] text-white uppercase">
                     Best Seller
                 </span>
             )}

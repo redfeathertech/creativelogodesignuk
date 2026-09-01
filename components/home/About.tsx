@@ -73,7 +73,7 @@ export default function About() {
                                         <span className="gradient-text-brand block font-display text-[clamp(1rem,0.9rem+0.4vw,1.125rem)] leading-none font-extrabold tracking-[0.02em] uppercase">
                                             {feature.title}
                                         </span>
-                                        <span className="mt-1.5 block text-[0.6875rem] tracking-[0.08em] text-onlight-muted uppercase">
+                                        <span className="mt-1.5 block text-ui-11 tracking-[0.08em] text-onlight-muted uppercase">
                                             {feature.label}
                                         </span>
                                     </div>

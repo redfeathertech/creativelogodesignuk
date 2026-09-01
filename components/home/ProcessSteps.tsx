@@ -84,7 +84,7 @@ export default function ProcessSteps() {
                                 // transparent border ring and wraps a crimson line down one edge.
                                 "relative z-[1] grid size-[34px] shrink-0 place-items-center rounded-full bg-origin-border min-[576px]:size-[60px]",
                                 "bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)]",
-                                "font-display text-[0.8125rem] font-extrabold text-white min-[576px]:text-[1.3rem]",
+                                "font-display text-ui-13 font-extrabold text-white min-[576px]:text-ui-21",
                                 "transition-[transform,box-shadow] duration-300 ease-out",
                                 "group-hover:scale-[1.06] group-hover:shadow-[0_0_28px_-2px_rgb(204_6_127/0.85)]",
                                 active
@@ -116,10 +116,10 @@ export default function ProcessSteps() {
                             )}
                         >
                             <div className="min-w-0">
-                                <h3 className="mb-1.5 font-display text-[0.9375rem] font-extrabold text-white min-[576px]:mb-2 min-[576px]:text-h4">
+                                <h3 className="mb-1.5 font-display text-ui-15 font-extrabold text-white min-[576px]:mb-2 min-[576px]:text-h4">
                                     {step.title}
                                 </h3>
-                                <p className="text-[0.75rem] leading-[1.5] text-white/65 min-[576px]:text-base">
+                                <p className="text-xs leading-[1.5] text-white/65 min-[576px]:text-base">
                                     {step.body}
                                 </p>
                             </div>

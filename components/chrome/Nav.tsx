@@ -419,7 +419,7 @@ export default function Nav() {
                                                                             )
                                                                         }
                                                                         className={cn(
-                                                                            "block rounded-md py-2 pr-3 pl-7 text-[0.8125rem] leading-snug transition-colors hover:bg-white/5 hover:text-white",
+                                                                            "block rounded-md py-2 pr-3 pl-7 text-ui-13 leading-snug transition-colors hover:bg-white/5 hover:text-white",
                                                                             bulletClass,
                                                                             "before:top-[1.05rem]",
                                                                             isActive(
@@ -446,7 +446,7 @@ export default function Nav() {
                                                                     false,
                                                                 )
                                                             }
-                                                            className="block rounded-md px-3 py-2 text-[0.8125rem] leading-snug text-white/70 transition-colors hover:bg-white/5 hover:text-white"
+                                                            className="block rounded-md px-3 py-2 text-ui-13 leading-snug text-white/70 transition-colors hover:bg-white/5 hover:text-white"
                                                         >
                                                             Explore{" "}
                                                             {group.label} →
@@ -616,7 +616,7 @@ export default function Nav() {
                                             href={group.href}
                                             onClick={() => setDrawerOpen(false)}
                                             className={cn(
-                                                "block py-1 pr-3 pl-7 text-[13px]/5 text-magenta-300",
+                                                "block py-1 pr-3 pl-7 text-ui-13/5 text-magenta-300",
                                                 isActive(group.href) &&
                                                     "font-bold",
                                             )}
@@ -631,7 +631,7 @@ export default function Nav() {
                                             href={item.href}
                                             onClick={() => setDrawerOpen(false)}
                                             className={cn(
-                                                "block py-1 pr-3 pl-7 text-[13px]/5 hover:text-white",
+                                                "block py-1 pr-3 pl-7 text-ui-13/5 hover:text-white",
                                                 bulletClass,
                                                 "before:top-3.5",
                                                 isActive(item.href)

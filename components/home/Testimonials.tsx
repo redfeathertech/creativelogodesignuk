@@ -54,7 +54,11 @@ export default function Testimonials() {
 
                 {/* Capped at exactly three cards plus their two gaps —
                     3 x 21.5rem + 2 x 1.5rem = 67.5rem — so the row ends on a
-                    card edge instead of slicing the third one.
+                    card edge instead of slicing the third one. From 2560px
+                    (160rem) up the cap moves to four cards plus three gaps —
+                    4 x 21.5rem + 3 x 1.5rem = 90.5rem — which still sits well
+                    inside the 2160px container that band gives us, so the row
+                    reads four-up on a 1440p or scaled-4K panel.
                     `container-site` runs to 1560px, which would put four and a
                     half cards on the row and leave the head floating over a
                     band twice its width.
@@ -65,7 +69,7 @@ export default function Testimonials() {
                     min-content is the full card, which blows the column out
                     past the viewport and pushes the whole document sideways on
                     a phone. */}
-                <div className="reveal mx-auto mt-12 grid max-w-[67.5rem] grid-cols-[minmax(0,1fr)]">
+                <div className="reveal mx-auto mt-12 grid max-w-[67.5rem] grid-cols-[minmax(0,1fr)] min-[160rem]:max-w-[90.5rem]">
                     <Rail
                         label="Client testimonials"
                         count={testimonials.items.length}

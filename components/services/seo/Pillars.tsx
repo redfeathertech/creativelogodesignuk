@@ -60,7 +60,7 @@ export default function Pillars() {
 
                             <div className="p-8">
                                 <p
-                                    className={`m-0 font-display text-[0.8125rem] font-bold tracking-[0.2em] uppercase ${accentText[item.accent]}`}
+                                    className={`m-0 font-display text-ui-13 font-bold tracking-[0.2em] uppercase ${accentText[item.accent]}`}
                                 >
                                     {item.tag}
                                 </p>

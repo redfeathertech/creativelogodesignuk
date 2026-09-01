@@ -308,10 +308,10 @@ export default function Methodology() {
                                         box from the block around it, so without
                                         this the two lines of a wrapped title sit
                                         a 16px/1.7 body line apart. */}
-                                    <div className="text-[0.8125rem] leading-[1.35] sm:text-[0.9375rem]">
+                                    <div className="text-ui-13 leading-[1.35] sm:text-ui-15">
                                         <span
                                             aria-hidden="true"
-                                            className="me-1 font-display text-[0.8125rem] leading-[1.3] font-extrabold text-violet-500 after:content-['.'] sm:text-[0.9375rem] lg:me-0 lg:text-sm lg:leading-none lg:text-magenta-500 lg:after:content-none"
+                                            className="me-1 font-display text-ui-13 leading-[1.3] font-extrabold text-violet-500 after:content-['.'] sm:text-ui-15 lg:me-0 lg:text-sm lg:leading-none lg:text-magenta-500 lg:after:content-none"
                                         >
                                             {String(i + 1).padStart(2, "0")}
                                         </span>
@@ -333,11 +333,11 @@ export default function Methodology() {
                                             fits its line. Both come back from
                                             `lg`, where the heading is a block
                                             of its own again. */}
-                                        <h3 className="inline text-wrap wrap-normal font-display text-[0.8125rem] leading-[1.3] font-extrabold text-violet-500 sm:text-[0.9375rem] lg:mt-1.5 lg:block lg:text-balance lg:wrap-break-word lg:text-[1rem] lg:leading-[1.25] lg:text-onlight">
+                                        <h3 className="inline text-wrap wrap-normal font-display text-ui-13 leading-[1.3] font-extrabold text-violet-500 sm:text-ui-15 lg:mt-1.5 lg:block lg:text-balance lg:wrap-break-word lg:text-base lg:leading-[1.25] lg:text-onlight">
                                             {step.title}
                                         </h3>
                                     </div>
-                                    <p className="mt-1.5 text-[0.75rem] leading-[1.55] text-onlight-muted sm:text-[0.8125rem] lg:text-sm lg:leading-[1.5]">
+                                    <p className="mt-1.5 text-xs leading-[1.55] text-onlight-muted sm:text-ui-13 lg:text-sm lg:leading-[1.5]">
                                         {step.body}
                                     </p>
                                 </div>
