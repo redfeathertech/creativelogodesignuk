@@ -43,7 +43,7 @@ export default function Industries() {
                         accentClassName="gradient-text-brand block"
                         className="mx-auto text-balance"
                     />
-                    <p className="mx-auto mt-6 max-w-[62ch] text-lead text-onlight/70">
+                    <p className="mx-auto mt-6 max-w-[68ch] text-lead text-onlight/70">
                         {industries.description}
                     </p>
                 </div>

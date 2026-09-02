@@ -37,7 +37,7 @@ export const clients = [
  * which is what keeps the track gapless. Only the first copy is announced.
  */
 export const clientMarquee = {
-    label: "Trusted by brands across the UK, USA and UAE",
+    label: "Trusted by businesses across the UK, USA and UAE.",
     copiesPerPass: 2,
 } as const;
 
@@ -53,3 +53,23 @@ export const serviceClientWall = {
     titleAccent: "our work",
     stat: { value: 1200, suffix: "+", label: "Projects delivered" },
 } as const;
+
+/**
+ * The /seo-services logo wall's artwork.
+ *
+ * A separate set from `clients` above, and deliberately so: that one is
+ * dark-on-transparent so the shared dark wall can knock each mark out to white.
+ * The SEO pillar's wall sits on the light `mist-100` surface and shows the five
+ * marks in their real colours, which needs the full-colour originals.
+ *
+ * Same brands, same accessible names. Intrinsic sizes are the real ones — the
+ * set is not height-normalised, so each mark carries its own pair and the wall
+ * sizes by height with width following.
+ */
+export const seoClientLogos = [
+    { name: "AutoKeyFix", src: "/assets/img/services/seo/client-autokeyfix.webp", width: 325, height: 76 },
+    { name: "Amonition", src: "/assets/img/services/seo/client-amonition.webp", width: 283, height: 76 },
+    { name: "Dyktik", src: "/assets/img/services/seo/client-dyktik.webp", width: 117, height: 88 },
+    { name: "Donna Holmes", src: "/assets/img/services/seo/client-donna-holmes.webp", width: 130, height: 98 },
+    { name: "DM Brickwork & Construction", src: "/assets/img/services/seo/client-dm-brickwork.webp", width: 212, height: 88 },
+] as const;

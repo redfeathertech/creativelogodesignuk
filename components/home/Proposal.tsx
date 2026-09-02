@@ -74,7 +74,7 @@ export default function Proposal({
                             "Free Expert Proposal" is wider than "Project with
                             a Free", so no column width both breaks the one and
                             fits the other. */}
-                        <span className="gradient-text block">
+                        <span className="block bg-[linear-gradient(90deg,#7225AD_0%,#CC067F_100%)] bg-clip-text pb-[0.08em] text-transparent">
                             {proposal.titleAccent}
                         </span>
                     </h2>

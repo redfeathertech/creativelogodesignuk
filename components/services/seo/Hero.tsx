@@ -162,7 +162,7 @@ export default function Hero() {
 
                                 <h1 className="text-hero text-white">
                                     {hero.titleLead}{" "}
-                                    <span className="gradient-text">
+                                    <span className="bg-[linear-gradient(90deg,#7225AD_0%,#CC067F_100%)] bg-clip-text pb-[0.08em] text-transparent">
                                         {hero.titleAccent}
                                     </span>
                                 </h1>

@@ -21,7 +21,7 @@ export default function About({ data }: { data: ServiceAbout }) {
             accentClassName="gradient-text-brand"
             className="mx-auto text-balance"
           />
-          <p className="mx-auto mt-6 max-w-[62ch] text-lead text-onlight-muted">{data.lead}</p>
+          <p className="mx-auto mt-6 max-w-[65ch] text-lead text-onlight-muted">{data.lead}</p>
         </div>
 
         {/*

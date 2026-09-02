@@ -31,7 +31,7 @@ import { hero } from "@/content/home";
 export default function HeroLeadForm() {
     return (
         <div className="reveal relative flex min-h-[46svh] items-center justify-center overflow-y-auto py-hero-block [@media(max-width:63.99rem)_and_(min-height:800px)]:pb-[calc(var(--spacing-hero-block)+5rem)] lg:min-h-full lg:justify-end lg:ps-hero-pad lg:py-hero-block">
-            <div className="hero-form w-full max-w-[30rem] overflow-hidden rounded-sm bg-white shadow-[0_30px_80px_-30px_rgb(0_0_0/0.65)]">
+            <div className="hero-form w-full max-w-[37rem] overflow-hidden rounded-sm bg-white shadow-[0_30px_80px_-30px_rgb(0_0_0/0.65)]">
                 {/* The gradient cap. A plain block rather than a border so it
                     keeps its full weight at every width. */}
                 <div

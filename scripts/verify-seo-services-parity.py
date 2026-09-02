@@ -179,13 +179,14 @@ REBRAND = {
     # still carries REVERSE, where the live run is the whole paragraph; this
     # fragment pair is what carries FORWARD.
     '"best plumber in Lynchburg,"': '"best plumber in Manchester,"',
-    "best dentist in Lynchburg VA": "best dentist in London",
-    "moving company Lynchburg": "moving company Manchester",
-    "custom home builder VA": "custom home builder Surrey",
-    # Crawl spaces are a US construction feature; damp proofing is the UK search.
-    "crawl space repair cost": "damp proofing cost",
     "google.com/search?q=best+HVAC+company+near+me":
         "google.com/search?q=best+hvac+company+near+me",
+
+    # -- the GBP review-score figure ----------------------------------------
+    # Client's call (2026-09), with the section redesign. The star was part of
+    # the string rather than markup, so it read as "4.9 black star" aloud and
+    # gave no denominator. Same number, written as a score out of five.
+    "4.9★": "4.9/5.0",
 }
 
 # ---------------------------------------------------------------------------
@@ -216,6 +217,20 @@ AUTHORED = {
     # destinations are href="#".
     "Privacy Policy",
     "Terms And Conditions",
+    # The FAQ left column, net-new with the 2026-09 two-column rebuild of that
+    # section. The live FAQ is a bare centred accordion with no lead line and
+    # no reason panel; these ten strings are lifted from the homepage
+    # `challenges` block the section now mirrors.
+    "Every business faces roadblocks.",
+    "We turn them into opportunities for growth.",
+    "One Partner. Every Solution.",
+    "From branding to marketing, we’ve got you covered at every step.",
+    "Strategy-First Approach",
+    "We solve the root problem, not just the symptoms.",
+    "Results That Matter",
+    "Our solutions are built to deliver measurable growth.",
+    "Dedicated Support",
+    "A team that’s with you, whenever you need us.",
 }
 
 NOT_COPY = re.compile(
@@ -259,8 +274,38 @@ REPLACED = {
     # The live FAQ accordion's "+" glyph, drawn as text. The rebuild rotates a
     # real icon inside <summary>.
     "+",
-    # The live ranking card's check glyph, part of the string rather than markup.
+    # ------------------------------------------------------------------
+    # The keyword-rankings card, cut whole on the client's instruction
+    # (2026-09): its heading, all seven keyword rows with their position
+    # labels, and the footer line. The redesigned section puts the client’s
+    # monitor mockup where the card stood, and a picture of a SERP is not text
+    # — so this is a removal of live copy, recorded here rather than silently
+    # dropped. The four US-geography keywords used to sit in REBRAND as
+    # rewordings; they are removals now, so they moved here.
+    #
+    # NOTE the coverage cost: a run listed here is skipped for the whole page,
+    # so if one of these strings ever appeared elsewhere on the live page, the
+    # reverse pass would stop checking that copy too. They are specific enough
+    # to this one card that the trade is worth it.
+    # ------------------------------------------------------------------
+    "Keyword Rankings — Last 30 Days",
+    "plumber near me",
+    "best dentist in Lynchburg VA",
+    "roofing contractor near me",
+    "HVAC repair near me",
+    "moving company Lynchburg",
+    "custom home builder VA",
+    "crawl space repair cost",
+    "Position #1",
+    "Position #2",
+    "Position #3",
+    "Position #4",
+    "Position #5",
+    "Position #7",
+    # The live card's check glyph is part of the string rather than markup, so
+    # the footer line is listed both with and without it.
     "✓ 18 keywords moved to page 1 this month",
+    "18 keywords moved to page 1 this month",
 }
 
 WORD = re.compile(r"[a-z0-9]+")

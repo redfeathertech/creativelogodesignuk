@@ -1,28 +1,50 @@
+import Image from "next/image";
+
 import { pricing, quoteDialog } from "@/content/landing/seo-services";
 import { Eyebrow, Section, SectionHeading } from "@/components/ui/Section";
 import { CheckIcon } from "@/components/ui/icons";
-import { SeoIcon } from "./icons";
+import { LeadButton } from "@/components/chrome/LeadPanel";
 import { QuoteButton } from "./QuoteDialog";
 
 /**
  * Pricing — the three retainer tiers.
  *
- * The `light-alt` surface with white cards, and the featured tier carries the
- * same `ring-magenta-500 ring-inset` + `shadow-md` treatment the `Benefits`
- * tabs use for their selected state — rather than the live page's inverted
- * near-black card, which was the one place on the page a card changed colour
- * to say "selected".
+ * ─────────────────────────────────────────────────────────────────────────────
+ * 2026-09 REDESIGN
+ * ─────────────────────────────────────────────────────────────────────────────
  *
- * The currency, the tier names and the two "Everything in …" references are
+ * Rebuilt to the client's approved composition. Three changes to the card:
+ *
+ * 1. Each tier now opens with the client's SVG in a lavender tile, beside a
+ *    two-line identity block — the tier name over its keyword allowance, which
+ *    used to sit as a pill *below* the price and read as an afterthought.
+ * 2. A hairline separates that header-and-price block from the checklist, so
+ *    the eye lands on price, then features, rather than on one undivided run.
+ * 3. The closing CTA is a gradient banner with the client's warning glyph,
+ *    rather than a centred paragraph under a rule.
+ *
+ * **Layout only. No copy rewritten.** The keyword allowance is uppercased in
+ * CSS, not in the content module, so the string stays the one the live page
+ * carries. The banner's heading is the live run's own opening question split
+ * off from the sentence that follows it — the two render adjacent and in
+ * source order, so `scripts/verify-seo-services-parity.py` still matches the
+ * run whole in both directions and neither of its lists needed an entry.
+ *
+ * The currency, the tier names and the two "Everything in …" references remain
  * rebrand decisions recorded in `content/landing/seo-services.ts`; nothing
  * about them lives here.
+ *
+ * Responsive: one column to 576px, two to `lg`, three above it. The header row
+ * wraps to its own line only where the tile plus the longest tier name cannot
+ * share a line, and the banner stacks its glyph above the copy below `md`,
+ * where a 100px illustration beside text leaves the text about 40 characters.
  */
 export default function Pricing() {
     return (
-        <Section tone="light-alt">
+        <Section tone="lilac">
             <div className="container-site">
-                <div className="reveal mx-auto max-w-[56rem] text-center">
-                    <Eyebrow className="justify-center text-magenta-500">
+                <div className="reveal mx-auto max-w-[60rem] text-center">
+                    <Eyebrow flanked className="justify-center text-magenta-500">
                         {pricing.eyebrow}
                     </Eyebrow>
                     <SectionHeading
@@ -44,7 +66,7 @@ export default function Pricing() {
                         return (
                             <li
                                 key={tier.name}
-                                className={`reveal relative flex h-full min-w-0 flex-col rounded-lg bg-white p-8 transition-transform duration-300 hover:-translate-y-1.5 ${
+                                className={`reveal relative flex h-full min-w-0 flex-col rounded-2xl bg-white p-6 transition-transform duration-300 hover:-translate-y-1.5 sm:p-8 ${
                                     tier.featured
                                         ? "shadow-lg ring-[1.5px] ring-magenta-500 ring-inset"
                                         : "border border-ink-900/[0.08] shadow-sm"
@@ -56,11 +78,32 @@ export default function Pricing() {
                                     </span>
                                 ) : null}
 
-                                <p className="m-0 font-display text-ui-13 font-bold tracking-[0.15em] text-onlight-muted uppercase">
-                                    {tier.name}
-                                </p>
+                                {/* -------------------------------- identity -- */}
+                                <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+                                    <span className="grid size-14 shrink-0 place-items-center rounded-xl bg-magenta-50">
+                                        <Image
+                                            src={tier.icon}
+                                            alt={tier.iconAlt}
+                                            width={tier.iconWidth}
+                                            height={tier.iconHeight}
+                                            className="size-7 object-contain"
+                                        />
+                                    </span>
 
-                                <h3 className="mt-3.5 font-display text-h2 leading-none font-extrabold text-onlight">
+                                    <div className="min-w-0">
+                                        <p className="m-0 font-display text-h6 leading-tight font-extrabold tracking-[0.02em] text-onlight uppercase">
+                                            {tier.name}
+                                        </p>
+                                        {/* Uppercased here, not in `content/` —
+                                            the string stays the live one. */}
+                                        <p className="mt-1 font-display text-ui-11 font-bold tracking-[0.1em] text-magenta-600 uppercase">
+                                            {tier.keywords}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* ---------------------------------- price -- */}
+                                <h3 className="mt-6 font-display text-h2 leading-none font-extrabold text-onlight">
                                     {tier.price}
                                     {tier.period ? (
                                         <span className="text-h5 font-semibold text-onlight-muted">
@@ -69,13 +112,11 @@ export default function Pricing() {
                                     ) : null}
                                 </h3>
 
-                                <p className="mt-3.5 text-onlight-muted">{tier.text}</p>
-
-                                <p className="mt-3">
-                                    <span className="inline-block rounded-full bg-magenta-50 px-3 py-1 text-ui-13 text-magenta-600 italic">
-                                        {tier.keywords}
-                                    </span>
+                                <p className="mt-3.5 text-sm text-onlight-muted">
+                                    {tier.text}
                                 </p>
+
+                                <hr className="mt-6 border-0 border-t border-ink-900/[0.08]" />
 
                                 <ul className="m-0 mt-6 grid list-none gap-4 p-0">
                                     {tier.points.map((point) => (
@@ -95,44 +136,59 @@ export default function Pricing() {
                                 </ul>
 
                                 <div className="mt-auto pt-8">
-                                    <QuoteButton
-                                        packageName={tier.name}
+                                    <LeadButton
                                         variant={tier.featured ? "primary" : "outline"}
                                         size="lg"
                                         className="w-full"
                                     >
                                         {tier.cta}
-                                    </QuoteButton>
+                                    </LeadButton>
                                 </div>
                             </li>
                         );
                     })}
                 </ul>
 
-                <p className="reveal mt-8 text-center text-sm text-onlight-muted">
+                <p className="reveal mt-10 text-center text-sm text-onlight-muted">
                     {pricing.bottomText}
                 </p>
 
                 {/* ----------------------------------------------------- cta -- */}
-                <div className="reveal mt-10 border-t border-ink-900/[0.08] pt-10 text-center">
-                    <p className="mx-auto mb-6 max-w-[62ch] text-onlight-muted">
-                        {pricing.ctaText}
-                    </p>
+                <div className="reveal mt-10 border-t border-ink-900/[0.08] pt-10">
+                    <div className="relative isolate overflow-hidden rounded-2xl bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)] p-6 text-white sm:p-8 lg:p-10">
+                        <div className="flex flex-col items-start gap-6 md:flex-row md:items-center md:gap-8">
+                            <Image
+                                src={pricing.ctaIcon}
+                                alt=""
+                                aria-hidden="true"
+                                width={pricing.ctaIconWidth}
+                                height={pricing.ctaIconHeight}
+                                className="h-12 w-auto shrink-0 md:h-[4.5rem]"
+                            />
 
-                    {/* `btn()` sets `whitespace-nowrap` and `leading-none`, and
-                        `cn()` concatenates rather than merges — this label is 24
-                        uppercase characters and overflows a 320px viewport on one
-                        line, so both are overridden as arbitrary properties, which
-                        Tailwind emits after every named utility. */}
-                    <QuoteButton
-                        packageName={quoteDialog.reportPackage}
-                        variant="primary"
-                        size="lg"
-                        className="max-w-full [line-height:1.4] [white-space:normal]"
-                    >
-                        <SeoIcon name="search" className="size-[1.125rem]" />
-                        {pricing.ctaButton}
-                    </QuoteButton>
+                            <div className="min-w-0">
+                                <p className="m-0 font-display text-h4 leading-tight font-extrabold">
+                                    {pricing.ctaHeading}
+                                </p>
+                                <p className="mt-2 max-w-[62ch] text-white/85">
+                                    {pricing.ctaText}
+                                </p>
+
+                                {/* `btn()` sets `leading-none`, and `cn()`
+                                    concatenates rather than merges — this label
+                                    is 21 uppercase characters and needs to be
+                                    allowed to wrap on a 320px viewport. */}
+                                <QuoteButton
+                                    packageName={quoteDialog.reportPackage}
+                                    variant="light"
+                                    size="lg"
+                                    className="mt-6 max-w-full rounded-[8px]! [line-height:1.4] [white-space:normal]"
+                                >
+                                    {pricing.ctaButton}
+                                </QuoteButton>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </Section>

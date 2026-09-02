@@ -1,0 +1,14 @@
+<svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g stroke="url(#paint0_linear_gbp)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+<path d="M10.5 8.5h47l6 12.5a8.2 8.2 0 0 1-15.2 4.3 8.2 8.2 0 0 1-15.3 0 8.2 8.2 0 0 1-15.3 0A8.2 8.2 0 0 1 4.5 21L10.5 8.5Z"/>
+<path d="M8.6 27.4V57.6a2 2 0 0 0 2 2h46.8a2 2 0 0 0 2-2V27.4"/>
+<path d="M42.5 38.9h8.7c.4 5.6-3.3 9.6-8.7 9.6a9.4 9.4 0 1 1 6.4-16.3"/>
+<path d="M17 59.6V44.2a2 2 0 0 1 2-2h11.4a2 2 0 0 1 2 2v15.4"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_gbp" x1="4.5" y1="8.5" x2="66" y2="12" gradientUnits="userSpaceOnUse">
+<stop offset="0.153846" stop-color="#7225AD"/>
+<stop offset="1" stop-color="#CC067F"/>
+</linearGradient>
+</defs>
+</svg>

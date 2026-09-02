@@ -420,31 +420,49 @@ export const services = {
     items: [
         {
             icon: "search",
+            iconSrc: "/assets/img/services/seo/included-keyword-research.svg",
+            iconWidth: 68,
+            iconHeight: 68,
             title: "Keyword Research & Strategy",
             text: "We identify the exact search terms your customers use to find businesses like yours, then build a strategy around ranking for the ones that drive real leads.",
         },
         {
             icon: "file",
+            iconSrc: "/assets/img/services/seo/included-on-page.svg",
+            iconWidth: 68,
+            iconHeight: 68,
             title: "On-Page Optimisation",
             text: "Meta tags, heading structure, content optimisation, URL structure, and internal linking — every page built to rank.",
         },
         {
             icon: "location",
+            iconSrc: "/assets/img/services/seo/included-gbp.svg",
+            iconWidth: 68,
+            iconHeight: 68,
             title: "Google Business Profile",
             text: "Active GBP management with weekly posts, geo-tagged images, Q&As, review responses, and monthly performance tracking.",
         },
         {
             icon: "pulse",
+            iconSrc: "/assets/img/services/seo/included-technical-seo.svg",
+            iconWidth: 68,
+            iconHeight: 68,
             title: "Technical SEO",
             text: "Site speed, schema markup, XML sitemaps, mobile optimisation, SSL checks, and crawl error fixes that silently hurt rankings.",
         },
         {
             icon: "link",
+            iconSrc: "/assets/img/services/seo/included-link-building.svg",
+            iconWidth: 64,
+            iconHeight: 56,
             title: "Link Building & Citations",
             text: "High-quality backlinks and local citations that signal authority to Google and boost your domain strength over time.",
         },
         {
             icon: "chart",
+            iconSrc: "/assets/img/services/seo/included-reporting.svg",
+            iconWidth: 64,
+            iconHeight: 54,
             title: "Monthly Reporting",
             text: "Plain-English reports covering keyword rankings, organic traffic, and GBP performance — with commentary on what's next.",
         },
@@ -459,6 +477,22 @@ export const services = {
  */
 export const onPage = {
     eyebrow: "ON-PAGE SEO",
+    /* The client's 2026-09 artwork for this section: the neon backdrop and the
+       desktop-monitor SERP mockup that replaced the hand-built dashboard card
+       on the right of the split. `src`/`width`/`height`/`*Alt` are NOT_COPY in
+       scripts/verify-seo-services-parity.py — artwork, not page copy. */
+    background: {
+        src: "/assets/img/services/seo/on-page-bg.webp",
+        width: 3840,
+        height: 1693,
+    },
+    monitor: {
+        src: "/assets/img/services/seo/on-page-monitor.webp",
+        width: 1048,
+        height: 819,
+    },
+    monitorAlt:
+        'Desktop monitor showing a Google results page for "plumber near me" with a local plumbing business ranked in position one',
     titleLead: "Your Website, Optimised",
     titleTrail: "From the Ground Up",
     description:
@@ -473,33 +507,62 @@ export const onPage = {
     ctaPrimary: "Get Started",
     ctaPhone: contact.phoneDisplay,
 
-    rankingHeading: "Keyword Rankings — Last 30 Days",
-    rankings: [
-        { keyword: "plumber near me", position: "Position #1", tone: "good" },
-        /* [fix] was "best dentist in Lynchburg VA" */
-        { keyword: "best dentist in London", position: "Position #2", tone: "good" },
-        { keyword: "roofing contractor near me", position: "Position #3", tone: "good" },
-        { keyword: "HVAC repair near me", position: "Position #4", tone: "warn" },
-        /* [fix] was "moving company Lynchburg" */
-        { keyword: "moving company Manchester", position: "Position #5", tone: "warn" },
-        /* [fix] was "custom home builder VA" */
-        { keyword: "custom home builder Surrey", position: "Position #7", tone: "warn" },
-        /* [fix] was "crawl space repair cost" — crawl spaces are a US
-           construction feature; the UK equivalent search is damp proofing. */
-        { keyword: "damp proofing cost", position: "Position #2", tone: "good" },
-    ],
-    rankingFooter: "18 keywords moved to page 1 this month",
+    /* The rankings card was cut whole on the client's instruction (2026-09) —
+       see components/services/seo/OnPage.tsx. `rankingHeading`, the seven
+       `rankings` rows and `rankingFooter` lived here; every one of those live
+       runs is now declared in REPLACED in scripts/verify-seo-services-parity.py,
+       so the reverse pass still fails on any other drop. */
 } as const;
 
 /* ------------------------------------------------------------------- GBP -- */
 
 export const gbp = {
     cardHeading: "GBP Insights — This Month",
+    /* The client's 2026-09 artwork for this section: the illustration that
+       takes the left of the split, and an icon per stat. The src/width/height,
+       imageAlt and every iconSrc are NOT_COPY in
+       scripts/verify-seo-services-parity.py — artwork, not page copy. */
+    image: {
+        src: "/assets/img/services/seo/gbp-google.webp",
+        width: 640,
+        height: 468,
+    },
+    imageAlt:
+        "Laptop with SEO icons floating above the keyboard, illustrating a managed Google Business Profile",
     stats: [
-        { label: "PROFILE VIEWS", value: "1,842", note: "↑ +34% vs last month", highlight: true },
-        { label: "DIRECTION REQUESTS", value: "218", note: "↑ +19% vs last month" },
-        { label: "PHONE CALLS", value: "94", note: "↑ +28% vs last month" },
-        { label: "REVIEW SCORE", value: "4.9★", note: "142 reviews" },
+        {
+            label: "PROFILE VIEWS",
+            value: "1,842",
+            note: "↑ +34% vs last month",
+            highlight: true,
+            iconSrc: "/assets/img/services/seo/gbp-profile-views.svg",
+            iconWidth: 40,
+            iconHeight: 40,
+        },
+        {
+            label: "DIRECTION REQUESTS",
+            value: "218",
+            note: "↑ +19% vs last month",
+            iconSrc: "/assets/img/services/seo/gbp-direction-requests.svg",
+            iconWidth: 44,
+            iconHeight: 40,
+        },
+        {
+            label: "PHONE CALLS",
+            value: "94",
+            note: "↑ +28% vs last month",
+            iconSrc: "/assets/img/services/seo/gbp-phone-calls.svg",
+            iconWidth: 40,
+            iconHeight: 40,
+        },
+        {
+            label: "REVIEW SCORE",
+            value: "4.9/5.0",
+            note: "142 reviews",
+            iconSrc: "/assets/img/services/seo/gbp-review-score.svg",
+            iconWidth: 42,
+            iconHeight: 36,
+        },
     ],
     eyebrow: "GOOGLE BUSINESS PROFILE",
     titleLead: "Win the Local Map Pack",
@@ -522,26 +585,44 @@ export const process = {
     eyebrow: "OUR PROCESS",
     titleLead: "From Audit to Page One",
     titleTrail: "in 4 Steps",
+    /* The client's 2026-09 composition sits on the same neon backdrop as the
+       pillars section, so the two read as one band down the page. */
+    background: pillars.background,
+    /* Left-hand artwork. Decorative — the four steps beside it carry the
+       meaning — so it renders with an empty alt. */
+    image: {
+        src: "/assets/img/services/seo/process-bulb.webp",
+        width: 640,
+        height: 554,
+    },
     steps: [
         {
             number: "01",
             title: "SEO AUDIT",
             text: "We analyse your site, rankings, competitors, and technical health to find exactly what's holding you back.",
+            icon: "/assets/img/services/seo/process-audit.svg",
+            iconAlt: "SEO audit icon: a shield with a tick, in a glowing circle",
         },
         {
             number: "02",
             title: "STRATEGY BUILD",
             text: "We create a custom keyword strategy and SEO roadmap tailored to your business, market, and goals.",
+            icon: "/assets/img/services/seo/process-strategy.svg",
+            iconAlt: "Strategy build icon: a screen of connected nodes, in a glowing circle",
         },
         {
             number: "03",
             title: "OPTIMISE & EXECUTE",
             text: "On-page fixes, GBP management, content, link building, and technical improvements — implemented monthly.",
+            icon: "/assets/img/services/seo/process-optimise.svg",
+            iconAlt: "Optimise and execute icon: a magnifying glass over an SEO page, in a glowing circle",
         },
         {
             number: "04",
             title: "TRACK & REPORT",
             text: "Monthly ranking reports, traffic data, and GBP insights in plain English with clear next steps.",
+            icon: "/assets/img/services/seo/process-report.svg",
+            iconAlt: "Track and report icon: a rising bar chart with an arrow, in a glowing circle",
         },
     ],
 } as const;
@@ -576,6 +657,10 @@ export const pricing = {
         {
             /* [fix] was "LONGHORN" */
             name: "LAUNCH",
+            icon: "/assets/img/services/seo/pricing-launch.svg",
+            iconAlt: "Launch plan icon: a rocket lifting off",
+            iconWidth: 40,
+            iconHeight: 40,
             price: "£799",
             period: "/mo",
             /* Machine-readable for the OfferCatalog JSON-LD. */
@@ -597,6 +682,10 @@ export const pricing = {
         {
             /* [fix] was "BRAHMA" */
             name: "GROWTH",
+            icon: "/assets/img/services/seo/pricing-growth.svg",
+            iconAlt: "Growth plan icon: a briefcase",
+            iconWidth: 40,
+            iconHeight: 40,
             price: "£999",
             period: "/mo",
             amount: 999,
@@ -620,6 +709,10 @@ export const pricing = {
         {
             /* [fix] was "EL GRAN TORO" */
             name: "ENTERPRISE",
+            icon: "/assets/img/services/seo/pricing-enterprise.svg",
+            iconAlt: "Enterprise plan icon: a columned building",
+            iconWidth: 40,
+            iconHeight: 40,
             price: "Custom",
             period: "",
             amount: null,
@@ -640,9 +733,18 @@ export const pricing = {
     ],
     /* [fix] was "All plans are month-to-month. No long-term contracts. No bull." */
     bottomText: "All plans are month-to-month. No long-term contracts. No surprises.",
+    /* The live page carries this as a single run: "Not ready to commit? Start
+       with a free SEO report on your website - no account needed." The 2026-09
+       redesign promotes the question to the closing banner’s heading. Same
+       words in the same DOM order, so both parity passes still see the run
+       whole and neither list needs an entry. */
+    ctaHeading: "Not Ready To Commit?",
     ctaText:
-        "Not ready to commit? Start with a free SEO report on your website — no account needed.",
-    ctaButton: "Run My Free SEO Report →",
+        "Start with a free SEO report on your website — no account needed.",
+    ctaButton: "Run My Free SEO Report",
+    ctaIcon: "/assets/img/services/seo/pricing-ready.svg",
+    ctaIconWidth: 100,
+    ctaIconHeight: 72,
 } as const;
 
 /* ------------------------------------------------------------------- FAQ -- */
@@ -653,7 +755,47 @@ export const pricing = {
  */
 export const faq = {
     eyebrow: "COMMON QUESTIONS",
-    title: "Frequently Asked Questions",
+    /* Split for the two-tone heading only. Joined with a single space these are
+       the live title, unchanged: "Frequently Asked Questions". */
+    titleLead: "Frequently Asked",
+    titleAccent: "Questions",
+    /* Net-new copy for the 2026-09 two-column rebuild of this section, lifted
+       from the homepage `challenges` block this now mirrors. No live
+       equivalent, so it carries no ranking risk — declared in AUTHORED in
+       scripts/verify-seo-services-parity.py. Two entries: the design breaks
+       the line. */
+    lead: [
+        "Every business faces roadblocks.",
+        "We turn them into opportunities for growth.",
+    ],
+    /* The four-reason panel beneath the heading, sharing the homepage's 78px
+       icon set. */
+    pillars: [
+        {
+            title: "One Partner. Every Solution.",
+            body: "From branding to marketing, we’ve got you covered at every step.",
+            icon: "/assets/img/home/challenges/pillar-partner.svg",
+            iconAlt: "Hand selecting from a network of connected services",
+        },
+        {
+            title: "Strategy-First Approach",
+            body: "We solve the root problem, not just the symptoms.",
+            icon: "/assets/img/home/challenges/pillar-strategy.svg",
+            iconAlt: "Chess piece icon for our strategy-first approach",
+        },
+        {
+            title: "Results That Matter",
+            body: "Our solutions are built to deliver measurable growth.",
+            icon: "/assets/img/home/challenges/pillar-results.svg",
+            iconAlt: "Upward graph icon for results that matter",
+        },
+        {
+            title: "Dedicated Support",
+            body: "A team that’s with you, whenever you need us.",
+            icon: "/assets/img/home/challenges/pillar-support.svg",
+            iconAlt: "Headset icon for dedicated client support",
+        },
+    ],
     items: [
         {
             q: "How long does SEO take to work?",
@@ -703,7 +845,22 @@ export const cta = {
     description:
         "New to SEO or looking to outrank your competition? Either way, we can help. Get started today or run a free SEO report on your site.",
     primary: "Get Started →",
+    /* No longer rendered: the client dropped the second pill from the closing
+       band in the 2026-09 redesign. Kept as the record of the live label — the
+       offer itself still reaches the visitor through quoteDialog.reportPackage. */
     secondary: "Free SEO Report →",
+
+    /* The phone pill in the client's 2026-09 CTA composition — the same number the
+       hero and the top bar already show, so it is not new copy. */
+    phone: contact.phoneDisplay,
+
+    /* The client's backdrop for the band (2026-09). The src/width/height
+       trio is not copy — see NOT_COPY in scripts/verify-seo-services-parity.py. */
+    background: {
+        src: "/assets/img/services/seo/cta-bg.webp",
+        width: 1920,
+        height: 586,
+    },
 } as const;
 
 /* ---------------------------------------------------------------- footer -- */

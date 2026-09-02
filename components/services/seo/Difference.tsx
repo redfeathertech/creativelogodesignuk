@@ -67,7 +67,7 @@ export default function Difference() {
                         accentClassName="gradient-text-brand"
                         className="mx-auto text-balance"
                     />
-                    <p className="mx-auto mt-6 max-w-[62ch] text-lead text-white/65">
+                    <p className="mx-auto mt-6 max-w-[65ch] text-lead text-white/65">
                         {difference.description}
                     </p>
                 </div>

@@ -10,7 +10,7 @@ import { QuoteDialogProvider } from "@/components/services/seo/QuoteDialog";
 import OfferBar from "@/components/services/seo/OfferBar";
 import Hero from "@/components/services/seo/Hero";
 import Proposal from "@/components/home/Proposal";
-import Clients from "@/components/services/Clients";
+import Clients from "@/components/services/seo/Clients";
 
 /* Below-the-fold sections are code-split, as on the other service pages:
    `ssr` still defaults to true, so every section is prerendered into the HTML —
@@ -19,7 +19,6 @@ const Info = dynamic(() => import("@/components/services/seo/Info"));
 const Pillars = dynamic(() => import("@/components/services/seo/Pillars"));
 const Industries = dynamic(() => import("@/components/services/seo/Industries"));
 const Difference = dynamic(() => import("@/components/services/seo/Difference"));
-const Marquee = dynamic(() => import("@/components/services/seo/Marquee"));
 const Services = dynamic(() => import("@/components/services/seo/Services"));
 const OnPage = dynamic(() => import("@/components/services/seo/OnPage"));
 const Gbp = dynamic(() => import("@/components/services/seo/Gbp"));
@@ -27,7 +26,6 @@ const Process = dynamic(() => import("@/components/services/seo/Process"));
 const Pricing = dynamic(() => import("@/components/services/seo/Pricing"));
 const Faq = dynamic(() => import("@/components/services/seo/Faq"));
 const Cta = dynamic(() => import("@/components/services/seo/Cta"));
-const ContactBand = dynamic(() => import("@/components/services/seo/ContactBand"));
 
 const PATH = "/seo-services";
 
@@ -81,17 +79,18 @@ export const metadata: Metadata = buildMetadata({
  *   `SectionHeading`, `container-site`, `reveal`, the `py-section` rhythm and
  *   the dark/light tone alternation the other 36 service pages run, with the
  *   `seo-*` tokens dropped for the brand ramp.
- * - The page's own top bar and footer became {@link OfferBar} and
- *   {@link ContactBand}: the site chrome covers what they duplicated, and these
- *   two carry the copy it has no equivalent of.
- * - `Clients` — the shared client-logo wall every service page ends its
- *   mid-section run with — is new here.
+ * - The page's own top bar became {@link OfferBar}: the site chrome covers what
+ *   it duplicated, and it carries the copy the chrome has no equivalent of. The
+ *   page's own footer band was dropped — the site footer supplies it.
+ * - `Clients` — the client-logo wall every service page carries — is new
+ *   here. It renders from components/services/seo/Clients.tsx rather than the
+ *   shared dark wall: same copy, light surface, full-colour marks.
  *
  * Section order follows the live page, with one change: offer bar → hero →
  * proposal band → what is SEO → the three pillars → industries → big-agency
  * comparison → services → on-page → Google Business Profile → process →
- * pricing → FAQ → closing CTA, with the client wall and the contact band
- * folded in where the service-page rhythm puts them.
+ * pricing → FAQ → closing CTA, with the client wall folded in where the
+ * service-page rhythm puts it.
  *
  * **One section was cut, on the client's instruction (2026-09):** the trust
  * strip that sat between the hero and the "what is SEO" section — the "fully
@@ -139,7 +138,6 @@ export default function SeoServicesPage() {
             <Pillars />
             <Industries />
             <Difference />
-            <Marquee />
             <Services />
             <OnPage />
             <Gbp />
@@ -148,7 +146,6 @@ export default function SeoServicesPage() {
             <Pricing />
             <Faq />
             <Cta />
-            <ContactBand />
         </QuoteDialogProvider>
     );
 }

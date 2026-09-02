@@ -52,7 +52,7 @@ export function Section({
   ariaLabel,
 }: {
   children: React.ReactNode;
-  tone?: "dark" | "darker" | "light" | "light-alt";
+  tone?: "dark" | "darker" | "light" | "light-alt" | "lilac";
   className?: string;
   id?: string;
   ariaLabel?: string;
@@ -62,6 +62,7 @@ export function Section({
     darker: "bg-ink-950 text-white",
     light: "bg-white text-onlight",
     "light-alt": "bg-mist-100 text-onlight",
+    lilac: "bg-lilac-50 text-onlight",
   } as const;
 
   const isDark = tone === "dark" || tone === "darker";

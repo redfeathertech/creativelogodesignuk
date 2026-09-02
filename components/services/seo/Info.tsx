@@ -40,9 +40,9 @@ export default function Info() {
                     <Eyebrow className="text-magenta-500">{info.eyebrow}</Eyebrow>
 
                     <SectionHeading
-                        lead={info.titleLead}
-                        accent={info.titleTrail}
-                        accentClassName="gradient-text-brand"
+                        lead={`${info.titleLead} ${info.titleTrail.replace(" Does It Matter?", "")}`}
+                        accent="Does It Matter?"
+                        accentClassName="bg-[linear-gradient(90deg,#7225AD_0%,#CC067F_100%)] bg-clip-text pb-[0.08em] text-transparent"
                     />
 
                     <div className="mt-8 grid gap-7">

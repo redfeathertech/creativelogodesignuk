@@ -64,8 +64,9 @@ export default function Pillars() {
                         {pillars.eyebrow}
                     </Eyebrow>
                     <SectionHeading
-                        lead={pillars.title}
-                        accentClassName="gradient-text-brand"
+                        lead={pillars.title.replace(" Service Works", "")}
+                        accent="Service Works"
+                        accentClassName="bg-[linear-gradient(97deg,#7225AD_0%,#CC067F_100%)] bg-clip-text pb-[0.08em] text-transparent"
                         className="mx-auto text-balance"
                     />
                     <p className="mx-auto mt-6 max-w-[62ch] text-lead text-white/70">

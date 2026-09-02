@@ -54,6 +54,11 @@
     /* Named `mist` rather than `slate` so Tailwind's own slate ramp stays
      intact — partially overriding a built-in ramp yields mismatched shades. */
     --color-mist-100: #f7f6fa;
+
+    /* The lilac ground the 2026-09 /seo-services pricing block sits on.
+       A tint of the page’s magenta rather than the neutral `mist-100`, so
+       the white cards read as raised off it. */
+    --color-lilac-50: #f7f1fe;
     --color-mist-200: #ecebf1;
     --color-mist-300: #d8d6e0;
     --color-mist-400: #a9a5b8;
@@ -674,6 +679,20 @@
         97deg,
         var(--color-violet-500) 0%,
         var(--color-magenta-500) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    padding-bottom: 0.08em;
+}
+
+/* Same two brand stops as `gradient-text-brand`, but flat horizontal and the
+   other way round: magenta on the left, violet on the right. */
+@utility gradient-text-brand-lr {
+    background-image: linear-gradient(
+        90deg,
+        var(--color-magenta-500) 0%,
+        var(--color-violet-500) 100%
     );
     -webkit-background-clip: text;
     background-clip: text;

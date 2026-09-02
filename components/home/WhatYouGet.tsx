@@ -77,7 +77,7 @@ export default function WhatYouGet() {
                             {whatYouGet.titleTrail}
                         </h2>
 
-                        <p className="mt-6 max-w-[52ch] text-lead text-white/65 max-lg:mx-auto">
+                        <p className="mt-6 max-w-[60ch] text-lead text-white/65 max-lg:mx-auto">
                             {whatYouGet.lead}
                         </p>
 

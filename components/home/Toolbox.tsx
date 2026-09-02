@@ -84,7 +84,7 @@ export default function Toolbox() {
                         cannot be read out. It paints its own background, and
                         `background-clip` is not an inherited property, so the
                         parent's clip-to-text does not erase it. */}
-                    <h2 className="text-h2 lg:max-w-[11.5ch]">
+                    <h2 className="text-h2 lg:max-w-[12.5ch]">
                         {toolbox.titleLead}{" "}
                         <span className="gradient-text-brand relative">
                             {toolbox.titleAccent}

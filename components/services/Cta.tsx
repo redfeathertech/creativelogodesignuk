@@ -7,7 +7,7 @@ export default function Cta({ data }: { data: ServiceCta }) {
     <section className="relative isolate overflow-hidden bg-ink-950 py-section text-white">
       <div className="pointer-events-none absolute inset-0 bg-mesh opacity-70" aria-hidden="true" />
       <div className="relative container-site text-center">
-        <div className="reveal mx-auto max-w-[62ch]">
+        <div className="reveal mx-auto max-w-[65ch]">
           <Eyebrow className="justify-center">{data.eyebrow}</Eyebrow>
           <SectionHeading
             lead={data.heading}
