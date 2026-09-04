@@ -23,8 +23,8 @@ import EnquiryForm from "@/components/forms/EnquiryForm";
  * and a visitor who has scrolled the whole page should not meet a second,
  * longer version of the form they already skipped in the fold.
  *
- * `source` is required, not defaulted, because this band closes `/about-us` as
- * well as the homepage — the design shares it, exactly as the Blade template
+ * `source` is required, not defaulted, because this band closes `/about-us` and
+ * `/seo-services` as well as the homepage — the design shares it, exactly as the Blade template
  * `@include`s one partial on both pages. A default would silently label About
  * Us enquiries as the homepage in the team's notification email, and the third
  * page to render this would inherit that same wrong label. See
@@ -32,13 +32,23 @@ import EnquiryForm from "@/components/forms/EnquiryForm";
  */
 export default function Proposal({
     source,
+    benefits = proposal.benefits,
 }: {
-    source: "home-proposal" | "about-proposal";
+    source: "home-proposal" | "about-proposal" | "seo-proposal";
+    /* The three benefits, so a page can supply its own art set without a
+       second copy of this band. Copy is never overridden — see
+       `seoProposalBenefits` in content/home.ts. */
+    benefits?: readonly {
+        title: string;
+        body: string;
+        icon: string;
+        iconAlt: string;
+    }[];
 }) {
     return (
         <section
             id="proposal"
-            className="relative isolate overflow-hidden bg-ink-950 py-section text-white"
+            className="relative isolate overflow-hidden bg-[#0C0026] py-section text-white"
         >
             {/* Brand glow, then grain over it, so the near-black canvas never
                 reads as flat black. Both decorative. Lighter than the
@@ -74,7 +84,7 @@ export default function Proposal({
                             "Free Expert Proposal" is wider than "Project with
                             a Free", so no column width both breaks the one and
                             fits the other. */}
-                        <span className="gradient-text block">
+                        <span className="block bg-[linear-gradient(90deg,#7225AD_0%,#CC067F_100%)] bg-clip-text pb-[0.08em] text-transparent">
                             {proposal.titleAccent}
                         </span>
                     </h2>
@@ -89,7 +99,7 @@ export default function Proposal({
                     </p>
 
                     <ul className="mt-10 grid gap-7 max-lg:text-start">
-                        {proposal.benefits.map((benefit) => (
+                        {benefits.map((benefit) => (
                             <li
                                 key={benefit.title}
                                 className="flex items-start gap-4 sm:gap-5"
@@ -143,7 +153,7 @@ export default function Proposal({
                                 <h3 className="font-display text-[clamp(1.3rem,1.05rem+0.8vw,1.7rem)] leading-tight font-extrabold text-onlight">
                                     {proposal.form.title}
                                 </h3>
-                                <p className="mt-1.5 text-[0.9rem] leading-[1.5] text-onlight-muted">
+                                <p className="mt-1.5 text-ui-15 leading-[1.5] text-onlight-muted">
                                     {proposal.form.sub}
                                 </p>
                             </div>

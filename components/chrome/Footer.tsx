@@ -46,7 +46,7 @@ const HEADING = "font-display text-xs font-bold tracking-[0.14em] text-white upp
 /** The magenta rule under every heading. */
 const RULE = "mt-2.5 block h-[3px] w-8 rounded-full bg-gradient-to-r from-magenta-500 to-violet-400";
 const LINK =
-  "block text-[0.8125rem] leading-snug text-white/55 transition-colors hover:text-white";
+  "block text-ui-13 leading-snug text-white/55 transition-colors hover:text-white";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -79,11 +79,11 @@ export default function Footer() {
               />
             </Link>
 
-            <p className="mt-6 max-w-[17rem] text-[0.8125rem] leading-relaxed text-white/55">
+            <p className="mt-6 max-w-[17rem] text-ui-13 leading-relaxed text-white/55">
               {footerTagline}
             </p>
 
-            <h2 className="mt-8 font-display text-[0.8125rem] font-bold tracking-[0.11em] text-white uppercase">
+            <h2 className="mt-8 font-display text-ui-13 font-bold tracking-[0.11em] text-white uppercase">
               {footerHeading}
             </h2>
 
@@ -113,7 +113,7 @@ export default function Footer() {
               <li>
                 <a
                   href={`tel:${contact.phoneE164}`}
-                  className="group flex items-center gap-3 text-[0.8125rem] text-white/65 transition-colors hover:text-white"
+                  className="group flex items-center gap-3 text-ui-13 text-white/65 transition-colors hover:text-white"
                 >
                   <span className="grid size-7 shrink-0 place-items-center rounded-full text-white/80 ring-1 ring-white/25 transition-colors group-hover:text-magenta-300 group-hover:ring-magenta-400">
                     <FooterPhoneIcon />
@@ -124,7 +124,7 @@ export default function Footer() {
               <li>
                 <a
                   href={`mailto:${contact.email}`}
-                  className="group flex items-center gap-3 text-[0.8125rem] break-words text-white/65 transition-colors hover:text-white"
+                  className="group flex items-center gap-3 text-ui-13 break-words text-white/65 transition-colors hover:text-white"
                 >
                   <span className="grid size-7 shrink-0 place-items-center rounded-full text-white/80 ring-1 ring-white/25 transition-colors group-hover:text-magenta-300 group-hover:ring-magenta-400">
                     <FooterChatIcon />
@@ -179,10 +179,10 @@ export default function Footer() {
                       applies: Montserrat bold reads as a different typeface
                       from every other line in this column and looks oversized
                       on mobile. */}
-                  <h3 className="font-body text-[0.9375rem] leading-snug font-semibold text-white">
+                  <h3 className="font-body text-ui-15 leading-snug font-semibold text-white">
                     {office.country}
                   </h3>
-                  <address className="mt-1.5 text-[0.8125rem] leading-relaxed text-white/55 not-italic">
+                  <address className="mt-1.5 text-ui-13 leading-relaxed text-white/55 not-italic">
                     {oneLineAddress(office)}
                   </address>
                 </li>
@@ -197,7 +197,7 @@ export default function Footer() {
           rather than inside the container. */}
       <div className="border-t border-white/10">
         <div className="container-site flex flex-col items-center justify-between gap-4 py-7 lg:flex-row">
-          <p className="text-[0.8125rem] text-white/55">
+          <p className="text-ui-13 text-white/55">
             All Rights Reserved &copy; {year} {site.name}.
           </p>
           <nav aria-label="Legal">
@@ -206,7 +206,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-[0.6875rem] whitespace-nowrap text-white/45 transition-colors hover:text-white sm:text-[0.8125rem]"
+                    className="text-ui-11 whitespace-nowrap text-white/45 transition-colors hover:text-white sm:text-ui-13"
                   >
                     {link.label}
                   </Link>

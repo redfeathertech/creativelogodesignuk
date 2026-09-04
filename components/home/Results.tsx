@@ -126,7 +126,7 @@ export default function Results() {
                                             />
 
                                             <div className="min-w-0">
-                                                <p className="font-display text-[1rem] leading-[1.25] font-extrabold text-white sm:text-[1.125rem]">
+                                                <p className="font-display text-base leading-[1.25] font-extrabold text-white sm:text-lg">
                                                     {item.label}
                                                 </p>
                                                 <p className="mt-1 text-sm leading-[1.4] text-white/55">

@@ -10,12 +10,12 @@
 /* ============================== HERO ================================== */
 
 export const hero = {
-    eyebrow: "We Are Creative Studio",
-    titleLead: "Your All-in-one",
-    titleAccent: "solution",
-    sub: "We’re a Full-Service Design & Development Agency From The UK Crafting unique brand identities, immersive UI/UX, cutting-edge apps, and growth-focused marketing strategies for businesses worldwide.",
-    primaryCta: "Request Growth Strategy",
-    secondaryCta: "See our work",
+    eyebrow: "Creative Digital Studio",
+    titleLead: "UK Based Design & Development",
+    titleAccent: "Agency",
+    sub: "Our design and development agency UK team helps you build a stronger digital presence through branding, web design, development, automation and growth focused marketing, with one experienced team managing everything from strategy through to delivery. ",
+    primaryCta: "Request Your Growth Plan",
+    secondaryCta: "View Our Work",
     /* Full-bleed hero backdrop, supplied by the client. One image across the
      whole section — the old build tinted the form half separately, which read
      as two panels rather than one banner. */
@@ -29,21 +29,21 @@ export const hero = {
         {
             value: 1000,
             suffix: "+",
-            label: "Happy clients",
+            label: "clients",
             icon: "/assets/img/home/stat-clients.svg",
             iconAlt: "Happy clients icon with five-star rating for Creative Logo Design",
         },
         {
             value: 1200,
             suffix: "+",
-            label: "Projects delivered",
+            label: "Projects",
             icon: "/assets/img/home/stat-projects.svg",
             iconAlt: "Rocket icon for design projects delivered by Creative Logo Design",
         },
         {
             value: 60,
             suffix: "+",
-            label: "Team members",
+            label: " Specialists",
             icon: "/assets/img/home/stat-team.svg",
             iconAlt: "Expert badge icon for the Creative Logo Design team of 60+ specialists",
         },
@@ -52,11 +52,12 @@ export const hero = {
     /* Hero enquiry card. Net-new content — nothing on the live homepage is being
      reworded (see docs/CONTENT-PARITY.md). */
     form: {
-        titleLead: "Start Getting",
-        titleAccent: "Results",
-        sub: "Tell us about your project and a strategist will be in touch.",
-        submit: "Submit Now",
-        assurances: ["No obligation", "Quick response", "100% confidential"],
+        titleLead: "Get Your Project",
+        titleAccent: "Started",
+        sub: "Share your business goals and our specialists will review them to recommend the next steps.",
+        submit: "Start My Project",
+        assurances: ["Expert Advice", "Prompt Response", "100% Confidential "],
+
     },
     /* Trustpilot badge under the hero stats.
 
@@ -75,7 +76,7 @@ export const hero = {
         logoAlt: "Trustpilot",
         stars: 5,
         rating: "4.9",
-        reviewCount: "Based 134 Reviews",
+        reviewCount: "Based 137 Reviews",
     },
 } as const;
 
@@ -83,11 +84,11 @@ export const hero = {
 
 export const about = {
     eyebrow: "About Us",
-    titleLead: "Still Wondering?",
-    titleMid: "Your Competitors",
-    titleAccent: "Aren’t Waiting",
-    lead: "While you're weighing things up, your competitors are busy launching fresh websites, sharpening their brands, and snapping up your audience. Every day you wait is an opportunity they take. Don't just think, act now.",
-    primaryCta: "Request A Proposal",
+    titleLead: "A Full Service Digital",
+    titleMid: "Agency UK For",
+    titleAccent: "Growing Businesses",
+    lead: "Our team specialises in streamlining digital growth by keeping strategy, design and delivery connected. From brand identity and web design to development, marketing and automation, everything is managed under one roof. Backed by 1,200+ completed projects and 60+ specialists, we support UK startups and growing businesses throughout your digital journey.",
+    primaryCta: "Meet Our Team",
     secondaryCta: "Start Your Project Today",
     badge: "Taking on new projects",
     /* [redesign] The counter strip is gone from About. It duplicated
@@ -132,9 +133,9 @@ export const about = {
 
 export const process = {
     eyebrow: "How it works",
-    titleLead: "Powerful Brand in Just a",
-    titleAccent: "Few Clicks",
-    lead: "Building your brand can be simple. We make the process quick and focused on results. Just tell us your goals, and we'll create a brand identity that helps your business get noticed.",
+    titleLead: "Clear Steps From ",
+    titleAccent: "Strategy To Delivery",
+    lead: "We lay out each step clearly so you always know what happens next. Our team keeps the process simple and decisions visible, from the initial brief through strategy, design and final delivery.",
     /* Full-bleed section backdrop, supplied by the client — the same treatment as
      the hero, so the two dark bands either side of the light About section read
      as one surface rather than a flat panel with an image dropped on it. */
@@ -144,22 +145,22 @@ export const process = {
     /* Net-new: the section had no call to action at all, so the three steps ended
      on a full stop. Nothing existing is reworded (docs/CONTENT-PARITY.md). The
      secondary CTA points at the portfolio section directly below. */
-    primaryCta: "Request A Proposal",
-    secondaryCta: "See our work",
+    primaryCta: "Start Your Project",
+    secondaryCta: "Submit Your Brief",
     workAnchor: "#recent-work",
     /* Net-new. The marks are client-supplied SVGs, each a complete badge — the
      gradient ring and its glow are baked into the asset, so nothing here draws
      a ring around them. 60x60 viewBox. */
     highlights: [
         {
-            title: "Proven Process",
-            body: "A step-by-step approach that delivers results.",
+            title: "Simple Steps",
+            body: "A simple plan where you always know what happens next.",
             icon: "/assets/img/home/proven-process.svg",
             iconAlt: "Gear and cycle icon for the proven Creative Logo Design branding process",
         },
         {
-            title: "Results Driven",
-            body: "We focus on growth that truly matters.",
+            title: "Results Focused",
+            body: "Strategies shaped around your priorities to achieve meaningful results.",
             icon: "/assets/img/home/results-driven.svg",
             iconAlt: "Analytics report icon for results-driven brand and web design work",
         },
@@ -167,22 +168,22 @@ export const process = {
     /* Step marks, also client-supplied complete badges. 117x117 viewBox, SVG. */
     steps: [
         {
-            title: "Discovery & Strategy",
-            body: "We learn about your goals, look at your competitors, and create a plan that fits your brand’s vision.",
+            title: "Brief & Strategy",
+            body: "You share your key details, goals and priorities. We create a clear plan showing how the project will move towards them.",
             icon: "/assets/img/home/step-discovery.svg",
             iconAlt: "Target and arrow icon for the brand discovery and strategy step",
         },
         {
             // [live] "understands your idea and makes it into" — not the redesign's "takes … turns it into"
             title: "Concept Development",
-            body: "Our team understands your idea and makes it into something special that connects with your audience.",
+            body: "You review our creative direction and provide feedback. We refine the concept until we both agree on the right outcome.",
             icon: "/assets/img/home/step-concept.svg",
             iconAlt: "Lightbulb and gear icon for the logo concept development step",
         },
         {
             // [live] "each detail" / "Our representative" — not the redesign's "every detail" / "Your representative"
             title: "Design & Delivery",
-            body: "We handle each detail. Our representative works closely with you to give the best outcome and also gives personal advice.",
+            body: "You see the plan take shape step by step as the project moves through design and development towards final delivery.",
             icon: "/assets/img/home/step-design.svg",
             iconAlt: "Rocket icon for the brand design and delivery step",
         },
@@ -194,9 +195,9 @@ export const recentWork = {
     /* `title` is the section's accessible name (it labels the rail). The
        heading renders `titleLead` + `titleAccent`, which concatenate to
        exactly it — the live heading text is unchanged. */
-    title: "Our Recent Work",
-    titleLead: "Our",
-    titleAccent: "Recent Work",
+    title: "Explore Our Recent Work",
+    titleLead: "Explore ",
+    titleAccent: "Our Recent Work",
     /* TODO — RENDERED WITHOUT A LINK ON PURPOSE. There is no portfolio route
        yet; give this button an `href` the moment that page ships. */
     viewAll: "View All Projects",
@@ -261,15 +262,15 @@ export const recentWork = {
 /* ============================ WHAT YOU GET ============================ */
 
 export const whatYouGet = {
-    eyebrow: "What you get",
-    titleLead: "What do You Get with",
+    eyebrow: "What We Deliver",
+    titleLead: "A Creative Design Agency UK",
     /* Lower case on purpose. The live heading reads "What do You Get with
        creative logo design?" verbatim — the approved mock title-cases the
        accent, but heading text is exactly what docs/CONTENT-PARITY.md says
        must not move, so the casing stays as it ranks. */
-    titleAccent: "creative logo design",
+    titleAccent: "Businesses Can Grow With",
     titleTrail: "?",
-    lead: "Complete solution at one place, including Design, Development, Branding, and Growth. You don't have to go anywhere else.",
+    lead: "You get one team of specialists working together across your whole plan, connecting design, development and digital growth while saving you the hassle of managing multiple agencies. ",
     /* The band's backdrop: a 1920x1039 field with the glow curve and the dot
        sphere already drawn into it, so neither is a DOM element. */
     background: "/assets/img/home/offer-bg.webp",
@@ -309,28 +310,28 @@ export const whatYouGet = {
     tabs: [
         {
             label: "Web Design",
-            body: "Launch a site that doesn't just look good. It sells for you 24/7.",
+            body: "You get a responsive website designed specifically around your business goals and customer needs.",
             icon: "/assets/img/home/offer/icon-web-design.svg",
             iconAlt: "Web design services icon",
             href: "/web-design-services",
         },
         {
             label: "UI/UX Design",
-            body: "Let us craft experiences your users will love from the very first click.",
+            body: "You get a user friendly interface that helps your customers navigate your website with ease.",
             icon: "/assets/img/home/offer/icon-ui-ux-design.svg",
             iconAlt: "UI/UX design services icon",
             href: "/web-design-services/ui-ux-design",
         },
         {
             label: "App Development",
-            body: "Turn your idea into a high-performing app that customers keep coming back to.",
+            body: "You get a high performing app built around usability, reliability and your future growth plans.",
             icon: "/assets/img/home/offer/icon-app-development.svg",
             iconAlt: "App development services icon",
             href: "/app-development-services",
         },
         {
             label: "Branding",
-            body: "Stand out instantly with branding that leaves a lasting impression everywhere you show up.",
+            body: "You get a distinctive brand identity that keeps your presence consistent across all digital platforms.",
             icon: "/assets/img/home/offer/icon-branding.svg",
             iconAlt: "Branding services icon",
             href: "/branding-services",
@@ -338,7 +339,7 @@ export const whatYouGet = {
         {
             // [live] retains "about the new trends, start growing with campaigns that will maximise"
             label: "Marketing",
-            body: "Stop guessing about the new trends, start growing with campaigns that will maximise every marketing pound.",
+            body: "You get coordinated campaigns focused on increasing digital presence, lead generation and lasting success.",
             icon: "/assets/img/home/offer/icon-marketing.svg",
             iconAlt: "Digital marketing services icon",
             href: "/digital-marketing-services",
@@ -353,13 +354,13 @@ export const whatYouGet = {
 
 export const toolbox = {
     eyebrow: "Creative Toolkit",
-    titleLead: "Our toolbox for",
-    titleAccent: "innovation",
+    titleLead: "Tools That Bring",
+    titleAccent: " Ideas To Life",
     /* The approved mock labels this button "Get started now". The live button
        reads "Get started" and that is what ships — a mock rewrite of existing
        copy is not taken (docs/CONTENT-PARITY.md), same call as the five
        `whatYouGet` tab bodies above. */
-    cta: "Get Started",
+    cta: "Explore Our Toolkit",
     /* Three presentational fields per tool, none of them copy:
        — `w`/`h` are the artwork's own pixel size. They differ per mark because
          these are the brand assets as exported, not a normalised set, and
@@ -537,14 +538,14 @@ export const toolbox = {
 /* ============================== RESULTS =============================== */
 
 export const results = {
-    eyebrow: "The numbers",
-    titleLead: "Our average success rate when",
+    eyebrow: "Proven Results",
+    titleLead: "A Branding and Digital Marketing",
     /* Sentence case, as it ranks. The approved mock title-cases the whole
        heading ("Our Average Success Rate When Working With Clients"); heading
        text is exactly what docs/CONTENT-PARITY.md says must not move, so the
        casing stays — same call as `whatYouGet.titleAccent` above. */
-    titleAccent: "working with clients",
-    lead: "We measure what matters. Here’s what partnering with us typically moves.",
+    titleAccent: "Agency UK That Delivers",
+    lead: "Our performance is reflected in project delivery, faster app development and a 98% client return  rate.",
     /* The band's backdrop: a 1920x1006 field with the 3D bar chart, its icon
        rail and the particle waves already drawn into its right half, so none
        of them is a DOM element.
@@ -573,7 +574,7 @@ export const results = {
         {
             value: 40,
             suffix: "%",
-            label: "Faster time-to-market",
+            label: "Faster App Delivery",
             note: "for apps",
             icon: "/assets/img/home/results/icon-time-to-market.svg",
             iconAlt: "Stopwatch icon for 40% faster app time-to-market",
@@ -581,7 +582,7 @@ export const results = {
         {
             value: 1200,
             suffix: "+",
-            label: "Projects shipped",
+            label: "Projects Delivered",
             note: "across branding, web and marketing",
             icon: "/assets/img/home/results/icon-projects.svg",
             iconAlt: "Laptop and rocket icon for 1200+ branding, web and marketing projects shipped",
@@ -589,18 +590,10 @@ export const results = {
         {
             value: 98,
             suffix: "%",
-            label: "Clients who come back",
+            label: "Client Return Rate",
             note: "for their next project",
             icon: "/assets/img/home/results/icon-repeat-clients.svg",
             iconAlt: "Client group and star-rating icon for 98% of clients who come back",
-        },
-        {
-            value: 95,
-            suffix: "%",
-            label: "Client satisfaction",
-            note: "rate across all projects",
-            icon: "/assets/img/home/results/icon-satisfaction.svg",
-            iconAlt: "Thumbs-up and five-star icon for 95% client satisfaction",
         },
     ],
 } as const;
@@ -615,12 +608,12 @@ export const methodology = {
        for success" — which is what docs/CONTENT-PARITY.md protects. Lower case
        stays as it ranks; the mock title-cases both lines, and that rewrite is
        not taken (same call as the `whatYouGet` tab bodies). */
-    titleLead: "Our methodology",
-    titleAccent: "for success",
+    titleLead: "Our Recipe",
+    titleAccent: "For Success",
     /* Net-new: the live section head is an eyebrow and a heading with nothing
        under it. Taken from the approved design, so nothing existing is reworded. */
     lead: "A proven process that helps us deliver exceptional results for your business.",
-    cta: "Get Started",
+    cta: "See How We Work",
     /* The centre of the diagram, supplied pre-cropped to a circle on
        transparency — 463x463 native. The ring around it and its four nodes are
        drawn in CSS, not part of the asset.
@@ -644,7 +637,7 @@ export const methodology = {
     steps: [
         {
             title: "Discovery & Strategy",
-            body: "We begin by understanding your goals, audience and competitive landscape.",
+            body: "We review your goals, priorities and project requirements before shaping project strategy.",
             icon: "/assets/img/home/method/icon-discovery.svg",
             iconAlt: "Target icon for the discovery and strategy stage of our design methodology",
             art: "/assets/img/home/method/art-discovery.webp",
@@ -654,7 +647,7 @@ export const methodology = {
         },
         {
             title: "Concept Development",
-            body: "Brainstorming, creative direction and agreed success criteria.",
+            body: "We turn strategy into wireframes and early concepts before moving into detailed design.",
             icon: "/assets/img/home/method/icon-concept.svg",
             iconAlt: "Lightbulb and gear icon for the concept development stage of our design methodology",
             art: "/assets/img/home/method/art-concept.webp",
@@ -664,7 +657,7 @@ export const methodology = {
         },
         {
             title: "Design & Iteration",
-            body: "Wireframes, prototypes and user feedback cycles.",
+            body: "We rework prototypes through structured feedback cycles to improve usability, clarity and direction.",
             icon: "/assets/img/home/method/icon-design.svg",
             iconAlt: "Artboard and pen-tool icon for the design and iteration stage of our design methodology",
             art: "/assets/img/home/method/art-design.webp",
@@ -674,7 +667,7 @@ export const methodology = {
         },
         {
             title: "Development & Execution",
-            body: "Full build, QA testing and final deployment.",
+            body: "We build the approved solution, complete QA testing and prepare everything for launch.",
             icon: "/assets/img/home/method/icon-development.svg",
             iconAlt: "Rocket icon for the development and execution stage of our design methodology",
             art: "/assets/img/home/method/art-development.webp",
@@ -857,8 +850,8 @@ export const videoTestimonials = {
 
 export const testimonials = {
     eyebrow: "Testimonials",
-    titleLead: "Clients’ valuable",
-    titleAccent: "feedback",
+    titleLead: "See What Our ",
+    titleAccent: "UK Clients Say",
     lead: "Real stories from amazing clients who trusted us and loved the results.",
     /* The pink double-quote that sits in the top-right corner of every card.
        Replaces the single 360px mark that used to hold its own column beside
@@ -958,13 +951,13 @@ export const testimonials = {
 /* =========================== CHALLENGES / FAQ ========================= */
 
 export const challenges = {
-    eyebrow: "Your challenges",
+    eyebrow: "Overcome Challenges",
     /* Split for the two-tone heading only. Joined with a single space these are
        the live title, unchanged: "Creative Logo Design Solves Your Design,
        Development & Marketing Challenges". Same titleLead/titleAccent pattern
        the rest of the page already uses. */
-    titleLead: "Creative Logo Design Solves Your Design, Development &",
-    titleAccent: "Marketing Challenges",
+    titleLead: "Web Design and Development Company UK ",
+    titleAccent: "Solutions for Growing Businesses",
     /* Net-new copy for the 2026-08 rebuild of this section. No live equivalent,
        so it carries no ranking risk — docs/CONTENT-PARITY.md, "Kept from the
        redesign (net-new, no live equivalent)". Two entries because the design
@@ -1004,12 +997,12 @@ export const challenges = {
     ],
     items: [
         {
-            q: "Could a stronger brand identity make you the talk of the town?",
-            a: "Yes. Your brand’s presence online tells people what you bring to the table — it’s more than just a logo. Our branding experts help you find gaps, improve your presence, and create messaging people remember.",
+            q: "Does Your Digital Presence Represent Your Brand Identity Well?",
+            a: "A well communicated brand identity across digital platforms helps potential customers understand your business clearly. We help position your brand through visual direction and messaging, so your presence feels more consistent, relevant and better aligned with the audience you want to reach.",
             list: [
-                "Brand audits to highlight weak spots",
-                "Custom logo & identity design",
-                "Consistent storytelling across every channel",
+                "Strengthen Your Brand Identity Across Platforms",
+                "Refresh Your Visual Direction and Messaging",
+                "Connect Better With Your Target Audience",
             ],
             icon: "/assets/img/home/challenges/branding.svg",
             iconAlt: "Star in a frame icon for brand identity design",
@@ -1022,12 +1015,12 @@ export const challenges = {
             href: "/branding-services",
         },
         {
-            q: "Is your website just there, doing nothing and only wasting money?",
-            a: "Your website shouldn’t be a digital brochure. It should attract visitors, keep them interested, and help you win more customers.",
+            q: "Is Your Website Design Outdated and Failing to Attract Potential Customers?",
+            a: "An outdated website can make your business feel less credible and harder to engage with. We refresh your design, improve user experience and responsive behaviour, helping visitors understand your offer quickly, move through the site easily and reach key conversion points with less friction.",
             list: [
-                "Free website audit to spot missed opportunities",
-                "Conversion-focused redesigns",
-                "Responsive layouts for every device",
+                "Modernise Your Website Design",
+                "Create User Friendly Web Design",
+                "Guide Visitors Towards Clear Conversion Points",
             ],
             icon: "/assets/img/home/challenges/website.svg",
             iconAlt: "Browser window icon for website design",
@@ -1035,26 +1028,12 @@ export const challenges = {
             href: "/web-design-services",
         },
         {
-            q: "Tired of watching sales slip through your ecommerce cracks?",
-            a: "If your checkout is clunky or your products aren’t shown well, you could be losing sales. We find what’s holding your store back and make the whole shopping experience smoother.",
+            q: "What Services Should a Digital Marketing Partner Provide?",
+            a: "A full service digital marketing agency should coordinate strategy, SEO, paid media, social campaigns, content and reporting around your business goals. Our team follows a connected approach, giving you a clear view of performance across multiple digital channels and helping keep priorities aligned.",
             list: [
-                "Optimised product pages & checkout flows",
-                "Seamless integrations with payment systems",
-                "Data-driven improvements to boost sales",
-            ],
-            icon: "/assets/img/home/challenges/ecommerce.svg",
-            iconAlt: "Shopping icon for ecommerce development",
-            ctaLabel: "Explore E-Com Development",
-            href: "/web-development-services",
-        },
-        {
-            // [live] "actually covers expenses for itself" — not the redesign's "actually pays for itself"
-            q: "Want digital marketing that actually covers expenses for itself?",
-            a: "Just posting online won’t cut it. What counts is real, measurable growth. We build campaigns that reach more people, build trust, and get results you can see.",
-            list: [
-                "SEO campaigns that rank and convert",
-                "Targeted social media strategies",
-                "Paid ads that bring high-value leads",
+                "Connect Marketing Channels to Business Goals",
+                "Track Campaign Performance More Clearly",
+                "Adjust Priorities Based on Results",
             ],
             icon: "/assets/img/home/challenges/marketing.svg",
             iconAlt: "Monitor and cursor icon for digital marketing",
@@ -1062,12 +1041,12 @@ export const challenges = {
             href: "/digital-marketing-services",
         },
         {
-            q: "Is managing a campaign like herding cats?",
-            a: "Running a business alone is challenging. Our team handles the marketing while you concentrate on the company.",
+            q: "Why Is Hiring an Agency Better Than Separate Freelancers for Digital Projects?",
+            a: "Hiring an agency can be a better option when your digital project requires different specialists working together. You get one coordinated team for strategy, design and development, reducing handovers, communication gaps and the need to manage several individuals separately.",
             list: [
-                "Fully managed multi-channel campaigns",
-                "Regular reports & performance insights",
-                "Flexible support tailored to your goals",
+                "Keep Workstreams Better Coordinated",
+                "Reduce Communication Gaps",
+                "Access Multiple Digital Specialists",
             ],
             icon: "/assets/img/home/challenges/campaigns.svg",
             iconAlt: "Icon for fully managed multi-channel campaigns",
@@ -1075,13 +1054,12 @@ export const challenges = {
             href: "/web-development-services",
         },
         {
-            // [live] "When was the last time you gave your website a thorough makeover?"
-            q: "When was the last time you gave your website a thorough makeover?",
-            a: "Customers can tell when a site is dated — and they judge you on it. We bring modern features, fresh design and an engaging experience that revitalises your presence.",
+            q: "How Much Time Does a Website Redesign Usually Require?",
+            a: "A website redesign timeline varies depending on its size, features, content and review cycles. Once the project begins, we communicate the expected stages clearly and keep progress visible, so you understand the timeline, approvals and any factors that may affect final delivery.",
             list: [
-                "Modern redesigns to refresh your brand",
-                "UX upgrades for smoother navigation",
-                "Future-proof functionality",
+                "Define Project Requirements Early",
+                "Track Progress Through Clear Stages",
+                "Reduce Unexpected Timeline Changes",
             ],
             icon: "/assets/img/home/challenges/redesign.svg",
             iconAlt: "Icon for a modern website redesign",
@@ -1089,12 +1067,12 @@ export const challenges = {
             href: "/web-design-services/website-redesign",
         },
         {
-            q: "Think SEO and responsive design are a bit of a mystery?",
-            a: "SEO and mobile-friendly design are essential to your online presence. We make it simple, so your site ranks well and works beautifully on any device.",
+            q: "Why Are Responsive Design and SEO Important to Plan Together?",
+            a: "SEO and responsive design should be planned together because both affect search visibility and user experience. They influence how search engines understand your website and how easily users navigate it, helping create clearer, more accessible and search friendly pages across different devices.",
             list: [
-                "Comprehensive SEO audits",
-                "On-page and technical SEO fixes",
-                "Fully responsive web design",
+                "Optimise Structure for Search Engines",
+                "Improve Responsive Website Experience",
+                "Make Content Easier to Navigate",
             ],
             icon: "/assets/img/home/challenges/seo.svg",
             iconAlt: "Icon for SEO and responsive web design",
@@ -1102,12 +1080,12 @@ export const challenges = {
             href: "/seo-services",
         },
         {
-            q: "Not sure which channels will give your business the biggest bang for buck?",
-            a: "Every brand is different, so chasing trends isn’t enough. We look at your market and recommend the channels that actually help you grow.",
+            q: "How Does Marketing and Sales Automation Support Business Growth and Performance?",
+            a: "Marketing and sales automation can handle repetitive tasks such as follow ups, lead routing and routine customer communication. A well planned system reduces manual admin, keeps important actions consistent and helps your team respond faster without making every interaction feel automated.",
             list: [
-                "Channel audits to pinpoint opportunities",
-                "Custom strategies based on your audience",
-                "Data-backed recommendations to scale smart",
+                "Save Time on Repetitive Tasks",
+                "Improve Lead Routing and Follow Up",
+                "Keep Customer Communication Consistent",
             ],
             icon: "/assets/img/home/challenges/channels.svg",
             iconAlt: "Icon for choosing the right marketing channels",
@@ -1124,9 +1102,9 @@ export const proposal = {
        section ABOVE it. Client-confirmed as a slip in the export, not a rename,
        so the band keeps its own eyebrow. */
     eyebrow: "RULE THE WEB!",
-    titleLead: "Kickstart Your Project with a",
-    titleAccent: "Free Expert Proposal",
-    lead: "Tell us where you want to get to. We’ll come back with a plan, a timeline and a straight answer on what it takes.",
+    titleLead: "Start Your Project Today,",
+    titleAccent: "Get Free Expert Advice",
+    lead: "Tell us your business goals and let our experts turn your ideas into strategies that succeed.",
     /* Three titled benefits, replacing the three plain bullets this band used to
        carry. Safe: docs/CONTENT-PARITY.md files "the proposal-form benefit
        bullets" under "Kept from the redesign (net-new, no live equivalent)" —
@@ -1136,19 +1114,19 @@ export const proposal = {
     benefits: [
         {
             title: "Tailored Strategies",
-            body: "Custom solutions designed for your unique goals.",
+            body: "Share your goals without committing to a project straight away",
             icon: "/assets/img/home/proposal/benefit-strategies.svg",
             iconAlt: "Gear and hand icon for strategies tailored to your goals",
         },
         {
             title: "Proven Results",
-            body: "Data-driven strategies that deliver real growth.",
+            body: "Receive clear next steps based on your actual goals",
             icon: "/assets/img/home/proposal/benefit-results.svg",
             iconAlt: "Rising bar chart icon for proven, data-driven results",
         },
         {
             title: "Reliable Support",
-            body: "A dedicated team with you, every step of the way.",
+            body: "Keep your business and project details fully confidential",
             icon: "/assets/img/home/proposal/benefit-support.svg",
             iconAlt: "Support agent icon for a dedicated, reliable team",
         },
@@ -1165,6 +1143,80 @@ export const proposal = {
         title: "Tell Us Your Challenges",
         sub: "Share your goals and we’ll create a plan to overcome your challenges and grow your business.",
         submit: "Submit Your Challenge",
-        assurances: ["No obligation", "Quick response", "100% confidential"],
+        assurances: ["Expert Advice", "Prompt Response", "100% Confidential "],
     },
+} as const;
+
+
+/* The same three benefits, with the SEO art set.
+
+   Only the icons differ — every string is `proposal.benefits`' string, mapped
+   by title, so the two bands can never drift in copy and the parity gate has
+   nothing new to walk. Rendered by the `Proposal` band on the SEO sub-service
+   pages only (components/services/SeoServicePage.tsx); the homepage and
+   /about-us keep the home set. */
+const SEO_PROPOSAL_ICONS: Record<string, { icon: string; iconAlt: string }> = {
+    "Tailored Strategies": {
+        icon: "/assets/img/seo/proposal/benefit-strategies.svg",
+        iconAlt: "Icon for SEO strategies tailored to your goals",
+    },
+    "Proven Results": {
+        icon: "/assets/img/seo/proposal/benefit-results.svg",
+        iconAlt: "Icon for proven, measurable SEO results",
+    },
+    "Reliable Support": {
+        icon: "/assets/img/seo/proposal/benefit-support.svg",
+        iconAlt: "Icon for reliable, ongoing SEO support",
+    },
+};
+
+export const seoProposalBenefits = proposal.benefits.map((benefit) => ({
+    ...benefit,
+    ...SEO_PROPOSAL_ICONS[benefit.title],
+}));
+/* ============================== FAQ SECTION ==============================
+
+   Net-new band, added 2026-09 between the Proposal form and the footer. There
+   is no live-site equivalent, so nothing here is parity-bound in the reverse
+   direction — but every string below still has to render, which
+   scripts/verify-home-parity.mjs enforces forward.
+
+   Deliberately NOT a second copy of `challenges`: that band answers "what is
+   going wrong in your business", each item ending in a service link. This one
+   answers the practical pre-sales questions — cost, timeline, ownership,
+   contracts — that a visitor who has read the whole page still has left. The
+   two sets share no question, which is what keeps the single homepage FAQPage
+   node in lib/seo.ts free of duplicates. */
+
+export const faq = {
+    eyebrow: "FAQ",
+    titleLead: "Frequently Asked",
+    titleAccent: "Questions",
+    lead: "Find quick answers to the questions we are asked most about working with our design, development and marketing team.",
+    items: [
+        {
+            q: "What services does a full service design agency in the UK offer?",
+            a: "A full service agency in the UK offers a range of services that include branding, web design, web development, app development, digital marketing and automation. These agencies bring together all these services under one roof so that the team works as a unit. This means smoother handovers between departments, clearer accountability and a more consistent customer experience across the brand, the website and growth efforts.",
+        },
+        {
+            q: "How much should a small business budget for a website in the UK?",
+            a: "When it comes to how much a small business should budget for a website in the UK, the cost can vary a lot. It depends on the size of the site, how many pages there are, what functionality is needed, how much content must be created and how much custom design is required. We always start by understanding your goals and needs. Then we provide a proposal that matches your actual project, so the budget reflects what you really need, not a guessed number.",
+        },
+        {
+            q: "How long does it take to build a website or app?",
+            a: "The time it takes to build a website or app depends on several factors. These include the project scope, the complexity of the design, any integrations with other systems and how quickly content is ready. It also depends on how fast feedback is given. Before we begin we agree on milestones and set a clear timeline. We keep each stage visible so you know exactly what is happening and can see how decisions might affect the launch date.",
+        },
+        {
+            q: "Do you work with businesses outside London?",
+            a: "Yes, we work with businesses outside London. We have worked with clients across the UK as well as in the USA and UAE. We use calls, shared feedback tools and clear checkpoints to manage projects, so location does not make collaboration harder. We make sure the process stays smooth no matter where you are.",
+        },
+        {
+            q: "Who owns the design files and website after the project is finished?",
+            a: "This is clearly stated in the proposal or contract before work begins. We do not publish a promise about ownership until the details are confirmed with you. This includes source files, licences, hosting, code and any third party assets, so both sides understand exactly what is included and what is not.",
+        },
+        {
+            q: "What happens if I need changes after the site goes live?",
+            a: "Post launch support is explained before the project is signed off. We set out what kind of support is available, how maintenance works and how changes are handled. This is confirmed with you first — what is included, what is chargeable and how ongoing requests are managed — so everything is fair and clear from the start.",
+        },
+    ],
 } as const;

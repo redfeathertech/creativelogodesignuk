@@ -15,7 +15,7 @@ export default function Advantages({ data }: { data: ServiceAdvantages }) {
                         lead={data.heading}
                         accent={data.headingAccent}
                     />
-                    <p className="mt-6 max-w-[62ch] text-lead text-white/65">
+                    <p className="mt-6 max-w-[65ch] text-lead text-white/65">
                         {data.lead}
                     </p>
 

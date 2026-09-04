@@ -182,7 +182,7 @@ export default function Portfolio() {
                                         className="block aspect-4/5 w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-105"
                                     />
 
-                                    <span className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-1.5 font-display text-[0.6875rem] font-bold tracking-[0.1em] text-onlight uppercase shadow-sm backdrop-blur-[2px]">
+                                    <span className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-1.5 font-display text-ui-11 font-bold tracking-[0.1em] text-onlight uppercase shadow-sm backdrop-blur-[2px]">
                                         <span
                                             aria-hidden="true"
                                             className="size-1.5 rounded-full bg-magenta-500"
@@ -192,7 +192,7 @@ export default function Portfolio() {
                                 </div>
 
                                 <div className="flex items-center justify-between gap-4 px-6 py-5">
-                                    <h3 className="font-display text-[1.125rem] leading-[1.15] font-extrabold text-onlight">
+                                    <h3 className="font-display text-lg leading-[1.15] font-extrabold text-onlight">
                                         {item.lead} {item.trail}
                                     </h3>
 

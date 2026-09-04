@@ -29,6 +29,7 @@ const VideoTestimonials = dynamic(
 const Testimonials = dynamic(() => import("@/components/home/Testimonials"));
 const Challenges = dynamic(() => import("@/components/home/Challenges"));
 const Proposal = dynamic(() => import("@/components/home/Proposal"));
+const Faq = dynamic(() => import("@/components/home/Faq"));
 
 /* Title and description are carried over verbatim from the live site — both
    currently rank, so neither is being "improved". */
@@ -69,6 +70,7 @@ export default function Home() {
             <Testimonials />
             <Challenges />
             <Proposal source="home-proposal" />
+            <Faq />
         </>
     );
 }

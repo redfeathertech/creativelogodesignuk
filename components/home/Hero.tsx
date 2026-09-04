@@ -53,10 +53,13 @@ export default function Hero() {
                 className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-center"
             />
 
-            {/* An even split rather than the old 5/7. At 5/7 the copy column is only
-          ~490px on a 1440 screen, which wraps the H1 onto a third line and the
-          CTAs onto a second row — ~150px the fold does not have. */}
-            <div className="relative z-[1] container-site grid grid-cols-1 lg:grid-cols-2">
+            {/* The form column is sized to the card (37rem), not to half the
+          container. An even split left ~18rem of dead space between the copy
+          and a card that is right-aligned inside its half, which read as a hole
+          down the middle of the fold. Now the only gap between them is the two
+          hero-pad steps and the copy column takes the rest — which also keeps
+          the H1 off a third line and the CTAs on one row. */}
+            <div className="relative z-[1] container-site grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,37rem)]">
                 {/* `--hero-foot` is the block padding plus room for the scroll cue —
             and collapses back to plain padding on the viewports too short to
             show the cue at all. */}
@@ -84,7 +87,7 @@ export default function Hero() {
                     {/* Tighter than the 1.65 body leading: at display size this reads as
               a standfirst, and five lines of it is the widest single block in
               the fold. */}
-                    <p className="mb-hero-gap max-w-[52ch] text-lead leading-[1.55] text-white/65 max-lg:mx-auto">
+                    <p className="mb-hero-gap max-w-[60ch] text-lead leading-[1.55] text-white/65 max-lg:mx-auto">
                         {hero.sub}
                     </p>
 
@@ -171,7 +174,7 @@ export default function Hero() {
                                                 above this is now a backstop, but
                                                 it is the one that makes the rail
                                                 safe at any label length. */}
-                                            <span className="mt-1 block text-[length:var(--rail-label)] tracking-[0.1em] text-white/40 uppercase max-sm:text-[0.625rem] max-sm:tracking-[0.06em] lg:tracking-wider">
+                                            <span className="mt-1 block text-[length:var(--rail-label)] tracking-[0.1em] text-white/40 uppercase max-sm:text-ui-10 max-sm:tracking-[0.06em] lg:tracking-wider">
                                                 {item.label}
                                             </span>
                                         </dd>

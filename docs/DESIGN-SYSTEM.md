@@ -63,6 +63,48 @@ Fluid scale, `clamp()` from 360px → 1440px:
 | `text-lead` | 17 → 20px |
 | `text-body` | 15 → 17px |
 
+`text-hero` is not in the table: it is
+`clamp(2.5rem, min(5.6vw, 8.6svh), 5.25rem)`. The `svh` term is what keeps the
+hero H1 off a third line on a wide-but-short screen.
+
+### The UI ladder
+
+Everything set below `text-body` — buttons, badges, eyebrows, trust
+indicators, nav links, card titles, form labels — reads from a second scale of
+flat rungs named for their pixel value, interleaved with Tailwind's own
+`text-xs`/`text-sm`/`text-base`/`text-lg`:
+
+| Utility | Size |
+|---|---|
+| `text-ui-9` | 9px |
+| `text-ui-10` | 10px |
+| `text-ui-11` | 11px |
+| `text-xs` | 12px |
+| `text-ui-13` | 13px |
+| `text-sm` | 14px |
+| `text-ui-15` | 15px |
+| `text-base` | 16px |
+| `text-ui-17` | 17px |
+| `text-lg` | 18px |
+| `text-ui-19` | 19px |
+| `text-ui-21` | 21px |
+
+The ladder is 9 · 10 · 11 · 12 · 13 · 14 · 15 · 16 · 17 · 18 · 19 · 21 — the
+four Tailwind rungs interleave with the eight `ui` ones rather than being
+replaced by them, so a component picks the rung it wants.
+
+**Use a rung, never `text-[0.8125rem]`.** An arbitrary value is a literal, so
+it is invisible to any change made by re-declaring a token — which is how every
+viewport-banded override has to work. Replacing the 83 hand-written sizes that
+were scattered across 33 components is what makes the small type adjustable at
+all. Sub-9px sizes are the one exception and are left as arbitrary values —
+they only exist inside `min-[22.5rem]:` phone ladders.
+
+Button metrics work the same way: `--btn-px-md`/`--btn-py-md`/`--btn-px-lg`/`--btn-py-lg`
+in `globals.css` set the CEILING of each pill's inline padding and its flat
+block padding. The clamp floor is untouched — that is what keeps a CTA on a
+320px screen.
+
 **Visual size and heading level are independent.** Use the level the document
 outline requires and the `text-*` utility the design requires — that is how the
 live site's 23 `<h4>`s were fixed without changing a word.
@@ -70,11 +112,12 @@ live site's 23 `<h4>`s were fixed without changing a word.
 ## Layout
 
 - `container-site` — max 1560px + fluid gutter (`clamp(1.25rem, .5rem + 3vw, 3rem)`).
-  **The one container.** Chrome (header/footer/top bars) and every section body
-  centre on the same `--container-site` box, so content edges line up from the
-  top bar to the footer. There is no second, wider token — a section that needs
-  to bleed (hero backgrounds) does it with absolute layers behind the container,
-  not with a different container.
+  **The one container.** Chrome
+  (header/footer/top bars) and every section body centre on the same
+  `--container-site` box, so content edges line up from the top bar to the
+  footer. There is no second, wider token — a section that needs to bleed (hero
+  backgrounds) does it with absolute layers behind the container, not with a
+  different container.
 - `py-section` — `clamp(4rem, 2rem + 8vw, 6.25rem)`, overridden to a flat
   `3.125rem` (50px) below `md` (48rem): the viewport-driven clamp still left
   ~62px on a phone, which over-spaces every stacked section
@@ -95,8 +138,35 @@ short; reach for utilities first.
 | `mask-edges` | Fades the marquee in/out at both edges |
 | `.reveal` / `.reveal.is-visible` | Scroll-reveal states |
 | `.accordion` | `<details>` open/close height transition (`::details-content`) |
+| `.seo-inner` | Page-scoped palette for the 11 SEO sub-service pages (below) |
+| `bg-mesh-sx` · `bg-grid-sx` | That family's mesh and technical grid |
 
 Keyframes: `marquee`, `orbit`, `orbit-reverse`, `ping-slow`.
+
+### The one page-scoped palette: `.seo-inner`
+
+The eleven sub-service pages under `/seo-services` run a deeper, more saturated
+take on the brand — indigo canvas, neon magenta accent, lilac light surface.
+Their values are seven `--sx-*` custom properties on `.seo-inner`, **not**
+`@theme` tokens, and they are read through arbitrary values
+(`bg-[var(--sx-canvas)]`).
+
+That is deliberate and is the rule for any future one-family palette: a `@theme`
+entry generates utilities for the whole build, so re-pointing `ink-900` or
+`magenta-500` would repaint all 36 service pages, the chrome and the homepage.
+The wrapper div in `components/services/SeoServicePage.tsx` is load-bearing — a
+section rendered outside it gets unset properties and paints transparent.
+
+`--sx-neon` (`#ff2fb0`) is close to `magenta-500` (`#cc067f`) but is not it, for
+the same reason `seo-pink` is its own token: close enough to look wrong if they
+drift, far enough apart to be visible side by side.
+
+One section in that family opts out of the two utilities: the hero. It paints
+`/assets/img/services/seo-inner/hero-bg.webp` — the supplied particle-wave
+backdrop — through `next/image` instead. `bg-mesh-sx` layered on top of that art
+lifted the band to a washed mid-purple, several stops lighter than the approved
+comp. Artwork wins over the mesh wherever a band has both; the mesh exists to
+give a band the atmosphere it does not otherwise have.
 
 ## Components
 

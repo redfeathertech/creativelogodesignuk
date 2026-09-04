@@ -33,8 +33,10 @@ export default function ContactHero({ trail }: { trail: readonly Crumb[] }) {
                 <Breadcrumbs trail={trail} className="mb-8" />
 
                 <div className="grid items-center gap-[clamp(2rem,1.5rem+4vw,4rem)] lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
-                    <div className="reveal">
-                        <Eyebrow>{contactHero.eyebrow}</Eyebrow>
+                    <div className="reveal max-lg:text-center">
+                        <Eyebrow className="max-lg:justify-center max-lg:[&>span]:hidden">
+                            {contactHero.eyebrow}
+                        </Eyebrow>
 
                         <SectionHeading
                             as="h1"
@@ -43,9 +45,11 @@ export default function ContactHero({ trail }: { trail: readonly Crumb[] }) {
                             trail={contactHero.titleTrail}
                         />
 
-                        <p className="mt-6 max-w-[62ch] text-lead text-white/65">{contactHero.lead}</p>
+                        <p className="mt-6 max-w-[62ch] text-lead text-white/65 max-lg:mx-auto">
+                            {contactHero.lead}
+                        </p>
 
-                        <div className="mt-8 flex flex-wrap gap-4">
+                        <div className="mt-8 flex flex-wrap gap-4 max-lg:justify-center">
                             {/* The icons are wrapped so the button recipe's
                                 `[&>svg]` arrow nudge does not reach them — it is
                                 meant for a trailing arrow, and on a leading icon

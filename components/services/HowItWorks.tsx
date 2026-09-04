@@ -8,7 +8,7 @@ export default function HowItWorks({ data }: { data: ServiceHowItWorks }) {
     return (
         <Section tone="dark">
             <div className="container-site">
-                <div className="reveal mx-auto max-w-[62ch] text-center">
+                <div className="reveal mx-auto max-w-[65ch] text-center">
                     <Eyebrow className="justify-center">{data.eyebrow}</Eyebrow>
                     <SectionHeading
                         lead={data.heading}

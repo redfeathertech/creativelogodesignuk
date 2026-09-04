@@ -1,30 +1,49 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { industries } from "@/content/landing/seo-services";
-import { Eyebrow, Section, SectionHeading } from "@/components/ui/Section";
-import { SeoIcon } from "./icons";
+import { Eyebrow, SectionHeading } from "@/components/ui/Section";
 
 /**
- * Industries — six vertical cards on the `darker` surface.
+ * Industries — six vertical cards, on the client's approved light composition.
  *
- * Three up at `lg` and two at `min-[576px]`, which is the two steps the live
- * `col-lg-4 col-md-6` grid makes and the same two the rest of the service
- * sections use. The cards take the hairline-ring treatment the site uses for a
- * dark card rather than the live page's second near-black panel colour.
+ * ─────────────────────────────────────────────────────────────────────────────
+ * 2026-09 REDESIGN
+ * ─────────────────────────────────────────────────────────────────────────────
  *
- * The live card titles are `h3`, so the levels already run h2 → h3 unbroken.
- * The closing line's "Get in touch" is `href="#"` on the live page; it points at
- * /contact-us here and stays an inline link rather than a pill, since it sits
- * mid-sentence.
+ * Was a `darker` section with inline glyphs; now the pale `#F9F9FC` canvas from
+ * the approved artwork, white cards on a hairline ring, and the client's own
+ * circular SVG icons. The closing line becomes a gradient-ringed callout with
+ * the warning mark, rather than a loose paragraph.
+ *
+ * **Layout only. No copy changed.** The heading is the same sentence, split at
+ * "Specific Industry" so the second half can take the brand gradient, and the
+ * closing line is the same sentence split at its first full stop so the
+ * question can head the callout — both still render contiguously, which is what
+ * `scripts/verify-seo-services-parity.py` checks in both directions.
+ *
+ * New strings are the `*Alt` values; keys ending `Alt` sit outside the parity
+ * script's copy set (`NOT_COPY`) by design, the icons being artwork the live
+ * page does not carry.
+ *
+ * Every card carries its own disc from the client's icon set, including
+ * `industry-professional-services.svg`, which arrived after the first pass.
  */
 export default function Industries() {
     return (
-        <Section tone="darker">
+        <section className="relative isolate bg-[#F9F9FC] py-section text-onlight">
             <div className="container-site">
                 <div className="reveal mx-auto max-w-[56rem] text-center">
-                    <Eyebrow className="justify-center">{industries.eyebrow}</Eyebrow>
-                    <SectionHeading lead={industries.title} className="mx-auto text-balance" />
-                    <p className="mx-auto mt-6 max-w-[62ch] text-lead text-white/65">
+                    <Eyebrow flanked className="justify-center">
+                        {industries.eyebrow}
+                    </Eyebrow>
+                    <SectionHeading
+                        lead={industries.titleLead}
+                        accent={industries.titleAccent}
+                        accentClassName="gradient-text-brand block"
+                        className="mx-auto text-balance"
+                    />
+                    <p className="mx-auto mt-6 max-w-[68ch] text-lead text-onlight/70">
                         {industries.description}
                     </p>
                 </div>
@@ -33,33 +52,50 @@ export default function Industries() {
                     {industries.items.map((item) => (
                         <li
                             key={item.title}
-                            className="reveal min-w-0 rounded-lg border border-white/[0.11] bg-white/[0.02] p-8 transition-[transform,border-color] duration-300 ease-out hover:-translate-y-1.5 hover:border-white/20"
+                            className="reveal min-w-0 rounded-lg border border-black/[0.07] bg-white p-7 shadow-[0_1px_2px_rgb(16_12_32/0.04),0_12px_28px_-18px_rgb(16_12_32/0.28)]"
                         >
-                            <span
-                                aria-hidden="true"
-                                className="mb-6 grid size-12 shrink-0 place-items-center rounded-md bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)] text-white"
-                            >
-                                <SeoIcon name={item.icon} className="size-5" />
-                            </span>
+                            <Image
+                                src={item.icon}
+                                alt={item.iconAlt}
+                                width={74}
+                                height={74}
+                                className="mb-5 size-14"
+                            />
 
-                            <h3 className="mb-2 text-h4 text-white">{item.title}</h3>
+                            <h3 className="mb-2 text-h4">{item.title}</h3>
 
-                            <p className="text-white/65">{item.text}</p>
+                            <p className="text-onlight/70">{item.text}</p>
                         </li>
                     ))}
                 </ul>
 
-                <p className="reveal mx-auto mt-12 max-w-[62ch] text-center text-white/65">
-                    {industries.bottomTextLead}{" "}
-                    <Link
-                        href="/contact-us"
-                        className="font-bold text-magenta-300 underline underline-offset-4 transition-colors duration-200 hover:text-white"
-                    >
-                        {industries.bottomLinkText}
-                    </Link>{" "}
-                    {industries.bottomTextTrail}
-                </p>
+                {/* The gradient ring is a padded gradient sheet with the white
+                    card sitting inside it — a border cannot carry a gradient. */}
+                <div className="reveal mt-10 rounded-lg overflow-hidden bg-[linear-gradient(97deg,var(--color-magenta-500)_0%,var(--color-violet-500)_100%)] p-[2px]">
+                    <div className="flex flex-col items-start gap-5 rounded-[calc(0.5rem_-_2px)] bg-clip-padding bg-white px-7 py-7 sm:flex-row sm:items-center sm:gap-7">
+                        <Image
+                            src={industries.calloutIcon}
+                            alt={industries.calloutIconAlt}
+                            width={100}
+                            height={72}
+                            className="h-14 w-auto shrink-0"
+                        />
+                        <div className="min-w-0">
+                            <h3 className="text-h4">{industries.calloutTitle}</h3>
+                            <p className="mt-1 text-onlight/70">
+                                {industries.bottomTextLead}{" "}
+                                <Link
+                                    href="/contact-us"
+                                    className="font-bold text-magenta-500 underline underline-offset-4 transition-colors duration-200 hover:text-violet-500"
+                                >
+                                    {industries.bottomLinkText}
+                                </Link>{" "}
+                                {industries.bottomTextTrail}
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </Section>
+        </section>
     );
 }

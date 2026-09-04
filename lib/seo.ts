@@ -10,7 +10,7 @@
 import type { Metadata } from "next";
 import { SITE_URL, site, contact, social, offices } from "@/content/site";
 import { allServiceLinks } from "@/content/nav";
-import { challenges } from "@/content/home";
+import { challenges, faq } from "@/content/home";
 
 /* Stable @id anchors. Uniqueness across pages matters — duplicated @ids are the
    single most common structured-data bug when porting from a template engine. */
@@ -146,20 +146,30 @@ function breadcrumbNode(path: string, trail: readonly { name: string; path: stri
     };
 }
 
-/** FAQPage built from the Challenges accordion. Answers are visible on the
-    page (inside <details>), which Google accepts. */
+/** FAQPage built from the homepage's two accordions — `Challenges` and the
+    `Faq` band above the footer. Answers are visible on the page (inside
+    <details>), which Google accepts. Both lists feed one node because a page
+    may only carry one FAQPage; they are disjoint by construction — see the
+    note above the `faq` export in content/home.ts. */
 function faqNode() {
     return {
         "@type": "FAQPage",
         "@id": `${SITE_URL}/#faq`,
-        mainEntity: challenges.items.map((item) => ({
-            "@type": "Question",
-            name: item.q,
-            acceptedAnswer: {
-                "@type": "Answer",
-                text: `${item.a} ${item.list.join(". ")}.`,
-            },
-        })),
+        mainEntity: [
+            ...challenges.items.map((item) => ({
+                "@type": "Question",
+                name: item.q,
+                acceptedAnswer: {
+                    "@type": "Answer",
+                    text: `${item.a} ${item.list.join(". ")}.`,
+                },
+            })),
+            ...faq.items.map((item) => ({
+                "@type": "Question",
+                name: item.q,
+                acceptedAnswer: { "@type": "Answer", text: item.a },
+            })),
+        ],
     };
 }
 

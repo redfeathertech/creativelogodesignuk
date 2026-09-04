@@ -84,7 +84,7 @@ export default function Toolbox() {
                         cannot be read out. It paints its own background, and
                         `background-clip` is not an inherited property, so the
                         parent's clip-to-text does not erase it. */}
-                    <h2 className="text-h2 lg:max-w-[11.5ch]">
+                    <h2 className="text-h2 lg:max-w-[12.5ch]">
                         {toolbox.titleLead}{" "}
                         <span className="gradient-text-brand relative">
                             {toolbox.titleAccent}
@@ -201,10 +201,10 @@ export default function Toolbox() {
                                 `break-words` stays as the backstop for a name none of
                                 this anticipates. */}
                             <span className="min-w-0 flex-1">
-                                <span className="block font-display text-[0.5rem] leading-[1.2] font-bold break-words text-onlight min-[22.5rem]:text-[0.5625rem] min-[23.5rem]:text-[0.625rem] min-[25rem]:text-[0.6875rem] min-[30rem]:text-xs min-[36rem]:text-sm md:text-base">
+                                <span className="block font-display text-[0.5rem] leading-[1.2] font-bold break-words text-onlight min-[22.5rem]:text-ui-9 min-[23.5rem]:text-ui-10 min-[25rem]:text-ui-11 min-[30rem]:text-xs min-[36rem]:text-sm md:text-base">
                                     {tool.name}
                                 </span>
-                                <span className="mt-0.5 block text-[0.4375rem] leading-[1.3] text-onlight-muted min-[22.5rem]:text-[0.5rem] min-[23.5rem]:text-[0.5625rem] min-[25rem]:text-[0.625rem] min-[30rem]:text-[0.6875rem] min-[36rem]:mt-1 min-[36rem]:text-xs">
+                                <span className="mt-0.5 block text-[0.4375rem] leading-[1.3] text-onlight-muted min-[22.5rem]:text-[0.5rem] min-[23.5rem]:text-ui-9 min-[25rem]:text-ui-10 min-[30rem]:text-ui-11 min-[36rem]:mt-1 min-[36rem]:text-xs">
                                     {tool.kind}
                                 </span>
                             </span>

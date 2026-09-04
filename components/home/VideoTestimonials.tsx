@@ -295,7 +295,7 @@ export default function VideoTestimonials() {
                                     )}
 
                                     <span className="flex min-w-0 flex-col">
-                                        <cite className="truncate font-display text-[0.9375rem] font-bold text-white not-italic">
+                                        <cite className="truncate font-display text-ui-15 font-bold text-white not-italic">
                                             {featured.client}
                                         </cite>
                                         <span className="truncate text-xs text-white/60">
@@ -349,7 +349,7 @@ export default function VideoTestimonials() {
 
                                         <span
                                             aria-hidden="true"
-                                            className="absolute top-1.5 left-1.5 rounded bg-ink-950/65 px-1.5 py-px font-display text-[0.625rem] font-bold text-white/90"
+                                            className="absolute top-1.5 left-1.5 rounded bg-ink-950/65 px-1.5 py-px font-display text-ui-10 font-bold text-white/90"
                                         >
                                             {item.duration}
                                         </span>
@@ -380,7 +380,7 @@ export default function VideoTestimonials() {
                                                 the name collapses to one word per
                                                 line. */}
                                             <span className="flex min-w-0 flex-col">
-                                                <cite className="font-display text-[0.9375rem] leading-tight font-bold text-white not-italic">
+                                                <cite className="font-display text-ui-15 leading-tight font-bold text-white not-italic">
                                                     {item.client}
                                                 </cite>
                                                 <span className="mt-0.5 text-xs text-magenta-300">
@@ -392,7 +392,7 @@ export default function VideoTestimonials() {
                                         </figcaption>
 
                                         <blockquote className="mt-2">
-                                            <p className="line-clamp-2 text-[0.8125rem] leading-[1.5] text-white/70">
+                                            <p className="line-clamp-2 text-ui-13 leading-[1.5] text-white/70">
                                                 {item.quote}
                                             </p>
                                         </blockquote>

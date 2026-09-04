@@ -54,6 +54,11 @@
     /* Named `mist` rather than `slate` so Tailwind's own slate ramp stays
      intact — partially overriding a built-in ramp yields mismatched shades. */
     --color-mist-100: #f7f6fa;
+
+    /* The lilac ground the 2026-09 /seo-services pricing block sits on.
+       A tint of the page’s magenta rather than the neutral `mist-100`, so
+       the white cards read as raised off it. */
+    --color-lilac-50: #f7f1fe;
     --color-mist-200: #ecebf1;
     --color-mist-300: #d8d6e0;
     --color-mist-400: #a9a5b8;
@@ -130,6 +135,36 @@
 
     --text-body: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
     --text-body--line-height: 1.65;
+
+    /* ---- UI ladder: the small type the fluid scale never covered ---------
+     Buttons, badges, eyebrows, trust indicators, nav links, card titles and
+     form labels all sit BELOW `--text-body`, and every one of them used to be
+     a hand-written arbitrary value (`text-[0.8125rem]`) scattered across 33
+     components. Arbitrary values are literals, so no viewport-banded override —
+     which can only work by re-declaring tokens — can ever reach them. As
+     tokens they are reachable, which is the point of the ladder even though
+     nothing re-declares them today.
+
+     Named for their pixel value at the default root size, and deliberately
+     interleaved with Tailwind's own 12/14/16/18 rungs (`text-xs`, `text-sm`,
+     `text-base`, `text-lg`) rather than replacing them, so the whole ladder is
+     10 · 11 · 12 · 13 · 14 · 15 · 16 · 17 · 18 · 19 · 21 and a component picks
+     the rung it wants. If either these or those four are ever re-declared, move
+     both together so the ladder steps as one piece.
+
+     No `--text-ui-*--line-height` is defined, and that is deliberate: Tailwind
+     emits a `line-height` declaration only when the companion key exists, so
+     these behave exactly like the arbitrary values they replaced — leading is
+     inherited, or set by the `leading-*` sitting next to them. Adding one here
+     would silently re-lead 60+ call sites. */
+    --text-ui-9: 0.5625rem;
+    --text-ui-10: 0.625rem;
+    --text-ui-11: 0.6875rem;
+    --text-ui-13: 0.8125rem;
+    --text-ui-15: 0.9375rem;
+    --text-ui-17: 1.0625rem;
+    --text-ui-19: 1.1875rem;
+    --text-ui-21: 1.3125rem;
 
     /* ---- layout --------------------------------------------------------- */
     /* 62rem = 992px, not Tailwind's 64rem: it is the breakpoint every two-column
@@ -323,6 +358,37 @@
      was on its own enough to push the hero past the fold at 1280x832. Restore
      it alongside the cue, not before. */
     --hero-foot: var(--spacing-hero-block);
+
+    /* ---- button metrics --------------------------------------------------
+       Only the CEILING of each pill's inline padding, plus its flat block
+       padding. `components/ui/button.ts` reads these as
+       `clamp(1.25rem, 0.85rem + 1.6vw, var(--btn-px-md))`, so the phone end of
+       that clamp — which exists to stop a 320px CTA hanging off the screen —
+       is untouched and only the desktop value moves. They live here rather
+       than in `@theme` because they generate no utility of their own. If the
+       type scale is ever stepped up, step these with it so a label that has
+       grown 2px is not sitting in the same pill it had at 1440. */
+    --btn-px-md: 1.75rem;
+    --btn-py-md: 0.9rem;
+    --btn-px-lg: 2.25rem;
+    --btn-py-lg: 1.05rem;
+
+    /* ---- /seo-services only ----------------------------------------------
+       The offer strip sits between the site header and that page's hero, so it
+       is the one thing `--hero-h` does not already account for. Declared here
+       and applied as a flat height on the strip itself — the same contract
+       TopBar and Nav keep with `--nav-h` — so the hero can subtract it and land
+       exactly on the fold instead of pushing its scroll cue off screen.
+
+       Two values because the strip wraps to two rows below `md`, where the
+       offer and the contact links no longer fit side by side. */
+    --offerbar-h: 4.5rem;
+}
+
+@media (width >= 48rem) {
+    :root {
+        --offerbar-h: 2.25rem;
+    }
 }
 
 /* Phone rhythm. The clamp above is viewport-driven, which still leaves ~62px of
@@ -620,6 +686,20 @@
     padding-bottom: 0.08em;
 }
 
+/* Same two brand stops as `gradient-text-brand`, but flat horizontal and the
+   other way round: magenta on the left, violet on the right. */
+@utility gradient-text-brand-lr {
+    background-image: linear-gradient(
+        90deg,
+        var(--color-magenta-500) 0%,
+        var(--color-violet-500) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    padding-bottom: 0.08em;
+}
+
 /* `/seo-services` only: the live page's `--rf-gradient-color`, magenta →
    coral → cream. It is a three-stop horizontal ramp, not the site's two-stop
    diagonal, so `gradient-text-brand` cannot stand in for it. Used on the H1
@@ -687,6 +767,121 @@
             rgb(24 207 171 / 0.13) 0%,
             transparent 70%
         );
+}
+
+/* ==========================================================================
+   The 11 SEO inner service pages (`/seo-services/<sub>`).
+
+   These run a deeper, more saturated take on the brand than the other 25
+   service pages: an indigo-violet canvas instead of `ink-900`, a neon magenta
+   accent instead of `magenta-500`, and a lilac rather than `mist-100` light
+   surface. Signed off from a full-page mock (2026-09).
+
+   Scoped to `.seo-inner` rather than added to `@theme` ON PURPOSE. A theme
+   token generates utilities for the whole build, so re-pointing `ink-900` or
+   `magenta-500` would repaint every other page on the site. These are plain
+   custom properties, read through arbitrary values (`bg-[var(--sx-canvas)]`),
+   so nothing outside the wrapper can see them.
+
+   Prefix `sx-` = "seo eXtended" — short enough to stay readable inside a
+   Tailwind arbitrary value.
+   ========================================================================== */
+.seo-inner {
+    /* Canvases. `canvas` is the section ground; `canvas-2` is the alternate
+       dark used where two dark sections meet and must read as two. */
+    --sx-canvas: #0a0221;
+    --sx-canvas-2: #11052e;
+    /* The accent is NOT `magenta-500` (#cc067f): the mock's pink is lifted
+       several stops so it still reads as neon against the deeper ground. */
+    --sx-neon: #ff2fb0;
+    --sx-violet: #9d4edd;
+    /* Card fill and hairlines on the dark canvas. */
+    --sx-card: rgb(255 255 255 / 0.035);
+    --sx-line: rgb(157 78 221 / 0.24);
+    --sx-line-hot: rgb(255 47 176 / 0.55);
+    /* Light surface. A tint of the accent, so white cards on it read as
+       raised rather than floating on a neutral grey. */
+    --sx-lilac: #f5effd;
+}
+
+/* The shared `Proposal` band ("RULE THE WEB!") is dark everywhere it renders,
+   but on the SEO sub-service pages it sits on the light lilac ground the
+   client asked for (#F8F2FF). Scoped to `.seo-inner` so the homepage and
+   /about-us copies of the same component keep their dark canvas. The decor
+   layers are dropped (a mesh + grain tuned for near-black reads as dirt on a
+   near-white ground) and every white-on-dark text colour is re-pointed to the
+   on-light pair — a background swap alone would leave the whole left column
+   invisible. */
+.seo-inner #proposal {
+    background-color: #f8f2ff;
+}
+
+.seo-inner #proposal > [aria-hidden="true"] {
+    display: none;
+}
+
+/* Only the left column: the white enquiry card on the right is already an
+   on-light surface, and repainting its <p>s would swallow the form's own
+   error colours. */
+.seo-inner #proposal > div > div:first-child h2,
+.seo-inner #proposal > div > div:first-child h3 {
+    color: var(--color-onlight);
+}
+
+.seo-inner #proposal > div > div:first-child p {
+    color: var(--color-onlight-muted);
+}
+
+/* The eyebrow is `magenta-300` — a pale pink built for a dark ground. */
+.seo-inner #proposal > div > div:first-child > span:first-child {
+    color: var(--color-magenta-500);
+}
+
+/* The white card needs a lighter shadow: the dark-canvas one reads as a smear
+   at 65% black against a near-white surface. */
+.seo-inner #proposal .shadow-\[0_30px_80px_-30px_rgb\(0_0_0\/0\.65\)\] {
+    box-shadow: 0 24px 60px -28px rgb(37 8 70 / 0.28);
+}
+
+/* The canvas behind every dark SEO-inner section: a magenta bloom top-left, a
+   violet one top-right and a deep violet wash rising from the floor. Warmer
+   and roughly twice as strong as `bg-mesh`, which is what separates this
+   family visually from the other service pages. */
+@utility bg-mesh-sx {
+    background-image:
+        radial-gradient(
+            62% 48% at 8% 4%,
+            rgb(255 47 176 / 0.2) 0%,
+            transparent 68%
+        ),
+        radial-gradient(
+            58% 50% at 92% 8%,
+            rgb(157 78 221 / 0.34) 0%,
+            transparent 70%
+        ),
+        radial-gradient(
+            80% 46% at 50% 104%,
+            rgb(102 46 145 / 0.42) 0%,
+            transparent 72%
+        );
+}
+
+/* Faint technical grid, as in the mock's dark bands. Two repeating linear
+   gradients rather than an image, masked so the lines fade out well before
+   the section edge and never draw a hard seam against the next surface. */
+@utility bg-grid-sx {
+    background-image:
+        repeating-linear-gradient(
+            90deg,
+            rgb(157 78 221 / 0.1) 0 1px,
+            transparent 1px 72px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            rgb(157 78 221 / 0.1) 0 1px,
+            transparent 1px 72px
+        );
+    mask-image: radial-gradient(72% 62% at 50% 40%, #000 0%, transparent 78%);
 }
 
 /* Footer canvas: a violet bloom in the top-left corner falling away to the
@@ -849,4 +1044,54 @@
         opacity: 1;
         transform: none;
     }
+}
+
+/* ---------------------------------------------------------------------------
+   Autofill.
+
+   Chrome/WebKit paint their own background on an autofilled control and ignore
+   `background-color` outright — the field flashes pale blue the moment the
+   browser fills a name or email, which is the one moment the form is supposed
+   to look untouched. The background sits *behind* box-shadow, so a huge inset
+   shadow in the field's own colour covers it; `-webkit-text-fill-color` is the
+   only way to override the forced text colour.
+
+   The shadow colour has to be opaque, but `Field` fills are translucent
+   (`bg-white/[0.04]` over the page, `#fff` on the light tone), so each control
+   declares its own flattened equivalent as `--field-fill` / `--field-ink`
+   arbitrary properties in `components/forms/Field.tsx`. The fallbacks below are
+   the dark tone, which is every form except /seo-services.
+
+   The absurd transition delay is not decoration: without it Chrome animates its
+   own background in over ~200ms before honouring the shadow, and the blue is
+   briefly visible anyway. Parking the transition past the heat death of the
+   form is the standard suppression. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px var(--field-fill, #170d25) inset !important;
+    box-shadow: 0 0 0 1000px var(--field-fill, #170d25) inset !important;
+    -webkit-text-fill-color: var(--field-ink, #fff) !important;
+    caret-color: var(--field-ink, #fff);
+    transition:
+        background-color 600000s 0s,
+        color 600000s 0s;
+}
+
+/* Autofilled text ignores the inherited font in some WebKit builds, and
+   ::first-line is the only selector that reaches it. */
+input:-webkit-autofill::first-line,
+textarea:-webkit-autofill::first-line {
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--field-ink, #fff);
 }

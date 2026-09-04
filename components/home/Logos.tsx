@@ -23,7 +23,7 @@ export default function Logos() {
       className="overflow-hidden bg-white py-[clamp(2.5rem,1.5rem+4vw,4.5rem)] text-onlight"
       aria-label="Clients we work with"
     >
-      <p className="mb-8 text-center text-xs tracking-[0.14em] text-onlight-muted uppercase">
+      <p className="mb-8 text-center text-sm font-semibold tracking-[0.14em] text-onlight-muted uppercase">
         {clientMarquee.label}
       </p>
 

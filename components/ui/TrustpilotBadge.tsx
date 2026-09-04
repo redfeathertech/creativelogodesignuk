@@ -137,7 +137,7 @@ export default function TrustpilotBadge({
       {rating && (
         <span
           className={cn(
-            "shrink-0 font-display text-sm leading-none font-extrabold text-white [@media(min-width:40rem)_and_(min-height:54rem)]:text-[0.95rem]",
+            "shrink-0 font-display text-sm leading-none font-extrabold text-white [@media(min-width:40rem)_and_(min-height:54rem)]:text-ui-15",
             full && "max-sm:text-[clamp(0.6875rem,3.4vw,1rem)]",
           )}
           aria-hidden="true"
