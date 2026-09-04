@@ -1,5 +1,6 @@
 import { routeByPath, type RouteEntry } from "@/content/routes";
 import { getServiceContent } from "@/content/services";
+import { seoProposalBenefits } from "@/content/home";
 import JsonLd from "@/components/JsonLd";
 import { pageGraph } from "@/lib/seo";
 
@@ -105,7 +106,7 @@ export default function SeoServicePage({ route }: { route: RouteEntry }) {
             />
 
             <Hero hero={content.hero} />
-            <Proposal source="seo-proposal" />
+            <Proposal source="seo-proposal" benefits={seoProposalBenefits} />
             <Plans data={content.howItWorks} />
             <Work data={content.howItWorks} />
             <Solutions data={content.solutions} />

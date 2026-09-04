@@ -32,8 +32,18 @@ import EnquiryForm from "@/components/forms/EnquiryForm";
  */
 export default function Proposal({
     source,
+    benefits = proposal.benefits,
 }: {
     source: "home-proposal" | "about-proposal" | "seo-proposal";
+    /* The three benefits, so a page can supply its own art set without a
+       second copy of this band. Copy is never overridden — see
+       `seoProposalBenefits` in content/home.ts. */
+    benefits?: readonly {
+        title: string;
+        body: string;
+        icon: string;
+        iconAlt: string;
+    }[];
 }) {
     return (
         <section
@@ -89,7 +99,7 @@ export default function Proposal({
                     </p>
 
                     <ul className="mt-10 grid gap-7 max-lg:text-start">
-                        {proposal.benefits.map((benefit) => (
+                        {benefits.map((benefit) => (
                             <li
                                 key={benefit.title}
                                 className="flex items-start gap-4 sm:gap-5"

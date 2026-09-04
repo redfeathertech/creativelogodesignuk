@@ -804,6 +804,45 @@
     --sx-lilac: #f5effd;
 }
 
+/* The shared `Proposal` band ("RULE THE WEB!") is dark everywhere it renders,
+   but on the SEO sub-service pages it sits on the light lilac ground the
+   client asked for (#F8F2FF). Scoped to `.seo-inner` so the homepage and
+   /about-us copies of the same component keep their dark canvas. The decor
+   layers are dropped (a mesh + grain tuned for near-black reads as dirt on a
+   near-white ground) and every white-on-dark text colour is re-pointed to the
+   on-light pair — a background swap alone would leave the whole left column
+   invisible. */
+.seo-inner #proposal {
+    background-color: #f8f2ff;
+}
+
+.seo-inner #proposal > [aria-hidden="true"] {
+    display: none;
+}
+
+/* Only the left column: the white enquiry card on the right is already an
+   on-light surface, and repainting its <p>s would swallow the form's own
+   error colours. */
+.seo-inner #proposal > div > div:first-child h2,
+.seo-inner #proposal > div > div:first-child h3 {
+    color: var(--color-onlight);
+}
+
+.seo-inner #proposal > div > div:first-child p {
+    color: var(--color-onlight-muted);
+}
+
+/* The eyebrow is `magenta-300` — a pale pink built for a dark ground. */
+.seo-inner #proposal > div > div:first-child > span:first-child {
+    color: var(--color-magenta-500);
+}
+
+/* The white card needs a lighter shadow: the dark-canvas one reads as a smear
+   at 65% black against a near-white surface. */
+.seo-inner #proposal .shadow-\[0_30px_80px_-30px_rgb\(0_0_0\/0\.65\)\] {
+    box-shadow: 0 24px 60px -28px rgb(37 8 70 / 0.28);
+}
+
 /* The canvas behind every dark SEO-inner section: a magenta bloom top-left, a
    violet one top-right and a deep violet wash rising from the floor. Warmer
    and roughly twice as strong as `bg-mesh`, which is what separates this

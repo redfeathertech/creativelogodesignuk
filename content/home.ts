@@ -1147,6 +1147,33 @@ export const proposal = {
     },
 } as const;
 
+
+/* The same three benefits, with the SEO art set.
+
+   Only the icons differ — every string is `proposal.benefits`' string, mapped
+   by title, so the two bands can never drift in copy and the parity gate has
+   nothing new to walk. Rendered by the `Proposal` band on the SEO sub-service
+   pages only (components/services/SeoServicePage.tsx); the homepage and
+   /about-us keep the home set. */
+const SEO_PROPOSAL_ICONS: Record<string, { icon: string; iconAlt: string }> = {
+    "Tailored Strategies": {
+        icon: "/assets/img/seo/proposal/benefit-strategies.svg",
+        iconAlt: "Icon for SEO strategies tailored to your goals",
+    },
+    "Proven Results": {
+        icon: "/assets/img/seo/proposal/benefit-results.svg",
+        iconAlt: "Icon for proven, measurable SEO results",
+    },
+    "Reliable Support": {
+        icon: "/assets/img/seo/proposal/benefit-support.svg",
+        iconAlt: "Icon for reliable, ongoing SEO support",
+    },
+};
+
+export const seoProposalBenefits = proposal.benefits.map((benefit) => ({
+    ...benefit,
+    ...SEO_PROPOSAL_ICONS[benefit.title],
+}));
 /* ============================== FAQ SECTION ==============================
 
    Net-new band, added 2026-09 between the Proposal form and the footer. There
