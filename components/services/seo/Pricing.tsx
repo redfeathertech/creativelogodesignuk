@@ -187,6 +187,19 @@ export default function Pricing() {
                                     {pricing.ctaButton}
                                 </QuoteButton>
                             </div>
+
+                            {/* Decorative. Sits at the right edge from `md` up,
+                                where the row is horizontal and there is width to
+                                spare; below that the banner is a narrow stack and
+                                the artwork would only push the CTA down the fold. */}
+                            <Image
+                                src={pricing.ctaImage}
+                                alt=""
+                                aria-hidden="true"
+                                width={pricing.ctaImageWidth}
+                                height={pricing.ctaImageHeight}
+                                className="ml-auto hidden h-auto w-[14rem] shrink-0 self-center md:block lg:w-[17.875rem]"
+                            />
                         </div>
                     </div>
                 </div>

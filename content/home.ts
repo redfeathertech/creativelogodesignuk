@@ -1146,3 +1146,50 @@ export const proposal = {
         assurances: ["Expert Advice", "Prompt Response", "100% Confidential "],
     },
 } as const;
+
+/* ============================== FAQ SECTION ==============================
+
+   Net-new band, added 2026-09 between the Proposal form and the footer. There
+   is no live-site equivalent, so nothing here is parity-bound in the reverse
+   direction — but every string below still has to render, which
+   scripts/verify-home-parity.mjs enforces forward.
+
+   Deliberately NOT a second copy of `challenges`: that band answers "what is
+   going wrong in your business", each item ending in a service link. This one
+   answers the practical pre-sales questions — cost, timeline, ownership,
+   contracts — that a visitor who has read the whole page still has left. The
+   two sets share no question, which is what keeps the single homepage FAQPage
+   node in lib/seo.ts free of duplicates. */
+
+export const faq = {
+    eyebrow: "FAQ",
+    titleLead: "Frequently Asked",
+    titleAccent: "Questions",
+    lead: "Find quick answers to the questions we are asked most about working with our design, development and marketing team.",
+    items: [
+        {
+            q: "What services does a full service design agency in the UK offer?",
+            a: "A full service agency in the UK offers a range of services that include branding, web design, web development, app development, digital marketing and automation. These agencies bring together all these services under one roof so that the team works as a unit. This means smoother handovers between departments, clearer accountability and a more consistent customer experience across the brand, the website and growth efforts.",
+        },
+        {
+            q: "How much should a small business budget for a website in the UK?",
+            a: "When it comes to how much a small business should budget for a website in the UK, the cost can vary a lot. It depends on the size of the site, how many pages there are, what functionality is needed, how much content must be created and how much custom design is required. We always start by understanding your goals and needs. Then we provide a proposal that matches your actual project, so the budget reflects what you really need, not a guessed number.",
+        },
+        {
+            q: "How long does it take to build a website or app?",
+            a: "The time it takes to build a website or app depends on several factors. These include the project scope, the complexity of the design, any integrations with other systems and how quickly content is ready. It also depends on how fast feedback is given. Before we begin we agree on milestones and set a clear timeline. We keep each stage visible so you know exactly what is happening and can see how decisions might affect the launch date.",
+        },
+        {
+            q: "Do you work with businesses outside London?",
+            a: "Yes, we work with businesses outside London. We have worked with clients across the UK as well as in the USA and UAE. We use calls, shared feedback tools and clear checkpoints to manage projects, so location does not make collaboration harder. We make sure the process stays smooth no matter where you are.",
+        },
+        {
+            q: "Who owns the design files and website after the project is finished?",
+            a: "This is clearly stated in the proposal or contract before work begins. We do not publish a promise about ownership until the details are confirmed with you. This includes source files, licences, hosting, code and any third party assets, so both sides understand exactly what is included and what is not.",
+        },
+        {
+            q: "What happens if I need changes after the site goes live?",
+            a: "Post launch support is explained before the project is signed off. We set out what kind of support is available, how maintenance works and how changes are handled. This is confirmed with you first — what is included, what is chargeable and how ongoing requests are managed — so everything is fair and clear from the start.",
+        },
+    ],
+} as const;

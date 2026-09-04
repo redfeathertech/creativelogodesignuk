@@ -745,6 +745,11 @@ export const pricing = {
     ctaIcon: "/assets/img/services/seo/pricing-ready.svg",
     ctaIconWidth: 100,
     ctaIconHeight: 72,
+    /* Decorative artwork for the right edge of the banner. Purely visual — it
+       carries an empty alt and adds no copy to the page. */
+    ctaImage: "/assets/img/services/seo/cta-not-ready.webp",
+    ctaImageWidth: 286,
+    ctaImageHeight: 173,
 } as const;
 
 /* ------------------------------------------------------------------- FAQ -- */
