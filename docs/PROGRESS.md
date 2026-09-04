@@ -2,6 +2,101 @@
 
 Where the rebuild stands. Update this at the end of each working session.
 
+## Done — 4 Sep 2026 · The 11 SEO inner service pages got their own design
+
+`/seo-services/seo-audit`, `/seo-services/technical-seo` and the nine beside
+them used to render through `components/services/ServicePage` — the same twelve
+shared sections as the other 25 service pages. They now render their own set
+from `components/services/seo-inner/`, built to the client's approved full-page
+mock: a deeper indigo canvas, a neon magenta accent and a lilac light surface.
+
+**This is a layout change. `content/` was not touched at all.** Every section
+still renders its own page's copy, so `scripts/verify-content-parity.py` is
+unaffected by construction — nothing it reads changed.
+
+### The eleven
+
+`seo-audit` · `technical-seo` · `on-page-seo` · `link-building` · `local-seo` ·
+`ecommerce-seo` · `shopify-seo` · `wordpress-seo` · `amazon-seo` · `aeo` ·
+`keyword-research`
+
+Selected in `ServicePage` by the path prefix `/seo-services/`, not by a list of
+eleven slugs, so a twelfth page added under the pillar joins the family with no
+second place to update. The pillar itself is `/seo-services` exactly — a static
+route in `(site)` — and does not match.
+
+### The palette is scoped, not themed
+
+`.seo-inner` in `app/globals.css` declares seven custom properties (`--sx-*`)
+plus two utilities, `bg-mesh-sx` and `bg-grid-sx`. **Nothing went into
+`@theme`.** A theme token generates utilities for the whole build, so
+re-pointing `ink-900` or `magenta-500` to the mock's deeper values would have
+repainted every other page on the site. The wrapper div in `SeoServicePage` is
+load-bearing: a section rendered outside it gets unset properties and paints
+transparent.
+
+`--sx-neon` is `#ff2fb0`, not `magenta-500`'s `#cc067f` — the mock's pink is
+lifted several stops so it still reads as neon against the deeper ground.
+
+### What moved, and what did not
+
+- The recent-work rail left the "how it works" band and became a light section
+  of its own.
+- The `Proposal` band was added between the hero and the plan cards. It is the
+  homepage's component, exactly as `/seo-services` already renders it, and posts
+  the same `seo-proposal` source.
+- The client wall is `components/services/seo/Clients` — the light, full-colour
+  wall the SEO pillar already uses — rather than the shared dark one, which
+  would have dropped a near-black block between two light sections.
+- The hero's four quick-link tiles (Mobile App / Website / Branding / Social
+  Media) are not rendered on these eleven pages at all. The shared hero shows
+  them as an image panel and this one briefly showed them as a pill row; the
+  approved comp has neither, and the freed width went to the artwork — the copy
+  grid moved from `6fr/5fr` to `11fr/10fr` and the illustration's cap from
+  `520px` to `720px` (its source is 776px square, so it still never upscales).
+
+  **The link graph is intact**, which is the one thing CONTENT-PARITY.md does
+  not let a layout change touch. Through `currentPath` the four resolve to
+  `/app-development-services`, `/web-design-services`, `/branding-services` and
+  `/digital-marketing-services/social-media-marketing`, and `content/nav.ts`
+  lists every one of them — so all four stay linked from the chrome on these
+  pages, via both the desktop mega-menu and the mobile drawer. `content/` still
+  carries the tiles untouched, and the other 25 service pages still render them.
+- The hero band's backdrop is the supplied `hero.webp`, shipped as
+  `public/assets/img/services/seo-inner/hero-bg.webp` and painted through
+  `next/image` (1920x885, `object-cover object-bottom`, `quality={90}` — a
+  near-black gradient with a fine particle dither bands at the default 75).
+  It **replaces** `bg-mesh-sx` and `bg-grid-sx` in that one section rather than
+  layering over them: the art carries its own bloom, and the mesh on top of it
+  read as a washed mid-purple where the comp is near-black. The other dark
+  bands keep both utilities.
+- **Nothing was cut.** The `about` slides and the `marquee` line have no band in
+  the mock but are kept — the slides are indexed body copy, and dropping a
+  section is a content change, not a layout one.
+
+### Two content-shaped layout decisions
+
+- `Numbers` steps the figure from `text-h3` down to `text-h5` when a stat's
+  `suffix` is a clause rather than a symbol ("Over 20 years in SEO and online
+  marketing"). Every character still renders; at `text-h3` it filled the tile
+  and swamped its own label.
+- `Capabilities` cards carry the mark and the label only. The schema has no body
+  copy for the six items, and the mock's per-card paragraph would have been
+  invented copy on eleven pages.
+
+### Verified
+
+- `npx tsc --noEmit` clean; `npx eslint` clean on everything new (the two
+  warnings in `components/services/Hero.tsx` are pre-existing).
+- `npm run build` — 94 pages, every route ○ or ●, nothing ƒ.
+- `scripts/audit-responsive.mjs` — all 11 pages, 12 default widths, 0 failing;
+  plus a 15-width sweep of `/seo-services/seo-audit` across both sides of the
+  576px and 1024px breakpoints this design introduces.
+- `scripts/verify-content-parity.py` **could not be run in this session** — it
+  needs `clduk/_migration_backup/baseline` beside the repo and that checkout is
+  not on this machine. No file under `content/` was modified, so its result
+  cannot have changed; run it before merging anyway.
+
 ## Done — 22 Aug 2026 · Two real hero defects, and the reason they shipped
 
 Reported from a live 320px screenshot and a 1342px one: the primary hero CTA ran

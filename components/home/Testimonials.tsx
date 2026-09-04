@@ -54,14 +54,16 @@ export default function Testimonials() {
 
                 {/* Capped at exactly three cards plus their two gaps —
                     3 x 21.5rem + 2 x 1.5rem = 67.5rem — so the row ends on a
-                    card edge instead of slicing the third one. From 2560px
-                    (160rem) up the cap moves to four cards plus three gaps —
-                    4 x 21.5rem + 3 x 1.5rem = 90.5rem — which still sits well
-                    inside the 2160px container that band gives us, so the row
-                    reads four-up on a 1440p or scaled-4K panel.
-                    `container-site` runs to 1560px, which would put four and a
-                    half cards on the row and leave the head floating over a
-                    band twice its width.
+                    card edge instead of slicing the third one. From 1544px
+                    (96.5rem) up the cap moves to four cards plus three gaps —
+                    4 x 21.5rem + 3 x 1.5rem = 90.5rem — so the row reads
+                    four-up on a desktop panel. 96.5rem is the smallest width
+                    where four whole cards fit: the gutter is capped at 3rem a
+                    side, so 90.5rem + 2 x 3rem = 96.5rem. Below that the
+                    fourth card would be sliced, which is what the three-card
+                    cap exists to prevent. `container-site` runs to 1560px,
+                    which unbounded would put four and a half cards on the row
+                    and leave the head floating over a band twice its width.
 
                     `grid-cols-[minmax(0,1fr)]` is load-bearing, not decoration:
                     a grid item defaults to `min-width: auto` — its min-content
@@ -69,7 +71,7 @@ export default function Testimonials() {
                     min-content is the full card, which blows the column out
                     past the viewport and pushes the whole document sideways on
                     a phone. */}
-                <div className="reveal mx-auto mt-12 grid max-w-[67.5rem] grid-cols-[minmax(0,1fr)] min-[160rem]:max-w-[90.5rem]">
+                <div className="reveal mx-auto mt-12 grid max-w-[67.5rem] grid-cols-[minmax(0,1fr)] min-[96.5rem]:max-w-[90.5rem]">
                     <Rail
                         label="Client testimonials"
                         count={testimonials.items.length}

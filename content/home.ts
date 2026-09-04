@@ -76,7 +76,7 @@ export const hero = {
         logoAlt: "Trustpilot",
         stars: 5,
         rating: "4.9",
-        reviewCount: "Based 134 Reviews",
+        reviewCount: "Based 137 Reviews",
     },
 } as const;
 

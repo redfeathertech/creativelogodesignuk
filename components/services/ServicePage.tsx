@@ -15,6 +15,7 @@ import Clients from "./Clients";
 import Process from "./Process";
 import Capabilities from "./Capabilities";
 import Cta from "./Cta";
+import SeoServicePage from "./SeoServicePage";
 
 /**
  * Renders one of the 36 "service" group routes from content/routes.ts.
@@ -22,8 +23,19 @@ import Cta from "./Cta";
  * Every one of them now has real content mapped in content/services/index.ts,
  * which asserts that completeness at module load — so the throw below is a
  * guard for the type, not a path any build reaches.
+ *
+ * The eleven sub-services under `/seo-services` are the exception: since the
+ * 2026-09 redesign they render their own section set. See {@link SeoServicePage}.
  */
 export default function ServicePage({ route }: { route: RouteEntry }) {
+  /* A path prefix rather than a list of eleven slugs, so a twelfth page added
+     under the pillar joins the family without a second place to update. The
+     pillar itself is `/seo-services` exactly — a static route in `(site)` —
+     and does not match. */
+  if (route.path.startsWith("/seo-services/")) {
+    return <SeoServicePage route={route} />;
+  }
+
   const content = getServiceContent(route.path);
 
   if (!content) {

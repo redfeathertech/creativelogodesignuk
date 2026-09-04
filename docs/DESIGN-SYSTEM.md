@@ -138,8 +138,35 @@ short; reach for utilities first.
 | `mask-edges` | Fades the marquee in/out at both edges |
 | `.reveal` / `.reveal.is-visible` | Scroll-reveal states |
 | `.accordion` | `<details>` open/close height transition (`::details-content`) |
+| `.seo-inner` | Page-scoped palette for the 11 SEO sub-service pages (below) |
+| `bg-mesh-sx` · `bg-grid-sx` | That family's mesh and technical grid |
 
 Keyframes: `marquee`, `orbit`, `orbit-reverse`, `ping-slow`.
+
+### The one page-scoped palette: `.seo-inner`
+
+The eleven sub-service pages under `/seo-services` run a deeper, more saturated
+take on the brand — indigo canvas, neon magenta accent, lilac light surface.
+Their values are seven `--sx-*` custom properties on `.seo-inner`, **not**
+`@theme` tokens, and they are read through arbitrary values
+(`bg-[var(--sx-canvas)]`).
+
+That is deliberate and is the rule for any future one-family palette: a `@theme`
+entry generates utilities for the whole build, so re-pointing `ink-900` or
+`magenta-500` would repaint all 36 service pages, the chrome and the homepage.
+The wrapper div in `components/services/SeoServicePage.tsx` is load-bearing — a
+section rendered outside it gets unset properties and paints transparent.
+
+`--sx-neon` (`#ff2fb0`) is close to `magenta-500` (`#cc067f`) but is not it, for
+the same reason `seo-pink` is its own token: close enough to look wrong if they
+drift, far enough apart to be visible side by side.
+
+One section in that family opts out of the two utilities: the hero. It paints
+`/assets/img/services/seo-inner/hero-bg.webp` — the supplied particle-wave
+backdrop — through `next/image` instead. `bg-mesh-sx` layered on top of that art
+lifted the band to a washed mid-purple, several stops lighter than the approved
+comp. Artwork wins over the mesh wherever a band has both; the mesh exists to
+give a band the atmosphere it does not otherwise have.
 
 ## Components
 

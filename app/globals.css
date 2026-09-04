@@ -769,6 +769,82 @@
         );
 }
 
+/* ==========================================================================
+   The 11 SEO inner service pages (`/seo-services/<sub>`).
+
+   These run a deeper, more saturated take on the brand than the other 25
+   service pages: an indigo-violet canvas instead of `ink-900`, a neon magenta
+   accent instead of `magenta-500`, and a lilac rather than `mist-100` light
+   surface. Signed off from a full-page mock (2026-09).
+
+   Scoped to `.seo-inner` rather than added to `@theme` ON PURPOSE. A theme
+   token generates utilities for the whole build, so re-pointing `ink-900` or
+   `magenta-500` would repaint every other page on the site. These are plain
+   custom properties, read through arbitrary values (`bg-[var(--sx-canvas)]`),
+   so nothing outside the wrapper can see them.
+
+   Prefix `sx-` = "seo eXtended" — short enough to stay readable inside a
+   Tailwind arbitrary value.
+   ========================================================================== */
+.seo-inner {
+    /* Canvases. `canvas` is the section ground; `canvas-2` is the alternate
+       dark used where two dark sections meet and must read as two. */
+    --sx-canvas: #0a0221;
+    --sx-canvas-2: #11052e;
+    /* The accent is NOT `magenta-500` (#cc067f): the mock's pink is lifted
+       several stops so it still reads as neon against the deeper ground. */
+    --sx-neon: #ff2fb0;
+    --sx-violet: #9d4edd;
+    /* Card fill and hairlines on the dark canvas. */
+    --sx-card: rgb(255 255 255 / 0.035);
+    --sx-line: rgb(157 78 221 / 0.24);
+    --sx-line-hot: rgb(255 47 176 / 0.55);
+    /* Light surface. A tint of the accent, so white cards on it read as
+       raised rather than floating on a neutral grey. */
+    --sx-lilac: #f5effd;
+}
+
+/* The canvas behind every dark SEO-inner section: a magenta bloom top-left, a
+   violet one top-right and a deep violet wash rising from the floor. Warmer
+   and roughly twice as strong as `bg-mesh`, which is what separates this
+   family visually from the other service pages. */
+@utility bg-mesh-sx {
+    background-image:
+        radial-gradient(
+            62% 48% at 8% 4%,
+            rgb(255 47 176 / 0.2) 0%,
+            transparent 68%
+        ),
+        radial-gradient(
+            58% 50% at 92% 8%,
+            rgb(157 78 221 / 0.34) 0%,
+            transparent 70%
+        ),
+        radial-gradient(
+            80% 46% at 50% 104%,
+            rgb(102 46 145 / 0.42) 0%,
+            transparent 72%
+        );
+}
+
+/* Faint technical grid, as in the mock's dark bands. Two repeating linear
+   gradients rather than an image, masked so the lines fade out well before
+   the section edge and never draw a hard seam against the next surface. */
+@utility bg-grid-sx {
+    background-image:
+        repeating-linear-gradient(
+            90deg,
+            rgb(157 78 221 / 0.1) 0 1px,
+            transparent 1px 72px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            rgb(157 78 221 / 0.1) 0 1px,
+            transparent 1px 72px
+        );
+    mask-image: radial-gradient(72% 62% at 50% 40%, #000 0%, transparent 78%);
+}
+
 /* Footer canvas: a violet bloom in the top-left corner falling away to the
    near-black page colour on the diagonal. Three layers rather than one because
    a single linear ramp reads as a flat band across a 1560px-wide element — the
