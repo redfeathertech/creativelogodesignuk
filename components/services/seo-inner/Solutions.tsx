@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import type { ServiceSolutions } from "@/content/services/types";
 import { LeadButton } from "@/components/chrome/LeadPanel";
-import { SxEyebrow, SxHeading, SxSection } from "./Shell";
+import { SX_RAMP_DEEP, SxEyebrow, SxHeading, SxSection } from "./Shell";
 
 /**
  * "What we do" — artwork left, pitch and CTA right, on the lilac ground.
@@ -14,7 +14,7 @@ import { SxEyebrow, SxHeading, SxSection } from "./Shell";
  */
 export default function Solutions({ data }: { data: ServiceSolutions }) {
     return (
-        <SxSection tone="lilac">
+        <SxSection tone="lilac-soft">
             <div className="container-site grid items-center gap-[clamp(2.5rem,1.5rem+5vw,5rem)] lg:grid-cols-2">
                 <div className="reveal min-w-0">
                     <Image
@@ -29,7 +29,11 @@ export default function Solutions({ data }: { data: ServiceSolutions }) {
 
                 <div className="reveal min-w-0">
                     <SxEyebrow tone="light">{data.eyebrow}</SxEyebrow>
-                    <SxHeading lead={data.heading} accent={data.headingAccent} />
+                    <SxHeading
+                        lead={data.heading}
+                        accent={data.headingAccent}
+                        ramp={SX_RAMP_DEEP}
+                    />
                     <p className="mt-6 max-w-[62ch] text-lead text-onlight-muted">
                         {data.lead}
                     </p>

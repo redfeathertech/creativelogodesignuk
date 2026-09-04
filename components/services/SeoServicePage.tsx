@@ -11,11 +11,9 @@ import Hero from "./seo-inner/Hero";
 import Plans from "./seo-inner/Plans";
 import Work from "./seo-inner/Work";
 import Solutions from "./seo-inner/Solutions";
-import Marquee from "./seo-inner/Marquee";
 import Benefits from "./seo-inner/Benefits";
 import Numbers from "./seo-inner/Numbers";
 import WhyChoose from "./seo-inner/WhyChoose";
-import About from "./seo-inner/About";
 import Process from "./seo-inner/Process";
 import Capabilities from "./seo-inner/Capabilities";
 import Cta from "./seo-inner/Cta";
@@ -39,7 +37,10 @@ import Cta from "./seo-inner/Cta";
  * `scripts/verify-content-parity.py` passes unchanged. What moved:
  *
  * - The recent-work rail left the "how it works" band and became a light
- *   section of its own, as the mock arranges it.
+ *   section of its own, as the mock arranges it. Its cards are now the six
+ *   real portfolio pieces from `content/seo-work.ts` rather than the untitled
+ *   shared service art: the mock captions every card, and captioning the art
+ *   would have meant inventing project names. See that file's header.
  * - The `Proposal` band was added between the hero and the plan cards. It is
  *   the homepage's, exactly as `/seo-services` already renders it, and posts
  *   the same `seo-proposal` source so the team's notification email keeps
@@ -51,9 +52,21 @@ import Cta from "./seo-inner/Cta";
  *   four hrefs; only the artwork panel is gone, and the mock has no room for
  *   it.
  *
- * Nothing was cut. The `about` slides and the `marquee` line have no band in
- * the mock but are kept — the slides are indexed body copy, and dropping a
- * section is a content change.
+ * Two things WERE cut, on the client's instruction:
+ *
+ * - the scrolling `marquee` band ("Amplify your brand identity"). The mock has
+ *   no band for it, and it was dropped here rather than kept.
+ * - the `about` slides ("Our SEO Work"). The mock has no band for these
+ *   either. This one costs more than the marquee did: it is several paragraphs
+ *   of indexed body copy that the live page carries and these pages now do
+ *   not. Cut on an explicit instruction after that was put to the client.
+ *
+ * `content.marquee` and `content.about` are both untouched, the other 25
+ * service pages still render them through `components/services/Marquee` and
+ * `components/services/About`, and `scripts/verify-content-parity.py` walks
+ * content against the live HTML rather than against what we render, so it is
+ * unaffected. These are per-page omissions, not content edits — and they are
+ * the only strings on these pages that the rebuild does not render.
  *
  * The wrapping `.seo-inner` div is load-bearing: it is what scopes the palette.
  * A section rendered outside it falls back to unset custom properties and
@@ -108,13 +121,11 @@ export default function SeoServicePage({ route }: { route: RouteEntry }) {
             <Hero hero={content.hero} />
             <Proposal source="seo-proposal" benefits={seoProposalBenefits} />
             <Plans data={content.howItWorks} />
-            <Work data={content.howItWorks} />
+            <Work />
             <Solutions data={content.solutions} />
-            <Marquee data={content.marquee} />
             <Benefits data={content.benefits} />
             <Numbers data={content.advantages} />
             <WhyChoose data={content.whyChoose} />
-            <About data={content.about} />
             <SeoClients />
             <Process data={content.process} />
             <Capabilities data={content.capabilities} />

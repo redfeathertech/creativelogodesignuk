@@ -1,154 +1,110 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 import type { ServiceBenefits } from "@/content/services/types";
 import { whatYouGet } from "@/content/home";
-import { ChevronDown } from "@/components/ui/icons";
+import { Eyebrow } from "@/components/ui/Section";
 import { cn } from "@/lib/cn";
-import { SxEyebrow, SxHeading } from "./Shell";
+
+/** The band's artwork, as supplied — one flat image, nothing composited in. */
+const ART = "/assets/img/services/seo-inner/client-benefits.webp";
 
 /**
- * The five client benefits as a vertical tab list, with the selected one's
- * screenshot cross-fading inside the monitor.
+ * "Client benefits" — rebuilt as the homepage's "What We Deliver" band.
  *
- * Same contract as the shared `components/services/Benefits`: a full ARIA
- * tablist with arrow-key navigation, and every panel stays in the DOM
- * (`hidden`, never unmounted) so all five descriptions are crawlable without
- * JavaScript. What differs is the surface and the column order, which the mock
- * flips — the list leads on the left and the monitor sits under the heading on
- * the right.
+ * Same arrangement, same surface and the same controls as
+ * `components/home/WhatYouGet`: the five cards hold the left column, the
+ * heading with its proof strip and the artwork share the right, and the band
+ * sits on the homepage's `offer-bg` backdrop rather than the seo-inner canvas.
+ * The client asked for the two sections to match, so the treatment is taken
+ * from there wholesale rather than re-derived here.
  *
- * The three proof badges are the homepage's, imported rather than re-declared.
- * They are net-new UI chrome with no live equivalent (see the note on
- * `whatYouGet.benefits` in content/home.ts), so sharing them adds no page copy
- * that has to be kept in parity with anything.
+ * Two consequences of that, both deliberate:
+ *
+ * 1. **Every card's body is always visible** and the artwork does not change
+ *    with the selection, so the cards are a highlight control and not an
+ *    accordion or a tab list — `aria-pressed` buttons in a `role="group"`, as
+ *    on the homepage. The earlier pass here was a real `tablist` because each
+ *    item swapped a screenshot into a monitor; with one flat image that
+ *    contract would be a lie.
+ * 2. **`item.image` goes unrendered.** The per-item screenshots stay in
+ *    `content/services/*` untouched — no copy moves either way, and nothing in
+ *    `scripts/verify-content-parity.py` covers them — but this band no longer
+ *    has a surface to show them on.
+ *
+ * One thing the homepage has that this band does not: the chevron pill on the
+ * right of each card. Dropped on the client's instruction. It was `aria-hidden`
+ * chrome, and with no panel to disclose the fill already says which card is
+ * selected.
+ *
+ * The three proof badges are the homepage's, imported rather than re-declared;
+ * they are net-new UI chrome with no live equivalent (see the note on
+ * `whatYouGet.benefits` in content/home.ts).
  */
 export default function Benefits({ data }: { data: ServiceBenefits }) {
     const [active, setActive] = useState(0);
-    const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-
-    const onKeyDown = (event: React.KeyboardEvent, index: number) => {
-        const last = data.items.length - 1;
-        let next: number | null = null;
-
-        if (event.key === "ArrowDown" || event.key === "ArrowRight")
-            next = index === last ? 0 : index + 1;
-        if (event.key === "ArrowUp" || event.key === "ArrowLeft")
-            next = index === 0 ? last : index - 1;
-        if (event.key === "Home") next = 0;
-        if (event.key === "End") next = last;
-
-        if (next === null) return;
-        event.preventDefault();
-        setActive(next);
-        tabRefs.current[next]?.focus();
-    };
 
     return (
-        <section className="relative isolate overflow-hidden bg-[var(--sx-canvas)] py-section text-white">
-            <div
-                className="pointer-events-none absolute inset-0 -z-10 bg-mesh-sx"
+        <section className="relative isolate overflow-hidden bg-ink-950 py-section text-white">
+            <Image
+                src={whatYouGet.background}
+                alt={whatYouGet.backgroundAlt}
                 aria-hidden="true"
+                width={1920}
+                height={1039}
+                sizes="100vw"
+                quality={90}
+                className="pointer-events-none absolute inset-0 -z-10 size-full object-cover object-right-bottom"
             />
-            <div
-                className="pointer-events-none absolute inset-0 -z-10 bg-noise opacity-[0.35] mix-blend-overlay"
-                aria-hidden="true"
-            />
 
-            {/* `lg:items-center`, not `items-start`: the tab list is a fixed
-                five cards while the right column is heading + badges + a
-                monitor, and the right side always runs the taller of the two.
-                Aligning to the start banked all of that difference as dead
-                space under the last tab; centring splits it. */}
-            <div className="relative container-site grid items-start gap-[clamp(2.5rem,1.5rem+5vw,4.5rem)] lg:grid-cols-2 lg:items-center">
-                {/* ------------------------------------------------- tabs -- */}
-                <div
-                    className="reveal order-2 grid min-w-0 gap-3 lg:order-1"
-                    role="tablist"
-                    aria-label={data.eyebrow}
-                    aria-orientation="vertical"
-                >
-                    {data.items.map((item, i) => {
-                        const selected = i === active;
-                        return (
-                            <div
-                                key={item.title}
-                                className={cn(
-                                    "rounded-md border px-6 pt-2 pb-3 backdrop-blur-sm transition-colors duration-300 ease-out",
-                                    selected
-                                        ? "border-[var(--sx-line-hot)] bg-white/[0.06]"
-                                        : "border-[var(--sx-line)] bg-[var(--sx-card)] hover:border-[var(--sx-line-hot)]",
-                                )}
-                            >
-                                <button
-                                    ref={(el) => {
-                                        tabRefs.current[i] = el;
-                                    }}
-                                    type="button"
-                                    role="tab"
-                                    id={`sx-benefit-tab-${i}`}
-                                    aria-controls={`sx-benefit-panel-${i}`}
-                                    aria-selected={selected}
-                                    tabIndex={selected ? 0 : -1}
-                                    onClick={() => setActive(i)}
-                                    onKeyDown={(e) => onKeyDown(e, i)}
-                                    className="block w-full cursor-pointer py-3 text-left"
-                                >
-                                    <span className="flex items-center justify-between gap-4 font-display text-h5 font-bold text-white">
-                                        {item.title}
-                                        <ChevronDown
-                                            className={cn(
-                                                "shrink-0 transition-[rotate,color] duration-300",
-                                                selected
-                                                    ? "rotate-180 text-[var(--sx-neon)]"
-                                                    : "text-white/40",
-                                            )}
-                                        />
-                                    </span>
-                                </button>
+            <div className="container-site">
+                {/* Rows are explicit so the card column can span both of them
+                    on the right-hand layout while the heading and the artwork
+                    stack above one another beside it. Below `lg` the grid
+                    collapses and DOM order takes over: heading, art, cards. */}
+                <div className="grid gap-x-[clamp(2.5rem,1.5rem+4vw,4.5rem)] gap-y-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:grid-rows-[auto_auto]">
+                    {/* ---------------------------------------- heading ---- */}
+                    <div className="reveal max-lg:text-center lg:col-start-2 lg:row-start-1">
+                        <Eyebrow className="max-lg:justify-center max-lg:[&>span]:hidden">
+                            {data.eyebrow}
+                        </Eyebrow>
 
-                                <div
-                                    id={`sx-benefit-panel-${i}`}
-                                    role="tabpanel"
-                                    aria-labelledby={`sx-benefit-tab-${i}`}
-                                    hidden={!selected}
-                                >
-                                    <p className="text-white/60">{item.body}</p>
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
+                        <h2 className="text-h2">
+                            {data.heading}{" "}
+                            <span className="gradient-text">
+                                {data.headingAccent}
+                            </span>
+                        </h2>
 
-                {/* --------------------------------------- copy + monitor -- */}
-                <div className="order-1 min-w-0 lg:order-2">
-                    <div className="reveal">
-                        <SxEyebrow>{data.eyebrow}</SxEyebrow>
-                        <SxHeading
-                            lead={data.heading}
-                            accent={data.headingAccent}
-                        />
-                        <p className="mt-6 max-w-[58ch] text-lead text-white/60">
+                        <p className="mt-6 max-w-[60ch] text-lead text-white/65 max-lg:mx-auto">
                             {data.lead}
                         </p>
 
-                        <ul className="mt-8 flex flex-wrap gap-3">
-                            {whatYouGet.benefits.map((benefit) => (
+                        {/* The proof strip: three bare marks straight on the
+                            backdrop, divided by hairlines — no plate, no fill,
+                            no border around the row. Stays three-across at
+                            every width, so the labels wrap rather than the row
+                            stacking. */}
+                        <ul className="mt-9 grid grid-cols-3 max-lg:text-start">
+                            {whatYouGet.benefits.map((benefit, i) => (
                                 <li
                                     key={benefit.label}
-                                    className="inline-flex items-center gap-2.5 rounded-full border border-[var(--sx-line)] bg-[var(--sx-card)] py-2 pr-4 pl-2.5"
+                                    className={cn(
+                                        "flex items-center gap-2 py-1 pe-2 sm:gap-3 sm:pe-4",
+                                        i > 0 &&
+                                            "border-s border-white/[0.14] ps-3 sm:ps-4",
+                                    )}
                                 >
                                     <Image
                                         src={benefit.icon}
-                                        alt=""
-                                        aria-hidden="true"
-                                        width={28}
-                                        height={28}
-                                        className="size-6 shrink-0"
+                                        alt={benefit.iconAlt}
+                                        width={40}
+                                        height={36}
+                                        className="size-7 shrink-0 object-contain sm:size-9"
                                     />
-                                    <span className="font-display text-ui-13 font-bold text-white/75">
+                                    <span className="font-display text-ui-13 leading-tight font-semibold text-balance text-white sm:text-ui-15">
                                         {benefit.label}
                                     </span>
                                 </li>
@@ -156,39 +112,100 @@ export default function Benefits({ data }: { data: ServiceBenefits }) {
                         </ul>
                     </div>
 
-                    {/* The screenshots sit ON TOP of the monitor artwork — its
-                        screen area is opaque, so the panel is positioned over
-                        it rather than composited into it. Percentages are
-                        measured off the 1000x820 asset. */}
-                    <div className="reveal relative mx-auto mt-10 max-w-[560px]">
-                        <div className="absolute top-[4.2%] left-[8.1%] z-[2] h-[68%] w-[83.8%] overflow-hidden rounded-[4px] bg-[var(--sx-canvas-2)]">
-                            {data.items.map((item, i) => (
-                                <Image
-                                    key={item.title}
-                                    src={item.image.src}
-                                    alt={`${item.title} preview`}
-                                    width={900}
-                                    height={560}
-                                    sizes="(max-width: 992px) 78vw, 46vw"
-                                    className={cn(
-                                        "absolute inset-0 size-full object-cover transition-[opacity,scale] duration-[600ms] ease-out",
-                                        i === active
-                                            ? "scale-100 opacity-100"
-                                            : "scale-[1.04] opacity-0",
-                                    )}
-                                />
-                            ))}
-                        </div>
-
+                    {/* -------------------------------------------- art ---- */}
+                    <div className="reveal lg:col-start-2 lg:row-start-2">
+                        {/* Capped under the artwork's native width on the
+                            two-column layout: at full size the heading plus
+                            the art run taller than the card column beside
+                            them, which is centred against it. */}
                         <Image
-                            src="/assets/img/home/monitor.webp"
+                            src={ART}
                             alt=""
                             aria-hidden="true"
-                            width={1000}
-                            height={820}
-                            sizes="(max-width: 992px) 92vw, 46vw"
-                            className="pointer-events-none relative z-[1] block h-auto w-full"
+                            width={1276}
+                            height={1000}
+                            sizes="(max-width: 1024px) 92vw, 42vw"
+                            className="pointer-events-none mx-auto block h-auto w-full max-w-[620px] lg:max-w-[520px] xl:max-w-[580px]"
                         />
+                    </div>
+
+                    {/* ------------------------------------------ cards ---- */}
+                    <div
+                        role="group"
+                        aria-label={data.eyebrow}
+                        className="reveal grid content-center gap-4 lg:col-start-1 lg:row-span-2 lg:row-start-1"
+                    >
+                        {data.items.map((item, i) => {
+                            const on = i === active;
+                            return (
+                                <div
+                                    key={item.title}
+                                    className={cn(
+                                        "relative rounded-2xl border p-5 transition-[background-color,border-color,box-shadow] duration-300 ease-out sm:p-6",
+                                        on
+                                            ? "border-magenta-500/70 bg-[linear-gradient(97deg,var(--color-violet-800)_0%,var(--color-magenta-800)_100%)] shadow-glow"
+                                            : "border-white/[0.08] bg-white/[0.03] hover:border-magenta-500/35 hover:bg-white/[0.05]",
+                                    )}
+                                >
+                                    <div className="flex items-start gap-4">
+                                        {/* The homepage's own marks, at the
+                                            homepage's size — each is an 80px
+                                            circle with its gradient plate
+                                            already drawn in, so there is no
+                                            wrapper here. They are positional:
+                                            `ServiceBenefits` carries no icon
+                                            field, and the eleven SEO
+                                            sub-service pages name their five
+                                            items differently, so a mark cannot
+                                            be keyed to a title without
+                                            inventing per-page content. Read
+                                            through `whatYouGet.tabs` rather
+                                            than re-listing the five paths, so
+                                            the two bands cannot drift apart.
+                                            `alt=""`: on the homepage the mark
+                                            names its own service, here it is
+                                            decoration beside a heading that
+                                            already says what the card is. */}
+                                        <Image
+                                            src={
+                                                whatYouGet.tabs[
+                                                    i % whatYouGet.tabs.length
+                                                ].icon
+                                            }
+                                            alt=""
+                                            aria-hidden="true"
+                                            width={80}
+                                            height={80}
+                                            unoptimized
+                                            className="size-11 shrink-0 sm:size-14"
+                                        />
+
+                                        <div className="min-w-0 flex-1">
+                                            <h3 className="font-display text-ui-17 leading-[1.2] font-extrabold text-white sm:text-ui-19">
+                                                {/* The whole card is the hit
+                                                    area: a bare control
+                                                    stretched over it, so the
+                                                    heading stays plain text
+                                                    and the click target is the
+                                                    card, not the label. */}
+                                                <button
+                                                    type="button"
+                                                    aria-pressed={on}
+                                                    onClick={() => setActive(i)}
+                                                    className="cursor-pointer text-left before:absolute before:inset-0 before:rounded-2xl before:content-['']"
+                                                >
+                                                    {item.title}
+                                                </button>
+                                            </h3>
+
+                                            <p className="mt-1.5 text-sm leading-[1.55] text-white/65">
+                                                {item.body}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>
